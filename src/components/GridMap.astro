@@ -1,8 +1,17 @@
 ---
-import { MAP_NODES } from '../grid/nodes';
+import { getCollection } from 'astro:content';
+import type { MapNode } from '../grid/nodes';
+
+const MAP_NODES: MapNode[] = (await getCollection('nodes'))
+  .map((e) => e.data)
+  .sort((a, b) => a.order - b.order);
 ---
 
-<section class="map" data-map aria-label="Interactive power grid. Each node is a link.">
+<section
+  class="map"
+  data-map
+  data-nodes={JSON.stringify(MAP_NODES)}
+  aria-label="Interactive power grid. Each node is a link.">
   <canvas class="map__layer" data-mesh aria-hidden="true"></canvas>
   <canvas class="map__layer" data-electrons aria-hidden="true"></canvas>
   <div class="map__vignette" aria-hidden="true"></div>
@@ -81,8 +90,9 @@ import { MAP_NODES } from '../grid/nodes';
 
 <script>
   import { mountGrid } from '../grid/main';
+  import type { MapNode } from '../grid/nodes';
   const root = document.querySelector<HTMLElement>('[data-map]');
-  if (root) mountGrid(root);
+  if (root) mountGrid(root, JSON.parse(root.dataset.nodes ?? '[]') as MapNode[]);
 </script>
 
 <style>

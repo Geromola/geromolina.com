@@ -1,6 +1,6 @@
 import { GridSim, RATIO, type StepMode } from './sim';
 import { computeLattice, placeNodes, toPx, type Lattice } from './layout';
-import { MAP_NODES } from './nodes';
+import type { MapNode } from './nodes';
 import { CanvasRenderer, WebGLRenderer, drawMesh, type Renderer } from './renderers';
 import { Spring } from './spring';
 
@@ -12,7 +12,7 @@ const FACTS = {
 } as const;
 type Fact = keyof typeof FACTS;
 
-export function mountGrid(root: HTMLElement) {
+export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   const meshCanvas = root.querySelector<HTMLCanvasElement>('[data-mesh]')!;
   const electronCanvas = root.querySelector<HTMLCanvasElement>('[data-electrons]')!;
   const nodeEls = [...root.querySelectorAll<HTMLElement>('[data-node]')];
@@ -52,7 +52,7 @@ export function mountGrid(root: HTMLElement) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const portrait = height > width;
     lat = computeLattice(width, height);
-    const placed = placeNodes(MAP_NODES, lat, width, height, portrait);
+    const placed = placeNodes(nodes, lat, width, height, portrait);
     const verts = lat.cols * lat.rows;
     sim = new GridSim({
       cols: lat.cols,

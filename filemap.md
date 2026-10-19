@@ -11,7 +11,9 @@
 - `src/grid/main.ts` — DOM wiring: layout, input, loop, panel, toasts
 - `src/grid/sim.ts` — DOM-free grid simulation (electrons, physics)
 - `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices
-- `src/grid/nodes.ts` — `MapNode` type and current node data
+- `src/content.config.ts` — content collections: `nodes` schema (glob loader)
+- `src/content/nodes/*.md` — map node data (one file per node; body is a plant's "How it works")
+- `src/grid/nodes.ts` — `MapNode` type (data lives in the `nodes` collection)
 - `src/grid/renderers.ts` — WebGL2 and Canvas 2D electron renderers, static mesh
 - `src/grid/spring.ts` — critically damped spring
 - `tests/sim.test.ts` — Vitest for the simulation
