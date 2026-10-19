@@ -1,0 +1,89 @@
+---
+import Pill from './Pill.astro';
+
+interface Props {
+  title: string;
+  liveUrl?: string;
+}
+const { title, liveUrl } = Astro.props;
+---
+
+<header class="topbar">
+  <div class="topbar__glass glass" aria-hidden="true"></div>
+  <nav class="topbar__inner" aria-label="Project">
+    <a class="topbar__back" href="/"><span aria-hidden="true">←</span> The grid</a>
+    <span class="topbar__title" aria-hidden="true">{title}</span>
+    {
+      liveUrl && (
+        <Pill href={liveUrl} variant="compact" class="topbar__launch">
+          Launch <span aria-hidden="true">↗</span>
+        </Pill>
+      )
+    }
+  </nav>
+</header>
+
+<style>
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: calc(3.5rem + env(safe-area-inset-top, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  /* Glass extends 1rem below the bar and fades out there instead of ending on a hard border. */
+  .topbar__glass {
+    position: absolute;
+    inset: 0 0 -1rem;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 1rem), transparent);
+    mask-image: linear-gradient(to bottom, black calc(100% - 1rem), transparent);
+  }
+  .topbar__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    height: 100%;
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+  }
+  .topbar__back {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+    padding: 0 0.25rem;
+    margin-left: -0.25rem;
+    color: var(--ink);
+    font-size: 0.9375rem;
+    font-weight: 550;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .topbar__back:hover {
+    color: var(--cyan);
+  }
+  .topbar__title {
+    font-size: 0.875rem;
+    color: var(--ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .topbar__inner :global(.topbar__launch) {
+    justify-self: end;
+    grid-column: 3;
+  }
+  @media (max-width: 719px) {
+    .topbar__title {
+      display: none;
+    }
+  }
+</style>

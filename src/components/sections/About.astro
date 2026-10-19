@@ -1,0 +1,108 @@
+---
+import { Image } from 'astro:assets';
+import Section from './Section.astro';
+import gero from '../../assets/gero.jpg';
+---
+
+<Section id="about" kicker="NODE · ABOUT" title="Hi, I'm Gero.">
+  <div class="about">
+    <figure class="about__photo">
+      <Image
+        src={gero}
+        width={480}
+        widths={[240, 480, 720]}
+        sizes="15rem"
+        alt="Gero smiling on the Berkeley campus"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+    <div class="about__text">
+      <p>
+        I'm a chemical engineer who spent four years at Mastercard Advisors building digital-payments programs across
+        Latin America. Now I'm at Berkeley doing an MBA at Haas and an MEng in materials science at the same time,
+        pointing all of it at the energy transition.
+      </p>
+      <p>
+        On the side, I build small, honest tools. One is a language model I trained from scratch and then made sit an
+        exam. Another is a team of AI agents that read 660,622 app reviews and had to show its work. And there's this
+        grid, which you may have just lost a few megawatts on. I like problems where the physics or the data gets the
+        final word.
+      </p>
+    </div>
+  </div>
+
+  <!--
+    Duotone: luminance → three-stop ramp in the site palette.
+    Shadows land on --bg (#04070b), mids pick up a dim cyan cast, highlights reach --hot (#eef7ff).
+  -->
+  <svg class="about__defs" aria-hidden="true" focusable="false" width="0" height="0">
+    <filter id="gero-duotone" color-interpolation-filters="sRGB">
+      <feColorMatrix
+        type="matrix"
+        values="0.2126 0.7152 0.0722 0 0
+                0.2126 0.7152 0.0722 0 0
+                0.2126 0.7152 0.0722 0 0
+                0      0      0      1 0"></feColorMatrix>
+      <feComponentTransfer>
+        <feFuncR type="table" tableValues="0.016 0.06 0.2 0.62 0.933"></feFuncR>
+        <feFuncG type="table" tableValues="0.027 0.16 0.42 0.8 0.969"></feFuncG>
+        <feFuncB type="table" tableValues="0.043 0.2 0.48 0.86 1"></feFuncB>
+      </feComponentTransfer>
+    </filter>
+  </svg>
+</Section>
+
+<style>
+  .about {
+    display: grid;
+    gap: 2rem;
+    justify-items: start;
+  }
+  @media (min-width: 840px) {
+    .about {
+      grid-template-columns: 16rem 1fr;
+      gap: clamp(2.5rem, 5vw, 4.5rem);
+      align-items: center;
+    }
+  }
+  .about__photo {
+    margin: 0;
+    width: 15rem;
+    height: 15rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--cyan);
+    box-shadow: 0 0 40px rgba(var(--cyan-rgb), 0.25);
+    background: var(--bg);
+  }
+  .about__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 48%;
+    filter: url(#gero-duotone);
+  }
+  .about__text p {
+    margin: 0;
+    max-width: 38rem;
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--ink-2);
+  }
+  .about__text p + p {
+    margin-top: 1.25em;
+  }
+  .about__defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+  @media (prefers-contrast: more) {
+    .about__text p {
+      color: var(--ink);
+    }
+  }
+</style>

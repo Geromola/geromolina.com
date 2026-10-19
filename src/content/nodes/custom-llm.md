@@ -7,14 +7,14 @@ href: /projects/custom-llm
 land: [0.56, 0.3]
 port: [0.28, 0.36]
 order: 0
-pitch: 'TODO(copy): one-line pitch'
+pitch: 'A 122,368-parameter language model I trained from scratch, then made sit a 48-question exam. The explorer runs the real weights in your browser, so you can watch it think.'
 liveUrl: https://geromola.github.io/custom-llm/viz/
 repo: https://github.com/Geromola/custom-llm
 embed: true
 metrics:
-  - { value: 'TODO', label: 'TODO' }
-  - { value: 'TODO', label: 'TODO' }
-  - { value: 'TODO', label: 'TODO' }
+  - { value: '122K', label: 'parameters' }
+  - { value: '20 → 35', label: 'of 48 on the exam' }
+  - { value: '0 / 12', label: 'on the control questions, every run' }
 ---
 
-TODO(copy): How it works.
+A nanoGPT-style model (2 blocks, 4 attention heads, 64 dimensions) trained in PyTorch on a corpus I generated. The question was simple: does extra study material actually teach it anything? I committed my predictions to git before training, ran three seeds, and audited the train/test split six ways. The score rose from 20 to 35 out of 48. All of the gain came from the categories the new material taught, and the control questions stayed at zero. The explorer shows the embeddings, the attention and the next-token probabilities as they happen.

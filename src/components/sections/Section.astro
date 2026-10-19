@@ -1,0 +1,54 @@
+---
+/**
+ * Shared shell for home-page sections: centred column, vertical rhythm,
+ * divider, and the kicker + h2 header pattern.
+ */
+interface Props {
+  id?: string;
+  kicker: string;
+  title: string;
+}
+
+const { id, kicker, title } = Astro.props;
+const headingId = `${id ?? kicker.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-title`;
+---
+
+<section id={id} class="section" aria-labelledby={headingId}>
+  <div class="section__inner">
+    <header class="section__head">
+      <p class="section__kicker mono">{kicker}</p>
+      <h2 class="section__title" id={headingId}>{title}</h2>
+    </header>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: clamp(4rem, 10vw, 8rem) var(--gutter);
+    scroll-margin-top: 0;
+  }
+  .section__inner {
+    max-width: 68rem;
+    margin: 0 auto;
+  }
+  .section__head {
+    margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .section__kicker {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .section__title {
+    margin: 0;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    color: var(--ink);
+  }
+</style>

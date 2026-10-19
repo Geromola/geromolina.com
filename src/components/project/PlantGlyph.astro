@@ -1,0 +1,33 @@
+---
+// Decorative plant glyph: a cyan ring with a hot core, scaled down from `.node--plant` in GridMap.
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 22, class: className } = Astro.props;
+---
+
+<span class:list={['plant-glyph', className]} style={`--size:${size}px`} aria-hidden="true">
+  <span class="plant-glyph__core"></span>
+</span>
+
+<style>
+  .plant-glyph {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    border: 1.5px solid var(--cyan);
+    background: radial-gradient(circle, rgba(var(--cyan-rgb), 0.22) 0%, var(--bg) 70%);
+    box-shadow: 0 0 10px rgba(var(--cyan-rgb), 0.3);
+  }
+  .plant-glyph__core {
+    width: calc(var(--size) * 0.3);
+    height: calc(var(--size) * 0.3);
+    border-radius: 50%;
+    background: var(--hot);
+    box-shadow: 0 0 calc(var(--size) * 0.3) calc(var(--size) * 0.065) rgba(var(--cyan-rgb), 0.8);
+  }
+</style>

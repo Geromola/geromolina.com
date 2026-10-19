@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import Pill from '../components/project/Pill.astro';
+---
+
+<Base title="Power outage · Gero Molina" description="This page tripped a breaker. Let's get you back on the grid.">
+  <main class="outage">
+    <span class="outage__spark" aria-hidden="true"></span>
+    <div class="outage__content">
+      <p class="outage__kicker mono">404 · Breaker tripped</p>
+      <h1>Power outage</h1>
+      <p class="outage__line">This page tripped a breaker. Let's get you back on the grid.</p>
+      <Pill href="/">Back home</Pill>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .outage {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding: var(--gutter);
+    overflow: hidden;
+    background-color: var(--bg);
+    background-image:
+      linear-gradient(rgba(var(--cyan-rgb), 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--cyan-rgb), 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center;
+  }
+  /* Sits on a mesh vertex: with the tile centred, lines fall at 50% - 24px + n·48px. */
+  .outage__spark {
+    position: absolute;
+    left: calc(50% + 168px + 0.5px);
+    top: calc(50% - 168px + 0.5px);
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 10px 2px rgba(var(--amber-rgb), 0.55);
+    animation: spark-glow 3.2s ease-in-out infinite alternate;
+  }
+  @keyframes spark-glow {
+    from {
+      box-shadow: 0 0 6px 1px rgba(var(--amber-rgb), 0.35);
+      opacity: 0.7;
+    }
+    to {
+      box-shadow: 0 0 22px 6px rgba(var(--amber-rgb), 0.6);
+      opacity: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .outage__spark {
+      animation: none;
+    }
+  }
+  .outage__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 32rem;
+    text-align: center;
+  }
+  .outage__kicker {
+    margin: 0 0 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2.75rem, 7vw, 5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  .outage__line {
+    margin: 1.25rem 0 2rem;
+    font-size: clamp(1.0625rem, 2vw, 1.25rem);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+</style>

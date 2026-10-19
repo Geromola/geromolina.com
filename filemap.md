@@ -6,8 +6,22 @@
 - `src/assets/gero.jpg` — portrait for the About section
 - `src/styles/tokens.css` — colour, type and glass tokens, plus global base styles
 - `src/layouts/Base.astro` — html shell, meta tags, global CSS
-- `src/pages/index.astro` — home page: map hero plus sections (placeholders for now)
+- `src/pages/index.astro` — home page: map hero, then the sections below and the footer
+- `src/components/sections/Section.astro` — shared section shell: column, rhythm, divider, kicker + h2
+- `src/components/sections/About.astro` — `#about`: duotone round portrait (inline SVG filter) and bio
+- `src/components/sections/OffTheGrid.astro` — `#off-the-grid`: four fact cards (ACS card links to the DOI)
+- `src/components/sections/MyTools.astro` — `#my-tools`: locked Networking Tracker tile
+- `src/components/sections/Contact.astro` — `#contact`: email, LinkedIn, GitHub pills
+- `src/components/sections/NodeIndex.astro` — `#node-index`: accessible list of every map node (from the `nodes` collection)
+- `src/components/sections/Footer.astro` — site footer line
 - `src/components/GridMap.astro` — map markup, styles, client mount (nodes, panel, toast)
+- `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown)
+- `src/pages/404.astro` — "Power outage" 404 page
+- `src/components/project/TopBar.astro` — sticky glass top bar: back to the grid, title, Launch pill
+- `src/components/project/LiveEmbed.astro` — sandboxed live-app iframe plus launch button (fallback card when framing is blocked)
+- `src/components/project/MetricTiles.astro` — three glass metric tiles
+- `src/components/project/PlantGlyph.astro` — small decorative plant glyph (cyan ring, hot core)
+- `src/components/project/Pill.astro` — pill / full-width button link with press and focus states
 - `src/grid/main.ts` — DOM wiring: layout, input, loop, panel, toasts
 - `src/grid/sim.ts` — DOM-free grid simulation (electrons, physics)
 - `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices

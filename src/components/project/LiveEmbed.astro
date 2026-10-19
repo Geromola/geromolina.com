@@ -1,0 +1,141 @@
+---
+import Pill from './Pill.astro';
+import PlantGlyph from './PlantGlyph.astro';
+
+interface Props {
+  title: string;
+  liveUrl: string;
+  // false when the live app's headers forbid cross-origin framing; renders a fallback card instead.
+  framable?: boolean;
+}
+const { title, liveUrl, framable = true } = Astro.props;
+---
+
+<section class="embed" aria-label={`${title} live app`}>
+  <div class:list={['embed__frame', { 'embed__frame--fallback': !framable }]}>
+    {
+      framable ? (
+        <>
+          <iframe
+            src={liveUrl}
+            loading="lazy"
+            title={`${title} live app`}
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-downloads"
+            referrerpolicy="no-referrer"
+          />
+          {/* Shield: the page keeps scrolling until the visitor opts into the embed. */}
+          <button type="button" class="embed__shield" data-embed-shield>
+            <span class="embed__shield-label mono">Click to interact</span>
+          </button>
+        </>
+      ) : (
+        <div class="embed__fallback">
+          <PlantGlyph size={46} />
+          <p>Opens in its own tab</p>
+          <Pill href={liveUrl}>
+            Launch <span aria-hidden="true">↗</span>
+          </Pill>
+        </div>
+      )
+    }
+  </div>
+  {
+    framable && (
+      <Pill href={liveUrl} variant="block" class="embed__launch">
+        Launch full-screen <span aria-hidden="true">↗</span>
+      </Pill>
+    )
+  }
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-embed-shield]').forEach((shield) =>
+    shield.addEventListener('pointerdown', () => {
+      const frame = shield.closest('.embed__frame');
+      frame?.classList.add('is-live');
+      frame?.querySelector('iframe')?.focus();
+    }),
+  );
+</script>
+
+<style>
+  .embed {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .embed__frame {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--glass-border);
+    background: var(--bg-raise);
+  }
+  @media (max-width: 719px) {
+    .embed__frame {
+      aspect-ratio: 4 / 5;
+    }
+  }
+  .embed__frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .embed__frame:not(.is-live) iframe {
+    pointer-events: none;
+  }
+  .embed__shield {
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    border: 0;
+    background: transparent;
+    display: grid;
+    place-items: end center;
+    padding-bottom: 1rem;
+    cursor: pointer;
+  }
+  .embed__shield-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    color: var(--ink);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    transition: transform 100ms ease-out;
+  }
+  .embed__shield:active .embed__shield-label {
+    transform: scale(0.96);
+  }
+  .is-live .embed__shield {
+    display: none;
+  }
+  .embed__frame--fallback {
+    background-color: var(--bg-raise);
+    background-image:
+      linear-gradient(rgba(var(--cyan-rgb), 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--cyan-rgb), 0.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center;
+  }
+  .embed__fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: var(--gutter);
+    text-align: center;
+  }
+  .embed__fallback p {
+    margin: 0;
+    color: var(--ink-2);
+  }
+</style>

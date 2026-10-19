@@ -1,0 +1,108 @@
+---
+import Section from './Section.astro';
+---
+
+<Section kicker="SUBSTATION · MY TOOLS" title="My tools" id="my-tools">
+  <a class="tile" href="https://networking-tracker-navy.vercel.app/">
+    <span class="tile__lock" aria-hidden="true">
+      <svg viewBox="0 0 16 16" width="16" height="16">
+        <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor"></rect>
+        <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6"></path>
+      </svg>
+    </span>
+    <span class="tile__body">
+      <span class="tile__title">Networking Tracker</span>
+      <span class="tile__line">Where I keep track of the people I meet. Mine only, so it'll ask you to sign in.</span>
+    </span>
+    <span class="tile__cta mono" aria-hidden="true">SIGN IN →</span>
+  </a>
+</Section>
+
+<style>
+  .tile {
+    display: flex;
+    align-items: center;
+    gap: 1.125rem;
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(var(--amber-rgb), 0.5);
+    background: rgba(var(--amber-rgb), 0.04);
+    box-shadow: 0 0 30px -12px rgba(var(--amber-rgb), 0.35);
+    text-decoration: none;
+    color: var(--ink);
+    transition:
+      border-color 150ms ease-out,
+      box-shadow 150ms ease-out,
+      transform 100ms ease-out;
+  }
+  .tile:hover {
+    border-color: var(--amber);
+    box-shadow: 0 0 36px -10px rgba(var(--amber-rgb), 0.55);
+  }
+  .tile:active {
+    transform: scale(0.98);
+  }
+  .tile__lock {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--amber);
+    color: var(--amber);
+    background: var(--bg);
+  }
+  .tile__body {
+    flex: 1;
+    display: grid;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+  .tile__title {
+    font-size: 1.125rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .tile__line {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+  .tile__cta {
+    flex: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    color: var(--amber);
+  }
+  @media (max-width: 540px) {
+    .tile {
+      flex-wrap: wrap;
+    }
+    .tile__body {
+      flex-basis: calc(100% - 4rem);
+    }
+    .tile__cta {
+      margin-left: calc(2.75rem + 1.125rem);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile {
+      transition:
+        border-color 150ms ease-out,
+        box-shadow 150ms ease-out;
+    }
+    .tile:active {
+      transform: none;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .tile {
+      border-color: var(--amber);
+    }
+    .tile__line {
+      color: var(--ink);
+    }
+  }
+</style>
