@@ -1,0 +1,521 @@
+---
+import { MAP_NODES } from '../grid/nodes';
+---
+
+<section class="map" data-map aria-label="Interactive power grid. Each node is a link.">
+  <canvas class="map__layer" data-mesh aria-hidden="true"></canvas>
+  <canvas class="map__layer" data-electrons aria-hidden="true"></canvas>
+  <div class="map__vignette" aria-hidden="true"></div>
+
+  <header class="hero">
+    <p class="hero__kicker mono">Geronimo Molina · Haas MBA</p>
+    <h1 class="hero__name">Gero</h1>
+    <p class="hero__line">Energy nerd who builds things. <br />Point anywhere: you're the transformer.</p>
+  </header>
+
+  <nav class="nodes" aria-label="Grid">
+    {
+      MAP_NODES.map((n, i) => (
+        <a
+          class={`node node--${n.kind}`}
+          data-node={i}
+          href={n.href}
+          style={`--x:${n.land[0]};--y:${n.land[1]};--xp:${n.port[0]};--yp:${n.port[1]}`}
+        >
+          <span class="node__glyph" aria-hidden="true">
+            {n.kind === 'plant' && <span class="node__core" />}
+            {n.locked && (
+              <svg viewBox="0 0 16 16" width="14" height="14">
+                <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor" />
+                <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6" />
+              </svg>
+            )}
+          </span>
+          <span class="node__label">
+            <span class="node__kicker mono">{n.kicker}</span>
+            <span class="node__title">{n.title}</span>
+          </span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <div class="transformer" data-transformer aria-hidden="true">
+    <span class="transformer__field"></span>
+    <svg class="transformer__coil" viewBox="0 0 32 32" width="32" height="32">
+      <circle cx="12" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+      <circle cx="20" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+    </svg>
+    <span class="transformer__tag mono" data-up>×25 ↑</span>
+    <span class="transformer__tag mono" data-down>÷28.75 ↓</span>
+  </div>
+
+  <aside class="meter glass" data-meter aria-label="Grid meter">
+    <button class="meter__chip mono" data-chip type="button" aria-label="Open meter">
+      <span class="meter__bolt" aria-hidden="true">⚡</span><span data-chip-v>13.8 kV</span>
+    </button>
+    <div class="meter__body">
+      <div class="meter__head">
+        <span class="meter__mode mono" data-mode>Point to energize</span>
+        <div class="meter__seg" role="group" aria-label="Current type">
+          <button type="button" class="mono" data-current="dc" aria-pressed="true">DC</button>
+          <button type="button" class="mono" data-current="ac" aria-pressed="false">AC</button>
+        </div>
+      </div>
+      <dl class="meter__readings">
+        <div><dt class="mono">V</dt><dd class="mono" data-v>13.8 kV</dd></div>
+        <div><dt class="mono">I</dt><dd class="mono" data-i>3.62 kA</dd></div>
+        <div class="is-power"><dt class="mono">P = V·I</dt><dd class="mono" data-p>50.0 MW</dd></div>
+      </dl>
+      <button type="button" class="meter__step" data-step>
+        <span class="up-only">Flip to step-down</span><span class="down-only">Flip to step-up</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="toast glass" data-toast role="status" aria-live="polite">
+    <span class="toast__bolt" aria-hidden="true">⚡</span>
+    <span data-toast-text></span>
+  </div>
+</section>
+
+<script>
+  import { mountGrid } from '../grid/main';
+  const root = document.querySelector<HTMLElement>('[data-map]');
+  if (root) mountGrid(root);
+</script>
+
+<style>
+  .map {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    overflow: hidden;
+    isolation: isolate;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
+    background: radial-gradient(120% 90% at 70% 30%, #08121c 0%, var(--bg) 60%);
+  }
+  @media (pointer: fine) {
+    .map {
+      cursor: none;
+    }
+    .map :is(a, button) {
+      cursor: pointer;
+    }
+  }
+  .map__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .map__vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(130% 100% at 50% 40%, transparent 55%, rgba(4, 7, 11, 0.85) 100%),
+      linear-gradient(to bottom, transparent 75%, var(--bg) 100%);
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: absolute;
+    top: clamp(1.5rem, 7vh, 4.5rem);
+    left: var(--gutter);
+    max-width: 34rem;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .hero__kicker {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .hero__name {
+    margin: 0;
+    font-size: clamp(5rem, 15vw, 11.5rem);
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    background: linear-gradient(180deg, #fff 30%, #9fdcec 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 28px rgba(var(--cyan-rgb), 0.18));
+  }
+  .hero__line {
+    margin: 1rem 0 0;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink-2);
+  }
+
+  /* ---------- nodes ---------- */
+  .nodes {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+  }
+  .node {
+    --pulse: 0;
+    position: absolute;
+    left: calc(var(--x) * 100%);
+    top: calc(var(--y) * 100%);
+    width: 0;
+    height: 0;
+    text-decoration: none;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (orientation: portrait) {
+    .node {
+      left: calc(var(--xp) * 100%);
+      top: calc(var(--yp) * 100%);
+    }
+  }
+  .node__glyph {
+    --size: 14px;
+    position: absolute;
+    left: calc(var(--size) / -2);
+    top: calc(var(--size) / -2);
+    width: var(--size);
+    height: var(--size);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid rgba(232, 241, 245, 0.7);
+    box-shadow: 0 0 calc(6px + var(--pulse) * 26px) rgba(var(--cyan-rgb), calc(0.15 + var(--pulse) * 0.5));
+    transform: scale(calc(1 + var(--pulse) * 0.12));
+    transition: transform 100ms ease-out, border-color 150ms ease-out;
+  }
+  /* generous hit area (≈10px beyond the glyph) */
+  .node__glyph::after {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+  }
+  .node--plant .node__glyph {
+    --size: 46px;
+    border-color: var(--cyan);
+    background: radial-gradient(circle, rgba(var(--cyan-rgb), 0.22) 0%, var(--bg) 70%);
+  }
+  .node__core {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--hot);
+    box-shadow: 0 0 14px 3px rgba(var(--cyan-rgb), 0.8);
+  }
+  .node--substation .node__glyph {
+    --size: 34px;
+    border-radius: 10px;
+    border-color: var(--amber);
+    color: var(--amber);
+    box-shadow: 0 0 calc(6px + var(--pulse) * 26px) rgba(var(--amber-rgb), calc(0.15 + var(--pulse) * 0.5));
+  }
+  .node:active .node__glyph {
+    transform: scale(0.92);
+  }
+  .node.is-hot .node__glyph {
+    border-color: var(--hot);
+  }
+
+  .node__label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(calc(var(--label-gap, 18px)), -50%);
+    display: grid;
+    white-space: nowrap;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    transition: color 150ms ease-out;
+  }
+  .node--plant {
+    --label-gap: 34px;
+  }
+  .node--substation {
+    --label-gap: 28px;
+  }
+  .node--flip .node__label {
+    left: auto;
+    right: 0;
+    text-align: right;
+    transform: translate(calc(var(--label-gap, 18px) * -1), -50%);
+  }
+  .node__kicker {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .node--plant .node__kicker {
+    color: var(--cyan);
+  }
+  .node--substation .node__kicker {
+    color: var(--amber);
+  }
+  .node__title {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-shadow: 0 1px 12px var(--bg), 0 0 2px var(--bg);
+  }
+  .node--section .node__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+  .node.is-hot .node__title {
+    color: #fff;
+  }
+
+  /* ---------- transformer (the cursor) ---------- */
+  .transformer {
+    --s: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+    color: var(--hot);
+  }
+  .transformer[data-step-mode='down'] {
+    color: var(--amber);
+  }
+  .transformer__field {
+    position: absolute;
+    width: var(--field, 300px);
+    height: var(--field, 300px);
+    left: calc(var(--field, 300px) / -2);
+    top: calc(var(--field, 300px) / -2);
+    border-radius: 50%;
+    border: 1px dashed currentColor;
+    opacity: 0.18;
+    background: radial-gradient(circle, rgba(var(--cyan-rgb), 0.06), transparent 70%);
+    transform: scale(calc(0.8 + var(--s) * 0.2));
+  }
+  .transformer[data-step-mode='down'] .transformer__field {
+    background: radial-gradient(circle, rgba(var(--amber-rgb), 0.07), transparent 70%);
+  }
+  .transformer__coil {
+    position: absolute;
+    left: -16px;
+    top: -16px;
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  .transformer__tag {
+    position: absolute;
+    left: 50%;
+    top: 22px;
+    transform: translateX(-50%);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .transformer[data-step-mode='up'] [data-down],
+  .transformer[data-step-mode='down'] [data-up] {
+    display: none;
+  }
+
+  /* ---------- meter ---------- */
+  .meter {
+    position: absolute;
+    z-index: 5;
+    left: var(--gutter);
+    bottom: var(--gutter);
+    width: 17.5rem;
+    border-radius: var(--radius-lg);
+    padding: 1rem 1rem 0.875rem;
+  }
+  .meter__chip {
+    display: none;
+  }
+  .meter__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .meter__mode {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .meter[data-step-mode='down'] .meter__mode {
+    color: var(--amber);
+  }
+  .meter__seg {
+    display: inline-flex;
+    padding: 2px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .meter__seg button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    transition: background 150ms ease-out, color 150ms ease-out;
+  }
+  .meter__seg button[aria-pressed='true'] {
+    background: rgba(var(--cyan-rgb), 0.16);
+    color: var(--cyan);
+  }
+  .meter__seg button:active,
+  .meter__step:active {
+    transform: scale(0.96);
+  }
+  .meter__readings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1rem;
+    margin: 0.875rem 0;
+  }
+  .meter__readings div {
+    display: grid;
+    gap: 0.125rem;
+  }
+  .meter__readings .is-power {
+    grid-column: 1 / -1;
+    padding-top: 0.625rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .meter__readings dt {
+    font-size: 0.6875rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+  .meter__readings dd {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .meter[data-step-mode='down'] [data-v] {
+    color: var(--amber);
+  }
+  .meter__readings .is-power dd {
+    color: var(--cyan);
+  }
+  .meter__step {
+    appearance: none;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink-2);
+    border-radius: var(--radius-md);
+    font: 500 0.8125rem/1 var(--font);
+    padding: 0.625rem;
+    transition: transform 100ms ease-out, background 150ms ease-out;
+  }
+  .meter__step:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .meter[data-step-mode='up'] .down-only,
+  .meter[data-step-mode='down'] .up-only {
+    display: none;
+  }
+
+  /* ---------- toast ---------- */
+  .toast {
+    position: absolute;
+    z-index: 6;
+    right: var(--gutter);
+    bottom: var(--gutter);
+    width: min(26rem, calc(100% - 20rem - 2 * var(--gutter)));
+    display: flex;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--ink);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 300ms ease, transform 400ms cubic-bezier(0.2, 0.9, 0.3, 1);
+    pointer-events: none;
+  }
+  .toast.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+  .toast__bolt {
+    color: var(--amber);
+  }
+
+  /* ---------- phones ---------- */
+  @media (max-width: 720px) {
+    .hero__line br {
+      display: none;
+    }
+    .node__title {
+      font-size: 0.9375rem;
+    }
+    .meter {
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      padding: 0;
+      border-radius: 999px;
+    }
+    .meter__chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 0.875rem;
+      padding: 0.625rem 1rem;
+    }
+    .meter__body {
+      display: none;
+    }
+    .meter.is-open {
+      width: min(20rem, calc(100% - 2 * var(--gutter)));
+      border-radius: var(--radius-lg);
+      padding: 0.25rem 1rem 0.875rem;
+    }
+    .meter.is-open .meter__body {
+      display: block;
+    }
+    .toast {
+      left: var(--gutter);
+      right: var(--gutter);
+      width: auto;
+      bottom: calc(var(--gutter) + 3.5rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .transformer {
+      display: none;
+    }
+    .toast {
+      transition: opacity 200ms ease;
+      transform: none;
+    }
+    .node__glyph {
+      transition: none;
+    }
+  }
+</style>

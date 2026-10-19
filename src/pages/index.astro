@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import GridMap from '../components/GridMap.astro';
+---
+
+<Base>
+  <main>
+    <GridMap />
+    <!-- Prototype placeholders: real sections arrive in build step 4. -->
+    <section id="about" class="stub"><p class="mono">About · coming next</p></section>
+    <section id="off-the-grid" class="stub"><p class="mono">Off the grid · coming next</p></section>
+    <section id="contact" class="stub"><p class="mono">Contact · coming next</p></section>
+  </main>
+</Base>
+
+<style>
+  .stub {
+    min-height: 40vh;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+</style>
