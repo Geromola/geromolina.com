@@ -11,6 +11,11 @@ import { Spring } from './spring';
  */
 
 const STORE_KEY = 'gero-grid-v1';
+/** sessionStorage: the current level's transformers, so a trip to a project page keeps the board. */
+const BOARD_KEY = 'gero-grid-board';
+/** sessionStorage: the clicked plant glyph's viewport circle, for the view transition (Base.astro). */
+const VT_KEY = 'gero-vt';
+const VT_NAME = 'plant-glyph';
 const SIM_DT = 1 / 30;
 const PREWARM_S = 4; // simulated seconds on build, so the page opens mid-flow
 const STILL_S = 3; // reduced motion: simulated seconds before each still frame
@@ -51,6 +56,12 @@ interface Xf {
   release?: () => void;
 }
 
+interface Board {
+  /** Map size and level the placements belong to: `${w}x${h}:${level}`. */
+  key: string;
+  xfs: [number, number][];
+}
+
 interface Spot {
   col: number;
   row: number;
@@ -62,8 +73,10 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   const $ = <T extends Element = HTMLElement>(sel: string, from: ParentNode = root) => from.querySelector<T>(sel)!;
   const meshCanvas = $<HTMLCanvasElement>('[data-mesh]');
   const electronCanvas = $<HTMLCanvasElement>('[data-electrons]');
-  const nodeEls = [...root.querySelectorAll<HTMLElement>('[data-node]')];
+  const nodeEls = [...root.querySelectorAll<HTMLAnchorElement>('[data-node]')];
   const ringEls = nodeEls.map((el) => $<SVGPathElement>('[data-ring]', el));
+  const glyphEls = nodeEls.map((el) => $('.node__glyph', el));
+  const isPlant = nodes.map((n) => n.kind === 'plant');
   const xfLayer = $('[data-xfs]');
   const ghost = $('[data-ghost]');
   const xfTemplate = $<HTMLTemplateElement>('[data-xf-template]');
@@ -111,6 +124,10 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   const sparks = nodeEls.map(() => new Spring(0, 0.35));
   const fills = nodeEls.map(() => new Spring(0, 0.5));
   const fillShown = nodeEls.map(() => -1);
+  // Plant charge-up arc (0..1): sweeps on press, springs back if the press doesn't become a click.
+  const charges = nodeEls.map(() => new Spring(0, 0.22, 1));
+  const chargeShown = nodeEls.map(() => -1);
+  const clicked = nodeEls.map(() => false);
   const beatAcc = nodeEls.map(() => 0);
   const beatT = nodeEls.map(() => 0);
   let lastDelivered: number[] = [];
@@ -136,7 +153,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     lat = layout.lattice;
 
     const prevLevel = game ? game.levelIndex : progress.current;
-    const prevXfs = game ? game.transformers : [];
+    const prevXfs = game ? game.transformers : loadBoard(prevLevel);
     const verts = lat.cols * lat.rows;
     game = GridGame.fromLayout(layout, {
       count: coarse ? Math.min(1100, verts * 8) : Math.min(3200, verts * 12),
@@ -423,11 +440,87 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     el.addEventListener('pointerleave', off);
     el.addEventListener('focus', on);
     el.addEventListener('blur', off);
-    el.addEventListener('pointerdown', () => {
+    el.addEventListener('pointerdown', (e) => {
       on();
       hideGhost();
       if (!reduceMotion.matches) pulses[i].velocity += 14; // charge-up kick, on press
+      if (isPlant[i] && (e.pointerType !== 'mouse' || e.button === 0)) chargeUp(i, e.pointerId);
     });
+    el.addEventListener('click', (e) => {
+      if (!isPlant[i]) return;
+      // A modified click opens elsewhere (or not at all): this page stays, so discharge.
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+        return discharge(i);
+      }
+      clicked[i] = true;
+      markTransition(i);
+    });
+  });
+
+  /** Press on a plant: sweep the arc. Release without a click springs it back from where it is. */
+  function chargeUp(i: number, pointerId: number) {
+    clicked[i] = false;
+    setCharge(i, 1);
+    const end = (ev: PointerEvent) => {
+      if (ev.pointerId !== pointerId) return;
+      window.removeEventListener('pointerup', end);
+      window.removeEventListener('pointercancel', end);
+      if (ev.type === 'pointercancel') return discharge(i);
+      // The click (if any) follows pointerup; on touch it can land a moment later.
+      window.setTimeout(() => clicked[i] || discharge(i), 120);
+    };
+    window.addEventListener('pointerup', end);
+    window.addEventListener('pointercancel', end);
+  }
+  function discharge(i: number) {
+    clicked[i] = false;
+    setCharge(i, 0);
+  }
+  function setCharge(i: number, v: number) {
+    charges[i].target = v;
+    if (reduceMotion.matches || !raf) {
+      charges[i].snap(v);
+      paintCharge(i);
+    }
+  }
+  function paintCharge(i: number) {
+    const c = Math.min(1, Math.max(0, charges[i].value));
+    if (c === chargeShown[i] || (Math.abs(c - chargeShown[i]) < 0.002 && c !== 0 && c !== 1)) return;
+    chargeShown[i] = c;
+    nodeEls[i].style.setProperty('--charge', c.toFixed(3));
+  }
+
+  /**
+   * Clicked plant: name its glyph for the morph (only this one, so names stay unique) and
+   * record its viewport circle. Base.astro's `pageswap` refreshes the record where supported.
+   */
+  function markTransition(i: number) {
+    glyphEls.forEach((g, k) => k !== i && g.style.viewTransitionName && (g.style.viewTransitionName = ''));
+    if (!reduceMotion.matches) glyphEls[i].style.viewTransitionName = VT_NAME;
+    const r = glyphEls[i].getBoundingClientRect();
+    try {
+      sessionStorage.setItem(
+        VT_KEY,
+        JSON.stringify({
+          id: nodes[i].id,
+          path: new URL(nodeEls[i].href).pathname,
+          x: r.left + r.width / 2,
+          y: r.top + r.height / 2,
+          r: r.width / 2,
+          w: innerWidth,
+          h: innerHeight,
+          sy: scrollY,
+          t: Date.now(),
+        }),
+      );
+    } catch {
+      /* storage unavailable: the page just navigates */
+    }
+  }
+
+  // Back on this page (bfcache restore after a project page): the arc lets go.
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted) nodeEls.forEach((_, i) => isPlant[i] && discharge(i));
   });
 
   // --------------------------------------------------------------- panel
@@ -567,6 +660,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     const cleared = (progress.best[i] ?? 0) > 0;
     ui.next.disabled = !(ev.won || cleared);
     renderChip();
+    saveBoard();
     if (reduceMotion.matches) still();
   }
 
@@ -731,6 +825,10 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       el.style.setProperty('--pulse', Math.max(0, pulses[k].step(dt)).toFixed(3));
       el.style.setProperty('--spark', Math.max(0, sparks[k].step(dt)).toFixed(3));
       el.classList.toggle('is-hot', hover === k);
+      if (isPlant[k]) {
+        charges[k].step(dt);
+        paintCharge(k);
+      }
       const f = fills[k].step(dt);
       if (Math.abs(f - fillShown[k]) > 0.002) {
         fillShown[k] = f;
@@ -760,7 +858,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       xf.y.snap(xf.y.target);
       xf.scale.snap(xf.scale.target);
     }
-    for (const s of [...pulses, ...sparks, ...fills, effSpring, shake]) s.snap(s.target);
+    for (const s of [...pulses, ...sparks, ...fills, ...charges, effSpring, shake]) s.snap(s.target);
     for (const st of stars) {
       st.delay = 0;
       st.s.snap(wasWon ? 1 : 0);
@@ -836,6 +934,35 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   };
 
   // ------------------------------------------------------------ storage
+  // Function declarations (hoisted): `build()` runs above, before this point is reached.
+  function boardKey(level: number) {
+    return `${Math.round(width)}x${Math.round(height)}:${level}`;
+  }
+
+  /** This visit's placements for `level`, if they were made at the same map size. */
+  function loadBoard(level: number): { col: number; row: number }[] {
+    try {
+      const raw = JSON.parse(sessionStorage.getItem(BOARD_KEY) ?? 'null') as Partial<Board> | null;
+      if (!raw || raw.key !== boardKey(level) || !Array.isArray(raw.xfs)) return [];
+      return raw.xfs
+        .filter((p) => Array.isArray(p) && Number.isInteger(p[0]) && Number.isInteger(p[1]))
+        .map(([col, row]) => ({ col, row }));
+    } catch {
+      return [];
+    }
+  }
+  function saveBoard() {
+    try {
+      const board: Board = {
+        key: boardKey(game.levelIndex),
+        xfs: game.transformers.map((t) => [t.col, t.row]),
+      };
+      sessionStorage.setItem(BOARD_KEY, JSON.stringify(board));
+    } catch {
+      /* storage unavailable: the board lasts for this page load */
+    }
+  }
+
   function loadProgress(): Progress {
     const n = LEVELS.length;
     const fallback: Progress = { unlocked: 1, best: {}, current: 0 };

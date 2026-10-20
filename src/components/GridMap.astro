@@ -47,7 +47,7 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     </button>
   </template>
 
-  <nav class="nodes" aria-label="Grid">
+  <nav class="nodes" id="grid-nodes" aria-label="Grid">
     {
       MAP_NODES.map((n, i) => (
         <a
@@ -61,6 +61,7 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
               <path class="node__ring-base" d={RING} pathLength="100" />
               <path class="node__ring-fill" d={RING} pathLength="100" data-ring />
             </svg>
+            {n.kind === 'plant' && <span class="node__charge" />}
             {n.kind === 'plant' && <span class="node__core" />}
             {n.locked && (
               <svg viewBox="0 0 16 16" width="14" height="14">
@@ -332,6 +333,28 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     --size: 46px;
     border-color: var(--cyan);
     background: radial-gradient(circle, rgba(var(--cyan-rgb), 0.22) 0%, var(--bg) 70%);
+  }
+  /* charge-up arc: a bright ring swept 0→360° by --charge (a Spring in main.ts) */
+  .node--plant {
+    --charge: 0;
+  }
+  .node__charge {
+    position: absolute;
+    inset: -9.5px;
+    border-radius: 50%;
+    pointer-events: none;
+    -webkit-mask-image: conic-gradient(#000 calc(var(--charge) * 1turn), transparent 0);
+    mask-image: conic-gradient(#000 calc(var(--charge) * 1turn), transparent 0);
+  }
+  .node__charge::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--hot);
+    box-shadow:
+      0 0 8px rgba(var(--cyan-rgb), 0.9),
+      inset 0 0 6px rgba(var(--cyan-rgb), 0.6);
   }
   .node__core {
     width: 14px;

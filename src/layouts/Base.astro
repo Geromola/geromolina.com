@@ -14,6 +14,10 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 const isProd = import.meta.env.PROD;
+// Hold the first render until the element the view transition needs is parsed (map nodes on
+// the home page, the hero glyph on a project page), so `pagereveal` can find it.
+const path = Astro.url.pathname.replace(/(.)\/$/, '$1');
+const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path) ? '#plant-glyph-morph' : null;
 ---
 
 <!doctype html>
@@ -28,6 +32,7 @@ const isProd = import.meta.env.PROD;
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    {vtExpect && <link rel="expect" href={vtExpect} blocking="render" />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -39,6 +44,131 @@ const isProd = import.meta.env.PROD;
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <script is:inline>
+      // Cross-document view transitions (SPEC "Transitions"): expand a project page out of the
+      // clicked plant node, collapse it back into the node on the way home. A classic inline
+      // script in <head>, so the `pagereveal` listener is registered before the first render.
+      (() => {
+        if (!('onpagereveal' in window)) return;
+        const KEY = 'gero-vt';
+        const NAME = 'plant-glyph';
+        const FRESH_MS = 30000;
+        const html = document.documentElement;
+        const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isHome = (path) => path === '/';
+        const isProject = (path) => /^\/projects\/[^/]+\/?$/.test(path);
+        const norm = (path) => path.replace(/(.)\/$/, '$1');
+        const pathOf = (url) => {
+          try {
+            return url ? norm(new URL(url, location.href).pathname) : null;
+          } catch {
+            return null;
+          }
+        };
+        const read = () => {
+          try {
+            const r = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+            return r && typeof r === 'object' ? r : null;
+          } catch {
+            return null;
+          }
+        };
+        const write = (r) => {
+          try {
+            sessionStorage.setItem(KEY, JSON.stringify(r));
+          } catch {
+            /* storage unavailable: no custom transition next time */
+          }
+        };
+        const fresh = (r) => !!r && typeof r.t === 'number' && Date.now() - r.t < FRESH_MS;
+        const hasCircle = (r) => !!r && [r.x, r.y, r.r].every((v) => typeof v === 'number' && isFinite(v));
+        const nodeFor = (path) =>
+          [...document.querySelectorAll('[data-node]')].find((a) => pathOf(a.href) === path) || null;
+        const glyphOf = (node) => node && node.querySelector('.node__glyph');
+        const circleOf = (el) => {
+          const b = el.getBoundingClientRect();
+          return { x: b.left + b.width / 2, y: b.top + b.height / 2, r: b.width / 2 };
+        };
+        const clearNames = () =>
+          document.querySelectorAll('[data-node] .node__glyph').forEach((g) => (g.style.viewTransitionName = ''));
+        /** Where the navigation came from: the Navigation API, else the referrer plus a fresh record. */
+        const fromPath = (record) => {
+          const act = window.navigation && navigation.activation;
+          if (act) return act.from ? pathOf(act.from.url) : null;
+          const ref = pathOf(document.referrer);
+          return fresh(record) && ref && ref !== norm(location.pathname) ? ref : null;
+        };
+
+        // Leaving a page: refresh the record that the next page's `pagereveal` reads.
+        addEventListener('pageswap', (e) => {
+          if (!e.activation) return;
+          const here = norm(location.pathname);
+          const to = pathOf(e.activation.entry.url);
+          const record = read();
+          if (isHome(here) && to && isProject(to)) {
+            // Only the glyph named on click takes part; anything else (the node list) is a plain fade.
+            const glyph = glyphOf(nodeFor(to));
+            if (glyph && glyph.style.viewTransitionName === NAME) {
+              const c = circleOf(glyph);
+              write({ ...(record || {}), path: to, ...c, w: innerWidth, h: innerHeight, sy: scrollY, t: Date.now() });
+            } else {
+              clearNames();
+              if (record && record.path === to) write({ ...record, t: 0 });
+            }
+          } else if (isProject(here) && to && isHome(to)) {
+            // Heading home: stamp the record for this project (keep its circle if it has one).
+            write(record && record.path === here ? { ...record, t: Date.now() } : { path: here, t: Date.now() });
+          }
+        });
+
+        // Entering a page: pick expand, collapse or the default cross-fade.
+        addEventListener('pagereveal', (e) => {
+          const vt = e.viewTransition;
+          const here = norm(location.pathname);
+          if (!vt || reduced()) {
+            if (isHome(here)) clearNames();
+            return;
+          }
+          const record = read();
+          const from = fromPath(record);
+          let mode = null;
+          let circle = null;
+          let glyph = null;
+
+          if (isProject(here) && from && isHome(from) && record && record.path === here && fresh(record) && hasCircle(record)) {
+            mode = 'expand';
+            circle = record;
+          } else if (isHome(here) && from && isProject(from)) {
+            glyph = glyphOf(nodeFor(from));
+            if (glyph) {
+              const sameView =
+                record && record.path === from && hasCircle(record) &&
+                record.w === innerWidth && record.h === innerHeight && Math.abs((record.sy || 0) - scrollY) < 2;
+              circle = sameView ? record : circleOf(glyph);
+              const onScreen = circle.y + circle.r > 0 && circle.y - circle.r < innerHeight && circle.x + circle.r > 0 && circle.x - circle.r < innerWidth;
+              if (onScreen) {
+                mode = 'collapse';
+                clearNames();
+                glyph.style.viewTransitionName = NAME;
+              }
+            }
+          }
+          if (!mode) {
+            if (isHome(here)) clearNames();
+            return;
+          }
+          html.style.setProperty('--vt-x', circle.x + 'px');
+          html.style.setProperty('--vt-y', circle.y + 'px');
+          html.style.setProperty('--vt-r', Math.max(1, circle.r) + 'px');
+          html.dataset.vt = mode;
+          vt.finished.finally(() => {
+            delete html.dataset.vt;
+            ['--vt-x', '--vt-y', '--vt-r'].forEach((p) => html.style.removeProperty(p));
+            if (glyph) glyph.style.viewTransitionName = '';
+          }).catch(() => {});
+        });
+      })();
+    </script>
     {isProd && <script is:inline defer src="/_vercel/insights/script.js"></script>}
     {
       isProd && (
@@ -56,3 +186,88 @@ const isProd = import.meta.env.PROD;
     <slot />
   </body>
 </html>
+
+<style is:global>
+  /* Cross-document view transitions (the script in <head> sets html[data-vt] and --vt-*). */
+  @view-transition {
+    navigation: auto;
+  }
+  /* Dark backdrop under the snapshots, so nothing light ever shows through mid-transition. */
+  ::view-transition {
+    background: var(--bg);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Home → project: the new page grows out of the node's circle; the map dims beneath it. */
+    html[data-vt='expand']::view-transition-old(root) {
+      mix-blend-mode: normal;
+      animation: 520ms cubic-bezier(0.2, 0.9, 0.25, 1) both vt-dim;
+    }
+    html[data-vt='expand']::view-transition-new(root) {
+      mix-blend-mode: normal;
+      animation: 520ms cubic-bezier(0.2, 0.9, 0.25, 1) both vt-grow;
+    }
+    html[data-vt='expand']::view-transition-group(plant-glyph) {
+      animation-duration: 520ms;
+      animation-timing-function: cubic-bezier(0.2, 0.9, 0.25, 1);
+    }
+
+    /* Project → home: the page shrinks back into the node; the map brightens beneath it. */
+    html[data-vt='collapse']::view-transition-old(root) {
+      z-index: 1;
+      mix-blend-mode: normal;
+      animation: 520ms cubic-bezier(0.75, 0, 0.8, 0.1) both vt-shrink;
+    }
+    html[data-vt='collapse']::view-transition-new(root) {
+      mix-blend-mode: normal;
+      animation: 520ms cubic-bezier(0.75, 0, 0.8, 0.1) both vt-undim;
+    }
+    html[data-vt='collapse']::view-transition-group(plant-glyph) {
+      z-index: 2;
+      animation-duration: 520ms;
+      animation-timing-function: cubic-bezier(0.75, 0, 0.8, 0.1);
+    }
+  }
+
+  @keyframes vt-grow {
+    from {
+      clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+    }
+    to {
+      clip-path: circle(150vmax at var(--vt-x) var(--vt-y));
+    }
+  }
+  @keyframes vt-shrink {
+    from {
+      clip-path: circle(150vmax at var(--vt-x) var(--vt-y));
+    }
+    to {
+      clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y));
+    }
+  }
+  @keyframes vt-dim {
+    to {
+      filter: brightness(0.6);
+    }
+  }
+  @keyframes vt-undim {
+    from {
+      filter: brightness(0.6);
+    }
+  }
+
+  /* Reduced motion: no clip, no morph (names are dropped), just a short cross-fade. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation-duration: 180ms;
+    }
+  }
+</style>
