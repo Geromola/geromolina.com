@@ -1,5 +1,11 @@
-import type { SimNode } from './sim';
-import type { MapNode } from './nodes';
+import type { MapNode, NodeKind } from './nodes';
+
+/** A node snapped to a lattice vertex. */
+export interface PlacedNode {
+  kind: NodeKind;
+  col: number;
+  row: number;
+}
 
 export interface Lattice {
   cols: number;
@@ -20,7 +26,7 @@ export function computeLattice(width: number, height: number): Lattice {
 }
 
 /** Snap each node to the nearest free lattice vertex inside the visible area. */
-export function placeNodes(nodes: MapNode[], lat: Lattice, width: number, height: number, portrait: boolean): SimNode[] {
+export function placeNodes(nodes: MapNode[], lat: Lattice, width: number, height: number, portrait: boolean): PlacedNode[] {
   const taken = new Set<string>();
   const minC = Math.ceil(-lat.ox / lat.spacing) + 1;
   const maxC = Math.floor((width - lat.ox) / lat.spacing) - 1;

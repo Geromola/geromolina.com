@@ -14,7 +14,7 @@
 - `src/components/sections/Contact.astro` — `#contact`: email, LinkedIn, GitHub pills
 - `src/components/sections/NodeIndex.astro` — `#node-index`: accessible list of every map node (from the `nodes` collection)
 - `src/components/sections/Footer.astro` — site footer line
-- `src/components/GridMap.astro` — map markup, styles, client mount (nodes, panel, toast)
+- `src/components/GridMap.astro` — map markup, styles, client mount: nodes (with target-load rings), transformer layer and template, ghost, level panel, toast
 - `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown)
 - `src/pages/404.astro` — "Power outage" 404 page
 - `src/components/project/TopBar.astro` — sticky glass top bar: back to the grid, title, Launch pill
@@ -22,13 +22,12 @@
 - `src/components/project/MetricTiles.astro` — three glass metric tiles
 - `src/components/project/PlantGlyph.astro` — small decorative plant glyph (cyan ring, hot core)
 - `src/components/project/Pill.astro` — pill / full-width button link with press and focus states
-- `src/grid/main.ts` — DOM wiring: layout, input, loop, panel, toasts
-- `src/grid/sim.ts` — DOM-free grid simulation (electrons, physics)
-- `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices
+- `src/grid/main.ts` — DOM wiring for the Grid operator game: layout, transformer place/move/remove, ghost, level panel, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
+- `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices (`PlacedNode`)
 - `src/content.config.ts` — content collections: `nodes` schema (glob loader)
 - `src/content/nodes/*.md` — map node data (one file per node; body is a plant's "How it works")
-- `src/grid/nodes.ts` — `MapNode` type (data lives in the `nodes` collection)
-- `src/grid/renderers.ts` — WebGL2 and Canvas 2D electron renderers, static mesh
+- `src/grid/nodes.ts` — `MapNode` and `NodeKind` types (data lives in the `nodes` collection)
+- `src/grid/renderers.ts` — WebGL2 and Canvas 2D renderers for electrons (colour by engine `hue`) and the per-edge heat glow; static mesh with faulted edges
 - `src/grid/spring.ts` — critically damped spring
 - `src/grid/game/index.ts` — public surface of the DOM-free grid game (re-exports)
 - `src/grid/game/physics.ts` — game constants: LOW/HIGH, losses, LIT_THRESHOLD, PLANT_MW, routing temperature, drift, heat τ
@@ -38,7 +37,6 @@
 - `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
 - `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
 - `src/grid/game/engine.ts` — `GridGame`: level, transformers, routing tables, electron pool, heat, evaluate/stars
-- `tests/sim.test.ts` — Vitest for the simulation
 - `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 layouts, solver timing, faults, step)
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions plus the 3 reference layouts for the engine tests
 - `.claude/launch.json` — dev-server config for the preview

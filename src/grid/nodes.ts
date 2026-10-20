@@ -1,4 +1,5 @@
-import type { NodeKind } from './sim';
+/** What a map node is: a generating plant, the locked substation, or a page section. */
+export type NodeKind = 'plant' | 'substation' | 'section';
 
 /** One map node. Data lives in the `nodes` content collection (`src/content/nodes/*.md`). */
 export interface MapNode {

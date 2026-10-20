@@ -1,17 +1,21 @@
 ---
 import { getCollection } from 'astro:content';
 import type { MapNode } from '../grid/nodes';
+import { LEVELS } from '../grid/game';
 
 const MAP_NODES: MapNode[] = (await getCollection('nodes'))
   .map((e) => e.data)
   .sort((a, b) => a.order - b.order);
+
+// A circle as a path (starts at the top, clockwise), so `pathLength` works everywhere.
+const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
 ---
 
 <section
   class="map"
   data-map
   data-nodes={JSON.stringify(MAP_NODES)}
-  aria-label="Interactive power grid. Each node is a link.">
+  aria-label="Interactive power grid puzzle. Each node is a link.">
   <canvas class="map__layer" data-mesh aria-hidden="true"></canvas>
   <canvas class="map__layer" data-electrons aria-hidden="true"></canvas>
   <div class="map__vignette" aria-hidden="true"></div>
@@ -19,8 +23,29 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
   <header class="hero">
     <p class="hero__kicker mono">Geronimo Molina · Haas MBA</p>
     <h1 class="hero__name">Gero</h1>
-    <p class="hero__line">Energy nerd who builds things. <br />Point anywhere: you're the transformer.</p>
+    <p class="hero__line">Energy nerd who builds things. <br />Place transformers, power the grid.</p>
   </header>
+
+  <div class="xfs" data-xfs>
+    <div class="xf xf--ghost" data-ghost aria-hidden="true">
+      <span class="xf__disc">
+        <svg class="xf__coil" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <circle cx="12" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+          <circle cx="20" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+        </svg>
+      </span>
+    </div>
+  </div>
+  <template data-xf-template>
+    <button type="button" class="xf" aria-label="Transformer. Click to remove, drag to move.">
+      <span class="xf__disc">
+        <svg class="xf__coil" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+          <circle cx="12" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+          <circle cx="20" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+        </svg>
+      </span>
+    </button>
+  </template>
 
   <nav class="nodes" aria-label="Grid">
     {
@@ -32,6 +57,10 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
           style={`--x:${n.land[0]};--y:${n.land[1]};--xp:${n.port[0]};--yp:${n.port[1]}`}
         >
           <span class="node__glyph" aria-hidden="true">
+            <svg class="node__ring" viewBox="0 0 100 100">
+              <path class="node__ring-base" d={RING} pathLength="100" />
+              <path class="node__ring-fill" d={RING} pathLength="100" data-ring />
+            </svg>
             {n.kind === 'plant' && <span class="node__core" />}
             {n.locked && (
               <svg viewBox="0 0 16 16" width="14" height="14">
@@ -49,36 +78,59 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     }
   </nav>
 
-  <div class="transformer" data-transformer aria-hidden="true">
-    <span class="transformer__field"></span>
-    <svg class="transformer__coil" viewBox="0 0 32 32" width="32" height="32">
-      <circle cx="12" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
-      <circle cx="20" cy="16" r="7.5" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
-    </svg>
-    <span class="transformer__tag mono" data-up>×25 ↑</span>
-    <span class="transformer__tag mono" data-down>÷28.75 ↓</span>
-  </div>
-
-  <aside class="meter glass" data-meter aria-label="Grid meter">
-    <button class="meter__chip mono" data-chip type="button" aria-label="Open meter">
-      <span class="meter__bolt" aria-hidden="true">⚡</span><span data-chip-v>13.8 kV</span>
+  <aside class="panel glass" data-panel aria-label="Grid operator">
+    <button
+      class="panel__chip mono"
+      data-chip
+      type="button"
+      aria-expanded="false"
+      aria-controls="grid-panel-body">
+      <span data-chip-text>Lv 1</span>
     </button>
-    <div class="meter__body">
-      <div class="meter__head">
-        <span class="meter__mode mono" data-mode>Point to energize</span>
-        <div class="meter__seg" role="group" aria-label="Current type">
-          <button type="button" class="mono" data-current="dc" aria-pressed="true">DC</button>
-          <button type="button" class="mono" data-current="ac" aria-pressed="false">AC</button>
+    <div class="panel__body" id="grid-panel-body">
+      <div class="panel__head">
+        <span class="panel__level mono" data-level-label>Level 1 / {LEVELS.length}</span>
+        <div class="panel__levels" role="group" aria-label="Levels">
+          {
+            LEVELS.map((l, i) => (
+              <button
+                type="button"
+                class="panel__ldot"
+                data-level={i}
+                aria-label={`Level ${i + 1}: ${l.title}`}
+                disabled={i > 0}
+              />
+            ))
+          }
         </div>
       </div>
-      <dl class="meter__readings">
-        <div><dt class="mono">V</dt><dd class="mono" data-v>13.8 kV</dd></div>
-        <div><dt class="mono">I</dt><dd class="mono" data-i>3.62 kA</dd></div>
-        <div class="is-power"><dt class="mono">P = V·I</dt><dd class="mono" data-p>50.0 MW</dd></div>
+      <p class="panel__title" data-title>{LEVELS[0].title}</p>
+      <p class="panel__objective" data-objective></p>
+      <div class="panel__budget" data-budget role="img"></div>
+      <div class="panel__eff">
+        <div class="panel__stat">
+          <span class="panel__label mono">Efficiency</span>
+          <span class="panel__big mono" data-eff>0%</span>
+        </div>
+        <div class="panel__stars" data-stars role="img" aria-label="Not cleared yet">
+          <span>★</span><span>★</span><span>★</span>
+        </div>
+      </div>
+      <dl class="panel__row">
+        <div class="panel__stat">
+          <dt class="panel__label mono">Delivered</dt>
+          <dd class="panel__small mono" data-delivered>0.0 MW</dd>
+        </div>
+        <div class="panel__stat">
+          <dt class="panel__label mono">Lost as heat</dt>
+          <dd class="panel__small panel__small--heat mono" data-lost>0.0 MW</dd>
+        </div>
       </dl>
-      <button type="button" class="meter__step" data-step>
-        <span class="up-only">Flip to step-down</span><span class="down-only">Flip to step-up</span>
-      </button>
+      <ul class="panel__loads" data-loads aria-label="Target loads"></ul>
+      <div class="panel__actions">
+        <button type="button" class="pill" data-reset>Reset</button>
+        <button type="button" class="pill pill--next" data-next disabled>Next</button>
+      </div>
     </div>
   </aside>
 
@@ -107,13 +159,8 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     -webkit-user-select: none;
     background: radial-gradient(120% 90% at 70% 30%, #08121c 0%, var(--bg) 60%);
   }
-  @media (pointer: fine) {
-    .map {
-      cursor: none;
-    }
-    .map :is(a, button) {
-      cursor: pointer;
-    }
+  .map :is(a, button:not(:disabled)) {
+    cursor: pointer;
   }
   .map__layer {
     position: absolute;
@@ -166,6 +213,59 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     color: var(--ink-2);
   }
 
+  /* ---------- transformers ---------- */
+  .xfs {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .xf {
+    --s: 1;
+    position: absolute;
+    left: -20px;
+    top: -20px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--hot);
+    pointer-events: auto;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+    will-change: transform;
+  }
+  .xf__disc {
+    width: 26px;
+    height: 26px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: 0 0 10px rgba(var(--cyan-rgb), 0.18);
+  }
+  .xf__coil {
+    flex: none;
+    filter: drop-shadow(0 0 4px rgba(var(--cyan-rgb), 0.55));
+  }
+  .xf--ghost {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .xf--ghost.is-visible {
+    opacity: 0.4;
+  }
+  .xf.is-leaving {
+    pointer-events: none;
+  }
+  .xf.is-dragging {
+    z-index: 1;
+  }
+
   /* ---------- nodes ---------- */
   .nodes {
     position: absolute;
@@ -175,6 +275,7 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
   }
   .node {
     --pulse: 0;
+    --spark: 0;
     position: absolute;
     left: calc(var(--x) * 100%);
     top: calc(var(--y) * 100%);
@@ -183,12 +284,16 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     text-decoration: none;
     pointer-events: auto;
     -webkit-tap-highlight-color: transparent;
+    transition: opacity 250ms ease-out;
   }
   @media (orientation: portrait) {
     .node {
       left: calc(var(--xp) * 100%);
       top: calc(var(--yp) * 100%);
     }
+  }
+  .node.is-idle {
+    opacity: 0.55;
   }
   .node__glyph {
     --size: 14px;
@@ -205,6 +310,16 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     box-shadow: 0 0 calc(6px + var(--pulse) * 26px) rgba(var(--cyan-rgb), calc(0.15 + var(--pulse) * 0.5));
     transform: scale(calc(1 + var(--pulse) * 0.12));
     transition: transform 100ms ease-out, border-color 150ms ease-out;
+  }
+  /* overvoltage flash */
+  .node__glyph::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: inherit;
+    border: 1.5px solid rgba(var(--amber-rgb), var(--spark));
+    box-shadow: 0 0 calc(var(--spark) * 22px) rgba(var(--amber-rgb), calc(var(--spark) * 0.8));
+    pointer-events: none;
   }
   /* generous hit area (≈10px beyond the glyph) */
   .node__glyph::after {
@@ -239,6 +354,40 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     border-color: var(--hot);
   }
 
+  /* target-load ring: dashed muted when unlit, fills cyan as it lights */
+  .node__ring {
+    position: absolute;
+    inset: -8px;
+    width: calc(100% + 16px);
+    height: calc(100% + 16px);
+    overflow: visible;
+    pointer-events: none;
+    display: none;
+    transform: scale(calc(1 + var(--pulse) * 0.16));
+  }
+  .node.is-target .node__ring {
+    display: block;
+  }
+  .node__ring path {
+    fill: none;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .node__ring-base {
+    stroke: var(--muted);
+    stroke-dasharray: 4 4;
+  }
+  .node__ring-fill {
+    stroke: var(--cyan);
+    stroke-dasharray: 0 100;
+  }
+  .node.is-lit .node__ring-fill {
+    filter: drop-shadow(0 0 calc(3px + var(--pulse) * 8px) rgba(var(--cyan-rgb), 0.7));
+  }
+  .node.is-lit .node__ring-base {
+    stroke: transparent;
+  }
+
   .node__label {
     position: absolute;
     top: 0;
@@ -255,6 +404,9 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
   }
   .node--substation {
     --label-gap: 28px;
+  }
+  .node--section.is-target {
+    --label-gap: 22px;
   }
   .node--flip .node__label {
     left: auto;
@@ -290,158 +442,237 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     color: #fff;
   }
 
-  /* ---------- transformer (the cursor) ---------- */
-  .transformer {
-    --s: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 4;
-    pointer-events: none;
-    opacity: 0;
-    will-change: transform, opacity;
-    color: var(--hot);
-  }
-  .transformer[data-step-mode='down'] {
-    color: var(--amber);
-  }
-  .transformer__field {
-    position: absolute;
-    width: var(--field, 300px);
-    height: var(--field, 300px);
-    left: calc(var(--field, 300px) / -2);
-    top: calc(var(--field, 300px) / -2);
-    border-radius: 50%;
-    border: 1px dashed currentColor;
-    opacity: 0.18;
-    background: radial-gradient(circle, rgba(var(--cyan-rgb), 0.06), transparent 70%);
-    transform: scale(calc(0.8 + var(--s) * 0.2));
-  }
-  .transformer[data-step-mode='down'] .transformer__field {
-    background: radial-gradient(circle, rgba(var(--amber-rgb), 0.07), transparent 70%);
-  }
-  .transformer__coil {
-    position: absolute;
-    left: -16px;
-    top: -16px;
-    filter: drop-shadow(0 0 6px currentColor);
-  }
-  .transformer__tag {
-    position: absolute;
-    left: 50%;
-    top: 22px;
-    transform: translateX(-50%);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-  }
-  .transformer[data-step-mode='up'] [data-down],
-  .transformer[data-step-mode='down'] [data-up] {
-    display: none;
-  }
-
-  /* ---------- meter ---------- */
-  .meter {
+  /* ---------- level panel ---------- */
+  .panel {
     position: absolute;
     z-index: 5;
     left: var(--gutter);
     bottom: var(--gutter);
-    width: 17.5rem;
+    width: 18.5rem;
     border-radius: var(--radius-lg);
     padding: 1rem 1rem 0.875rem;
   }
-  .meter__chip {
+  .panel__chip {
     display: none;
   }
-  .meter__head {
+  .panel__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
   }
-  .meter__mode {
+  .panel__level {
     font-size: 0.6875rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink-2);
   }
-  .meter[data-step-mode='down'] .meter__mode {
-    color: var(--amber);
+  .panel__levels {
+    display: flex;
+    margin-right: -6px;
   }
-  .meter__seg {
-    display: inline-flex;
-    padding: 2px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
-  }
-  .meter__seg button {
+  .panel__ldot {
     appearance: none;
+    width: 20px;
+    height: 20px;
+    padding: 0;
     border: 0;
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.6875rem;
-    padding: 0.25rem 0.625rem;
-    border-radius: 999px;
-    transition: background 150ms ease-out, color 150ms ease-out;
-  }
-  .meter__seg button[aria-pressed='true'] {
-    background: rgba(var(--cyan-rgb), 0.16);
-    color: var(--cyan);
-  }
-  .meter__seg button:active,
-  .meter__step:active {
-    transform: scale(0.96);
-  }
-  .meter__readings {
+    background: none;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem 1rem;
-    margin: 0.875rem 0;
+    place-items: center;
+    border-radius: 50%;
   }
-  .meter__readings div {
+  .panel__ldot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 1.5px solid var(--ink-2);
+    transition: background 150ms ease-out, border-color 150ms ease-out;
+  }
+  .panel__ldot[aria-current='step']::before {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px rgba(var(--cyan-rgb), 0.6);
+  }
+  .panel__ldot:disabled::before {
+    border-color: transparent;
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .panel__ldot:not(:disabled):active {
+    transform: scale(0.9);
+  }
+  .panel__title {
+    margin: 0.5rem 0 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .panel__objective {
+    margin: 0.125rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .panel__budget {
+    display: flex;
+    gap: 6px;
+    margin-top: 0.625rem;
+    will-change: transform;
+  }
+  .panel__budget :global(span) {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 1.5px solid var(--hot);
+    opacity: 0.45;
+  }
+  .panel__budget :global(span.is-left) {
+    background: var(--hot);
+    opacity: 1;
+    box-shadow: 0 0 6px rgba(var(--cyan-rgb), 0.5);
+  }
+  .panel__eff {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+  }
+  .panel__stat {
     display: grid;
     gap: 0.125rem;
+    margin: 0;
   }
-  .meter__readings .is-power {
-    grid-column: 1 / -1;
+  .panel__label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .panel__big {
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--cyan);
+    transition: color 200ms ease-out;
+  }
+  .panel__big[data-state='low'] {
+    color: var(--amber);
+  }
+  .panel__big[data-state='won'] {
+    color: var(--hot);
+    text-shadow: 0 0 14px rgba(var(--cyan-rgb), 0.45);
+  }
+  .panel__stars {
+    display: flex;
+    gap: 2px;
+    padding-bottom: 0.25rem;
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+  .panel__stars span {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.18);
+    transform: scale(0);
+  }
+  .panel__stars span.is-on {
+    color: var(--hot);
+    text-shadow: 0 0 10px rgba(var(--cyan-rgb), 0.6);
+  }
+  .panel__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0.625rem 0 0;
     padding-top: 0.625rem;
     border-top: 1px solid rgba(255, 255, 255, 0.07);
   }
-  .meter__readings dt {
-    font-size: 0.6875rem;
-    color: var(--muted);
-    letter-spacing: 0.06em;
-  }
-  .meter__readings dd {
+  .panel__small {
     margin: 0;
-    font-size: 1.375rem;
+    font-size: 1rem;
     font-weight: 500;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     color: var(--ink);
   }
-  .meter[data-step-mode='down'] [data-v] {
+  .panel__small--heat {
     color: var(--amber);
   }
-  .meter__readings .is-power dd {
-    color: var(--cyan);
+  .panel__loads {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
   }
-  .meter__step {
+  .panel__loads :global(li) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem 0.25rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.75rem;
+    color: var(--ink-2);
+    transition: background 200ms ease-out, color 200ms ease-out;
+  }
+  .panel__loads :global(li svg circle) {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.5;
+    stroke-dasharray: 2.2 2.2;
+  }
+  .panel__loads :global(li.is-lit) {
+    background: rgba(var(--cyan-rgb), 0.12);
+    color: var(--ink);
+  }
+  .panel__loads :global(li.is-lit svg circle) {
+    stroke: var(--cyan);
+    stroke-dasharray: none;
+  }
+  .panel__actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.875rem;
+  }
+  .pill {
+    position: relative;
     appearance: none;
-    width: 100%;
+    flex: 1;
+    height: 36px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: rgba(255, 255, 255, 0.04);
     color: var(--ink-2);
-    border-radius: var(--radius-md);
+    border-radius: 999px;
     font: 500 0.8125rem/1 var(--font);
-    padding: 0.625rem;
-    transition: transform 100ms ease-out, background 150ms ease-out;
+    transition: transform 100ms ease-out, background 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out;
   }
-  .meter__step:hover {
+  /* 44px hit area */
+  .pill::before {
+    content: '';
+    position: absolute;
+    inset: -4px 0;
+  }
+  .pill:hover:not(:disabled) {
     background: rgba(255, 255, 255, 0.08);
   }
-  .meter[data-step-mode='up'] .down-only,
-  .meter[data-step-mode='down'] .up-only {
-    display: none;
+  .pill:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+  .pill--next:not(:disabled) {
+    border-color: rgba(var(--cyan-rgb), 0.4);
+    background: rgba(var(--cyan-rgb), 0.14);
+    color: var(--cyan);
+  }
+  .pill--next:hover:not(:disabled) {
+    background: rgba(var(--cyan-rgb), 0.22);
+  }
+  .pill:disabled {
+    opacity: 0.4;
   }
 
   /* ---------- toast ---------- */
@@ -450,7 +681,7 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     z-index: 6;
     right: var(--gutter);
     bottom: var(--gutter);
-    width: min(26rem, calc(100% - 20rem - 2 * var(--gutter)));
+    width: min(26rem, calc(100% - 21rem - 2 * var(--gutter)));
     display: flex;
     gap: 0.625rem;
     padding: 0.875rem 1rem;
@@ -479,14 +710,14 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
     .node__title {
       font-size: 0.9375rem;
     }
-    .meter {
+    .panel {
       left: 50%;
       transform: translateX(-50%);
       width: auto;
       padding: 0;
       border-radius: 999px;
     }
-    .meter__chip {
+    .panel__chip {
       display: inline-flex;
       align-items: center;
       gap: 0.375rem;
@@ -495,36 +726,42 @@ const MAP_NODES: MapNode[] = (await getCollection('nodes'))
       background: transparent;
       color: var(--ink);
       font-size: 0.875rem;
-      padding: 0.625rem 1rem;
+      white-space: nowrap;
+      padding: 0.75rem 1.125rem;
     }
-    .meter__body {
+    .panel__chip:active {
+      transform: scale(0.96);
+    }
+    .panel__body {
       display: none;
     }
-    .meter.is-open {
+    .panel.is-open {
       width: min(20rem, calc(100% - 2 * var(--gutter)));
       border-radius: var(--radius-lg);
       padding: 0.25rem 1rem 0.875rem;
     }
-    .meter.is-open .meter__body {
+    .panel.is-open .panel__chip {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .panel.is-open .panel__body {
       display: block;
     }
     .toast {
       left: var(--gutter);
       right: var(--gutter);
       width: auto;
-      bottom: calc(var(--gutter) + 3.5rem);
+      bottom: calc(var(--gutter) + 3.75rem);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .transformer {
-      display: none;
-    }
     .toast {
       transition: opacity 200ms ease;
       transform: none;
     }
-    .node__glyph {
+    .node__glyph,
+    .node {
       transition: none;
     }
   }
