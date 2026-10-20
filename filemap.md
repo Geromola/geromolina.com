@@ -37,8 +37,8 @@
 - `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
 - `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
 - `src/grid/game/engine.ts` — `GridGame`: level, transformers, routing tables, electron pool, heat, evaluate/stars
-- `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 layouts, solver timing, faults, step)
-- `tests/fixtures/nodes.ts` — node ids, kinds and positions plus the 3 reference layouts for the engine tests
+- `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, solver timing, faults, step)
+- `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
 - `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` plus every `kind: plant` node `href`
 - `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)

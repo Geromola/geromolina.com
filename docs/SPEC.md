@@ -78,7 +78,7 @@ The map, node positions and links are the same in every level. A level only chan
 | 1 | First light | custom-llm | about | 2 | none |
 | 2 | Two towns | custom-llm | about, off-the-grid | 3 | none |
 | 3 | Long haul | spotify-insight | contact, about | 4 | none |
-| 4 | Storm damage | both | about, off-the-grid, contact, networking-tracker | 4 | ~12% of edges cut (seeded, never next to a node, regenerated until solvable) |
+| 4 | Storm damage | both | about, contact, networking-tracker | 4 | ~12% of edges cut (seeded, never next to a node, regenerated until solvable) |
 
 - **Placement.** Transformers can't go on node vertices. Every other junction in the visible area is valid.
 - **Win.** All target loads are lit.

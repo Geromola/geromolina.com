@@ -398,6 +398,8 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     padding: 0.25rem 0.5rem;
     border-radius: 0.5rem;
     transition: color 150ms ease-out;
+    /* Only the glyph is a pointer target, so labels never swallow junction clicks. */
+    pointer-events: none;
   }
   .node--plant {
     --label-gap: 34px;

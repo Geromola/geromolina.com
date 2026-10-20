@@ -431,9 +431,30 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   });
 
   // --------------------------------------------------------------- panel
-  ui.chip.addEventListener('click', () => {
-    const open = panel.classList.toggle('is-open');
+  const phone = matchMedia('(max-width: 720px)');
+  function setPanelOpen(open: boolean) {
+    panel.classList.toggle('is-open', open);
     ui.chip.setAttribute('aria-expanded', String(open));
+  }
+  ui.chip.addEventListener('click', () => setPanelOpen(!panel.classList.contains('is-open')));
+  // Expanded on a phone: a tap outside the panel only collapses it (capture phase,
+  // so it never also places, removes or drags a transformer). Node links still work.
+  root.addEventListener(
+    'pointerdown',
+    (e) => {
+      if (!phone.matches || !panel.classList.contains('is-open')) return;
+      const t = e.target as Element | null;
+      if (t?.closest('[data-panel]')) return;
+      setPanelOpen(false);
+      if (!t?.closest('[data-node]')) e.stopPropagation();
+    },
+    true,
+  );
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || !panel.classList.contains('is-open')) return;
+    const inside = panel.contains(document.activeElement);
+    setPanelOpen(false);
+    if (inside) ui.chip.focus({ preventScroll: true });
   });
   ui.reset.addEventListener('click', () => {
     if (!game.transformers.length) return;

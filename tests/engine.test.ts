@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { GridGame, starsFor } from '../src/grid/game/engine';
 import { layoutGame } from '../src/grid/game/layout';
 import { LEVELS, type LevelDef } from '../src/grid/game/levels';
-import { HIGH, LOSS_HIGH, LOSS_LOW, LOW, SEG_COST, T_COST } from '../src/grid/game/physics';
+import { HIGH, LIT_THRESHOLD, LOSS_HIGH, LOSS_LOW, LOW, SEG_COST, T_COST } from '../src/grid/game/physics';
 import { solve } from '../src/grid/game/solver';
-import { LAYOUTS, NODES } from './fixtures/nodes';
+import { LAYOUTS, NODES, SAMPLED_LAYOUTS } from './fixtures/nodes';
 
 function run(game: GridGame, seconds: number, dt = 1 / 60) {
   for (let t = 0; t < seconds; t += dt) game.step(dt);
@@ -288,6 +288,36 @@ describe('levels on the reference layouts', () => {
       });
     });
   }
+});
+
+describe('levels on sampled viewports', () => {
+  // Every level on every sampled layout: the solver wins within budget, and the
+  // empty board does not (otherwise the level is trivial on that screen).
+  let worstEmpty = 0; // highest efficiency of the load that keeps the empty board from winning
+  let worstSolved = 1; // lowest lit-load efficiency under the solver's placement
+  for (const [w, h] of SAMPLED_LAYOUTS) {
+    it(`${w}×${h}${h > w ? ' (portrait)' : ''}`, () => {
+      const game = forLayout(w, h, 0);
+      LEVELS.forEach((def, i) => {
+        game.setLevel(i);
+        const empty = game.evaluate();
+        expect(empty.won, `level ${i + 1} is won by the empty board`).toBe(false);
+        worstEmpty = Math.max(worstEmpty, Math.min(...empty.perLoad.map((l) => l.efficiency)));
+
+        const sol = game.solverPlacement;
+        expect(sol.length).toBeLessThanOrEqual(def.budget);
+        for (const t of sol) expect(game.placeTransformer(t.col, t.row)).toBe(true);
+        const ev = game.evaluate();
+        expect(ev.won, `level ${i + 1} is not solvable`).toBe(true);
+        worstSolved = Math.min(worstSolved, ...ev.perLoad.map((l) => l.efficiency));
+      });
+    });
+  }
+  it('margins against LIT_THRESHOLD', () => {
+    expect(worstEmpty).toBeLessThan(LIT_THRESHOLD);
+    expect(worstSolved).toBeGreaterThanOrEqual(LIT_THRESHOLD);
+    console.info(`sampled margins: worst empty ${worstEmpty.toFixed(3)}, worst solved ${worstSolved.toFixed(3)} (threshold ${LIT_THRESHOLD})`);
+  });
 });
 
 describe('faults', () => {

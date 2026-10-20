@@ -24,7 +24,10 @@ export const LEVELS: readonly LevelDef[] = [
   {
     title: 'Storm damage',
     plants: ['custom-llm', 'spotify-insight'],
-    loads: ['about', 'off-the-grid', 'contact', 'networking-tracker'],
+    // Three loads, not four: with a budget of 4 (one step-up plus three
+    // step-downs) every realistic viewport stays solvable. Four loads needed a
+    // shared step-down that only some layouts allow.
+    loads: ['about', 'contact', 'networking-tracker'],
     budget: 4,
     faults: { fraction: 0.12, seed: 0x5707 },
   },
