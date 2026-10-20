@@ -30,5 +30,22 @@
 - `src/grid/nodes.ts` — `MapNode` type (data lives in the `nodes` collection)
 - `src/grid/renderers.ts` — WebGL2 and Canvas 2D electron renderers, static mesh
 - `src/grid/spring.ts` — critically damped spring
+- `src/grid/game/index.ts` — public surface of the DOM-free grid game (re-exports)
+- `src/grid/game/physics.ts` — game constants: LOW/HIGH, losses, LIT_THRESHOLD, PLANT_MW, routing temperature, drift, heat τ
+- `src/grid/game/board.ts` — lattice graph: vertex and edge indexing, neighbours, visible bounds check
+- `src/grid/game/routing.ts` — backward Dijkstra on the (vertex, level) state graph; best plant per load
+- `src/grid/game/levels.ts` — the 4 level definitions; seeded fault generation
+- `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
+- `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
+- `src/grid/game/engine.ts` — `GridGame`: level, transformers, routing tables, electron pool, heat, evaluate/stars
 - `tests/sim.test.ts` — Vitest for the simulation
+- `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 layouts, solver timing, faults, step)
+- `tests/fixtures/nodes.ts` — node ids, kinds and positions plus the 3 reference layouts for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
+- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` plus every `kind: plant` node `href`
+- `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)
+- `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`, `public/apple-touch-icon.png` — PNG app icons (generated from SVG via qlmanage + sips)
+- `public/og.png` — 1200×630 Open Graph image
+- `public/manifest.webmanifest` — PWA manifest
+- `public/sw.js` — hand-written service worker (cache-first `/_astro/*` + icons, network-first HTML, same-origin only); registered from `Base.astro` in production
+- `public/robots.txt` — allow all, points to the sitemap

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://geromolina.com/sitemap.xml
