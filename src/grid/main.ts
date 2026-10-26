@@ -1,13 +1,16 @@
-import { GridGame, LEVELS, LIT_THRESHOLD, layoutGame, type Evaluation, type GameLayout } from './game';
+import { GridGame, LEVELS, LIT_THRESHOLD, layoutDecor, layoutGame, type DecorCard, type Evaluation, type GameLayout } from './game';
 import { toPx, type Lattice } from './layout';
 import type { MapNode } from './nodes';
 import { CanvasRenderer, WebGLRenderer, drawMesh, type Renderer } from './renderers';
 import { Spring } from './spring';
 
 /**
- * DOM wiring for the "Grid operator" puzzle (SPEC "The grid game"): layout,
- * transformer input, the level panel, toasts and the render loop. The game
- * itself is `GridGame` (DOM-free).
+ * DOM wiring for the home hero (SPEC "Home hero v2"): Projects mode (the
+ * default: a decorative flow between the project cards' terminal dots) and
+ * Play mode (`#play`: the "Grid operator" puzzle, SPEC "The grid game", with
+ * transformer input, the level panel, toasts). One canvas pair and one render
+ * loop serve whichever mode is showing. The games themselves are `GridGame`
+ * (DOM-free).
  */
 
 const STORE_KEY = 'gero-grid-v1';
@@ -25,9 +28,14 @@ const DRAG_PX = 10;
 const TOAST_MS = 7000;
 const HEAT_FACT_AT = 0.3; // renderer.maxHeat that counts as "visible heat"
 const BEAT_S = 0.9; // min seconds between delivery pulses on a lit load
-const BLOCK_PAD = 8; // css px around hero text and the panel where transformers can't go
+const BLOCK_PAD = 8; // css px around the Back pill and the panel where transformers can't go
 const LIVE_GAP_MS = 1200; // min ms between screen-reader announcements
 const LIVE_SETTLE_MS = 500; // wait this long after the last change before announcing
+const INTRO_MS = 2000; // idle time in Play mode before the level intro toast
+const FOCUS_SHARE = 0.6; // share of the decorative flow a hovered or focused card pulls toward itself
+const MODE_RESPONSE = 0.35; // s, the Projects ↔ Play spring (damping 1)
+const MODE_SCALE = 0.96; // the cards and header shrink to this as they leave
+const PLAY_HASH = '#play';
 
 const FACTS = {
   place: '345 kV means 25× less current, so 625× less heat (I²R).',
@@ -80,7 +88,21 @@ interface Spot {
   y: number;
 }
 
-export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
+type Mode = 'projects' | 'play';
+
+/** The decorative flow of Projects mode, at one map size and card layout. */
+interface Decor {
+  key: string;
+  width: number;
+  height: number;
+  lat: Lattice;
+  /** Null with fewer than two cards (no flow, just the mesh). */
+  game: GridGame | null;
+}
+
+/** `home` is `[data-home]`: the project menu plus the map (`[data-map]`). */
+export function mountGrid(home: HTMLElement, nodes: MapNode[]) {
+  const root = home.querySelector<HTMLElement>('[data-map]')!;
   const $ = <T extends Element = HTMLElement>(sel: string, from: ParentNode = root) => from.querySelector<T>(sel)!;
   const meshCanvas = $<HTMLCanvasElement>('[data-mesh]');
   const electronCanvas = $<HTMLCanvasElement>('[data-electrons]');
@@ -94,7 +116,14 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   const toast = $('[data-toast]');
   const live = $('[data-live]');
   const panel = $('[data-panel]');
-  const heroEls = [...root.querySelectorAll<HTMLElement>('[data-hero-block]')];
+  /** Chrome over the map in Play mode (the Back pill): junctions under it are blocked. */
+  const blockEls = [...root.querySelectorAll<HTMLElement>('[data-block]')];
+  const gameLayer = $('[data-game]');
+  const backBtn = $<HTMLButtonElement>('[data-back]');
+  const projects = home.querySelector<HTMLElement>('[data-projects]');
+  const playLink = home.querySelector<HTMLAnchorElement>('[data-play]');
+  const cardEls = [...home.querySelectorAll<HTMLAnchorElement>('[data-card]')];
+  const cardDots = cardEls.map((el) => el.querySelector<HTMLElement>('[data-card-dot]'));
   const ui = {
     chip: $<HTMLButtonElement>('[data-chip]', panel),
     chipText: $('[data-chip-text]', panel),
@@ -138,7 +167,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   let everPlaced = false;
   let heatEligible = false;
   let dragging: Xf | null = null;
-  /** Vertices kept free of transformers: hero text plus the resting panel, and hero only (fallback). */
+  /** Vertices kept free of transformers: the Back pill plus the resting panel, and the pill only (fallback). */
   let blocks: { all: number[]; hero: number[] } = { all: [], hero: [] };
   let panelBox: Box | null = null;
 
@@ -159,6 +188,13 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   let litNodes = new Set<number>();
   let targetNodes = new Set<number>();
 
+  // Mode: Projects (decorative flow) or Play (the game). 0 = projects, 1 = play.
+  let mode: Mode = location.hash === PLAY_HASH ? 'play' : 'projects';
+  const modeT = new Spring(mode === 'play' ? 1 : 0, MODE_RESPONSE, 1);
+  let decor: Decor | null = null;
+  let decorFocus = -1;
+  let introTimer = 0;
+
   // Panel animation state.
   const effSpring = new Spring(0, 0.45);
   let effShown = '';
@@ -166,9 +202,10 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   const stars = ui.starEls.map(() => ({ s: new Spring(0, 0.35), delay: 0 }));
 
   // ------------------------------------------------------------- layout
-  function build() {
+  /** Play mode: (re)build the game for the map size. False when the size is unchanged. */
+  function build(): boolean {
     const rect = root.getBoundingClientRect();
-    if (game && rect.width === width && rect.height === height) return;
+    if (game && rect.width === width && rect.height === height) return false;
     const t0 = performance.now();
     width = rect.width;
     height = rect.height;
@@ -222,12 +259,206 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       animate(0);
     }
     performance.measure('grid:build', { start: t0 });
+    return true;
+  }
+
+  /** Show the game on the canvases (after Projects mode drew there). */
+  function showPlay() {
+    if (build()) return;
+    drawMesh(meshCanvas, width, height, dpr, lat, game.faulted);
+    renderer.resize(width, height, dpr, lat);
+    if (reduceMotion.matches) still();
+    else renderer.draw(game, 0);
+  }
+
+  // ------------------------------------------------------ decorative flow
+  /**
+   * Terminal-dot centres in map px. Transforms (the mode spring's scale, a
+   * card's hover lift) are switched off while measuring.
+   */
+  function measureCards(): DecorCard[] {
+    home.classList.add('is-measuring');
+    const origin = root.getBoundingClientRect();
+    const cards = cardEls.flatMap((el, i): DecorCard[] => {
+      const dot = cardDots[i];
+      if (!dot) return [];
+      const r = dot.getBoundingClientRect();
+      if (!r.width) return [];
+      return [
+        {
+          id: el.dataset.card || `card-${i}`,
+          live: el.hasAttribute('data-live'),
+          x: r.left + r.width / 2 - origin.left,
+          y: r.top + r.height / 2 - origin.top,
+        },
+      ];
+    });
+    home.classList.remove('is-measuring');
+    return cards;
+  }
+
+  /** Projects mode: (re)build the decorative flow for the map size and card layout. False when unchanged. */
+  function buildDecor(): boolean {
+    const rect = root.getBoundingClientRect();
+    const cards = measureCards();
+    const key = `${rect.width}x${rect.height}|${cards.map((c) => `${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(';')}`;
+    if (decor && decor.key === key) return false;
+    const t0 = performance.now();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const d = layoutDecor(cards, rect.width, rect.height);
+    const verts = d.lattice.cols * d.lattice.rows;
+    const g = d.level
+      ? new GridGame({
+          cols: d.lattice.cols,
+          rows: d.lattice.rows,
+          nodes: d.nodes,
+          bounds: d.bounds,
+          levels: [d.level],
+          count: coarse ? Math.min(700, verts * 4) : Math.min(1500, verts * 6),
+          decorative: true,
+        })
+      : null;
+    if (g && decorFocus >= 0) g.setFocus(decorFocus, FOCUS_SHARE);
+    if (g) for (let k = 0; k < PREWARM_S / PREWARM_DT; k++) g.step(PREWARM_DT);
+    decor = { key, width: rect.width, height: rect.height, lat: d.lattice, game: g };
+    paintDecor();
+    root.dataset.ready = '';
+    performance.measure('grid:decor', { start: t0 });
+    return true;
+  }
+
+  /** Draw the decorative flow on the canvases (mesh, size, one frame). */
+  function paintDecor() {
+    if (!decor) return;
+    drawMesh(meshCanvas, decor.width, decor.height, dpr, decor.lat);
+    renderer.resize(decor.width, decor.height, dpr, decor.lat);
+    if (reduceMotion.matches) stillDecor();
+    else if (decor.game) renderer.draw(decor.game, 0);
+  }
+
+  function showDecor() {
+    if (!buildDecor()) paintDecor();
+  }
+
+  /** Reduced motion: run the decorative flow offline, then draw one still frame. */
+  function stillDecor() {
+    if (!decor?.game) return;
+    for (let k = 0; k < STILL_S / SIM_DT; k++) decor.game.step(SIM_DT);
+    renderer.draw(decor.game, 0);
+  }
+
+  /** Hovered or focused card `k` (−1: none) pulls the flow toward its anchor. */
+  function setDecorFocus(k: number) {
+    if (k === decorFocus) return;
+    decorFocus = k;
+    decor?.game?.setFocus(k, FOCUS_SHARE);
+    if (mode === 'projects' && reduceMotion.matches) stillDecor();
+  }
+
+  cardEls.forEach((el, i) => {
+    const on = () => setDecorFocus(i);
+    const off = () => decorFocus === i && setDecorFocus(-1);
+    el.addEventListener('pointerenter', on);
+    el.addEventListener('pointerleave', off);
+    el.addEventListener('focus', on);
+    el.addEventListener('blur', off);
+    el.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      markCardTransition(i);
+    });
+  });
+
+  // --------------------------------------------------------------- mode
+  /** Switch between Projects and Play. Springs from wherever the last switch got to. */
+  function setMode(next: Mode) {
+    if (next === mode) return;
+    mode = next;
+    home.dataset.mode = next;
+    document.documentElement.dataset.homeMode = next;
+    const play = next === 'play';
+    if (projects) projects.inert = play;
+    gameLayer.inert = !play;
+    modeT.target = play ? 1 : 0;
+    if (reduceMotion.matches || !raf) modeT.snap(modeT.target);
+    if (play) {
+      showPlay();
+      scheduleIntro();
+    } else {
+      clearTimeout(introTimer);
+      if (dragging) drop(dragging, false);
+      cancelTouch();
+      hideGhost();
+      setPanelOpen(false);
+      hover = -1;
+      showDecor();
+    }
+    paintMode();
   }
 
   /**
-   * Junctions under the hero kicker, name and line (their text's client rects)
-   * and under the level panel at rest (desktop, or the collapsed chip up to 1024px),
-   * each padded by BLOCK_PAD. In map coordinates.
+   * Paint the mode spring: the cards and header fade and shrink, the game layer fades.
+   * At rest the inline styles go and the CSS state for `data-mode` takes over (under
+   * reduced motion that is a CSS cross-fade).
+   */
+  function paintMode() {
+    const layers = projects ? [projects, gameLayer] : [gameLayer];
+    if (Math.abs(modeT.value - modeT.target) < 0.002 && Math.abs(modeT.velocity) < 0.02) {
+      modeT.snap(modeT.target);
+      for (const el of layers) {
+        el.style.opacity = '';
+        el.style.transform = '';
+        el.style.visibility = '';
+      }
+      return;
+    }
+    const t = Math.min(1, Math.max(0, modeT.value));
+    if (projects) {
+      projects.style.opacity = (1 - t).toFixed(3);
+      projects.style.transform = `scale(${(1 - (1 - MODE_SCALE) * t).toFixed(4)})`;
+      projects.style.visibility = 'visible';
+    }
+    gameLayer.style.opacity = t.toFixed(3);
+    gameLayer.style.visibility = 'visible';
+  }
+
+  function scheduleIntro() {
+    clearTimeout(introTimer);
+    introTimer = window.setTimeout(() => {
+      if (mode === 'play' && !everPlaced && !game.transformers.length) showFact('intro');
+    }, INTRO_MS);
+  }
+
+  const scrollBehavior = (): ScrollBehavior => (reduceMotion.matches ? 'auto' : 'smooth');
+
+  playLink?.addEventListener('click', (e) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    if (mode === 'play') return;
+    history.pushState({ gridPlay: true }, '', PLAY_HASH);
+    setMode('play');
+    if (scrollY > 0) window.scrollTo({ top: 0, behavior: scrollBehavior() });
+  });
+  backBtn.addEventListener('click', () => {
+    if ((history.state as { gridPlay?: boolean } | null)?.gridPlay) return history.back();
+    // Landed on #play: a new entry, so the browser's Back still returns to the game.
+    history.pushState(null, '', location.pathname + location.search);
+    setMode('projects');
+  });
+  // The URL decides: #play is the game, anything else is Projects. Following a section link
+  // out of Play mode (a node such as About) keeps the target in view after the hero grows.
+  const syncFromHash = () => {
+    const next: Mode = location.hash === PLAY_HASH ? 'play' : 'projects';
+    if (next === mode) return;
+    setMode(next);
+    const target = location.hash.length > 1 ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    target?.scrollIntoView({ block: 'start', behavior: scrollBehavior() });
+  };
+  window.addEventListener('popstate', syncFromHash);
+  window.addEventListener('hashchange', syncFromHash);
+
+  /**
+   * Junctions under the Back pill (its box) and under the level panel at rest
+   * (desktop, or the collapsed chip up to 1024px), each padded by BLOCK_PAD. In map coordinates.
    */
   function blockedVertices() {
     const origin = root.getBoundingClientRect();
@@ -237,11 +468,10 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       r: r.right - origin.left + BLOCK_PAD,
       b: r.bottom - origin.top + BLOCK_PAD,
     });
-    const range = document.createRange();
-    const hero = heroEls.flatMap((el) => {
-      range.selectNodeContents(el);
-      return [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0).map(rel);
-    });
+    const hero = blockEls
+      .map((el) => el.getBoundingClientRect())
+      .filter((r) => r.width > 0 && r.height > 0)
+      .map(rel);
     // The expanded chip panel is a temporary overlay: keep the last resting rect.
     if (!compact.matches || !panel.classList.contains('is-open')) panelBox = rel(panel.getBoundingClientRect());
     const inside = (boxes: Box[]) => {
@@ -259,8 +489,8 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   }
 
   /**
-   * Block the hero and panel; if that leaves the level unsolvable (a node under
-   * the panel at some tablet sizes), block the hero only, then nothing.
+   * Block the Back pill and the panel; if that leaves the level unsolvable (a node under
+   * the panel at some tablet sizes), block the pill only, then nothing.
    */
   function applyBlocked() {
     game.setBlocked(blocks.all);
@@ -474,7 +704,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   let pendingTouch: { id: number; x: number; y: number; xf: Xf | null; empty: boolean } | null = null;
 
   root.addEventListener('pointerdown', (e) => {
-    if (isChrome(e.target)) return;
+    if (mode !== 'play' || isChrome(e.target)) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     const p = local(e);
     const spot = snapAt(p.x, p.y);
@@ -494,7 +724,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       if (Math.hypot(p.x - pendingTouch.x, p.y - pendingTouch.y) > DRAG_PX) cancelTouch();
       return;
     }
-    if (e.pointerType === 'touch' || dragging) return;
+    if (e.pointerType === 'touch' || dragging || mode !== 'play') return;
     if (isChrome(e.target) || game.budgetLeft <= 0) return hideGhost();
     const p = local(e);
     const spot = snapAt(p.x, p.y);
@@ -582,15 +812,32 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
    * record its viewport circle. Base.astro's `pageswap` refreshes the record where supported.
    */
   function markTransition(i: number) {
-    glyphEls.forEach((g, k) => k !== i && g.style.viewTransitionName && (g.style.viewTransitionName = ''));
-    if (!reduceMotion.matches) glyphEls[i].style.viewTransitionName = VT_NAME;
-    const r = glyphEls[i].getBoundingClientRect();
+    nameForTransition(glyphEls[i]);
+    recordTransition(nodes[i].id, nodeEls[i], glyphEls[i]);
+  }
+
+  /** Clicked card (Projects mode): its terminal dot is the source of the morph instead. */
+  function markCardTransition(i: number) {
+    const dot = cardDots[i];
+    if (!dot || !/^\/projects\/[^/]+\/?$/.test(new URL(cardEls[i].href).pathname)) return;
+    nameForTransition(dot);
+    recordTransition(cardEls[i].dataset.card ?? '', cardEls[i], dot);
+  }
+
+  /** Give `el` (only it, so names stay unique) the morph's view-transition name. */
+  function nameForTransition(el: HTMLElement) {
+    for (const g of [...glyphEls, ...cardDots]) if (g && g !== el && g.style.viewTransitionName) g.style.viewTransitionName = '';
+    if (!reduceMotion.matches) el.style.viewTransitionName = VT_NAME;
+  }
+
+  function recordTransition(id: string, link: HTMLAnchorElement, el: HTMLElement) {
+    const r = el.getBoundingClientRect();
     try {
       sessionStorage.setItem(
         VT_KEY,
         JSON.stringify({
-          id: nodes[i].id,
-          path: new URL(nodeEls[i].href).pathname,
+          id,
+          path: new URL(link.href).pathname,
           x: r.left + r.width / 2,
           y: r.top + r.height / 2,
           r: r.width / 2,
@@ -623,7 +870,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   root.addEventListener(
     'pointerdown',
     (e) => {
-      if (!compact.matches || !panel.classList.contains('is-open')) return;
+      if (mode !== 'play' || !compact.matches || !panel.classList.contains('is-open')) return;
       const t = e.target as Element | null;
       if (t?.closest('[data-panel]')) return;
       setPanelOpen(false);
@@ -1012,10 +1259,19 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     if (elapsed < frameBudget) return;
     const dt = Math.min(elapsed / 1000, 1 / 20);
     last = now;
-    game.step(dt);
-    renderer.draw(game, dt);
-    watchSim();
-    animate(dt);
+    if (modeT.value !== modeT.target || modeT.velocity !== 0) {
+      modeT.step(dt);
+      paintMode();
+    }
+    if (mode === 'play') {
+      game.step(dt);
+      renderer.draw(game, dt);
+      watchSim();
+      animate(dt);
+    } else if (decor?.game) {
+      decor.game.step(dt);
+      renderer.draw(decor.game, dt);
+    }
   }
 
   function start() {
@@ -1026,31 +1282,50 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   function stop() {
     cancelAnimationFrame(raf);
     raf = 0;
+    // No loop to finish the mode spring: land it.
+    if (modeT.value !== modeT.target) {
+      modeT.snap(modeT.target);
+      paintMode();
+    }
   }
+  const stillActive = () => (mode === 'play' ? still() : stillDecor());
 
   new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
     visible ? start() : stop();
   }).observe(root);
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  reduceQuery.addEventListener('change', () => (reduceMotion.matches ? (stop(), still()) : start()));
+  reduceQuery.addEventListener('change', () => (reduceMotion.matches ? (stop(), stillActive()) : start()));
 
+  // Recompute the active scene on resize (Projects: the card anchors move with the layout).
   let resizeTimer = 0;
   new ResizeObserver(() => {
     clearTimeout(resizeTimer);
-    resizeTimer = window.setTimeout(build, 120);
+    resizeTimer = window.setTimeout(() => (mode === 'play' ? build() : buildDecor()), 120);
   }).observe(root);
 
-  build();
+  if (projects) projects.inert = mode === 'play';
+  gameLayer.inert = mode !== 'play';
+  if (mode === 'play') {
+    build();
+    scheduleIntro();
+  } else {
+    buildDecor();
+  }
   start();
-  setTimeout(() => {
-    if (!everPlaced && !game.transformers.length) showFact('intro');
-  }, 2000);
 
   // Debug handle for verification in the browser.
   (window as unknown as { __grid: unknown }).__grid = {
+    /** The Play-mode game (undefined until Play mode is first shown). */
     get game() {
       return game;
+    },
+    get mode() {
+      return mode;
+    },
+    /** Projects mode's decorative flow. */
+    get decor() {
+      return decor;
     },
     get lattice() {
       return lat;

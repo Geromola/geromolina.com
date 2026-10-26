@@ -1,0 +1,103 @@
+---
+// Section nav (SPEC "Home hero v2"): a fixed glass pill, top right; a compact pill at top centre
+// on phones. Hidden in Play mode (html[data-home-mode], set by GridMap.astro and main.ts).
+---
+
+<nav class="secnav glass" aria-label="Sections" data-secnav>
+  <a href="#about">About</a>
+  <a href="#off-the-grid">Off the grid</a>
+  <a href="#contact">Contact</a>
+  <a class="secnav__lock" href="#my-tools" aria-label="My tools">
+    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+      <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor"></rect>
+      <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6"></path>
+    </svg>
+  </a>
+</nav>
+
+<style>
+  .secnav {
+    position: fixed;
+    z-index: 20;
+    top: var(--gutter);
+    right: var(--gutter);
+    display: flex;
+    align-items: center;
+    padding: 0.25rem;
+    border-radius: 999px;
+    transition:
+      opacity 200ms ease-out,
+      visibility 0s linear 0s;
+  }
+  :global(html[data-home-mode='play']) .secnav {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 200ms ease-out,
+      visibility 0s linear 200ms;
+  }
+  .secnav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 2.25rem;
+    padding: 0 0.875rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--ink-2);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color 150ms ease-out,
+      background 150ms ease-out,
+      transform 100ms ease-out;
+  }
+  /* 44px hit area */
+  .secnav a::before {
+    content: '';
+    position: absolute;
+    inset: -4px 0;
+  }
+  .secnav a:focus-visible {
+    border-radius: 999px;
+    outline-offset: 0;
+  }
+  @media (hover: hover) {
+    .secnav a:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.06);
+    }
+  }
+  .secnav a:active {
+    transform: scale(0.96);
+  }
+  .secnav .secnav__lock {
+    padding: 0 0.75rem;
+    color: var(--amber);
+  }
+
+  @media (max-width: 720px) {
+    .secnav {
+      right: auto;
+      left: 50%;
+      translate: -50% 0;
+      padding: 0.1875rem;
+    }
+    .secnav a {
+      height: 2.125rem;
+      padding: 0 0.625rem;
+      font-size: 0.8125rem;
+    }
+    .secnav .secnav__lock {
+      padding: 0 0.625rem;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .secnav a {
+      color: var(--ink);
+    }
+  }
+</style>

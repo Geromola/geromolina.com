@@ -14,8 +14,9 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 const isProd = import.meta.env.PROD;
-// Hold the first render until the element the view transition needs is parsed (map nodes on
-// the home page, the hero glyph on a project page), so `pagereveal` can find it.
+// Hold the first render until the element the view transition needs is parsed (the project
+// cards and the map nodes after them on the home page, the hero glyph on a project page), so
+// `pagereveal` can find it.
 const path = Astro.url.pathname.replace(/(.)\/$/, '$1');
 const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path) ? '#plant-glyph-morph' : null;
 ---
@@ -61,8 +62,9 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
       })();
     </script>
     <script is:inline>
-      // Cross-document view transitions (SPEC "Transitions"): expand a project page out of the
-      // clicked plant node, collapse it back into the node on the way home. A classic inline
+      // Cross-document view transitions (SPEC "Transitions", "Home hero v2"): expand a project
+      // page out of the clicked card's terminal dot (Projects mode) or plant node (Play mode,
+      // `#play`), and collapse it back into the same one on the way home. A classic inline
       // script in <head>, so the `pagereveal` listener is registered before the first render.
       (() => {
         if (!('onpagereveal' in window)) return;
@@ -101,12 +103,19 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
         const nodeFor = (path) =>
           [...document.querySelectorAll('[data-node]')].find((a) => pathOf(a.href) === path) || null;
         const glyphOf = (node) => node && node.querySelector('.node__glyph');
+        const cardFor = (path) =>
+          [...document.querySelectorAll('[data-card]')].find((a) => pathOf(a.href) === path) || null;
+        const dotOf = (card) => card && card.querySelector('[data-card-dot]');
+        /** The element a project expands out of / collapses into on the home page, for its mode. */
+        const sourceFor = (path) => (location.hash === '#play' ? glyphOf(nodeFor(path)) : dotOf(cardFor(path)));
         const circleOf = (el) => {
           const b = el.getBoundingClientRect();
           return { x: b.left + b.width / 2, y: b.top + b.height / 2, r: b.width / 2 };
         };
         const clearNames = () =>
-          document.querySelectorAll('[data-node] .node__glyph').forEach((g) => (g.style.viewTransitionName = ''));
+          document
+            .querySelectorAll('[data-node] .node__glyph, [data-card-dot]')
+            .forEach((g) => (g.style.viewTransitionName = ''));
         /** Where the navigation came from: the Navigation API, else the referrer plus a fresh record. */
         const fromPath = (record) => {
           const act = window.navigation && navigation.activation;
@@ -122,9 +131,10 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
           const to = pathOf(e.activation.entry.url);
           const record = read();
           if (isHome(here) && to && isProject(to)) {
-            // Only the glyph named on click takes part; anything else (the node list) is a plain fade.
-            const glyph = glyphOf(nodeFor(to));
-            if (glyph && glyph.style.viewTransitionName === NAME) {
+            // Only the card dot or glyph named on click takes part; anything else (the node list,
+            // the section nav) is a plain fade.
+            const glyph = [dotOf(cardFor(to)), glyphOf(nodeFor(to))].find((el) => el && el.style.viewTransitionName === NAME);
+            if (glyph) {
               const c = circleOf(glyph);
               write({ ...(record || {}), path: to, ...c, w: innerWidth, h: innerHeight, sy: scrollY, t: Date.now() });
             } else {
@@ -155,7 +165,7 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
             mode = 'expand';
             circle = record;
           } else if (isHome(here) && from && isProject(from)) {
-            glyph = glyphOf(nodeFor(from));
+            glyph = sourceFor(from);
             if (glyph) {
               const sameView =
                 record && record.path === from && hasCircle(record) &&

@@ -1,0 +1,462 @@
+---
+// Projects mode of the home hero (SPEC "Home hero v2"): the profile header, the project cards,
+// the locked Networking Tracker strip and the Play pill. Each card's terminal dot
+// (`data-card-dot`) is measured by `src/grid/main.ts` and becomes an anchor of the decorative flow.
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import gero from '../assets/gero.jpg';
+
+type Status = 'live' | 'code' | 'private';
+const statusOf = (n: object): Status => {
+  const s = (n as { status?: unknown }).status;
+  if (s === 'live' || s === 'code' || s === 'private') return s;
+  return (n as { locked?: boolean }).locked ? 'private' : 'live';
+};
+
+const projects = (await getCollection('nodes'))
+  .map((e) => e.data)
+  .filter((n) => n.kind === 'plant' || n.kind === 'substation')
+  .sort((a, b) => a.order - b.order)
+  .map((n) => ({ ...n, status: statusOf(n) }));
+const cards = projects.filter((p) => p.status !== 'private');
+const strips = projects.filter((p) => p.status === 'private');
+// The tracker has no pitch in the collection: reuse the My tools line.
+const TRACKER_LINE = "Where I keep track of the people I meet. Mine only, so it'll ask you to sign in.";
+---
+
+<div class="projects" data-projects>
+  <header class="profile">
+    <span class="profile__photo">
+      <Image src={gero} width={144} widths={[72, 144, 216]} sizes="72px" alt="" loading="eager" decoding="async" />
+    </span>
+    <p class="profile__kicker mono">Geronimo Molina</p>
+    <h1 class="profile__name">Gero</h1>
+    <p class="profile__line">MBA + MEng Candidate&nbsp;· UC Berkeley, California</p>
+  </header>
+
+  <ul class="cards" id="project-cards" role="list" aria-label="Projects">
+    {
+      cards.map((p) => (
+        <li>
+          <a class={`card glass card--${p.status}`} href={p.href} data-card={p.id} data-live={p.status === 'live' ? '' : undefined}>
+            <span class="card__dot" data-card-dot aria-hidden="true" />
+            <span class="card__badge mono">
+              {p.status === 'live' ? (
+                <>
+                  <span class="card__charge" aria-hidden="true">
+                    ●
+                  </span>{' '}
+                  Live
+                </>
+              ) : (
+                <>
+                  <span aria-hidden="true">‹/›</span> Code
+                </>
+              )}
+            </span>
+            <h2 class="card__title">{p.title}</h2>
+            {p.pitch && <p class="card__pitch">{p.pitch}</p>}
+            <span class="card__foot">
+              {p.metrics?.[0] && (
+                <span class="card__metric">
+                  <span class="card__value mono">{p.metrics[0].value}</span> {p.metrics[0].label}
+                </span>
+              )}
+              <span class="card__open">
+                Open <span aria-hidden="true">→</span>
+              </span>
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    strips.map((p) => (
+      <a class="strip" href={p.href} data-card={p.id}>
+        <span class="card__dot card__dot--amber" data-card-dot aria-hidden="true" />
+        <span class="strip__lock" aria-hidden="true">
+          <svg viewBox="0 0 16 16" width="14" height="14">
+            <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor" />
+            <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6" />
+          </svg>
+        </span>
+        <span class="strip__body">
+          <span class="strip__badge mono">Mine</span>
+          <span class="strip__title">{p.title}</span>
+          <span class="strip__line">{p.pitch ?? TRACKER_LINE}</span>
+        </span>
+        <span class="strip__open">
+          Open <span aria-hidden="true">→</span>
+        </span>
+      </a>
+    ))
+  }
+
+  <a class="play-pill" href="#play" data-play>
+    <span aria-hidden="true">▶</span> Play the grid
+  </a>
+</div>
+
+<style>
+  .projects {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(4.25rem, 11vh, 6rem) var(--gutter) clamp(2.5rem, 7vh, 4rem);
+    transform-origin: 50% 40vh;
+  }
+
+  /* ---------- profile header ---------- */
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .profile__photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--cyan);
+    box-shadow: 0 0 24px rgba(var(--cyan-rgb), 0.3);
+    background: var(--bg);
+  }
+  .profile__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 48%;
+    /* The duotone filter is defined once, in About.astro. */
+    filter: url(#gero-duotone);
+  }
+  .profile__kicker {
+    margin: 0.875rem 0 0.375rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .profile__name {
+    margin: 0;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    background: linear-gradient(180deg, #fff 30%, #9fdcec 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 28px rgba(var(--cyan-rgb), 0.18));
+  }
+  .profile__line {
+    margin: 0.625rem 0 0;
+    font-size: 1.0625rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink-2);
+    text-wrap: balance;
+  }
+
+  /* ---------- cards ---------- */
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 60rem;
+    margin: clamp(1.75rem, 4.5vh, 2.75rem) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  @media (min-width: 720px) {
+    .cards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .cards li {
+    display: flex;
+  }
+  .card {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 11rem;
+    padding: 1.25rem 1.375rem;
+    border-radius: var(--radius-lg);
+    color: var(--ink);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .card:focus-visible {
+    outline-offset: 4px;
+    border-radius: var(--radius-lg);
+  }
+  @media (hover: hover) {
+    .card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(var(--cyan-rgb), 0.32);
+    }
+  }
+  .card:active {
+    transform: translateY(-2px) scale(0.98);
+    transition-duration: 100ms;
+  }
+
+  /* Terminal dot: 8px cyan ring centred on the top edge, half outside. */
+  .card__dot {
+    position: absolute;
+    top: -4px;
+    left: calc(50% - 4px);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid var(--cyan);
+    background: var(--bg);
+    box-shadow: 0 0 8px rgba(var(--cyan-rgb), 0.55);
+  }
+  .card__dot--amber {
+    border-color: var(--amber);
+    box-shadow: 0 0 8px rgba(var(--amber-rgb), 0.5);
+  }
+
+  .card__badge {
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .card--live .card__badge {
+    color: var(--cyan);
+  }
+  .card__charge {
+    display: inline-block;
+    transition:
+      text-shadow 150ms ease-out,
+      transform 100ms ease-out;
+  }
+  /* Pointer-down charges the badge dot. */
+  .card:active .card__charge {
+    text-shadow:
+      0 0 6px rgba(var(--cyan-rgb), 0.9),
+      0 0 14px rgba(var(--cyan-rgb), 0.7);
+    transform: scale(1.2);
+  }
+  .card__title {
+    margin: 0.5rem 0 0;
+    font-size: 1.375rem;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .card__pitch {
+    margin: 0.375rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .card__foot {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 0.875rem;
+  }
+  .card__metric {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+  .card__value {
+    color: var(--cyan);
+    font-size: 0.9375rem;
+  }
+  .card__open {
+    flex: none;
+    margin-left: auto;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    transition: color 150ms ease-out;
+  }
+  @media (hover: hover) {
+    .card:hover .card__open {
+      color: var(--ink);
+    }
+  }
+
+  /* ---------- Networking Tracker strip (like the My tools tile, slimmer) ---------- */
+  .strip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    width: 100%;
+    max-width: 60rem;
+    margin-top: 1rem;
+    padding: 0.75rem 1.25rem 0.75rem 0.875rem;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(var(--amber-rgb), 0.5);
+    background: rgba(var(--amber-rgb), 0.04);
+    box-shadow: 0 0 30px -12px rgba(var(--amber-rgb), 0.35);
+    color: var(--ink);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 150ms ease-out,
+      border-color 150ms ease-out,
+      box-shadow 150ms ease-out;
+  }
+  @media (hover: hover) {
+    .strip:hover {
+      transform: translateY(-2px);
+      border-color: var(--amber);
+      box-shadow: 0 0 36px -10px rgba(var(--amber-rgb), 0.55);
+    }
+  }
+  .strip:active {
+    transform: translateY(-2px) scale(0.98);
+    transition-duration: 100ms;
+  }
+  .strip__lock {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 9px;
+    border: 1.5px solid var(--amber);
+    color: var(--amber);
+    background: var(--bg);
+  }
+  .strip__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.75rem;
+    row-gap: 0.125rem;
+  }
+  .strip__badge {
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .strip__title {
+    font-size: 1rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .strip__line {
+    flex-basis: 100%;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .strip__open {
+    flex: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--amber);
+  }
+
+  /* ---------- Play entry ---------- */
+  .play-pill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      color 150ms ease-out,
+      border-color 150ms ease-out,
+      transform 100ms ease-out;
+  }
+  /* 44px hit area */
+  .play-pill::before {
+    content: '';
+    position: absolute;
+    inset: -6px -2px;
+  }
+  .play-pill span {
+    font-size: 0.625rem;
+  }
+  @media (hover: hover) {
+    .play-pill:hover {
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+  }
+  .play-pill:active {
+    transform: scale(0.96);
+  }
+
+  @media (max-width: 720px) {
+    .projects {
+      padding-top: 4.5rem;
+    }
+    .card {
+      min-height: 10.5rem;
+    }
+  }
+  @media (max-width: 540px) {
+    .strip__open {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card,
+    .strip {
+      transition: border-color 150ms ease-out;
+    }
+    .card:is(:hover, :active),
+    .strip:is(:hover, :active) {
+      transform: none;
+    }
+  }
+  :global(html[data-motion='reduce']) :is(.card, .strip) {
+    transition: border-color 150ms ease-out;
+    transform: none;
+  }
+  @media (prefers-contrast: more) {
+    .card {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .card__pitch,
+    .card__metric,
+    .card__open,
+    .profile__line,
+    .strip__line {
+      color: var(--ink);
+    }
+    .play-pill {
+      color: var(--ink);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+</style>

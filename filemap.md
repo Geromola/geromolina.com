@@ -5,8 +5,8 @@
 - `docs/PLAN.md` — task list and status
 - `src/assets/gero.jpg` — portrait for the About section
 - `src/styles/tokens.css` — colour, type and glass tokens, plus global base styles
-- `src/layouts/Base.astro` — html shell, meta tags, global CSS; `?motion=reduce` debug flag (html[data-motion]), view-transition script, analytics (skipped on localhost)
-- `src/pages/index.astro` — home page: "Skip the game" link, map hero, then the sections below and the footer
+- `src/layouts/Base.astro` — html shell, meta tags, global CSS; `?motion=reduce` debug flag (html[data-motion]), view-transition script (expand from / collapse into a card's terminal dot in Projects mode, the map node in Play mode), analytics (skipped on localhost)
+- `src/pages/index.astro` — home page: "Skip to About" link, the home hero (GridMap), then the sections below and the footer
 - `src/components/sections/Section.astro` — shared section shell: column, rhythm, divider, kicker + h2
 - `src/components/sections/About.astro` — `#about`: duotone round portrait (inline SVG filter) and bio
 - `src/components/sections/OffTheGrid.astro` — `#off-the-grid`: four fact cards (ACS card links to the DOI)
@@ -14,18 +14,20 @@
 - `src/components/sections/Contact.astro` — `#contact`: email, LinkedIn, GitHub pills
 - `src/components/sections/NodeIndex.astro` — `#node-index`: accessible list of every map node (from the `nodes` collection)
 - `src/components/sections/Footer.astro` — site footer line
-- `src/components/GridMap.astro` — map markup, styles, client mount: hero (`data-hero-block`), nodes (with target-load rings), transformer layer and template, ghost, level panel, toast, screen-reader live region
-- `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown)
+- `src/components/GridMap.astro` — home hero (`[data-home]`, `data-mode` projects/play, set before first render from `#play`): section nav, project menu, and the map: canvases, the game layer (`[data-game]`: Back to projects pill (`data-block`), nodes with target-load rings, transformer layer and template, ghost, level panel, toast, screen-reader live region), styles, client mount. Only `inGame` nodes go on the game map
+- `src/components/ProjectMenu.astro` — Projects mode: profile header (duotone portrait via About's filter), project cards from the `nodes` collection (plants and substations by `order`, `status` badge, terminal dot `data-card-dot`), the locked strip for `private` nodes, the `#play` pill
+- `src/components/SectionNav.astro` — fixed glass section nav (About, Off the grid, Contact, My tools lock); top centre on phones; hidden in Play mode (html[data-home-mode])
+- `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown; code projects without a `liveUrl` get no embed and a top-bar "Source" pill)
 - `src/pages/404.astro` — "Power outage" 404 page
 - `src/components/project/TopBar.astro` — sticky glass top bar: back to the grid, title, Launch pill
 - `src/components/project/LiveEmbed.astro` — sandboxed live-app iframe plus launch button (fallback card when framing is blocked)
 - `src/components/project/MetricTiles.astro` — three glass metric tiles
 - `src/components/project/PlantGlyph.astro` — small decorative plant glyph (cyan ring, hot core)
 - `src/components/project/Pill.astro` — pill / full-width button link with press and focus states
-- `src/grid/main.ts` — DOM wiring for the Grid operator game: layout, blocked junctions (hero text, resting panel), transformer place/move/remove, ghost, level panel, throttled live announcements, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
+- `src/grid/main.ts` — DOM wiring for the home hero: Projects/Play mode switch (URL hash, history, Spring), the decorative flow (measures card dots, hover/focus pull, card view-transition source) and the Grid operator game: layout, blocked junctions (Back pill, resting panel), transformer place/move/remove, ghost, level panel, throttled live announcements, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
 - `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices (`PlacedNode`)
 - `src/content.config.ts` — content collections: `nodes` schema (glob loader)
-- `src/content/nodes/*.md` — map node data (one file per node; body is a plant's "How it works")
+- `src/content/nodes/*.md` — map node data (one file per node; body is a plant's "How it works"; `status` live/code/private, `inGame: false` keeps a node off the game map — `personal-wiki` and `pacman-dqn` are code projects)
 - `src/grid/nodes.ts` — `MapNode` and `NodeKind` types (data lives in the `nodes` collection)
 - `src/grid/renderers.ts` — WebGL2 and Canvas 2D renderers for electrons (colour by engine `hue`) and the per-edge heat glow; static mesh with faulted edges
 - `src/grid/spring.ts` — critically damped spring
@@ -36,8 +38,10 @@
 - `src/grid/game/levels.ts` — the 4 level definitions; seeded fault generation
 - `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
 - `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
-- `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars
+- `src/grid/game/decor.ts` — Projects-mode flow layout: lattice aligned to the card dots, anchors, the decorative level (live cards are plants)
+- `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars; `decorative` option (lossless, no heat, nothing placeable, no solver) and `setFocus` (bias the flow toward a node)
 - `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, blocked hero/panel zones, solver timing, faults, step)
+- `tests/decor.test.ts` — Vitest for the decorative flow: lattice alignment, anchors, decorative engine, focus (and that the default flow is unchanged)
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
 - `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` plus every `kind: plant` node `href`

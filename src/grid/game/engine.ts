@@ -40,6 +40,12 @@ export interface EngineOptions {
   level?: number;
   /** Vertices kept free of transformers (see `setBlocked`). */
   blocked?: Iterable<number> | readonly Transformer[];
+  /**
+   * Decorative flow (the projects hero, SPEC "Home hero v2"): counted packets
+   * keep all their energy (no line or transformer loss, so no heat), nothing
+   * can be placed, there are no faults and the solver never runs.
+   */
+  decorative?: boolean;
 }
 
 export interface LoadResult {
@@ -91,6 +97,8 @@ export class GridGame {
   readonly nodes: readonly GameNode[];
   readonly bounds: Bounds;
   readonly levels: readonly LevelDef[];
+  /** See `EngineOptions.decorative`. */
+  readonly decorative: boolean;
 
   // ---- per edge ----
   /** Energy lost on each edge (packet units), decaying with τ = HEAT_TAU. */
@@ -161,6 +169,12 @@ export class GridGame {
   private faultSeedUsed: number | null = null;
   private rr = 0;
   private cached: Evaluation | null = null;
+  // Focus (see `setFocus`): an extra routing slot, after the loads.
+  private focusNode = -1;
+  private focusVert = -1;
+  private focusShare = 0;
+  private focusTable: Float64Array | null = null;
+  private focusSources: number[] = [];
 
   constructor(opts: EngineOptions) {
     this.board = new Board(opts.cols, opts.rows);
@@ -169,6 +183,7 @@ export class GridGame {
     this.nodes = opts.nodes;
     this.bounds = opts.bounds ?? { minC: 0, maxC: opts.cols - 1, minR: 0, maxR: opts.rows - 1 };
     this.levels = opts.levels ?? LEVELS;
+    this.decorative = opts.decorative ?? false;
     this.rand = mulberry32(opts.seed ?? 0x9e3779b9);
 
     this.nodes.forEach((n, i) => {
@@ -273,6 +288,7 @@ export class GridGame {
     this.plantVerts = this.plantNodes.map((k) => this.vertexOfNode(k));
     this.loadVerts = this.loadNodes.map((k) => this.vertexOfNode(k));
     this.tablesArr = this.loadVerts.map(() => new Float64Array(this.board.V * 2));
+    this.focusSourcesFor();
     for (const v of this.placed) this.isTransformer[v] = 0;
     this.placed.length = 0;
     this.heat.fill(0);
@@ -319,9 +335,13 @@ export class GridGame {
   /** Faults (regenerated until solvable) and the solver's best, for the current level and blocked set. */
   private solveLevel() {
     const def = this.levelDef;
-    const problem = this.solverProblem();
     this.faulted.fill(0);
     this.faultSeedUsed = null;
+    if (this.decorative) {
+      this.solution = null;
+      return;
+    }
+    const problem = this.solverProblem();
     if (def.faults) {
       const { fraction, seed } = def.faults;
       for (let k = 0; k < 64; k++) {
@@ -365,6 +385,7 @@ export class GridGame {
 
   /** Valid empty junction: integer, in the visible bounds, not a node, not blocked, not occupied. */
   canPlace(col: number, row: number): boolean {
+    if (this.decorative) return false;
     if (!this.board.inLattice(col, row) || !inBounds(this.bounds, col, row)) return false;
     const v = this.board.vertex(col, row);
     return !this.nodeVerts.has(v) && this.blocked[v] === 0 && this.isTransformer[v] === 0;
@@ -444,7 +465,59 @@ export class GridGame {
       costTable(this.board, this.isTransformer, this.faulted, load, this.tablesArr[j]);
       return bestPlant(this.tablesArr[j], this.plantVerts);
     });
+    if (this.focusTable && this.focusVert >= 0) costTable(this.board, this.isTransformer, this.faulted, this.focusVert, this.focusTable);
     this.cached = null;
+  }
+
+  // ---------------------------------------------------------------- focus
+
+  /** Node index the flow is biased toward, or −1. */
+  get focus(): number {
+    return this.focusNode;
+  }
+
+  /**
+   * Bias the flow toward node `k` (any node, plant or load), e.g. a hovered
+   * card: a `share` of new counted packets leave a random other active node
+   * (plants and loads) and head for `k`. −1 stops the bias; packets already
+   * heading for the old focus finish their trip. Moving the focus retargets
+   * them. Until a focus is set the engine draws no extra random numbers, so
+   * the default flow is unchanged.
+   */
+  setFocus(k: number, share = 0.5) {
+    if (!Number.isInteger(k) || k < 0 || k >= this.nodes.length) k = -1;
+    this.focusShare = Math.min(1, Math.max(0, share));
+    if (k === this.focusNode) return;
+    this.focusNode = k;
+    if (k < 0) return;
+    this.focusVert = this.vertexOfNode(k);
+    this.focusTable ??= new Float64Array(this.board.V * 2);
+    costTable(this.board, this.isTransformer, this.faulted, this.focusVert, this.focusTable);
+    this.focusSourcesFor();
+    // Packets already on their way to an old focus follow the new one, and a
+    // `share` of the others turn toward it now, so the pull shows at once.
+    const slot = this.loadVerts.length;
+    for (let i = 0; i < this.count; i++) {
+      if (this.ambient[i]) continue;
+      if (this.slot[i] === slot || (this.delay[i] <= 0 && this.rand() < this.focusShare)) {
+        this.slot[i] = slot;
+        this.target[i] = k;
+      }
+    }
+  }
+
+  private focusSourcesFor() {
+    const all = [...new Set([...this.plantVerts, ...this.loadVerts])];
+    this.focusSources = all.filter((v) => v !== this.focusVert);
+  }
+
+  /** Target vertex and cost table of routing slot `j` (loads, then the focus). */
+  private slotVert(j: number): number {
+    return j < this.loadVerts.length ? this.loadVerts[j] : this.focusVert;
+  }
+
+  private slotTable(j: number): Float64Array {
+    return j < this.tablesArr.length ? this.tablesArr[j] : this.focusTable!;
   }
 
   // ------------------------------------------------------------ electrons
@@ -482,7 +555,7 @@ export class GridGame {
         const left = 1 - this.s[i];
         const need = left / v;
         const ds = need <= t ? left : v * t;
-        if (!this.ambient[i]) this.lose(i, Math.pow(KEEP[lv], ds));
+        if (!this.ambient[i] && !this.decorative) this.lose(i, Math.pow(KEEP[lv], ds));
         if (need <= t) {
           t -= need;
           this.s[i] = 1;
@@ -518,7 +591,7 @@ export class GridGame {
         this.lose(i, 1 - T_LOSS);
       }
       const k = this.target[i];
-      if (k >= 0 && v === this.loadVerts[this.slot[i]]) {
+      if (k >= 0 && v === this.slotVert(this.slot[i])) {
         if (this.volt[i] === LOW) {
           this.delivered[k]++;
           this.deliveredEnergy[k] += this.energy[i];
@@ -570,7 +643,7 @@ export class GridGame {
 
     let pick = -1;
     if (!this.ambient[i]) {
-      const table = this.tablesArr[this.slot[i]];
+      const table = this.slotTable(this.slot[i]);
       const lv = this.volt[i];
       const score = this.scratch;
       let min = Infinity;
@@ -626,6 +699,11 @@ export class GridGame {
       this.target[i] = -1;
       this.slot[i] = -1;
       if (fresh) this.age[i] = this.rand() * MAX_AGE;
+    } else if (this.focusNode >= 0 && this.focusSources.length && this.rand() < this.focusShare) {
+      v = this.focusSources[Math.floor(this.rand() * this.focusSources.length)];
+      this.target[i] = this.focusNode;
+      this.slot[i] = this.loadVerts.length;
+      if (fresh) this.delay[i] = this.rand() * SPAWN_SPREAD;
     } else {
       const j = this.rr++ % this.loadVerts.length;
       const route = this.routesArr[j];
