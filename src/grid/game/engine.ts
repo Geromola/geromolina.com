@@ -38,6 +38,8 @@ export interface EngineOptions {
   levels?: readonly LevelDef[];
   /** Initial level index (0-based). */
   level?: number;
+  /** Vertices kept free of transformers (see `setBlocked`). */
+  blocked?: Iterable<number> | readonly Transformer[];
 }
 
 export interface LoadResult {
@@ -99,6 +101,8 @@ export class GridGame {
   // ---- per vertex ----
   /** 1 where a transformer sits. */
   readonly isTransformer: Uint8Array;
+  /** 1 where transformers may not go (hero text, the panel): fails `canPlace`, never a solver candidate. */
+  readonly blocked: Uint8Array;
 
   // ---- per electron (structure of arrays) ----
   readonly count: number;
@@ -177,6 +181,8 @@ export class GridGame {
     this.heat = new Float32Array(this.board.E);
     this.faulted = new Uint8Array(this.board.E);
     this.isTransformer = new Uint8Array(this.board.V);
+    this.blocked = new Uint8Array(this.board.V);
+    if (opts.blocked) this.blocked.set(this.blockMask(opts.blocked));
 
     const n = (this.count = Math.max(0, Math.floor(opts.count ?? 1200)));
     this.ambient = new Uint8Array(n);
@@ -246,6 +252,11 @@ export class GridGame {
     return this.faultSeedUsed;
   }
 
+  /** Whether the solver wins this level with the current layout, faults and blocked set. */
+  get solvable(): boolean {
+    return this.solution?.won ?? false;
+  }
+
   /** The solver's placement for this level and layout. */
   get solverPlacement(): Transformer[] {
     return (this.solution?.placement ?? []).map((v) => this.toCR(v));
@@ -266,6 +277,48 @@ export class GridGame {
     this.placed.length = 0;
     this.heat.fill(0);
 
+    this.solveLevel();
+    this.recompute();
+    this.rr = 0;
+    for (let e = 0; e < this.count; e++) this.spawn(e, true);
+    this.writeOutputs();
+  }
+
+  /**
+   * Keep these vertices free of transformers (vertex indices or `{ col, row }`;
+   * anything outside the lattice is ignored). Blocked vertices fail `canPlace`
+   * and the solver never uses them, so a change re-runs the solver (and, on a
+   * storm level, the search for solvable faults). Transformers already on the
+   * board stay where they are. Returns false when the set didn't change.
+   */
+  setBlocked(vertices: Iterable<number> | readonly Transformer[]): boolean {
+    const mask = this.blockMask(vertices);
+    if (mask.every((b, v) => b === this.blocked[v])) return false;
+    this.blocked.set(mask);
+    this.solveLevel();
+    this.recompute();
+    return true;
+  }
+
+  isBlocked(col: number, row: number): boolean {
+    return this.board.inLattice(col, row) && this.blocked[this.board.vertex(col, row)] === 1;
+  }
+
+  private blockMask(vertices: Iterable<number> | readonly Transformer[]): Uint8Array {
+    const mask = new Uint8Array(this.board.V);
+    for (const item of vertices as Iterable<number | Transformer>) {
+      if (typeof item === 'number') {
+        if (Number.isInteger(item) && item >= 0 && item < this.board.V) mask[item] = 1;
+      } else if (item && this.board.inLattice(item.col, item.row)) {
+        mask[this.board.vertex(item.col, item.row)] = 1;
+      }
+    }
+    return mask;
+  }
+
+  /** Faults (regenerated until solvable) and the solver's best, for the current level and blocked set. */
+  private solveLevel() {
+    const def = this.levelDef;
     const problem = this.solverProblem();
     this.faulted.fill(0);
     this.faultSeedUsed = null;
@@ -280,11 +333,6 @@ export class GridGame {
     } else {
       this.solution = solve(problem);
     }
-
-    this.recompute();
-    this.rr = 0;
-    for (let e = 0; e < this.count; e++) this.spawn(e, true);
-    this.writeOutputs();
   }
 
   /** The solver's input for the current level, layout and faults. */
@@ -295,7 +343,9 @@ export class GridGame {
       plants: this.plantVerts,
       loads: this.loadVerts,
       budget: this.levelDef.budget,
-      candidates: candidatesFor(this.board, this.bounds, this.nodeVerts, [...this.plantVerts, ...this.loadVerts]),
+      candidates: candidatesFor(this.board, this.bounds, this.nodeVerts, [...this.plantVerts, ...this.loadVerts]).filter(
+        (v) => this.blocked[v] === 0,
+      ),
     };
   }
 
@@ -313,11 +363,11 @@ export class GridGame {
 
   // ------------------------------------------------------------ placement
 
-  /** Valid empty junction: integer, in the visible bounds, not a node, not occupied. */
+  /** Valid empty junction: integer, in the visible bounds, not a node, not blocked, not occupied. */
   canPlace(col: number, row: number): boolean {
     if (!this.board.inLattice(col, row) || !inBounds(this.bounds, col, row)) return false;
     const v = this.board.vertex(col, row);
-    return !this.nodeVerts.has(v) && this.isTransformer[v] === 0;
+    return !this.nodeVerts.has(v) && this.blocked[v] === 0 && this.isTransformer[v] === 0;
   }
 
   hasTransformer(col: number, row: number): boolean {

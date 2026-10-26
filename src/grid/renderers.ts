@@ -105,6 +105,10 @@ function headSize(ambient: number, hue: number) {
   return hue > 0 ? 7 - 2.5 * hue : 7;
 }
 
+/** Trail sample `j` (0 = head): brightness and size factors. Shared so both renderers match. */
+const trailBright = (j: number) => (j === 0 ? 1 : 0.42 / j);
+const trailSize = (j: number) => 1 - j * 0.16;
+
 // ----------------------------------------------------------------- WebGL
 
 const POINT_VERT = `#version 300 es
@@ -126,7 +130,8 @@ void main() {
   v_hue = a_hue;
 }`;
 
-// CYAN = --cyan #5fe3ff, HOT = --hot #eef7ff, AMBER = --amber #ffb547
+// CYAN = --cyan #5fe3ff, HOT = --hot #eef7ff, AMBER = --amber #ffb547.
+// The Canvas fallback's sprites (`sprite()`) reproduce this profile.
 const POINT_FRAG = `#version 300 es
 precision mediump float;
 in float v_bright;
@@ -315,9 +320,9 @@ export class WebGLRenderer implements Renderer {
         const [ox, oy] = this.trails.offset(i, j);
         d[o++] = game.x[i] - ox;
         d[o++] = game.y[i] - oy;
-        d[o++] = game.bright[i] * (j === 0 ? 1 : 0.42 / j);
+        d[o++] = game.bright[i] * trailBright(j);
         d[o++] = game.hue[i];
-        d[o++] = head * (1 - j * 0.16);
+        d[o++] = head * trailSize(j);
       }
     }
     gl.useProgram(this.points);
@@ -350,11 +355,15 @@ function compile(gl: WebGL2RenderingContext, type: number, src: string) {
 
 const HEAT_BUCKETS = 8; // heat strokes are batched by quantised alpha
 
-/** Canvas 2D fallback: pre-rendered glow sprites and heat strokes, additive. */
+/** Hues the Canvas fallback pre-renders (HIGH is exactly 1; LOW runs 0 → −1 toward amber). */
+const SPRITE_HUES = [1, 0, -1 / 3, -2 / 3, -1];
+const SPRITE_PX = 32;
+
+/** Canvas 2D fallback: sprites with the WebGL point profile, the same trails, heat strokes, additive. */
 export class CanvasRenderer implements Renderer {
   readonly kind = 'canvas' as const;
   private ctx: CanvasRenderingContext2D;
-  private sprites: { amber: HTMLCanvasElement; cyan: HTMLCanvasElement; hot: HTMLCanvasElement };
+  private sprites: HTMLCanvasElement[];
   private trails = new Trails();
   private heatField = new HeatField();
   private lat: Lattice = { cols: 0, rows: 0, spacing: 1, ox: 0, oy: 0 };
@@ -367,12 +376,7 @@ export class CanvasRenderer implements Renderer {
 
   constructor(private canvas: HTMLCanvasElement) {
     this.ctx = canvas.getContext('2d')!;
-    // --amber, --cyan, --hot (the hot sprite has a tighter core)
-    this.sprites = {
-      amber: sprite(255, 181, 71, 0.25),
-      cyan: sprite(95, 227, 255, 0.25),
-      hot: sprite(238, 247, 255, 0.12),
-    };
+    this.sprites = SPRITE_HUES.map(sprite);
   }
 
   resize(width: number, height: number, dpr: number, lat: Lattice) {
@@ -420,16 +424,19 @@ export class CanvasRenderer implements Renderer {
       ctx.stroke();
     }
 
+    // Electrons: same head size, profile and trail samples as the WebGL points.
     for (let i = 0; i < game.count; i++) {
+      const b = game.bright[i];
+      if (b <= 0) continue;
       const h = game.hue[i];
-      const img = h < -0.5 ? this.sprites.amber : h > 0.5 ? this.sprites.hot : this.sprites.cyan;
-      const size = headSize(game.ambient[i], h) * 1.45;
-      for (let j = 2; j >= 0; j--) {
-        const [ox, oy] = this.trails.offset(i, j * 1.5);
-        ctx.globalAlpha = Math.min(1, game.bright[i] * (j === 0 ? 1 : 0.35 / j));
+      const img = this.sprites[nearestHue(h)];
+      const head = headSize(game.ambient[i], h);
+      for (let j = TRAIL; j >= 0; j--) {
+        const [ox, oy] = this.trails.offset(i, j);
+        ctx.globalAlpha = Math.min(1, b * trailBright(j));
         const x = lat.ox + (game.x[i] - ox) * s;
         const y = lat.oy + (game.y[i] - oy) * s;
-        const z = size * (1 - j * 0.2);
+        const z = head * trailSize(j);
         ctx.drawImage(img, x - z / 2, y - z / 2, z, z);
       }
     }
@@ -438,16 +445,40 @@ export class CanvasRenderer implements Renderer {
   }
 }
 
-function sprite(r: number, g: number, b: number, mid: number) {
+function nearestHue(h: number) {
+  if (h > 0.5) return 0;
+  let best = 1;
+  for (let k = 2; k < SPRITE_HUES.length; k++) if (Math.abs(SPRITE_HUES[k] - h) < Math.abs(SPRITE_HUES[best] - h)) best = k;
+  return best;
+}
+
+/** A glow sprite with POINT_FRAG's profile: a tight core plus a faint halo, cut at the point's radius. */
+function sprite(hue: number) {
+  const CYAN = [95, 227, 255];
+  const HOT = [238, 247, 255];
+  const AMBER = [255, 181, 71];
+  const to = hue >= 0 ? HOT : AMBER;
+  const t = Math.abs(hue);
+  const col = CYAN.map((c, k) => c + (to[k] - c) * t);
+  const hot = Math.max(hue, 0);
   const c = document.createElement('canvas');
-  c.width = c.height = 32;
+  c.width = c.height = SPRITE_PX;
   const ctx = c.getContext('2d')!;
-  const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
-  grad.addColorStop(0, `rgba(${r},${g},${b},1)`);
-  grad.addColorStop(mid, `rgba(${r},${g},${b},0.55)`);
-  grad.addColorStop(1, `rgba(${r},${g},${b},0)`);
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 32, 32);
+  const img = ctx.createImageData(SPRITE_PX, SPRITE_PX);
+  for (let y = 0; y < SPRITE_PX; y++) {
+    for (let x = 0; x < SPRITE_PX; x++) {
+      const px = ((x + 0.5) / SPRITE_PX) * 2 - 1;
+      const py = ((y + 0.5) / SPRITE_PX) * 2 - 1;
+      const r2 = px * px + py * py;
+      const a = r2 > 1 ? 0 : Math.exp(-r2 * (10 + 14 * hot)) + Math.exp(-r2 * 3) * 0.3 * (1 - 0.6 * hot);
+      const o = (y * SPRITE_PX + x) * 4;
+      img.data[o] = col[0];
+      img.data[o + 1] = col[1];
+      img.data[o + 2] = col[2];
+      img.data[o + 3] = Math.round(Math.min(1, a) * 255);
+    }
+  }
+  ctx.putImageData(img, 0, 0);
   return c;
 }
 

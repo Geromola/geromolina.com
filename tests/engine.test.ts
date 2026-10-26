@@ -4,6 +4,7 @@ import { layoutGame } from '../src/grid/game/layout';
 import { LEVELS, type LevelDef } from '../src/grid/game/levels';
 import { HIGH, LIT_THRESHOLD, LOSS_HIGH, LOSS_LOW, LOW, SEG_COST, T_COST } from '../src/grid/game/physics';
 import { solve } from '../src/grid/game/solver';
+import { toPx } from '../src/grid/layout';
 import { LAYOUTS, NODES, SAMPLED_LAYOUTS } from './fixtures/nodes';
 
 function run(game: GridGame, seconds: number, dt = 1 / 60) {
@@ -318,6 +319,80 @@ describe('levels on sampled viewports', () => {
     expect(worstSolved).toBeGreaterThanOrEqual(LIT_THRESHOLD);
     console.info(`sampled margins: worst empty ${worstEmpty.toFixed(3)}, worst solved ${worstSolved.toFixed(3)} (threshold ${LIT_THRESHOLD})`);
   });
+});
+
+/**
+ * Approximate hero zone (landscape: x < 0.45w, y < 0.4h; portrait: y < 0.27h)
+ * and level panel at rest (≤ 1024px wide: the collapsed chip, a 200 × 56 strip
+ * at bottom centre; wider: the 300 × 340 px corner bottom-left), in map pixels.
+ */
+function zones(w: number, h: number) {
+  const gutter = Math.min(32, Math.max(16, 0.03 * w));
+  return {
+    hero: (x: number, y: number) => (h > w ? y < 0.27 * h : x < 0.45 * w && y < 0.4 * h),
+    panel: (x: number, y: number) =>
+      w <= 1024 ? Math.abs(x - w / 2) <= 100 && y >= h - gutter - 56 : x <= gutter + 300 && y >= h - gutter - 340,
+  };
+}
+
+/** Vertices under the hero zone and the resting panel. */
+function heroAndPanel(w: number, h: number): number[] {
+  const { lattice: lat } = layoutGame(NODES, w, h);
+  const z = zones(w, h);
+  const out: number[] = [];
+  for (let r = 0; r < lat.rows; r++) {
+    for (let c = 0; c < lat.cols; c++) {
+      const { x, y } = toPx(lat, c, r);
+      if (z.hero(x, y) || z.panel(x, y)) out.push(r * lat.cols + c);
+    }
+  }
+  return out;
+}
+
+describe('blocked vertices', () => {
+  it('fail canPlace, accept {col,row} too, and re-run the solver only on change', () => {
+    const game = forLayout(1440, 900, 0);
+    expect(game.canPlace(2, 3)).toBe(true);
+    expect(game.setBlocked([{ col: 2, row: 3 }])).toBe(true);
+    expect(game.canPlace(2, 3)).toBe(false);
+    expect(game.isBlocked(2, 3)).toBe(true);
+    expect(game.placeTransformer(2, 3)).toBe(false);
+    expect(game.setBlocked([game.board.vertex(2, 3)])).toBe(false); // same set
+    expect(game.setBlocked([])).toBe(true);
+    expect(game.canPlace(2, 3)).toBe(true);
+
+    // Blocking the solver's own placement makes it find another one.
+    const sol = game.solverPlacement;
+    expect(sol.length).toBeGreaterThan(0);
+    game.setBlocked(sol);
+    const next = game.solverPlacement;
+    for (const t of next) expect(sol.some((s) => s.col === t.col && s.row === t.row)).toBe(false);
+    expect(game.solverProblem().candidates.some((v) => game.blocked[v])).toBe(false);
+  });
+
+  it('can be passed at construction', () => {
+    const blocked = heroAndPanel(1440, 900);
+    const game = GridGame.fromLayout(layoutGame(NODES, 1440, 900), { count: 0, blocked });
+    for (const v of blocked) expect(game.blocked[v]).toBe(1);
+  });
+
+  // Every level on every sampled layout stays solvable and non-trivial with the hero and panel blocked.
+  for (const [w, h] of SAMPLED_LAYOUTS) {
+    it(`hero + panel blocked: ${w}×${h}${h > w ? ' (portrait)' : ''}`, () => {
+      const game = GridGame.fromLayout(layoutGame(NODES, w, h), { count: 0, blocked: heroAndPanel(w, h) });
+      LEVELS.forEach((def, i) => {
+        game.setLevel(i);
+        expect(game.evaluate().won, `level ${i + 1} is won by the empty board`).toBe(false);
+        const sol = game.solverPlacement;
+        expect(sol.length).toBeLessThanOrEqual(def.budget);
+        for (const t of sol) {
+          expect(game.isBlocked(t.col, t.row)).toBe(false);
+          expect(game.placeTransformer(t.col, t.row)).toBe(true);
+        }
+        expect(game.evaluate().won, `level ${i + 1} is not solvable`).toBe(true);
+      });
+    });
+  }
 });
 
 describe('faults', () => {

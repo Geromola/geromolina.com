@@ -1,12 +1,12 @@
 # File map
 
-- `astro.config.mjs` — Astro config (site URL)
+- `astro.config.mjs` — Astro config (site URL, dev toolbar off, stylesheets inlined)
 - `docs/SPEC.md` — product and game spec
 - `docs/PLAN.md` — task list and status
 - `src/assets/gero.jpg` — portrait for the About section
 - `src/styles/tokens.css` — colour, type and glass tokens, plus global base styles
-- `src/layouts/Base.astro` — html shell, meta tags, global CSS
-- `src/pages/index.astro` — home page: map hero, then the sections below and the footer
+- `src/layouts/Base.astro` — html shell, meta tags, global CSS; `?motion=reduce` debug flag (html[data-motion]), view-transition script, analytics (skipped on localhost)
+- `src/pages/index.astro` — home page: "Skip the game" link, map hero, then the sections below and the footer
 - `src/components/sections/Section.astro` — shared section shell: column, rhythm, divider, kicker + h2
 - `src/components/sections/About.astro` — `#about`: duotone round portrait (inline SVG filter) and bio
 - `src/components/sections/OffTheGrid.astro` — `#off-the-grid`: four fact cards (ACS card links to the DOI)
@@ -14,7 +14,7 @@
 - `src/components/sections/Contact.astro` — `#contact`: email, LinkedIn, GitHub pills
 - `src/components/sections/NodeIndex.astro` — `#node-index`: accessible list of every map node (from the `nodes` collection)
 - `src/components/sections/Footer.astro` — site footer line
-- `src/components/GridMap.astro` — map markup, styles, client mount: nodes (with target-load rings), transformer layer and template, ghost, level panel, toast
+- `src/components/GridMap.astro` — map markup, styles, client mount: hero (`data-hero-block`), nodes (with target-load rings), transformer layer and template, ghost, level panel, toast, screen-reader live region
 - `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown)
 - `src/pages/404.astro` — "Power outage" 404 page
 - `src/components/project/TopBar.astro` — sticky glass top bar: back to the grid, title, Launch pill
@@ -22,7 +22,7 @@
 - `src/components/project/MetricTiles.astro` — three glass metric tiles
 - `src/components/project/PlantGlyph.astro` — small decorative plant glyph (cyan ring, hot core)
 - `src/components/project/Pill.astro` — pill / full-width button link with press and focus states
-- `src/grid/main.ts` — DOM wiring for the Grid operator game: layout, transformer place/move/remove, ghost, level panel, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
+- `src/grid/main.ts` — DOM wiring for the Grid operator game: layout, blocked junctions (hero text, resting panel), transformer place/move/remove, ghost, level panel, throttled live announcements, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
 - `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices (`PlacedNode`)
 - `src/content.config.ts` — content collections: `nodes` schema (glob loader)
 - `src/content/nodes/*.md` — map node data (one file per node; body is a plant's "How it works")
@@ -36,8 +36,8 @@
 - `src/grid/game/levels.ts` — the 4 level definitions; seeded fault generation
 - `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
 - `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
-- `src/grid/game/engine.ts` — `GridGame`: level, transformers, routing tables, electron pool, heat, evaluate/stars
-- `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, solver timing, faults, step)
+- `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars
+- `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, blocked hero/panel zones, solver timing, faults, step)
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
 - `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` plus every `kind: plant` node `href`

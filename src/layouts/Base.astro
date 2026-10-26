@@ -45,6 +45,22 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <script is:inline>
+      // Debug: `?motion=reduce` forces the reduced-motion path for this tab (main.ts and the
+      // view transitions read html[data-motion]); `?motion=auto` clears it.
+      (() => {
+        const q = new URLSearchParams(location.search).get('motion');
+        let m = q;
+        try {
+          if (q === 'reduce') sessionStorage.setItem('gero-motion', 'reduce');
+          else if (q !== null) sessionStorage.removeItem('gero-motion');
+          m = sessionStorage.getItem('gero-motion');
+        } catch {
+          /* storage unavailable: the flag lasts for this page */
+        }
+        if (m === 'reduce') document.documentElement.dataset.motion = 'reduce';
+      })();
+    </script>
+    <script is:inline>
       // Cross-document view transitions (SPEC "Transitions"): expand a project page out of the
       // clicked plant node, collapse it back into the node on the way home. A classic inline
       // script in <head>, so the `pagereveal` listener is registered before the first render.
@@ -54,7 +70,7 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
         const NAME = 'plant-glyph';
         const FRESH_MS = 30000;
         const html = document.documentElement;
-        const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const reduced = () => html.dataset.motion === 'reduce' || matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isHome = (path) => path === '/';
         const isProject = (path) => /^\/projects\/[^/]+\/?$/.test(path);
         const norm = (path) => path.replace(/(.)\/$/, '$1');
@@ -169,7 +185,19 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
         });
       })();
     </script>
-    {isProd && <script is:inline defer src="/_vercel/insights/script.js"></script>}
+    {
+      isProd && (
+        <script is:inline>
+          // Vercel Web Analytics only exists on Vercel: skip it on a local preview (no 404 in the console).
+          if (!/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) {
+            const va = document.createElement('script');
+            va.defer = true;
+            va.src = '/_vercel/insights/script.js';
+            document.head.append(va);
+          }
+        </script>
+      )
+    }
     {
       isProd && (
         <script is:inline>
@@ -269,5 +297,14 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
     ::view-transition-new(*) {
       animation-duration: 180ms;
     }
+  }
+  /* Same, forced by the `?motion=reduce` debug flag. */
+  html[data-motion='reduce'] {
+    scroll-behavior: auto;
+  }
+  html[data-motion='reduce']::view-transition-group(*),
+  html[data-motion='reduce']::view-transition-old(*),
+  html[data-motion='reduce']::view-transition-new(*) {
+    animation-duration: 180ms;
   }
 </style>

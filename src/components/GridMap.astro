@@ -15,15 +15,15 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
   class="map"
   data-map
   data-nodes={JSON.stringify(MAP_NODES)}
-  aria-label="Interactive power grid puzzle. Each node is a link.">
+  aria-label="Grid operator puzzle. Place transformers on junctions to step power up to high voltage and back down, so it reaches the target nodes with little lost as heat. Each node is a link; the full list is in Every node on the grid, below.">
   <canvas class="map__layer" data-mesh aria-hidden="true"></canvas>
   <canvas class="map__layer" data-electrons aria-hidden="true"></canvas>
   <div class="map__vignette" aria-hidden="true"></div>
 
   <header class="hero">
-    <p class="hero__kicker mono">Geronimo Molina · Haas MBA</p>
-    <h1 class="hero__name">Gero</h1>
-    <p class="hero__line">Energy nerd who builds things. <br />Place transformers, power the grid.</p>
+    <p class="hero__kicker mono" data-hero-block>Geronimo Molina · Haas MBA</p>
+    <h1 class="hero__name" data-hero-block>Gero</h1>
+    <p class="hero__line" data-hero-block>Energy nerd who builds things. <br />Place transformers, power the grid.</p>
   </header>
 
   <div class="xfs" data-xfs>
@@ -135,7 +135,8 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     </div>
   </aside>
 
-  <div class="toast glass" data-toast role="status" aria-live="polite">
+  <p class="visually-hidden" data-live role="status" aria-live="polite"></p>
+  <div class="toast glass" data-toast>
     <span class="toast__bolt" aria-hidden="true">⚡</span>
     <span data-toast-text></span>
   </div>
@@ -369,6 +370,14 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     border-color: var(--amber);
     color: var(--amber);
     box-shadow: 0 0 calc(6px + var(--pulse) * 26px) rgba(var(--amber-rgb), calc(0.15 + var(--pulse) * 0.5));
+  }
+  /* The link itself is a zero-size anchor: show its focus ring on the glyph. */
+  .node:focus-visible {
+    outline: none;
+  }
+  .node:focus-visible .node__glyph {
+    outline: 2px solid var(--cyan);
+    outline-offset: 4px;
   }
   .node:active .node__glyph {
     transform: scale(0.92);
@@ -727,14 +736,8 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     color: var(--amber);
   }
 
-  /* ---------- phones ---------- */
-  @media (max-width: 720px) {
-    .hero__line br {
-      display: none;
-    }
-    .node__title {
-      font-size: 0.9375rem;
-    }
+  /* ---------- phones and tablets (≤ 1024px): the level panel collapses to a chip ---------- */
+  @media (max-width: 1024px) {
     .panel {
       left: 50%;
       transform: translateX(-50%);
@@ -772,11 +775,38 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     .panel.is-open .panel__body {
       display: block;
     }
+    /* Clear of the centred chip. */
+    .toast {
+      width: min(26rem, calc(100% - 2 * var(--gutter)));
+      bottom: calc(var(--gutter) + 3.75rem);
+    }
+  }
+
+  /* ---------- phones ---------- */
+  @media (max-width: 720px) {
+    .hero__line br {
+      display: none;
+    }
+    .node__title {
+      font-size: 0.9375rem;
+    }
     .toast {
       left: var(--gutter);
       right: var(--gutter);
       width: auto;
-      bottom: calc(var(--gutter) + 3.75rem);
+    }
+  }
+
+  /* Short phones (320×568 to 375×667): the hero would run into the first plant. Tighten it. */
+  @media (max-width: 720px) and (max-height: 700px) {
+    .hero {
+      top: var(--gutter);
+    }
+    .hero__name {
+      font-size: 4.25rem;
+    }
+    .hero__line {
+      margin-top: 0.75rem;
     }
   }
 
@@ -789,5 +819,13 @@ const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
     .node {
       transition: none;
     }
+  }
+  /* `?motion=reduce` debug flag (Base.astro sets html[data-motion]). */
+  :global(html[data-motion='reduce']) .toast {
+    transition: opacity 200ms ease;
+    transform: none;
+  }
+  :global(html[data-motion='reduce']) :is(.node__glyph, .node) {
+    transition: none;
   }
 </style>

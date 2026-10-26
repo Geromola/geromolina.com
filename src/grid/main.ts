@@ -18,12 +18,16 @@ const VT_KEY = 'gero-vt';
 const VT_NAME = 'plant-glyph';
 const SIM_DT = 1 / 30;
 const PREWARM_S = 4; // simulated seconds on build, so the page opens mid-flow
+const PREWARM_DT = 1 / 20; // the engine's largest step: fewest steps for the same flow (main-thread time at load)
 const STILL_S = 3; // reduced motion: simulated seconds before each still frame
 const SNAP_RADIUS = 0.45; // × spacing
 const DRAG_PX = 10;
 const TOAST_MS = 7000;
 const HEAT_FACT_AT = 0.3; // renderer.maxHeat that counts as "visible heat"
 const BEAT_S = 0.9; // min seconds between delivery pulses on a lit load
+const BLOCK_PAD = 8; // css px around hero text and the panel where transformers can't go
+const LIVE_GAP_MS = 1200; // min ms between screen-reader announcements
+const LIVE_SETTLE_MS = 500; // wait this long after the last change before announcing
 
 const FACTS = {
   place: '345 kV means 25× less current, so 625× less heat (I²R).',
@@ -62,6 +66,13 @@ interface Board {
   xfs: [number, number][];
 }
 
+interface Box {
+  l: number;
+  t: number;
+  r: number;
+  b: number;
+}
+
 interface Spot {
   col: number;
   row: number;
@@ -81,7 +92,9 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   const ghost = $('[data-ghost]');
   const xfTemplate = $<HTMLTemplateElement>('[data-xf-template]');
   const toast = $('[data-toast]');
+  const live = $('[data-live]');
   const panel = $('[data-panel]');
+  const heroEls = [...root.querySelectorAll<HTMLElement>('[data-hero-block]')];
   const ui = {
     chip: $<HTMLButtonElement>('[data-chip]', panel),
     chipText: $('[data-chip-text]', panel),
@@ -100,7 +113,14 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     next: $<HTMLButtonElement>('[data-next]', panel),
   };
 
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  // `?motion=reduce` (remembered for the tab by Base.astro as html[data-motion]) forces the reduced path.
+  const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const forceReduce = document.documentElement.dataset.motion === 'reduce';
+  const reduceMotion = {
+    get matches() {
+      return forceReduce || reduceQuery.matches;
+    },
+  };
   const coarse = matchMedia('(pointer: coarse)').matches;
   const forceCanvas = new URLSearchParams(location.search).get('renderer') === 'canvas';
   const renderer: Renderer = (!forceCanvas && WebGLRenderer.create(electronCanvas)) || new CanvasRenderer(electronCanvas);
@@ -118,6 +138,9 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   let everPlaced = false;
   let heatEligible = false;
   let dragging: Xf | null = null;
+  /** Vertices kept free of transformers: hero text plus the resting panel, and hero only (fallback). */
+  let blocks: { all: number[]; hero: number[] } = { all: [], hero: [] };
+  let panelBox: Box | null = null;
 
   // Per-node animation state.
   const pulses = nodeEls.map(() => new Spring(0, 0.5));
@@ -146,6 +169,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   function build() {
     const rect = root.getBoundingClientRect();
     if (game && rect.width === width && rect.height === height) return;
+    const t0 = performance.now();
     width = rect.width;
     height = rect.height;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -155,15 +179,18 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     const prevLevel = game ? game.levelIndex : progress.current;
     const prevXfs = game ? game.transformers : loadBoard(prevLevel);
     const verts = lat.cols * lat.rows;
+    blocks = blockedVertices();
     game = GridGame.fromLayout(layout, {
       count: coarse ? Math.min(1100, verts * 8) : Math.min(3200, verts * 12),
       level: prevLevel,
+      blocked: blocks.all,
     });
+    applyBlocked();
     // Keep the transformers if every vertex is still valid; otherwise the level resets.
     if (prevXfs.length && prevXfs.every((t) => game.canPlace(t.col, t.row))) {
       for (const t of prevXfs) game.placeTransformer(t.col, t.row);
     }
-    for (let k = 0; k < PREWARM_S / SIM_DT; k++) game.step(SIM_DT);
+    prewarm();
     lastDelivered = [...game.delivered];
     lastSparked = [...game.sparked];
 
@@ -194,6 +221,58 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       renderer.draw(game, 0);
       animate(0);
     }
+    performance.measure('grid:build', { start: t0 });
+  }
+
+  /**
+   * Junctions under the hero kicker, name and line (their text's client rects)
+   * and under the level panel at rest (desktop, or the collapsed chip up to 1024px),
+   * each padded by BLOCK_PAD. In map coordinates.
+   */
+  function blockedVertices() {
+    const origin = root.getBoundingClientRect();
+    const rel = (r: DOMRect): Box => ({
+      l: r.left - origin.left - BLOCK_PAD,
+      t: r.top - origin.top - BLOCK_PAD,
+      r: r.right - origin.left + BLOCK_PAD,
+      b: r.bottom - origin.top + BLOCK_PAD,
+    });
+    const range = document.createRange();
+    const hero = heroEls.flatMap((el) => {
+      range.selectNodeContents(el);
+      return [...range.getClientRects()].filter((r) => r.width > 0 && r.height > 0).map(rel);
+    });
+    // The expanded chip panel is a temporary overlay: keep the last resting rect.
+    if (!compact.matches || !panel.classList.contains('is-open')) panelBox = rel(panel.getBoundingClientRect());
+    const inside = (boxes: Box[]) => {
+      const out: number[] = [];
+      const { minC, maxC, minR, maxR } = layout.bounds;
+      for (let r = minR; r <= maxR; r++) {
+        for (let c = minC; c <= maxC; c++) {
+          const p = toPx(lat, c, r);
+          if (boxes.some((q) => p.x >= q.l && p.x <= q.r && p.y >= q.t && p.y <= q.b)) out.push(r * lat.cols + c);
+        }
+      }
+      return out;
+    };
+    return { all: inside(panelBox ? [...hero, panelBox] : hero), hero: inside(hero) };
+  }
+
+  /**
+   * Block the hero and panel; if that leaves the level unsolvable (a node under
+   * the panel at some tablet sizes), block the hero only, then nothing.
+   */
+  function applyBlocked() {
+    game.setBlocked(blocks.all);
+    if (!game.solvable) game.setBlocked(blocks.hero);
+    if (!game.solvable) game.setBlocked([]);
+  }
+
+  /** Simulate PREWARM_S seconds so the page opens mid-flow. */
+  function prewarm() {
+    const t0 = performance.now();
+    for (let k = 0; k < PREWARM_S / PREWARM_DT; k++) game.step(PREWARM_DT);
+    performance.measure('grid:prewarm', { start: t0 });
   }
 
   const vertexPx = (col: number, row: number) => toPx(lat, col, row);
@@ -228,6 +307,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     };
     xf.scale.target = 1;
     paintXf(xf);
+    labelXf(xf);
     el.addEventListener('pointerdown', (e) => onXfDown(xf, e));
     el.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -239,6 +319,12 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     });
     xfLayer.append(el);
     return xf;
+  }
+
+  function labelXf(xf: Xf) {
+    const c = xf.col - layout.bounds.minC + 1;
+    const r = xf.row - layout.bounds.minR + 1;
+    xf.el.setAttribute('aria-label', `Transformer at column ${c}, row ${r}. Press Enter to remove it, or drag to move it.`);
   }
 
   function paintXf(xf: Xf) {
@@ -359,6 +445,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       if (changed) {
         xf.col = spot.col;
         xf.row = spot.row;
+        labelXf(xf);
       }
     }
     // Valid drop settles into the junction; invalid springs back from where it is now.
@@ -524,18 +611,19 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
   });
 
   // --------------------------------------------------------------- panel
-  const phone = matchMedia('(max-width: 720px)');
+  /** Up to 1024px the panel rests as a collapsed chip (GridMap.astro). */
+  const compact = matchMedia('(max-width: 1024px)');
   function setPanelOpen(open: boolean) {
     panel.classList.toggle('is-open', open);
     ui.chip.setAttribute('aria-expanded', String(open));
   }
   ui.chip.addEventListener('click', () => setPanelOpen(!panel.classList.contains('is-open')));
-  // Expanded on a phone: a tap outside the panel only collapses it (capture phase,
+  // Expanded chip (phones and tablets): a tap outside the panel only collapses it (capture phase,
   // so it never also places, removes or drags a transformer). Node links still work.
   root.addEventListener(
     'pointerdown',
     (e) => {
-      if (!phone.matches || !panel.classList.contains('is-open')) return;
+      if (!compact.matches || !panel.classList.contains('is-open')) return;
       const t = e.target as Element | null;
       if (t?.closest('[data-panel]')) return;
       setPanelOpen(false);
@@ -568,6 +656,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
 
   function setLevel(i: number) {
     game.setLevel(i);
+    applyBlocked();
     progress.current = i;
     saveProgress(progress);
     for (const xf of xfs) if (!xf.leaving) leave(xf);
@@ -577,6 +666,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     drawMesh(meshCanvas, width, height, dpr, lat, game.faulted);
     wasWon = false;
     renderLevel();
+    say(`Level ${i + 1}: ${game.levelDef.title}. ${ui.objective.textContent}`);
     onChange();
   }
 
@@ -652,6 +742,13 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     });
     if (!silent && litNodes.size) showFact('lit');
 
+    if (!silent) {
+      const lit = ev.perLoad.filter((l) => l.lit).length;
+      const result = ev.won
+        ? ` Level cleared, ${ev.stars} of 3 stars.`
+        : ` ${lit} of ${ev.perLoad.length} load${ev.perLoad.length === 1 ? '' : 's'} lit.`;
+      sayStatus(`Efficiency ${pct(ev.efficiency)}.${result}`);
+    }
     if (ev.won) record(ev);
     renderStars(ev, !silent && ev.won && !wasWon);
     if (!silent && ev.won && !wasWon) celebrate(ev);
@@ -771,6 +868,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     toastBusy = true;
     shown = t;
     toastText.textContent = t.text;
+    if (!t.win) say(t.text); // the win is in the panel status
     toast.classList.add('is-visible');
     toastTimer = window.setTimeout(hideToast, TOAST_MS);
   }
@@ -778,6 +876,33 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     shown = null;
     toast.classList.remove('is-visible');
     setTimeout(nextToast, 450);
+  }
+
+  // ------------------------------------------------- screen readers
+  // One polite live region: facts and level changes queue up, the panel status
+  // keeps only its latest value. Announced once things settle, at most every LIVE_GAP_MS.
+  const liveQueue: string[] = [];
+  let liveStatus = '';
+  let liveTimer = 0;
+  let liveAt = 0;
+  function say(text: string) {
+    liveQueue.push(text);
+    scheduleLive();
+  }
+  function sayStatus(text: string) {
+    liveStatus = text;
+    scheduleLive();
+  }
+  function scheduleLive() {
+    clearTimeout(liveTimer);
+    const wait = Math.max(LIVE_SETTLE_MS, LIVE_GAP_MS - (performance.now() - liveAt));
+    liveTimer = window.setTimeout(() => {
+      const text = [...liveQueue.splice(0), liveStatus].filter(Boolean).join(' ');
+      liveStatus = '';
+      if (!text) return;
+      liveAt = performance.now();
+      live.textContent = text;
+    }, wait);
   }
 
   /** Facts that depend on what the simulation is doing (heat, sparks). */
@@ -908,7 +1033,7 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
     visible ? start() : stop();
   }).observe(root);
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
-  reduceMotion.addEventListener('change', () => (reduceMotion.matches ? (stop(), still()) : start()));
+  reduceQuery.addEventListener('change', () => (reduceMotion.matches ? (stop(), still()) : start()));
 
   let resizeTimer = 0;
   new ResizeObserver(() => {
@@ -931,6 +1056,13 @@ export function mountGrid(root: HTMLElement, nodes: MapNode[]) {
       return lat;
     },
     renderer: renderer.kind,
+    /** True while the rAF loop runs (never under reduced motion). */
+    get animating() {
+      return raf !== 0;
+    },
+    get reducedMotion() {
+      return reduceMotion.matches;
+    },
   };
 
   // ------------------------------------------------------------ storage
