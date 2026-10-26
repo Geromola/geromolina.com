@@ -1,6 +1,7 @@
 ---
 id: contact
 kind: section
+status: live
 title: Contact
 kicker: Node
 href: '#contact'

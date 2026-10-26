@@ -4,8 +4,9 @@ import Pill from './Pill.astro';
 interface Props {
   title: string;
   liveUrl?: string;
+  repo?: string;
 }
-const { title, liveUrl } = Astro.props;
+const { title, liveUrl, repo } = Astro.props;
 ---
 
 <header class="topbar">
@@ -17,6 +18,13 @@ const { title, liveUrl } = Astro.props;
       liveUrl && (
         <Pill href={liveUrl} variant="compact" class="topbar__launch">
           Launch <span aria-hidden="true">↗</span>
+        </Pill>
+      )
+    }
+    {
+      !liveUrl && repo && (
+        <Pill href={repo} newTab variant="compact" class="topbar__launch">
+          Source <span aria-hidden="true">↗</span>
         </Pill>
       )
     }

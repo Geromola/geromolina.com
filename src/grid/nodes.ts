@@ -5,6 +5,9 @@ export type NodeKind = 'plant' | 'substation' | 'section';
 export interface MapNode {
   id: string;
   kind: NodeKind;
+  status?: 'live' | 'code' | 'private';
+  /** False keeps the node off the game map (default true). */
+  inGame?: boolean;
   title: string;
   kicker: string; // small mono label above the title
   href: string;

@@ -10,6 +10,8 @@ const nodes = defineCollection({
   schema: z.object({
     id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
     kind: z.enum(['plant', 'substation', 'section']),
+    status: z.enum(['live', 'code', 'private']),
+    inGame: z.boolean().default(true),
     title: z.string(),
     kicker: z.string(),
     href: z.string(),

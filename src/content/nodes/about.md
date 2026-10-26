@@ -1,6 +1,7 @@
 ---
 id: about
 kind: section
+status: live
 title: About
 kicker: Node
 href: '#about'

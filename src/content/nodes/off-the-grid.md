@@ -1,6 +1,7 @@
 ---
 id: off-the-grid
 kind: section
+status: live
 title: Off the grid
 kicker: Node
 href: '#off-the-grid'

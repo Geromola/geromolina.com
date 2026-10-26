@@ -1,6 +1,7 @@
 ---
 id: networking-tracker
 kind: substation
+status: private
 title: Networking Tracker
 kicker: Substation · mine
 href: https://networking-tracker-navy.vercel.app/

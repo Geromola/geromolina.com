@@ -1,6 +1,7 @@
 ---
 id: custom-llm
 kind: plant
+status: live
 title: Custom LLM
 kicker: Plant · live
 href: /projects/custom-llm

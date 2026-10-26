@@ -1,6 +1,7 @@
 ---
 id: spotify-insight
 kind: plant
+status: live
 title: Spotify Insight
 kicker: Plant · live
 href: /projects/spotify-insight
