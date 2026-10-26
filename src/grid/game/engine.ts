@@ -433,6 +433,28 @@ export class GridGame {
     return this.placed.map((v) => this.toCR(v));
   }
 
+  /**
+   * Decorative flow only (the node menu, SPEC "Home hero v3"): fix a set of
+   * hidden transformers so the flow runs along solved-looking corridors
+   * (see `corridorTransformers`). Replaces any previous set; node vertices,
+   * duplicates and vertices outside the lattice are skipped. Budget and
+   * bounds don't apply. Returns false (and changes nothing) on a game that
+   * isn't decorative, where transformers are the player's to place.
+   */
+  setDecorTransformers(vertices: Iterable<number> | readonly Transformer[]): boolean {
+    if (!this.decorative) return false;
+    for (const v of this.placed) this.isTransformer[v] = 0;
+    this.placed.length = 0;
+    const mask = this.blockMask(vertices);
+    for (let v = 0; v < mask.length; v++) {
+      if (!mask[v] || this.nodeVerts.has(v)) continue;
+      this.isTransformer[v] = 1;
+      this.placed.push(v);
+    }
+    this.recompute();
+    return true;
+  }
+
   // -------------------------------------------------------------- routing
 
   /** Cost tables (nats, index `vertex * 2 + level`), aligned with `activeLoads`. */
@@ -588,7 +610,7 @@ export class GridGame {
     if (!this.ambient[i]) {
       if (this.isTransformer[v]) {
         this.volt[i] = 1 - this.volt[i];
-        this.lose(i, 1 - T_LOSS);
+        if (!this.decorative) this.lose(i, 1 - T_LOSS); // decorative packets stay lossless
       }
       const k = this.target[i];
       if (k >= 0 && v === this.slotVert(this.slot[i])) {

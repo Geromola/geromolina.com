@@ -589,3 +589,81 @@ export function drawMesh(
     }
   }
 }
+
+// ------------------------------------------------------------- corridors
+
+/** One lit corridor segment, in lattice coordinates. */
+export interface CorridorSegment {
+  c0: number;
+  r0: number;
+  c1: number;
+  r1: number;
+  /** 345 kV (white-hot) or 13.8 kV (cyan, where a corridor branches into a node). */
+  high: boolean;
+}
+
+const CORRIDOR_BUCKETS = 10; // strokes are batched by quantised alpha
+
+/**
+ * The node menu's lit corridors (SPEC "Home hero v3"): a soft glow and a
+ * hairline core along each segment, white-hot at 345 kV and cyan at 13.8 kV.
+ * Canvas 2D (it only repaints during the intro and hover), so both electron
+ * renderers share it. Alpha per segment is the caller's (power-on, hover).
+ */
+export class CorridorLayer {
+  private ctx: CanvasRenderingContext2D;
+  private lat: Lattice = { cols: 0, rows: 0, spacing: 1, ox: 0, oy: 0 };
+  private width = 0;
+  private height = 0;
+
+  constructor(private canvas: HTMLCanvasElement) {
+    this.ctx = canvas.getContext('2d')!;
+  }
+
+  resize(width: number, height: number, dpr: number, lat: Lattice) {
+    this.width = width;
+    this.height = height;
+    this.lat = lat;
+    this.canvas.width = Math.round(width * dpr);
+    this.canvas.height = Math.round(height * dpr);
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  draw(segments: readonly CorridorSegment[], alpha: ArrayLike<number>) {
+    const { ctx, lat } = this;
+    const s = lat.spacing;
+    ctx.clearRect(0, 0, this.width, this.height);
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (const high of [false, true]) {
+      const rgb = high ? '238, 247, 255' : '95, 227, 255'; // --hot, --cyan
+      for (let k = 1; k <= CORRIDOR_BUCKETS; k++) {
+        const lo = (k - 1) / CORRIDOR_BUCKETS;
+        const hi = k / CORRIDOR_BUCKETS;
+        ctx.beginPath();
+        let any = false;
+        for (let i = 0; i < segments.length; i++) {
+          const a = alpha[i];
+          const seg = segments[i];
+          if (seg.high !== high || a <= lo || a > hi + 1e-6) continue;
+          any = true;
+          ctx.moveTo(lat.ox + seg.c0 * s, lat.oy + seg.r0 * s);
+          ctx.lineTo(lat.ox + seg.c1 * s, lat.oy + seg.r1 * s);
+        }
+        if (!any) continue;
+        const a = (lo + hi) / 2;
+        ctx.strokeStyle = `rgba(${rgb}, ${(a * 0.07).toFixed(3)})`;
+        ctx.lineWidth = 9;
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(${rgb}, ${(a * 0.16).toFixed(3)})`;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.strokeStyle = `rgba(${rgb}, ${(a * (high ? 0.62 : 0.5)).toFixed(3)})`;
+        ctx.lineWidth = high ? 1.25 : 1;
+        ctx.stroke();
+      }
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+}

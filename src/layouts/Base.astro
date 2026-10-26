@@ -14,11 +14,10 @@ const {
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.png', Astro.site).href;
 const isProd = import.meta.env.PROD;
-// Hold the first render until the element the view transition needs is parsed (the project
-// cards and the map nodes after them on the home page, the hero glyph on a project page), so
-// `pagereveal` can find it.
+// Hold the first render until the element the view transition needs is parsed (the node menu
+// on the home page, the hero glyph on a project page), so `pagereveal` can find it.
 const path = Astro.url.pathname.replace(/(.)\/$/, '$1');
-const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path) ? '#plant-glyph-morph' : null;
+const vtExpect = path === '/' ? '#menu-nodes' : /^\/projects\/[^/]+$/.test(path) ? '#plant-glyph-morph' : null;
 ---
 
 <!doctype html>
@@ -62,10 +61,11 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
       })();
     </script>
     <script is:inline>
-      // Cross-document view transitions (SPEC "Transitions", "Home hero v2"): expand a project
-      // page out of the clicked card's terminal dot (Projects mode) or plant node (Play mode,
-      // `#play`), and collapse it back into the same one on the way home. A classic inline
-      // script in <head>, so the `pagereveal` listener is registered before the first render.
+      // Cross-document view transitions (SPEC "Transitions", "Home hero v3"): expand a project
+      // page out of the clicked node's glyph in the home menu (or, with the v2 hero, a card's
+      // terminal dot, or a plant node in Play mode, `#play`), and collapse it back into the same
+      // one on the way home. A classic inline script in <head>, so the `pagereveal` listener is
+      // registered before the first render.
       (() => {
         if (!('onpagereveal' in window)) return;
         const KEY = 'gero-vt';
@@ -106,15 +106,20 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
         const cardFor = (path) =>
           [...document.querySelectorAll('[data-card]')].find((a) => pathOf(a.href) === path) || null;
         const dotOf = (card) => card && card.querySelector('[data-card-dot]');
-        /** The element a project expands out of / collapses into on the home page, for its mode. */
-        const sourceFor = (path) => (location.hash === '#play' ? glyphOf(nodeFor(path)) : dotOf(cardFor(path)));
+        const menuNodeFor = (path) =>
+          [...document.querySelectorAll('[data-menu-node][href]')].find((a) => pathOf(a.href) === path) || null;
+        const menuGlyphOf = (node) => node && node.querySelector('[data-menu-glyph]');
+        /** The element a project expands out of / collapses into on the home page: the menu glyph, else per v2 mode. */
+        const sourceFor = (path) =>
+          menuGlyphOf(menuNodeFor(path)) ||
+          (location.hash === '#play' ? glyphOf(nodeFor(path)) : dotOf(cardFor(path)));
         const circleOf = (el) => {
           const b = el.getBoundingClientRect();
           return { x: b.left + b.width / 2, y: b.top + b.height / 2, r: b.width / 2 };
         };
         const clearNames = () =>
           document
-            .querySelectorAll('[data-node] .node__glyph, [data-card-dot]')
+            .querySelectorAll('[data-node] .node__glyph, [data-card-dot], [data-menu-glyph]')
             .forEach((g) => (g.style.viewTransitionName = ''));
         /** Where the navigation came from: the Navigation API, else the referrer plus a fresh record. */
         const fromPath = (record) => {
@@ -131,9 +136,11 @@ const vtExpect = path === '/' ? '#grid-nodes' : /^\/projects\/[^/]+$/.test(path)
           const to = pathOf(e.activation.entry.url);
           const record = read();
           if (isHome(here) && to && isProject(to)) {
-            // Only the card dot or glyph named on click takes part; anything else (the node list,
+            // Only the glyph (or card dot) named on click takes part; anything else (the node list,
             // the section nav) is a plain fade.
-            const glyph = [dotOf(cardFor(to)), glyphOf(nodeFor(to))].find((el) => el && el.style.viewTransitionName === NAME);
+            const glyph = [menuGlyphOf(menuNodeFor(to)), dotOf(cardFor(to)), glyphOf(nodeFor(to))].find(
+              (el) => el && el.style.viewTransitionName === NAME,
+            );
             if (glyph) {
               const c = circleOf(glyph);
               write({ ...(record || {}), path: to, ...c, w: innerWidth, h: innerHeight, sy: scrollY, t: Date.now() });

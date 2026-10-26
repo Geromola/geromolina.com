@@ -1,0 +1,691 @@
+---
+// Home hero v3 (SPEC "Home hero v3: the node menu"): the profile header, the section nav and the
+// projects as grid nodes in ordered rows. Each node is a glyph plus a glass plate, fused into one
+// link. `src/grid/menu.ts` snaps the glyphs to lattice vertices and runs the decorative flow
+// (the plants feed every other node along lit corridors) on the canvases behind them.
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import gero from '../assets/gero.jpg';
+import SectionNav from './SectionNav.astro';
+
+type Kind = 'plant' | 'substation' | 'section';
+type Row = 'featured' | 'mid' | 'small';
+
+// Only these kinds are menu nodes; anything else in the collection (e.g. `kind: game`) is ignored.
+const KINDS: readonly string[] = ['plant', 'substation', 'section'];
+const all = (await getCollection('nodes'))
+  .map((e) => e.data)
+  .filter((n): n is typeof n & { kind: Kind } => KINDS.includes(n.kind))
+  .sort((a, b) => a.order - b.order);
+const byId = new Map(all.map((n) => [n.id, n]));
+
+// Rows, most important first. The featured and second rows are explicit (don't reorder `order`
+// in the content for this); the third row is everything else, by `order`.
+const FEATURED = ['spotify-insight', 'custom-llm'];
+const SECOND = ['personal-wiki', 'pacman-dqn'];
+const pick = (ids: string[]) => ids.flatMap((id) => (byId.has(id) ? [byId.get(id)!] : []));
+const featured = pick(FEATURED);
+const listed = new Set([...FEATURED, ...SECOND]);
+// A plant that's in neither list joins the second row (after the listed ones), not the small row.
+const second = [...pick(SECOND), ...all.filter((n) => !listed.has(n.id) && n.kind === 'plant')];
+const small = all.filter((n) => !listed.has(n.id) && n.kind !== 'plant');
+
+const rows: { row: Row; nodes: typeof all }[] = [
+  { row: 'featured', nodes: featured },
+  { row: 'mid', nodes: second },
+  { row: 'small', nodes: small },
+];
+
+// Plants with a live page feed the flow; every other node is a load.
+const isSource = (n: (typeof all)[number]) => n.kind === 'plant' && n.status === 'live';
+
+// A circle and a rounded square as paths (start at the top, clockwise), so `pathLength` works everywhere.
+const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
+const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 0 0 1 -22 -22 V26 a22 22 0 0 1 22 -22 Z';
+
+// Node indices: in DOM order (the featured row, the second row, the Ballpark placeholder, the small row).
+let index = 0;
+const next = () => index++;
+const featuredIdx = featured.map(next);
+const secondIdx = second.map(next);
+const ballparkIdx = next();
+const smallIdx = small.map(next);
+const indices: Record<Row, number[]> = { featured: featuredIdx, mid: secondIdx, small: smallIdx };
+---
+
+<SectionNav />
+<div class="nmenu" data-menu>
+  <script is:inline>
+    // Power-on intro (menu.ts): nodes start dark, before the first paint. Skipped under reduced
+    // motion and on a quick return from a project page (the view transition collapses into a lit
+    // node). If the client entry never runs, everything lights after a moment.
+    (() => {
+      const root = document.currentScript.parentElement;
+      const html = document.documentElement;
+      if (html.dataset.motion === 'reduce' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      try {
+        const r = JSON.parse(sessionStorage.getItem('gero-vt') || 'null');
+        if (r && typeof r.t === 'number' && Date.now() - r.t < 30000) return;
+      } catch {
+        /* storage unavailable: play the intro */
+      }
+      root.dataset.intro = '';
+      setTimeout(() => {
+        if (!('ready' in root.dataset)) delete root.dataset.intro;
+      }, 2500);
+    })();
+  </script>
+
+  <div class="nmenu__map" aria-hidden="true">
+    <canvas class="nmenu__layer" data-mesh></canvas>
+    <canvas class="nmenu__layer" data-corridors></canvas>
+    <canvas class="nmenu__layer" data-electrons></canvas>
+    <div class="nmenu__vignette"></div>
+  </div>
+
+  <div class="nmenu__content">
+    <header class="profile">
+      <span class="profile__photo">
+        <Image src={gero} width={144} widths={[72, 144, 216]} sizes="72px" alt="" loading="eager" decoding="async" />
+      </span>
+      <p class="profile__kicker mono">Geronimo Molina</p>
+      <h1 class="profile__name">Gero</h1>
+      <p class="profile__line">MBA + MEng Candidate&nbsp;· UC Berkeley, California</p>
+    </header>
+
+    <nav class="nmenu__nodes" id="menu-nodes" aria-label="Projects and sections">
+      {
+        rows.map(({ row, nodes }) => (
+          <ul class={`nmenu__row nmenu__row--${row}`} role="list">
+            {nodes.map((n, j) => (
+              <li class="nmenu__item" data-menu-item>
+                <a
+                  class:list={['mnode', `mnode--${row}`, `mnode--${n.kind}`, `mnode--${n.status}`]}
+                  href={n.href}
+                  data-menu-node={indices[row][j]}
+                  data-id={n.id}
+                  data-source={isSource(n) ? '' : undefined}>
+                  <span class="mnode__glyph" data-menu-glyph aria-hidden="true">
+                    <svg class="mnode__ring" viewBox="0 0 100 100">
+                      <path class="mnode__ring-base" d={n.kind === 'substation' ? SQUARE : RING} pathLength="100" />
+                      <path class="mnode__ring-fill" d={n.kind === 'substation' ? SQUARE : RING} pathLength="100" data-ring />
+                    </svg>
+                    <span class="mnode__charge" />
+                    {n.kind === 'plant' && <span class="mnode__core" />}
+                    {n.kind === 'substation' && (
+                      <svg class="mnode__lock" viewBox="0 0 16 16">
+                        <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor" />
+                        <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6" />
+                      </svg>
+                    )}
+                  </span>
+                  <span class="mnode__plate glass">
+                    {row !== 'small' && (
+                      <span class="mnode__badge mono">
+                        {n.status === 'live' ? (
+                          <>
+                            <span aria-hidden="true">●</span> Live
+                          </>
+                        ) : n.status === 'private' ? (
+                          <>
+                            <svg class="mnode__badge-lock" viewBox="0 0 16 16" aria-hidden="true">
+                              <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor" />
+                              <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6" />
+                            </svg>{' '}
+                            Mine
+                          </>
+                        ) : (
+                          <>
+                            <span aria-hidden="true">‹/›</span> Code
+                          </>
+                        )}
+                      </span>
+                    )}
+                    <span class="mnode__title">{n.title}</span>
+                    {row !== 'small' && n.pitch && <span class="mnode__pitch">{n.pitch}</span>}
+                    {row === 'featured' && n.metrics?.[0] && (
+                      <span class="mnode__metric">
+                        <span class="mnode__value mono">{n.metrics[0].value}</span> {n.metrics[0].label}
+                      </span>
+                    )}
+                  </span>
+                </a>
+              </li>
+            ))}
+            {row === 'mid' && (
+              <>
+              {/* ======================= Ballpark placeholder (SPEC "Home hero v3") =======================
+                  Hardcoded, not from the collection. It is a load in the flow, but its ring stays
+                  half-lit (`data-fill`) while it's under construction. No link yet: to launch it, add
+                  href="/ballpark", drop role, aria-disabled, tabindex, data-soon and data-fill, and swap
+                  the SOON badge and pitch for the real ones. */}
+              <li class="nmenu__item" data-menu-item>
+                <a
+                  class="mnode mnode--mid mnode--soon"
+                  role="link"
+                  aria-disabled="true"
+                  tabindex="-1"
+                  data-menu-node={ballparkIdx}
+                  data-id="ballpark"
+                  data-soon
+                  data-fill="0.5">
+                  <span class="mnode__glyph" data-menu-glyph aria-hidden="true">
+                    <svg class="mnode__ring" viewBox="0 0 100 100">
+                      <path class="mnode__ring-base" d={RING} pathLength="100" />
+                      <path class="mnode__ring-fill" d={RING} pathLength="100" data-ring />
+                    </svg>
+                    <span class="mnode__charge" />
+                  </span>
+                  <span class="mnode__plate glass">
+                    <span class="mnode__badge mono">
+                      <span aria-hidden="true">◌</span> Soon
+                      <span class="mnode__hint" aria-hidden="true">Coming soon</span>
+                    </span>
+                    <span class="mnode__title">Ballpark</span>
+                    <span class="mnode__pitch">An energy guessing game. In construction.</span>
+                  </span>
+                </a>
+              </li>
+              {/* ===================== end of the Ballpark placeholder ===================== */}
+              </>
+            )}
+          </ul>
+        ))
+      }
+    </nav>
+  </div>
+</div>
+
+<script>
+  import { mountMenu } from '../grid/menu';
+  const root = document.querySelector<HTMLElement>('[data-menu]');
+  if (root) mountMenu(root);
+</script>
+
+<style>
+  .nmenu {
+    position: relative;
+    min-height: max(560px, 100svh);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* ---------- the grid behind (menu.ts) ---------- */
+  .nmenu__map {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(120% 80% at 50% 30%, var(--bg-raise) 0%, var(--bg) 62%);
+  }
+  .nmenu__layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .nmenu__vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(130% 100% at 50% 40%, transparent 55%, rgba(4, 7, 11, 0.85) 100%),
+      linear-gradient(to bottom, transparent 80%, var(--bg) 100%);
+  }
+
+  .nmenu__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(3.5rem, 8vh, 5rem) var(--gutter) clamp(3.5rem, 9vh, 5.5rem);
+  }
+
+  /* ---------- profile header (as in v2) ---------- */
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .profile__photo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--cyan);
+    box-shadow: 0 0 24px rgba(var(--cyan-rgb), 0.3);
+    background: var(--bg);
+  }
+  .profile__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 48%;
+    /* The duotone filter is defined once, in About.astro (later in the page). */
+    filter: url(#gero-duotone);
+  }
+  .profile__kicker {
+    margin: 0.875rem 0 0.375rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .profile__name {
+    margin: 0;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    /* Same gradient as v2's header (ProjectMenu.astro). */
+    background: linear-gradient(180deg, #fff 30%, #9fdcec 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 28px rgba(var(--cyan-rgb), 0.18));
+  }
+  .profile__line {
+    margin: 0.625rem 0 0;
+    font-size: 1.0625rem;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink-2);
+    text-wrap: balance;
+  }
+
+  /* ---------- rows ---------- */
+  .nmenu__nodes {
+    width: 100%;
+    max-width: 66rem;
+    margin-top: clamp(2.5rem, 6vh, 3.5rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(2rem, 5vh, 3rem);
+  }
+  .nmenu__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    column-gap: 6rem;
+    row-gap: 2.5rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .nmenu__row--small {
+    column-gap: 5rem;
+  }
+  /* menu.ts measures the glyphs untransformed. */
+  .nmenu.is-measuring .mnode {
+    transform: none !important;
+  }
+  /* menu.ts snaps each glyph to a lattice vertex: a small sideways nudge and a top margin. */
+  .nmenu__item {
+    display: flex;
+    margin-top: var(--snap-y, 0px);
+    translate: var(--snap-x, 0px) 0;
+  }
+
+  /* ---------- the node object: glyph + plate, one link ---------- */
+  .mnode {
+    --glyph: 56px;
+    --power: 1;
+    --pulse: 0;
+    --glow: 0;
+    --charge: 0;
+    --lift: 0;
+    --press: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--ink);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transform: translateY(calc(var(--lift) * 1px)) scale(var(--press));
+  }
+  .mnode[href] {
+    cursor: pointer;
+  }
+  .mnode--mid {
+    --glyph: 40px;
+  }
+  .mnode--small {
+    --glyph: 20px;
+  }
+  .nmenu[data-intro] .mnode {
+    --power: 0;
+  }
+
+  /* Glyph: the plant, substation or section ring. Its ring fills and lights as power arrives. */
+  .mnode__glyph {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: var(--glyph);
+    height: var(--glyph);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(var(--cyan-rgb), calc(0.04 + var(--power) * 0.16)) 0%, var(--bg) 70%);
+    box-shadow: 0 0 calc(4px + var(--power) * 6px + var(--pulse) * 22px)
+      rgba(var(--cyan-rgb), calc(var(--power) * 0.22 + var(--pulse) * 0.45 + var(--glow) * 0.12));
+    transform: scale(calc(1 + var(--pulse) * 0.1));
+  }
+  .mnode--substation .mnode__glyph {
+    border-radius: 28%;
+    color: var(--amber);
+    background: var(--bg);
+    box-shadow: 0 0 calc(4px + var(--power) * 6px + var(--pulse) * 18px)
+      rgba(var(--amber-rgb), calc(var(--power) * 0.25 + var(--pulse) * 0.45 + var(--glow) * 0.12));
+  }
+  .mnode__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+  .mnode__ring path {
+    fill: none;
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+  }
+  .mnode__ring-base {
+    stroke: rgba(232, 241, 245, 0.22);
+  }
+  .mnode__ring-fill {
+    stroke: var(--cyan);
+    stroke-dasharray: 100 0;
+    filter: drop-shadow(0 0 calc(1px + var(--power) * 2px + var(--glow) * 4px) rgba(var(--cyan-rgb), 0.7));
+  }
+  .nmenu[data-intro] .mnode__ring-fill {
+    stroke-dasharray: 0 100;
+  }
+  .mnode--substation .mnode__ring-base {
+    stroke: rgba(var(--amber-rgb), 0.3);
+  }
+  .mnode--substation .mnode__ring-fill {
+    stroke: var(--amber);
+    filter: drop-shadow(0 0 calc(1px + var(--power) * 2px + var(--glow) * 4px) rgba(var(--amber-rgb), 0.7));
+  }
+  .mnode.is-hot .mnode__ring-fill {
+    stroke: var(--hot);
+  }
+  .mnode--substation.is-hot .mnode__ring-fill {
+    stroke: var(--amber);
+  }
+  .mnode__core {
+    width: calc(var(--glyph) * 0.3);
+    height: calc(var(--glyph) * 0.3);
+    border-radius: 50%;
+    background: var(--hot);
+    box-shadow: 0 0 calc(var(--glyph) * 0.3) calc(var(--glyph) * 0.06) rgba(var(--cyan-rgb), 0.8);
+    opacity: calc(0.12 + var(--power) * 0.88);
+  }
+  .mnode__lock {
+    width: calc(var(--glyph) * 0.55);
+    height: calc(var(--glyph) * 0.55);
+    opacity: calc(0.35 + var(--power) * 0.65);
+  }
+  /* Charge sweep: a hot arc swept 0→360° by --charge (a Spring in menu.ts), on press and at ignition. */
+  .mnode__charge {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid var(--hot);
+    box-shadow:
+      0 0 8px rgba(var(--cyan-rgb), 0.9),
+      inset 0 0 6px rgba(var(--cyan-rgb), 0.6);
+    pointer-events: none;
+    -webkit-mask-image: conic-gradient(black calc(var(--charge) * 1turn), transparent 0);
+    mask-image: conic-gradient(black calc(var(--charge) * 1turn), transparent 0);
+  }
+  .mnode--substation .mnode__charge {
+    border-radius: 32%;
+  }
+  .mnode--small .mnode__charge {
+    inset: -3px;
+    border-width: 1.5px;
+  }
+
+  /* Under construction: a dashed ring that only ever fills halfway. */
+  .mnode--soon .mnode__ring-base {
+    stroke: var(--muted);
+    stroke-dasharray: 4 4;
+  }
+  .mnode--soon .mnode__ring-fill {
+    stroke-dasharray: 50 100;
+  }
+
+  /* Plate: hangs under the glyph, which overlaps its top edge. */
+  .mnode__plate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 18rem;
+    margin-top: calc(var(--glyph) / -2);
+    padding: calc(var(--glyph) / 2 + 0.625rem) 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    transition: border-color 150ms ease-out;
+  }
+  .mnode--mid .mnode__plate {
+    width: 15rem;
+    padding: calc(var(--glyph) / 2 + 0.5rem) 1.125rem 0.875rem;
+    border-radius: var(--radius-md);
+  }
+  .mnode--small .mnode__plate {
+    width: auto;
+    padding: calc(var(--glyph) / 2 + 0.25rem) 1rem 0.5rem;
+    border-radius: 999px;
+  }
+  .mnode.is-hot .mnode__plate {
+    border-color: rgba(var(--cyan-rgb), 0.36);
+    border-top-color: rgba(var(--cyan-rgb), 0.5);
+  }
+  .mnode--substation .mnode__plate {
+    border-color: rgba(var(--amber-rgb), 0.4);
+  }
+  .mnode--substation.is-hot .mnode__plate {
+    border-color: var(--amber);
+  }
+  .mnode:focus-visible {
+    outline: none;
+  }
+  .mnode:focus-visible .mnode__plate {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  .mnode__badge {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .mnode--live .mnode__badge {
+    color: var(--cyan);
+  }
+  .mnode--private .mnode__badge {
+    color: var(--amber);
+  }
+  .mnode__badge-lock {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+  .mnode__title {
+    margin-top: 0.25rem;
+    font-size: 1.3125rem;
+    font-weight: 650;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .mnode--mid .mnode__title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .mnode--small .mnode__title {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    white-space: nowrap;
+    color: var(--ink-2);
+    transition: color 150ms ease-out;
+  }
+  .mnode--small.is-hot .mnode__title {
+    color: var(--ink);
+  }
+  .mnode__pitch {
+    margin-top: 0.3125rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .mnode--mid .mnode__pitch {
+    font-size: 0.8125rem;
+  }
+  .mnode__metric {
+    margin-top: 0.625rem;
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+  .mnode__value {
+    color: var(--cyan);
+    font-size: 0.9375rem;
+  }
+
+  /* "Coming soon": a small hint beside the SOON badge, on hover or press. */
+  .mnode__hint {
+    position: absolute;
+    left: calc(100% + 0.625rem);
+    top: 50%;
+    translate: 0 -50%;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-edge);
+    background: var(--bg-raise);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    color: var(--ink-2);
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+    pointer-events: none;
+  }
+  .mnode--soon.is-hot .mnode__hint,
+  .mnode--soon.is-hinting .mnode__hint {
+    opacity: 1;
+  }
+  .mnode--soon {
+    cursor: default;
+  }
+
+  /* ---------- phones: one column along the spine, plates to the right of the glyphs ---------- */
+  @media (max-width: 720px) {
+    .nmenu__content {
+      padding-top: 4.5rem;
+      align-items: stretch;
+    }
+    .nmenu__nodes {
+      align-items: stretch;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .nmenu__row {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 1rem;
+    }
+    .mnode {
+      flex: 1;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
+      /* Every glyph centred on the same spine x, whatever its size. */
+      padding-left: calc((56px - var(--glyph)) / 2);
+    }
+    .mnode__glyph {
+      margin-right: calc((56px - var(--glyph)) / 2);
+    }
+    .mnode__plate,
+    .mnode--mid .mnode__plate,
+    .mnode--small .mnode__plate {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+      margin-top: 0;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .mnode__plate {
+      padding: 0.875rem 1rem 0.9375rem;
+    }
+    .mnode--mid .mnode__plate {
+      padding: 0.6875rem 0.875rem 0.75rem;
+    }
+    .mnode--small .mnode__plate {
+      flex: 0 1 auto;
+      padding: 0.5rem 0.875rem;
+    }
+    .mnode__title {
+      font-size: 1.125rem;
+    }
+    .mnode--mid .mnode__title {
+      font-size: 1rem;
+    }
+    .mnode__pitch {
+      font-size: 0.8125rem;
+    }
+  }
+
+  /* ---------- preferences ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .mnode {
+      transform: none;
+    }
+  }
+  :global(html[data-motion='reduce']) .mnode {
+    transform: none;
+  }
+  @media (prefers-contrast: more) {
+    .mnode__plate {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .mnode__pitch,
+    .mnode__metric,
+    .mnode--small .mnode__title,
+    .mnode__badge,
+    .profile__line,
+    .mnode__hint {
+      color: var(--ink);
+    }
+    .mnode--live .mnode__badge {
+      color: var(--cyan);
+    }
+    .mnode--private .mnode__badge {
+      color: var(--amber);
+    }
+    .mnode__ring-base {
+      stroke: rgba(232, 241, 245, 0.5);
+    }
+  }
+</style>
