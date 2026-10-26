@@ -1,14 +1,12 @@
 ---
-// Home hero v3.1 (SPEC "Home hero v3: the node menu"): a compact profile header (top-left), the
-// section nav (top right) and two zones of grid nodes, PROJECTS and ABOUT ME. Every node is the
-// same object, a glyph plus a glass plate fused into one link. `src/grid/menu.ts` snaps the glyphs
-// to lattice vertices and runs the decorative flow (the plants feed every node in both zones along
-// lit corridors) on the canvases behind them.
+// Home hero v3.2 (SPEC "Home hero v3: the node menu"): the root node "Gero" (top-left) powers two
+// fenced sections on the lattice, ABOUT ME and PROJECTS. Each section has a switch node (a
+// button) that expands and collapses it like a dropdown on the grid. Every child is a glyph plus a
+// glass plate, fused into one link. `src/grid/menu.ts` lays everything out on lattice vertices
+// (`menuLayout` in src/grid/game/decor.ts), runs the power-on intro and the decorative flow
+// (root → switch → child, along lit corridors), and animates the sections.
 //
-// The grid is sized so a 64px lattice fits it exactly (16px root): columns 13.5rem + 2.5rem = 4
-// spacings apart, rows 126px + 66px = 3 spacings, the ABOUT ME column 5 spacings right of the last
-// project column, and each zone label centred one spacing above its first glyphs. menu.ts still
-// nudges whatever doesn't fit (another root size, the narrower layouts).
+// Without JS the menu is a plain stacked list (the switches do nothing and everything is shown).
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import gero from '../assets/gero.jpg';
@@ -101,10 +99,10 @@ const ABOUT = ['about', 'off-the-grid', 'contact'];
 const sections = [...pick(ABOUT), ...all.filter((n) => n.kind === 'section' && !ABOUT.includes(n.id))];
 const about: Entry[] = sections.map((n) => ({ ...toEntry(n), label: ABOUT_LINES[n.id] ?? n.title }));
 
-// Node indices in DOM order: the projects, then about me.
-const zones = [
-  { key: 'projects', label: 'Projects', entries: projects, offset: 0 },
-  { key: 'about', label: 'About me', entries: about, offset: projects.length },
+// The two sections, in DOM (and tab) order. Child indices (`data-menu-node`) run across both.
+const groups = [
+  { key: 'about', label: 'About me', count: `${about.length} nodes`, entries: about, offset: 0 },
+  { key: 'projects', label: 'Projects', count: `${projects.length} projects`, entries: projects, offset: about.length },
 ];
 
 // A circle and a rounded square as paths (start at the top, clockwise), so `pathLength` works everywhere.
@@ -115,12 +113,19 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
 <SectionNav />
 <div class="nmenu" data-menu>
   <script is:inline>
-    // Power-on intro (menu.ts): nodes start dark, before the first paint. Skipped under reduced
+    // menu.ts lays the menu out on the lattice: hide it until then (no jump from the fallback
+    // layout). Power-on intro: nodes start dark, before the first paint; skipped under reduced
     // motion and on a quick return from a project page (the view transition collapses into a lit
-    // node). If the client entry never runs, everything lights after a moment.
+    // node). If the client entry never runs, the plain layout shows and everything lights.
     (() => {
       const root = document.currentScript.parentElement;
       const html = document.documentElement;
+      root.dataset.js = '';
+      setTimeout(() => {
+        if ('laid' in root.dataset) return;
+        delete root.dataset.js;
+        delete root.dataset.intro;
+      }, 3000);
       if (html.dataset.motion === 'reduce' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       try {
         const r = JSON.parse(sessionStorage.getItem('gero-vt') || 'null');
@@ -129,9 +134,6 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
         /* storage unavailable: play the intro */
       }
       root.dataset.intro = '';
-      setTimeout(() => {
-        if (!('ready' in root.dataset)) delete root.dataset.intro;
-      }, 4000);
     })();
   </script>
 
@@ -139,40 +141,71 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     <canvas class="nmenu__layer" data-mesh></canvas>
     <canvas class="nmenu__layer" data-corridors></canvas>
     <canvas class="nmenu__layer" data-electrons></canvas>
-    <div class="nmenu__vignette"></div>
   </div>
+  <!-- Outside the map: the map keeps the full menu height while a collapsed section shortens the menu. -->
+  <div class="nmenu__vignette" aria-hidden="true"></div>
 
-  <div class="nmenu__content">
-    <header class="profile">
-      <span class="profile__photo">
-        <Image src={gero} width={88} widths={[44, 88, 132]} sizes="44px" alt="" loading="eager" decoding="async" />
+  <div class="nmenu__content" data-content>
+    <!-- The root node: the power source. Not a link; the page's h1. -->
+    <header class="mroot" data-root>
+      <span class="mroot__glyph" data-root-glyph aria-hidden="true">
+        <svg class="mnode__ring" viewBox="0 0 100 100">
+          <path class="mnode__ring-base" d={RING} pathLength="100" />
+          <path class="mnode__ring-fill" d={RING} pathLength="100" data-ring />
+        </svg>
+        <span class="mnode__charge"></span>
+        <span class="mroot__photo">
+          <Image src={gero} width={104} widths={[52, 104, 156]} sizes="52px" alt="" loading="eager" decoding="async" />
+        </span>
       </span>
-      <span class="profile__text">
-        <p class="profile__kicker mono">Geronimo Molina</p>
-        <h1 class="profile__name">Gero</h1>
-        <p class="profile__line">MBA + MEng Candidate&nbsp;· UC Berkeley, California</p>
+      <span class="mroot__plate glass">
+        <p class="mroot__kicker mono">Geronimo Molina</p>
+        <h1 class="mroot__name">Gero</h1>
+        <p class="mroot__line">MBA + MEng Candidate&nbsp;· UC Berkeley, California</p>
       </span>
     </header>
 
-    <nav class="nmenu__zones" id="menu-nodes" aria-label="Projects and sections">
+    <nav class="nmenu__sections" id="menu-nodes" aria-label="About me and projects">
       {
-        zones.map((zone) => (
-          <section class={`zone zone--${zone.key}`} aria-labelledby={`zone-${zone.key}`}>
-            <h2 class="zone__label mono" id={`zone-${zone.key}`}>
-              {zone.label}
-            </h2>
-            <ul class="zone__grid" role="list" data-flow={zone.key === 'projects' ? 0 : 1}>
-              {zone.entries.map((n, j) => (
-                <li class="nmenu__item" data-menu-item>
+        groups.map((group) => (
+          <section class={`msec msec--${group.key}`} data-section={group.key} aria-labelledby={`msec-${group.key}-switch`}>
+            <div class="mfence" data-fence aria-hidden="true">
+              <span class="mfence__label mono">{group.label}</span>
+            </div>
+            <button
+              class="mswitch"
+              type="button"
+              id={`msec-${group.key}-switch`}
+              data-switch
+              aria-expanded="true"
+              aria-controls={`msec-${group.key}`}>
+              <span class="mswitch__glyph" data-switch-glyph aria-hidden="true">
+                <svg class="mnode__ring" viewBox="0 0 100 100">
+                  <path class="mnode__ring-base" d={RING} pathLength="100" />
+                  <path class="mnode__ring-fill" d={RING} pathLength="100" data-ring />
+                </svg>
+                <span class="mnode__charge" />
+                <span class="mswitch__core" />
+              </span>
+              <span class="mswitch__label">{group.label}</span>
+              <span class="mswitch__chev" aria-hidden="true">
+                ▾
+              </span>
+              <span class="mswitch__count mono" aria-hidden="true">
+                {group.count}
+              </span>
+            </button>
+            <ul class="msec__list" id={`msec-${group.key}`} role="list" data-list>
+              {group.entries.map((n, j) => (
+                <li class="mitem" data-menu-item>
                   <a
                     class:list={['mnode', `mnode--${n.kind}`, n.badge && `mnode--${n.badge}`]}
                     href={n.href}
                     role={n.href ? undefined : 'link'}
                     aria-disabled={n.href ? undefined : 'true'}
                     tabindex={n.href ? undefined : -1}
-                    data-menu-node={zone.offset + j}
+                    data-menu-node={group.offset + j}
                     data-id={n.id}
-                    data-source={n.source ? '' : undefined}
                     data-soon={n.href ? undefined : ''}
                     data-fill={n.fill === undefined ? undefined : String(n.fill)}>
                     <span class="mnode__glyph" data-menu-glyph aria-hidden="true">
@@ -256,7 +289,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    background: radial-gradient(120% 80% at 50% 30%, var(--bg-raise) 0%, var(--bg) 62%);
+    background: radial-gradient(120% 80% at 30% 20%, var(--bg-raise) 0%, var(--bg) 62%);
   }
   .nmenu__layer {
     position: absolute;
@@ -267,40 +300,104 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
   .nmenu__vignette {
     position: absolute;
     inset: 0;
+    z-index: 0;
+    pointer-events: none;
     background:
-      radial-gradient(130% 100% at 50% 40%, transparent 55%, rgba(4, 7, 11, 0.85) 100%),
-      linear-gradient(to bottom, transparent 80%, var(--bg) 100%);
+      radial-gradient(130% 100% at 45% 35%, transparent 55%, rgba(4, 7, 11, 0.85) 100%),
+      linear-gradient(to bottom, transparent 85%, var(--bg) 100%);
   }
 
+  /* ---------- fallback layout (no JS yet, or none at all): a plain stacked list ---------- */
   .nmenu__content {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: var(--gutter) var(--gutter) clamp(3rem, 8vh, 5rem);
+    gap: 2rem;
+    padding: 4.5rem var(--gutter) 4rem;
+  }
+  .nmenu[data-js]:not([data-laid]) .nmenu__content {
+    visibility: hidden;
+  }
+  .nmenu__sections {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .msec {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .msec__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+    gap: 2.5rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .mfence {
+    display: none;
   }
 
-  /* ---------- compact profile header, top-left (the section nav is on the same row) ---------- */
-  .profile {
-    align-self: flex-start;
+  /* ---------- lattice layout (menu.ts): everything absolutely placed on vertices ---------- */
+  .nmenu[data-laid] .nmenu__content {
+    display: block;
+    padding: 0;
+  }
+  /* The wrappers keep their semantics but stop taking part in layout: full-size, click-through layers. */
+  .nmenu[data-laid] :is(.nmenu__sections, .msec, .msec__list) {
+    display: block;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    pointer-events: none;
+  }
+  .nmenu[data-laid] :is(.mroot, .mswitch, .mitem, .mfence) {
+    position: absolute;
+  }
+  .nmenu[data-laid] :is(.mswitch, .mitem) {
+    pointer-events: auto;
+  }
+  .nmenu[data-laid] .mfence {
+    display: block;
+  }
+
+  /* ---------- the root node ---------- */
+  .mroot {
+    --power: 1;
+    --charge: 0;
+    --pulse: 0;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    /* Centred on the section nav's row. */
-    margin-top: -0.5rem;
+    gap: 0.875rem;
   }
-  .profile__photo {
+  .nmenu[data-laid] .mroot {
+    translate: 0 -50%;
+  }
+  .mroot__glyph {
+    --glyph: 64px;
+    position: relative;
     flex: none;
-    width: 44px;
-    height: 44px;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow:
+      0 0 calc(6px + var(--power) * 26px) rgba(var(--cyan-rgb), calc(0.1 + var(--power) * 0.45)),
+      0 0 calc(var(--power) * 60px) rgba(var(--cyan-rgb), calc(var(--power) * 0.18));
+  }
+  .mroot__photo {
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     overflow: hidden;
-    border: 1.5px solid var(--cyan);
-    box-shadow: 0 0 16px rgba(var(--cyan-rgb), 0.3);
-    background: var(--bg);
+    opacity: calc(0.35 + var(--power) * 0.65);
   }
-  .profile__photo img {
+  .mroot__photo img {
     display: block;
     width: 100%;
     height: 100%;
@@ -309,12 +406,20 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     /* The duotone filter is defined once, in About.astro (later in the page). */
     filter: url(#gero-duotone);
   }
-  .profile__text {
+  .mroot .mnode__ring path {
+    stroke-width: 2;
+  }
+  .mroot .mnode__ring-fill {
+    stroke: var(--hot);
+    filter: drop-shadow(0 0 calc(2px + var(--power) * 5px) rgba(var(--cyan-rgb), 0.9));
+  }
+  .mroot__plate {
     display: flex;
     flex-direction: column;
-    max-width: 19rem;
+    padding: 0.5rem 1rem 0.5625rem;
+    border-radius: var(--radius-md);
   }
-  .profile__kicker {
+  .mroot__kicker {
     margin: 0;
     font-size: 0.625rem;
     line-height: 1.4;
@@ -322,7 +427,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     text-transform: uppercase;
     color: var(--cyan);
   }
-  .profile__name {
+  .mroot__name {
     margin: 0;
     font-size: 1.75rem;
     font-weight: 700;
@@ -334,7 +439,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     background-clip: text;
     color: transparent;
   }
-  .profile__line {
+  .mroot__line {
     margin: 0.125rem 0 0;
     font-size: 0.8125rem;
     line-height: 1.35;
@@ -342,57 +447,119 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     text-wrap: balance;
   }
 
-  /* ---------- the two zones ---------- */
-  .nmenu__zones {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 6.5rem;
-    width: 100%;
-    margin-top: clamp(1.75rem, 5vh, 3rem);
+  /* ---------- fences: a thin dashed outline on lattice lines, the label on the line ---------- */
+  .mfence {
+    border: 1px dashed rgba(var(--cyan-rgb), 0.32);
+    border-radius: 12px;
+    pointer-events: none;
   }
-  .zone {
-    display: flex;
-    flex-direction: column;
-  }
-  /* A mono kicker sitting on a conductor, one lattice row above the zone's first glyphs. */
-  .zone__label {
-    margin: 0 0 2.125rem;
-    font-size: 0.6875rem;
+  .mfence__label {
+    position: absolute;
+    top: 0;
+    left: 0.875rem;
+    translate: 0 -50%;
+    padding: 0 0.375rem;
+    background: var(--bg);
+    font-size: 0.625rem;
     font-weight: 500;
     line-height: 1rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--cyan);
-  }
-  .zone--about .zone__label {
+    white-space: nowrap;
     color: var(--ink-2);
   }
-  .zone__grid {
-    display: grid;
-    grid-template-columns: repeat(3, var(--plate-w));
-    column-gap: 2.5rem;
-    row-gap: 4.125rem;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    --plate-w: 13.5rem;
-  }
-  .zone--about .zone__grid {
-    grid-template-columns: var(--plate-w);
-  }
-  /* menu.ts measures the glyphs untransformed. */
-  .nmenu.is-measuring .mnode {
-    transform: none !important;
-  }
-  /* menu.ts snaps each glyph to a lattice vertex: a small sideways nudge and a top margin. */
-  .nmenu__item {
-    display: flex;
-    margin-top: var(--snap-y, 0px);
-    translate: var(--snap-x, 0px) 0;
+  .msec--projects .mfence__label {
+    color: var(--cyan);
   }
 
-  /* ---------- the node object: glyph + plate, one link, one size ---------- */
+  /* ---------- section switch: a glyph and a label, a real button ---------- */
+  .mswitch {
+    --power: 1;
+    --charge: 0;
+    --pulse: 0;
+    --glow: 0;
+    --chev: 0;
+    --open: 1;
+    --press: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+    margin: 0;
+    padding: 0 0.75rem 0 0;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transform: scale(var(--press));
+    transform-origin: 14px 50%;
+  }
+  .nmenu[data-laid] .mswitch {
+    translate: 0 -50%;
+  }
+  .mswitch:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
+  .mswitch__glyph {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: 0 0 calc(3px + var(--power) * 6px + var(--pulse) * 16px)
+      rgba(var(--cyan-rgb), calc(var(--power) * 0.3 + var(--pulse) * 0.4 + var(--glow) * 0.15));
+    transform: scale(calc(1 + var(--pulse) * 0.12));
+  }
+  .mswitch__core {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--hot);
+    box-shadow: 0 0 8px 1px rgba(var(--cyan-rgb), 0.8);
+    opacity: calc(0.15 + var(--power) * 0.85);
+  }
+  .mswitch__label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .mswitch__chev {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--ink-2);
+    rotate: calc(var(--chev) * -90deg);
+  }
+  .mswitch__count {
+    font-size: 0.6875rem;
+    color: var(--muted);
+    opacity: calc(1 - var(--open));
+  }
+  @media (hover: hover) {
+    .mswitch:hover .mswitch__label {
+      color: var(--hot);
+    }
+  }
+
+  /* ---------- children: one node object, plates hanging (projects, desktop) or beside ---------- */
+  .mitem {
+    --shown: 1;
+    --fx: 0px;
+    --fy: 0px;
+    display: flex;
+  }
+  .nmenu[data-laid] .mitem {
+    width: var(--item-w);
+    opacity: var(--shown);
+    transform: translate(calc((1 - var(--shown)) * var(--fx)), calc((1 - var(--shown)) * var(--fy)))
+      scale(calc(0.72 + 0.28 * var(--shown)));
+  }
   .mnode {
     --glyph: 44px;
     --power: 1;
@@ -415,7 +582,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
   .mnode[href] {
     cursor: pointer;
   }
-  .nmenu[data-intro] .mnode {
+  .nmenu[data-intro] :is(.mnode, .mswitch, .mroot) {
     --power: 0;
   }
 
@@ -475,7 +642,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     stroke: var(--amber);
     filter: drop-shadow(0 0 calc(1px + var(--power) * 2px + var(--glow) * 4px) rgba(var(--amber-rgb), 0.7));
   }
-  .mnode.is-hot .mnode__ring-fill {
+  :is(.mnode, .mswitch).is-hot .mnode__ring-fill {
     stroke: var(--hot);
   }
   .mnode--substation.is-hot .mnode__ring-fill {
@@ -507,6 +674,10 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     -webkit-mask-image: conic-gradient(black calc(var(--charge) * 1turn), transparent 0);
     mask-image: conic-gradient(black calc(var(--charge) * 1turn), transparent 0);
   }
+  .mswitch .mnode__charge {
+    inset: -3px;
+    border-width: 1.5px;
+  }
   .mnode--substation .mnode__charge {
     border-radius: 32%;
   }
@@ -523,7 +694,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     cursor: default;
   }
 
-  /* Plate: hangs under the glyph, which overlaps its top edge. One fixed size, so rows align. */
+  /* Plate, hanging style: under the glyph, which overlaps its top edge. One fixed size. */
   .mnode__plate {
     position: relative;
     display: flex;
@@ -537,10 +708,26 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     text-align: center;
     transition: border-color 150ms ease-out;
   }
-  /* ABOUT ME plates have no badge: the title and its line sit centred in the space below the glyph. */
   .mnode--section .mnode__plate {
     justify-content: center;
     padding-bottom: calc(0.625rem + 0.5rem);
+  }
+  /* Plate, side style: to the right of the glyph (ABOUT ME, and everything on phones). */
+  .msec[data-style='side'] .mnode {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .msec[data-style='side'] .mnode__plate {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    height: 5.25rem;
+    margin-top: 0;
+    padding: 0.625rem 1rem;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
   }
   .mnode.is-hot .mnode__plate {
     border-color: rgba(var(--cyan-rgb), 0.36);
@@ -616,7 +803,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     line-height: 1.4;
   }
 
-  /* "Coming soon": a small hint just under the plate, on hover or press. */
+  /* "Coming soon": a small hint just under the plate (inside it, top right, beside the glyph). */
   .mnode__hint {
     position: absolute;
     left: 50%;
@@ -634,99 +821,46 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     transition: opacity 150ms ease-out;
     pointer-events: none;
   }
+  .msec[data-style='side'] .mnode__hint {
+    left: auto;
+    right: 0.75rem;
+    top: 0.625rem;
+    translate: none;
+  }
   .mnode--soon.is-hot .mnode__hint,
   .mnode--soon.is-hinting .mnode__hint {
     opacity: 1;
   }
 
-  /* ---------- below 1120px: projects in 2 columns (3 rows), ABOUT ME still on the right ---------- */
-  @media (max-width: 1119px) {
-    .zone--projects .zone__grid {
-      grid-template-columns: repeat(2, var(--plate-w));
-    }
-  }
-  /* Narrow tablets: a 58px lattice (columns 4 spacings apart, rows 3, ABOUT ME 4 to the right). */
-  @media (min-width: 721px) and (max-width: 879px) {
-    .nmenu__zones {
-      gap: 2.5rem;
-    }
-    .zone__grid {
-      --plate-w: 12rem;
-      row-gap: 3rem;
-    }
-  }
-
-  /* ---------- phones: the header under the nav pill, then both zones in one column on the spine ---------- */
-  @media (max-width: 720px) {
-    .nmenu__content {
-      padding-top: 4.25rem;
-      align-items: stretch;
-    }
-    .profile {
-      margin-top: 0;
-    }
-    .nmenu__zones {
-      flex-direction: column;
-      align-items: stretch;
-      /* ABOUT ME's first glyph lands 3 spacings below the last project glyph. */
-      gap: 4.125rem;
-      margin-top: 1.75rem;
-    }
-    /* Label centre one lattice row (58px) above the first glyph centre. */
-    .zone__label {
-      margin-bottom: 0.5rem;
-    }
-    .zone__grid,
-    .zone--projects .zone__grid,
-    .zone--about .zone__grid {
-      grid-template-columns: minmax(0, 1fr);
-      /* 84px nodes, 116px apart: two spacings of the phone lattice. */
-      row-gap: 2rem;
-    }
-    .mnode {
-      flex-direction: row;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .mnode__plate,
-    .mnode--section .mnode__plate {
-      flex: 1;
-      min-width: 0;
-      width: auto;
-      height: 5.25rem;
-      margin-top: 0;
-      padding: 0.625rem 1rem;
-      align-items: flex-start;
-      justify-content: center;
-      text-align: left;
-    }
-    /* Inside the plate, top right. */
-    .mnode__hint {
-      left: auto;
-      right: 0.75rem;
-      top: 0.625rem;
-      translate: none;
-    }
-  }
-
   /* ---------- preferences ---------- */
   @media (prefers-reduced-motion: reduce) {
-    .mnode {
+    .mnode,
+    .mswitch {
       transform: none;
     }
   }
-  :global(html[data-motion='reduce']) .mnode {
+  :global(html[data-motion='reduce']) :is(.mnode, .mswitch) {
     transform: none;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .mfence__label {
+      background: var(--bg);
+    }
   }
   @media (prefers-contrast: more) {
     .mnode__plate {
       border-color: rgba(255, 255, 255, 0.5);
     }
+    .mfence {
+      border-color: rgba(var(--cyan-rgb), 0.55);
+    }
     .mnode__line,
     .mnode__badge,
-    .profile__line,
+    .mroot__line,
     .mnode__hint,
-    .zone--about .zone__label {
+    .mfence__label,
+    .mswitch__chev,
+    .mswitch__count {
       color: var(--ink);
     }
     .mnode--live .mnode__badge {

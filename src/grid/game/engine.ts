@@ -88,6 +88,8 @@ const AMBIENT_BRIGHT = 0.22;
 const AMBER_FROM = 0.9; // energy where LOW packets start turning amber
 const AMBER_TO = 0.3; // energy where they are fully amber
 const MAX_DT = 1 / 20;
+const DRAIN_S = 2.5; // s a packet bound for a disabled load keeps going (fading) before it's gone
+const PARK_S = 0.5; // s a packet with no enabled load to feed waits (hidden) before trying again, ± half
 const KEEP: readonly [number, number] = [1 - LOSS_LOW, 1 - LOSS_HIGH];
 
 export class GridGame {
@@ -148,6 +150,8 @@ export class GridGame {
   private readonly lostT: Float32Array; // seconds without a route
   private readonly lost: Uint8Array;
   private readonly age: Float32Array;
+  private readonly parked: Uint8Array; // waiting at a plant: every load was disabled
+  private readonly drainT: Float32Array; // seconds bound for a disabled load
 
   private readonly rand: () => number;
   private readonly nodeAt = new Map<number, number>(); // vertex → node index
@@ -175,6 +179,10 @@ export class GridGame {
   private focusShare = 0;
   private focusTable: Float64Array | null = null;
   private focusSources: number[] = [];
+  // Per routing slot (aligned with `loadNodes`): 1 = disabled (see `setLoadEnabled`), and the
+  // vertex its packets leave from (−1 = its best plant, see `setLoadSource`).
+  private loadOff = new Uint8Array(0);
+  private loadSrc = new Int32Array(0);
 
   constructor(opts: EngineOptions) {
     this.board = new Board(opts.cols, opts.rows);
@@ -218,6 +226,8 @@ export class GridGame {
     this.lostT = new Float32Array(n);
     this.lost = new Uint8Array(n);
     this.age = new Float32Array(n);
+    this.parked = new Uint8Array(n);
+    this.drainT = new Float32Array(n);
     this.delivered = new Uint32Array(this.nodes.length);
     this.sparked = new Uint32Array(this.nodes.length);
     this.deliveredEnergy = new Float64Array(this.nodes.length);
@@ -288,6 +298,8 @@ export class GridGame {
     this.plantVerts = this.plantNodes.map((k) => this.vertexOfNode(k));
     this.loadVerts = this.loadNodes.map((k) => this.vertexOfNode(k));
     this.tablesArr = this.loadVerts.map(() => new Float64Array(this.board.V * 2));
+    this.loadOff = new Uint8Array(this.loadVerts.length);
+    this.loadSrc = new Int32Array(this.loadVerts.length).fill(-1);
     this.focusSourcesFor();
     for (const v of this.placed) this.isTransformer[v] = 0;
     this.placed.length = 0;
@@ -491,6 +503,50 @@ export class GridGame {
     this.cached = null;
   }
 
+  // ------------------------------------------------------ load switching
+
+  /**
+   * Stop (false) or resume (true) feeding active load node `k`, e.g. a menu
+   * section collapsing or expanding (SPEC "Home hero v3"). New counted packets
+   * skip a disabled load; those already on the way keep going and either
+   * arrive or fade out within DRAIN_S, so its branch drains. With every load disabled, packets wait hidden at a plant
+   * and leave again once one is enabled. A disabled load is no focus source.
+   * Returns false when `k` isn't an active load. Every load starts enabled.
+   */
+  setLoadEnabled(k: number, on: boolean): boolean {
+    const j = this.loadNodes.indexOf(k);
+    if (j < 0) return false;
+    const off = on ? 0 : 1;
+    if (this.loadOff[j] === off) return true;
+    this.loadOff[j] = off;
+    this.focusSourcesFor();
+    return true;
+  }
+
+  /** Whether active load node `k` is fed (false for a node that isn't an active load). */
+  isLoadEnabled(k: number): boolean {
+    const j = this.loadNodes.indexOf(k);
+    return j >= 0 && this.loadOff[j] === 0;
+  }
+
+  /**
+   * Packets for load node `k` leave from node `source` (any node) instead of
+   * the load's best plant, so a branch can be fed from a junction, e.g. a menu
+   * section's switch. −1 restores the best plant. False when `k` isn't an
+   * active load or `source` isn't a node.
+   */
+  setLoadSource(k: number, source: number): boolean {
+    const j = this.loadNodes.indexOf(k);
+    if (j < 0) return false;
+    if (source < 0) {
+      this.loadSrc[j] = -1;
+      return true;
+    }
+    if (!Number.isInteger(source) || source >= this.nodes.length) return false;
+    this.loadSrc[j] = this.vertexOfNode(source);
+    return true;
+  }
+
   // ---------------------------------------------------------------- focus
 
   /** Node index the flow is biased toward, or −1. */
@@ -529,7 +585,7 @@ export class GridGame {
   }
 
   private focusSourcesFor() {
-    const all = [...new Set([...this.plantVerts, ...this.loadVerts])];
+    const all = [...new Set([...this.plantVerts, ...this.loadVerts.filter((_, j) => !this.loadOff[j])])];
     this.focusSources = all.filter((v) => v !== this.focusVert);
   }
 
@@ -555,6 +611,10 @@ export class GridGame {
       if (this.delay[i] > 0) {
         this.delay[i] -= dt;
         if (this.delay[i] > 0) continue;
+        if (this.parked[i]) {
+          this.spawn(i, false); // try again: a load may be enabled by now
+          continue;
+        }
       }
       this.age[i] += dt;
       if (this.lost[i]) this.lostT[i] += dt;
@@ -565,6 +625,15 @@ export class GridGame {
       if (this.ambient[i] && this.age[i] > MAX_AGE) {
         this.spawn(i, false);
         continue;
+      }
+      // Bound for a load that was switched off: it may still arrive, else it fades out (drains).
+      const sl = this.slot[i];
+      if (sl >= 0 && sl < this.loadOff.length && this.loadOff[sl] && !this.ambient[i]) {
+        this.drainT[i] += dt;
+        if (this.drainT[i] > DRAIN_S) {
+          this.spawn(i, false);
+          continue;
+        }
       }
       let t = dt;
       for (let guard = 0; t > 0 && guard < 6; guard++) {
@@ -715,6 +784,8 @@ export class GridGame {
     this.volt[i] = LOW;
     this.energy[i] = 1;
     this.delay[i] = 0;
+    this.parked[i] = 0;
+    this.drainT[i] = 0;
     let v: number;
     if (this.ambient[i]) {
       v = Math.floor(this.rand() * this.board.V);
@@ -727,12 +798,27 @@ export class GridGame {
       this.slot[i] = this.loadVerts.length;
       if (fresh) this.delay[i] = this.rand() * SPAWN_SPREAD;
     } else {
-      const j = this.rr++ % this.loadVerts.length;
-      const route = this.routesArr[j];
-      v = route && route.plant >= 0 ? route.plant : this.plantVerts[this.rr % this.plantVerts.length];
+      const L = this.loadVerts.length;
+      let j = this.rr++ % L;
+      // Skip disabled loads (no extra random numbers while every load is enabled).
+      for (let tries = 1; this.loadOff[j] && tries < L; tries++) j = this.rr++ % L;
       this.target[i] = this.loadNodes[j];
       this.slot[i] = j;
-      if (fresh) this.delay[i] = this.rand() * SPAWN_SPREAD;
+      if (this.loadOff[j]) {
+        // Nothing to feed: wait, hidden, at a plant.
+        v = this.plantVerts[0];
+        this.parked[i] = 1;
+        this.delay[i] = PARK_S * (0.5 + this.rand());
+      } else {
+        const route = this.routesArr[j];
+        v =
+          this.loadSrc[j] >= 0
+            ? this.loadSrc[j]
+            : route && route.plant >= 0
+              ? route.plant
+              : this.plantVerts[this.rr % this.plantVerts.length];
+        if (fresh) this.delay[i] = this.rand() * SPAWN_SPREAD;
+      }
     }
     this.from[i] = v;
     this.to[i] = v;
@@ -763,7 +849,8 @@ export class GridGame {
       }
       const en = this.energy[i];
       const fade = this.lost[i] ? Math.max(0, 1 - this.lostT[i] / LOST_LIFE) : 1;
-      this.bright[i] = en * fade;
+      const drain = this.drainT[i] > 0 ? Math.max(0, 1 - this.drainT[i] / DRAIN_S) : 1;
+      this.bright[i] = en * fade * drain;
       this.hue[i] =
         this.volt[i] === HIGH ? 1 : -Math.min(1, Math.max(0, (AMBER_FROM - en) / (AMBER_FROM - AMBER_TO)));
     }

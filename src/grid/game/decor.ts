@@ -421,3 +421,322 @@ function tracePath(board: Board, isT: Uint8Array, faulted: Uint8Array, table: Fl
   }
   return { steps, verts };
 }
+
+// ------------------------------------------------- node menu v3.2: sections
+/*
+ * v3.2 (SPEC "Home hero v3"): the root node "Gero" feeds two sections, ABOUT
+ * ME and PROJECTS, each behind a switch node and inside a fence on the
+ * lattice. `menuLayout` places everything in lattice units (the root is vertex
+ * (0, 0)); the page positions the DOM from it, so every glyph sits exactly on
+ * a vertex and every fence edge on a conductor. `circuitTransformers` and
+ * `circuitPaths` wire the circuit: root → each switch → each child.
+ */
+
+/** Node geometry in css px, shared with NodeMenu.astro's CSS. */
+export const MENU_PX = {
+  /** Child glyph diameter. */
+  glyph: 44,
+  /** Gap between a side glyph and its plate. */
+  sideGap: 12,
+  /** Plate heights: hanging under the glyph (projects) and beside it (about, phones). */
+  hangH: 104,
+  sideH: 84,
+  /** A hanging plate is this much narrower than 4 spacings (the gap between columns). */
+  hangGap: 40,
+} as const;
+
+export type MenuMode = 'wide' | 'stacked' | 'column';
+export type MenuStyle = 'hang' | 'side';
+
+export interface LatticeRect {
+  c0: number;
+  r0: number;
+  c1: number;
+  r1: number;
+}
+
+export interface MenuSectionLayout {
+  switch: { col: number; row: number };
+  children: { col: number; row: number }[];
+  style: MenuStyle;
+  /** Plate width, px. */
+  plateW: number;
+  /** Fence when expanded, and shrunk to the switch when collapsed (lattice lines). */
+  fence: LatticeRect;
+  collapsed: LatticeRect;
+}
+
+export interface MenuLayout {
+  mode: MenuMode;
+  spacing: number;
+  root: { col: number; row: number };
+  about: MenuSectionLayout;
+  projects: MenuSectionLayout;
+  /** Union of the fences, in lattice units. */
+  extent: LatticeRect;
+}
+
+export interface MenuLayoutOptions {
+  /** Children per section. */
+  about: number;
+  projects: number;
+  /** Horizontal margin each side, px. */
+  gutter: number;
+  /** Lattice row the fences start on (default 1, right under the root): 2 when the root plate is tall. */
+  fenceTop?: number;
+  /**
+   * Collapsed sections. In `stacked` and `column` a collapsed section gives
+   * back its rows below the switch, so everything after it moves up by whole
+   * rows (and the extent shrinks). `wide` keeps every position.
+   */
+  collapsed?: { about?: boolean; projects?: boolean };
+}
+
+/** Lattice columns each layout needs, fence edge to fence edge. */
+const WIDE_COLS = 19;
+const STACKED_COLS = 13;
+const MIN_WIDE = 56;
+const MIN_STACKED = 55;
+const MAX_SPACING_MENU = 64;
+const PHONE_SPACING_MENU = 58;
+/** Switch area when collapsed: the glyph and its label (≈ 4 spacings). */
+const SWITCH_COLS = 4;
+
+/**
+ * Lay the menu out for a viewport width (SPEC "Home hero v3", v3.2):
+ * - `wide`: ABOUT ME (a column of side nodes) left, PROJECTS (3 per row, plates hanging) right.
+ * - `stacked`: ABOUT ME (a row of side nodes), then PROJECTS (3 per row) under it.
+ * - `column` (phones, narrow tablets): one column on the spine, side nodes throughout.
+ * The root is vertex (0, 0); each section's fence starts one row under the root and its
+ * switch sits just inside the fence's top-left corner.
+ */
+export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
+  const inner = width - 2 * opts.gutter;
+  const g = MENU_PX.glyph / 2;
+  const sideW = (s: number, room: number) => room * s - g - MENU_PX.sideGap;
+  const collapsed = (sw: { col: number; row: number }, fence: LatticeRect): LatticeRect => ({
+    c0: fence.c0,
+    r0: fence.r0,
+    c1: Math.min(fence.c1, sw.col + SWITCH_COLS),
+    r1: sw.row + 1,
+  });
+  const grid = (n: number, perRow: number, c0: number, r0: number, dc: number, dr: number) =>
+    Array.from({ length: n }, (_, k) => ({ col: c0 + (k % perRow) * dc, row: r0 + Math.floor(k / perRow) * dr }));
+  const section = (
+    sw: { col: number; row: number },
+    children: { col: number; row: number }[],
+    style: MenuStyle,
+    plateW: number,
+    fence: LatticeRect,
+  ): MenuSectionLayout => ({ switch: sw, children, style, plateW, fence, collapsed: collapsed(sw, fence) });
+  const rows = (n: number, perRow: number) => Math.max(1, Math.ceil(n / perRow));
+
+  let mode: MenuMode;
+  let s: number;
+  let about: MenuSectionLayout;
+  let projects: MenuSectionLayout;
+  if (inner / WIDE_COLS >= MIN_WIDE) {
+    mode = 'wide';
+    s = Math.min(MAX_SPACING_MENU, inner / WIDE_COLS);
+    // ABOUT ME: fence cols −1..4; switch (0, 2); children down the spine, 2 rows apart.
+    const aKids = grid(opts.about, 1, 0, 4, 0, 2);
+    const aBottom = Math.max(9, (aKids.at(-1)?.row ?? 2) + 1);
+    // PROJECTS: fence cols 5..18; switch (6, 2); children 4 cols and 3 rows apart, hanging plates.
+    const pRows = rows(opts.projects, 3);
+    const pBottom = Math.max(aBottom, 4 + 3 * (pRows - 1) + 2);
+    about = section({ col: 0, row: 2 }, aKids, 'side', sideW(s, 3.7), { c0: -1, r0: 1, c1: 4, r1: Math.max(aBottom, pBottom) });
+    projects = section({ col: 6, row: 2 }, grid(opts.projects, 3, 8, 4, 4, 3), 'hang', 4 * s - MENU_PX.hangGap, {
+      c0: 5,
+      r0: 1,
+      c1: 18,
+      r1: Math.max(aBottom, pBottom),
+    });
+  } else if (inner / STACKED_COLS >= MIN_STACKED) {
+    mode = 'stacked';
+    s = Math.min(MAX_SPACING_MENU, inner / STACKED_COLS);
+    // ABOUT ME: fence −1..12 × 1..5; switch (0, 2); children in a row on row 4, 4 cols apart.
+    const aRows = rows(opts.about, 3);
+    const aBottom = 4 + 2 * (aRows - 1) + 1;
+    about = section({ col: 0, row: 2 }, grid(opts.about, 3, 0, 4, 4, 2), 'side', 4 * s - 2 * g - MENU_PX.sideGap - 16, {
+      c0: -1,
+      r0: 1,
+      c1: 12,
+      r1: aBottom,
+    });
+    // PROJECTS: the next fence down; switch one row in; children 4 cols and 3 rows apart.
+    const top = aBottom + 1;
+    const pRows = rows(opts.projects, 3);
+    projects = section(
+      { col: 0, row: top + 1 },
+      grid(opts.projects, 3, 2, top + 3, 4, 3),
+      'hang',
+      4 * s - MENU_PX.hangGap,
+      { c0: -1, r0: top, c1: 12, r1: top + 3 + 3 * (pRows - 1) + 2 },
+    );
+  } else {
+    mode = 'column';
+    // An exact number of spacings across, near 58px; the fence spans them all.
+    const n = Math.max(4, Math.round(inner / PHONE_SPACING_MENU));
+    s = inner / n;
+    const c1 = n - 1;
+    const room = c1 - 0.3;
+    const aBottom = 4 + 2 * (opts.about - 1) + 1;
+    about = section({ col: 0, row: 2 }, grid(opts.about, 1, 0, 4, 0, 2), 'side', sideW(s, room), {
+      c0: -1,
+      r0: 1,
+      c1,
+      r1: aBottom,
+    });
+    const top = aBottom + 1;
+    projects = section(
+      { col: 0, row: top + 1 },
+      grid(opts.projects, 1, 0, top + 3, 0, 2),
+      'side',
+      sideW(s, room),
+      { c0: -1, r0: top, c1, r1: top + 3 + 2 * (opts.projects - 1) + 1 },
+    );
+  }
+  // Everything but the root moves down when the fences start lower.
+  const dr = Math.max(0, Math.round(opts.fenceTop ?? 1) - 1);
+  if (dr) {
+    for (const sec of [about, projects]) {
+      sec.switch = { ...sec.switch, row: sec.switch.row + dr };
+      sec.children = sec.children.map((c) => ({ ...c, row: c.row + dr }));
+      sec.fence = { ...sec.fence, r0: sec.fence.r0 + dr, r1: sec.fence.r1 + dr };
+      sec.collapsed = { ...sec.collapsed, r0: sec.collapsed.r0 + dr, r1: sec.collapsed.r1 + dr };
+    }
+  }
+  let bottom = Math.max(about.fence.r1, projects.fence.r1);
+  if (mode !== 'wide') {
+    // A collapsed section keeps only its switch row: what follows moves up by the rows it frees.
+    if (opts.collapsed?.about) {
+      const up = about.fence.r1 - about.collapsed.r1;
+      projects.switch = { ...projects.switch, row: projects.switch.row - up };
+      projects.children = projects.children.map((c) => ({ ...c, row: c.row - up }));
+      projects.fence = { ...projects.fence, r0: projects.fence.r0 - up, r1: projects.fence.r1 - up };
+      projects.collapsed = { ...projects.collapsed, r0: projects.collapsed.r0 - up, r1: projects.collapsed.r1 - up };
+    }
+    bottom = opts.collapsed?.projects ? projects.collapsed.r1 : projects.fence.r1;
+  }
+  const extent = {
+    c0: Math.min(about.fence.c0, projects.fence.c0),
+    r0: 0,
+    c1: Math.max(about.fence.c1, projects.fence.c1),
+    r1: bottom,
+  };
+  return { mode, spacing: s, root: { col: 0, row: 0 }, about, projects, extent };
+}
+
+/** One leg of the circuit: power flows from vertex `from` to vertex `to`. */
+export interface Feed {
+  from: number;
+  to: number;
+}
+
+/**
+ * One hidden transformer beside every vertex of the circuit (the root, the
+ * switches, the children), so the board reads as solved: a feed leaves its
+ * source at 13.8 kV, steps up beside it, runs at 345 kV and steps down beside
+ * its destination. A switch's one transformer serves both ways (down from the
+ * root, up toward its children). Sources are placed first, facing their
+ * destinations; each destination takes the free neighbour its feed delivers
+ * best through (ties: one no other feed already runs through, then the side
+ * facing its own destinations). Two passes. Returns vertices.
+ */
+export function circuitTransformers(
+  board: Board,
+  bounds: Bounds,
+  nodeVerts: ReadonlySet<number>,
+  feeds: readonly Feed[],
+  faulted: Uint8Array = new Uint8Array(board.E),
+): number[] {
+  const isT = new Uint8Array(board.V);
+  const table = new Float64Array(board.V * 2);
+  const dist = (a: number, b: number) => Math.abs(board.col(a) - board.col(b)) + Math.abs(board.row(a) - board.row(b));
+  const free = (v: number) => {
+    const out: number[] = [];
+    for (const [dc, dr] of [[0, 1], [1, 0], [-1, 0], [0, -1]]) {
+      const c = board.col(v) + dc;
+      const r = board.row(v) + dr;
+      if (!board.inLattice(c, r) || !inBounds(bounds, c, r)) continue;
+      const n = board.vertex(c, r);
+      if (!nodeVerts.has(n) && !isT[n]) out.push(n);
+    }
+    return out;
+  };
+  const inbound = new Map<number, number>(); // destination → its source
+  const outbound = new Map<number, number[]>(); // source → its destinations
+  for (const f of feeds) {
+    inbound.set(f.to, f.from);
+    outbound.set(f.from, [...(outbound.get(f.from) ?? []), f.to]);
+  }
+  // Roots (sources nothing feeds) first, then destinations breadth-first from them.
+  const order: number[] = [...outbound.keys()].filter((v) => !inbound.has(v));
+  for (let k = 0; k < order.length; k++) for (const to of outbound.get(order[k]) ?? []) if (!order.includes(to)) order.push(to);
+
+  const at = new Map<number, number>(); // vertex → its transformer
+  const pathVerts = (skip: number) => {
+    const used = new Set<number>();
+    for (const [to, from] of inbound) {
+      if (to === skip || !at.has(to) || !at.has(from)) continue;
+      costTable(board, isT, faulted, to, table);
+      for (const v of tracePath(board, isT, faulted, table, from, to).verts) used.add(v);
+    }
+    return used;
+  };
+  const place = (v: number) => {
+    const prev = at.get(v);
+    if (prev !== undefined) isT[prev] = 0;
+    const from = inbound.get(v);
+    const toward = outbound.get(v) ?? [];
+    const used = pathVerts(v);
+    let pick = -1;
+    let best = -Infinity;
+    for (const c of prev !== undefined ? [prev, ...free(v)] : free(v)) {
+      let score = 0;
+      if (from !== undefined && at.has(from)) {
+        isT[c] = 1;
+        costTable(board, isT, faulted, v, table);
+        isT[c] = 0;
+        score += Math.exp(-table[from * 2 + LOW]);
+      }
+      if (used.has(c)) score -= 0.01;
+      score -= 1e-4 * toward.reduce((sum, t) => sum + dist(c, t), 0);
+      if (score > best + 1e-12) {
+        best = score;
+        pick = c;
+      }
+    }
+    if (pick >= 0) {
+      isT[pick] = 1;
+      at.set(v, pick);
+    } else at.delete(v);
+  };
+  for (const v of order) place(v);
+  for (const v of order) if (inbound.has(v)) place(v);
+
+  const out: number[] = [];
+  for (let v = 0; v < board.V; v++) if (isT[v]) out.push(v);
+  return out;
+}
+
+export interface FeedPath {
+  /** Node indices. */
+  from: number;
+  to: number;
+  steps: CorridorStep[];
+}
+
+/**
+ * The route of each feed (node index pairs): from the source at 13.8 kV, down
+ * the destination's cost table. The destination must be an active load.
+ */
+export function circuitPaths(game: GridGame, feeds: readonly { from: number; to: number }[]): FeedPath[] {
+  const vOf = (k: number) => game.board.vertex(game.nodes[k].col, game.nodes[k].row);
+  return feeds.map(({ from, to }) => {
+    const j = game.activeLoads.indexOf(to);
+    if (j < 0) return { from, to, steps: [] };
+    const path = tracePath(game.board, game.isTransformer, game.faulted, game.tables[j], vOf(from), vOf(to));
+    return { from, to, steps: path.verts[path.verts.length - 1] === vOf(to) ? path.steps : [] };
+  });
+}

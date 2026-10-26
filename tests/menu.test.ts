@@ -270,3 +270,281 @@ describe('setDecorTransformers', () => {
     expect(game.transformers).toEqual([]);
   });
 });
+
+// ------------------------------------------------------------------ v3.2
+import { MENU_PX, circuitPaths, circuitTransformers, menuLayout, type LatticeRect, type MenuLayout } from '../src/grid/game/decor';
+
+const GUTTER = (w: number) => Math.min(32, Math.max(16, w * 0.03));
+
+/** Plate box (lattice units, relative to the glyph's vertex) for a section's style. */
+function plateBox(l: MenuLayout, sec: MenuLayout['about'], c: { col: number; row: number }): LatticeRect {
+  const s = l.spacing;
+  const g = MENU_PX.glyph / 2;
+  if (sec.style === 'hang') {
+    return { c0: c.col - sec.plateW / 2 / s, c1: c.col + sec.plateW / 2 / s, r0: c.row - g / s, r1: c.row + MENU_PX.hangH / s };
+  }
+  return {
+    c0: c.col - g / s,
+    c1: c.col + (g + MENU_PX.sideGap + sec.plateW) / s,
+    r0: c.row - MENU_PX.sideH / 2 / s,
+    r1: c.row + MENU_PX.sideH / 2 / s,
+  };
+}
+const inside = (a: LatticeRect, b: LatticeRect) => a.c0 >= b.c0 && a.c1 <= b.c1 && a.r0 >= b.r0 && a.r1 <= b.r1;
+const overlap = (a: LatticeRect, b: LatticeRect) => a.c0 < b.c1 && b.c0 < a.c1 && a.r0 < b.r1 && b.r0 < a.r1;
+const isLines = (r: LatticeRect) => [r.c0, r.r0, r.c1, r.r1].every(Number.isInteger);
+
+describe('menuLayout (v3.2 sections)', () => {
+  for (const [w, mode] of [
+    [1440, 'wide'],
+    [1280, 'wide'],
+    [1180, 'wide'],
+    [1024, 'stacked'],
+    [860, 'stacked'],
+    [768, 'stacked'],
+    [760, 'column'],
+    [390, 'column'],
+    [375, 'column'],
+    [320, 'column'],
+  ] as const) {
+    it(`${w}px: ${mode}; fences on lattice lines, plates inside them, nothing overlaps, it fits`, () => {
+      const l = menuLayout(w, { about: 3, projects: 6, gutter: GUTTER(w) });
+      expect(l.mode).toBe(mode);
+      expect(l.spacing).toBeGreaterThanOrEqual(52);
+      expect(l.spacing).toBeLessThanOrEqual(64);
+      expect((l.extent.c1 - l.extent.c0) * l.spacing).toBeLessThanOrEqual(w - 2 * GUTTER(w) + 1e-6);
+      const boxes: LatticeRect[] = [];
+      for (const sec of [l.about, l.projects]) {
+        expect(isLines(sec.fence)).toBe(true);
+        expect(isLines(sec.collapsed)).toBe(true);
+        expect(inside(sec.collapsed, sec.fence)).toBe(true);
+        // The switch sits inside both fences, on a vertex.
+        const sw = { c0: sec.switch.col, c1: sec.switch.col, r0: sec.switch.row, r1: sec.switch.row };
+        expect(inside(sw, sec.collapsed)).toBe(true);
+        expect(sec.plateW).toBeGreaterThan(150);
+        for (const c of sec.children) {
+          expect(Number.isInteger(c.col) && Number.isInteger(c.row)).toBe(true);
+          const box = plateBox(l, sec, c);
+          expect(inside(box, sec.fence), `${w} ${c.col},${c.row}`).toBe(true);
+          // Children are below the switch row: the collapsed fence holds none of them.
+          expect(c.row).toBeGreaterThan(sec.collapsed.r1 - 1);
+          for (const b of boxes) expect(overlap(box, b)).toBe(false);
+          boxes.push(box);
+        }
+      }
+      expect(overlap(l.about.fence, l.projects.fence)).toBe(false);
+      // The root sits above both fences.
+      expect(l.about.fence.r0).toBeGreaterThan(l.root.row);
+      expect(l.projects.fence.r0).toBeGreaterThan(l.root.row);
+      expect(l.about.children).toHaveLength(3);
+      expect(l.projects.children).toHaveLength(6);
+    });
+  }
+
+  it('a collapsed section moves what follows it up by whole rows (stacked, column); wide keeps everything', () => {
+    for (const w of [1024, 768, 630, 375]) {
+      const g = GUTTER(w);
+      const open = menuLayout(w, { about: 3, projects: 6, gutter: g });
+      const shut = menuLayout(w, { about: 3, projects: 6, gutter: g, collapsed: { about: true } });
+      const up = open.about.fence.r1 - open.about.collapsed.r1;
+      expect(up, `${w}`).toBeGreaterThan(0);
+      expect(Number.isInteger(up)).toBe(true);
+      // ABOUT ME itself and the root stay put.
+      expect(shut.about).toEqual(open.about);
+      expect(shut.root).toEqual(open.root);
+      // PROJECTS (fence, switch, children) moves up by exactly those rows, still on vertices.
+      expect(shut.projects.fence.r0).toBe(open.projects.fence.r0 - up);
+      expect(shut.projects.collapsed.r1).toBe(open.projects.collapsed.r1 - up);
+      expect(shut.projects.switch).toEqual({ ...open.projects.switch, row: open.projects.switch.row - up });
+      shut.projects.children.forEach((c, k) => {
+        expect(c.col).toBe(open.projects.children[k].col);
+        expect(c.row).toBe(open.projects.children[k].row - up);
+      });
+      // It sits right under the collapsed switch area, with the same gap as before.
+      expect(shut.projects.fence.r0 - shut.about.collapsed.r1).toBe(open.projects.fence.r0 - open.about.fence.r1);
+      expect(shut.extent.r1).toBe(open.extent.r1 - up);
+      // Collapsing PROJECTS (last) only shortens the menu.
+      const both = menuLayout(w, { about: 3, projects: 6, gutter: g, collapsed: { about: true, projects: true } });
+      expect(both.projects.switch).toEqual(shut.projects.switch);
+      expect(both.extent.r1).toBe(shut.projects.collapsed.r1);
+    }
+    const wide = menuLayout(1440, { about: 3, projects: 6, gutter: 32 });
+    const wideShut = menuLayout(1440, { about: 3, projects: 6, gutter: 32, collapsed: { about: true, projects: true } });
+    expect(wideShut).toEqual(wide);
+  });
+
+  it('fenceTop moves everything but the root down a row', () => {
+    const a = menuLayout(375, { about: 3, projects: 6, gutter: 16 });
+    const b = menuLayout(375, { about: 3, projects: 6, gutter: 16, fenceTop: 2 });
+    expect(b.root).toEqual(a.root);
+    expect(b.about.fence.r0).toBe(a.about.fence.r0 + 1);
+    expect(b.projects.children[5].row).toBe(a.projects.children[5].row + 1);
+    expect(b.projects.collapsed.r1).toBe(a.projects.collapsed.r1 + 1);
+    expect(b.extent.r1).toBe(a.extent.r1 + 1);
+  });
+
+  it('wide puts ABOUT ME left and PROJECTS right in 3×2; stacked and column put PROJECTS below', () => {
+    const wide = menuLayout(1440, { about: 3, projects: 6, gutter: 32 });
+    expect(wide.projects.fence.c0).toBeGreaterThan(wide.about.fence.c1 - 1);
+    expect(new Set(wide.projects.children.map((c) => c.row)).size).toBe(2);
+    expect(new Set(wide.projects.children.map((c) => c.col)).size).toBe(3);
+    for (const w of [1024, 375]) {
+      const l = menuLayout(w, { about: 3, projects: 6, gutter: GUTTER(w) });
+      expect(l.projects.fence.r0).toBeGreaterThan(l.about.fence.r1 - 1);
+    }
+  });
+});
+
+/** The menu circuit on a real layout: root 0, switches 1–2, about children, then projects. */
+function circuitGame(width: number) {
+  const l = menuLayout(width, { about: 3, projects: 6, gutter: GUTTER(width) });
+  // Lattice with the root at (2, 1), bleeding past the extent.
+  const offC = 1 - l.extent.c0 + 1;
+  const offR = 1;
+  const cols = l.extent.c1 - l.extent.c0 + 4;
+  const rows = l.extent.r1 + 3;
+  const at = (p: { col: number; row: number }) => ({ col: p.col + offC, row: p.row + offR });
+  const ids = ['root', 'sw-about', 'sw-projects', 'a0', 'a1', 'a2', 'p0', 'p1', 'p2', 'p3', 'p4', 'p5'];
+  const places = [l.root, l.about.switch, l.projects.switch, ...l.about.children, ...l.projects.children].map(at);
+  const nodes = ids.map((id, i) => ({ id, kind: i === 0 ? ('plant' as const) : ('section' as const), ...places[i] }));
+  const game = new GridGame({
+    cols,
+    rows,
+    nodes,
+    levels: [{ title: 'Menu', plants: ['root'], loads: ids.slice(1), budget: 0 }],
+    count: 900,
+    seed: 3,
+    decorative: true,
+  });
+  const feeds = [
+    { from: 0, to: 1 },
+    { from: 0, to: 2 },
+    ...[3, 4, 5].map((to) => ({ from: 1, to })),
+    ...[6, 7, 8, 9, 10, 11].map((to) => ({ from: 2, to })),
+  ];
+  const vOf = (k: number) => game.board.vertex(nodes[k].col, nodes[k].row);
+  game.setDecorTransformers(
+    circuitTransformers(game.board, game.bounds, new Set(nodes.map((_, k) => vOf(k))), feeds.map((f) => ({ from: vOf(f.from), to: vOf(f.to) }))),
+  );
+  for (const f of feeds) if (f.from !== 0) game.setLoadSource(f.to, f.from);
+  return { game, feeds, l };
+}
+
+describe('menu circuit (v3.2)', () => {
+  for (const w of [1440, 1024, 375]) {
+    it(`${w}px: the root feeds each switch at 345 kV, each switch its children`, () => {
+      const { game, feeds } = circuitGame(w);
+      expect(game.transformers).toHaveLength(12);
+      const paths = circuitPaths(game, feeds);
+      for (const p of paths) {
+        const label = `${game.nodes[p.from].id}→${game.nodes[p.to].id}`;
+        expect(p.steps.length, label).toBeGreaterThan(0);
+        let at = game.board.vertex(game.nodes[p.from].col, game.nodes[p.from].row);
+        for (const s of p.steps) {
+          const { edgeA, edgeB } = game.board;
+          expect([edgeA[s.edge], edgeB[s.edge]], label).toContain(at);
+          at = edgeA[s.edge] === at ? edgeB[s.edge] : edgeA[s.edge];
+        }
+        expect(at, label).toBe(game.board.vertex(game.nodes[p.to].col, game.nodes[p.to].row));
+        expect(p.steps[0].high, label).toBe(false);
+        expect(p.steps[p.steps.length - 1].high, label).toBe(false);
+        if (p.steps.length > 3) expect(p.steps.some((s) => s.high), label).toBe(true);
+      }
+      // Root → switch corridors are 345 kV for most of their length.
+      for (const p of paths.slice(0, 2)) {
+        if (p.steps.length > 3) expect(p.steps.filter((s) => s.high).length).toBeGreaterThanOrEqual(p.steps.length - 2);
+      }
+      // The longest branches are ~15 segments at 345 kV drift (plus the spawn spread).
+      run(game, w < 720 ? 30 : 20);
+      for (const k of game.activeLoads) expect(game.delivered[k], game.nodes[k].id).toBeGreaterThan(0);
+    });
+  }
+});
+
+describe('load switching', () => {
+  it('disabled loads stop receiving packets, their branch drains, and they resume when enabled', () => {
+    const { game } = circuitGame(1440);
+    const kids = [6, 7, 8, 9, 10, 11];
+    run(game, 4);
+    for (const k of kids) expect(game.setLoadEnabled(k, false)).toBe(true);
+    expect(game.isLoadEnabled(6)).toBe(false);
+    // Packets already on the way arrive or fade out within the drain time; then nothing arrives.
+    const visibleTo = () =>
+      [...game.target].filter((t, i) => kids.includes(t) && !game.ambient[i] && game.bright[i] > 0).length;
+    expect(visibleTo()).toBeGreaterThan(0);
+    run(game, 3);
+    expect(visibleTo()).toBe(0);
+    const aimed = () => [...game.target].filter((t) => kids.includes(t)).length;
+    const d0 = kids.map((k) => game.delivered[k]);
+    run(game, 6);
+    kids.forEach((k, i) => expect(game.delivered[k], game.nodes[k].id).toBe(d0[i]));
+    // The other branch keeps flowing.
+    const a0 = game.delivered[3];
+    run(game, 3);
+    expect(game.delivered[3]).toBeGreaterThan(a0);
+    for (const k of kids) game.setLoadEnabled(k, true);
+    run(game, 20);
+    kids.forEach((k, i) => expect(game.delivered[k], game.nodes[k].id).toBeGreaterThan(d0[i]));
+    expect(aimed()).toBeGreaterThan(0);
+  });
+
+  it('with every load disabled, packets wait hidden and leave once one is enabled', () => {
+    const { game } = circuitGame(1440);
+    for (const k of game.activeLoads) game.setLoadEnabled(k, false);
+    // The packets already on their way (some still in the 3 s spawn spread) arrive or drain first.
+    run(game, 6);
+    for (let i = 0; i < game.count; i++) if (!game.ambient[i]) expect(game.bright[i]).toBe(0);
+    run(game, 4);
+    for (let i = 0; i < game.count; i++) if (!game.ambient[i]) expect(game.bright[i]).toBe(0);
+    const d0 = game.delivered[1];
+    game.setLoadEnabled(1, true);
+    run(game, 6);
+    expect(game.delivered[1]).toBeGreaterThan(d0);
+    let lit = 0;
+    for (let i = 0; i < game.count; i++) if (!game.ambient[i] && game.bright[i] > 0) lit++;
+    expect(lit).toBeGreaterThan(20);
+  });
+
+  it('a load source makes its packets leave from that node; −1 restores the plant', () => {
+    const { game } = circuitGame(1440);
+    const sw = game.board.vertex(game.nodes[2].col, game.nodes[2].row);
+    expect(game.setLoadSource(0, 1)).toBe(false); // the root isn't a load
+    expect(game.setLoadSource(6, 99)).toBe(false);
+    const root = game.board.vertex(game.nodes[0].col, game.nodes[0].row);
+    for (const k of game.activeLoads) if (k !== 6) game.setLoadEnabled(k, false);
+    run(game, 25);
+    // Packets for p0 leave next to the projects switch. A few 345 kV packets wander widely
+    // (their route costs barely differ), so one can pass the root, but none start there.
+    const near = (i: number, v: number) =>
+      Math.abs(game.x[i] - game.board.col(v)) + Math.abs(game.y[i] - game.board.row(v)) <= 1.01;
+    let fromSwitch = 0;
+    let fromRoot = 0;
+    for (let f = 0; f < 30; f++) {
+      run(game, 0.1);
+      for (let i = 0; i < game.count; i++) {
+        if (game.ambient[i] || game.bright[i] <= 0 || game.target[i] !== 6) continue;
+        if (near(i, sw)) fromSwitch++;
+        if (near(i, root)) fromRoot++;
+      }
+    }
+    expect(fromSwitch).toBeGreaterThan(10);
+    expect(fromRoot).toBeLessThan(fromSwitch / 4);
+    expect(game.setLoadSource(6, -1)).toBe(true);
+  });
+
+  it('leaves the default flow untouched while every load stays enabled', () => {
+    const a = circuitGame(1440).game;
+    const b = circuitGame(1440).game;
+    b.setLoadEnabled(6, true);
+    run(a, 3);
+    run(b, 3);
+    expect([...b.x]).toEqual([...a.x]);
+  });
+
+  it('is refused for nodes that aren\'t active loads', () => {
+    const { game } = circuitGame(1440);
+    expect(game.setLoadEnabled(0, false)).toBe(false);
+    expect(game.isLoadEnabled(0)).toBe(false);
+    expect(game.setLoadEnabled(42, false)).toBe(false);
+  });
+});
