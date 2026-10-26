@@ -53,3 +53,21 @@ Sources: the vault's Positioning Statements, Education and Publications, PROJ-02
 ## 404
 - Title: "Power outage"
 - Line: "This page tripped a breaker. Let's get you back on the grid." Button: "Back home"
+
+## Project: Personal Wiki (`personal-wiki`)
+- **Pitch:** "An offline AI research assistant over my own energy research and class notes. It answers with cited sources, and nothing ever leaves my laptop."
+- **Metrics:**
+  - `8 / 8` cited-answer tests passed
+  - `685` passages indexed
+  - `4.5–9.6 s` per answer, fully offline
+- **How it works:** A local Gemma model (4-bit, MLX) runs on Apple Silicon and loads from local files only. Retrieval is hybrid: BM25 keyword search plus bge-small embeddings, merged with reciprocal rank fusion. It indexes 41 of my notes into 685 passages and generates 60 linked wiki pages across 7 topics. I wrote 8 offline tests (cited answers and correct refusals) and iterated 8 times until all passed. The failures got fixed by better retrieval, not a bigger model. Offline operation is verified by blocking all network access.
+- Repo: https://github.com/Geromola/personal-wiki
+
+## Project: Pac-Man DQN (`pacman-dqn`)
+- **Pitch:** "An agent that learned Ms. Pac-Man from raw pixels, and more than tripled its score."
+- **Metrics:**
+  - `1,668` mean score, vs 492 untrained
+  - `5 / 5` evaluation seeds improved
+  - `2.36M` decisions trained in 112 min
+- **How it works:** The agent sees four 84×84 grayscale frames and picks one of 9 moves. Starting from a course notebook ⚑, I added Double DQN, 3-step returns, a life-loss signal and a 100,000-frame replay buffer stored 5× more compactly. A baseline run (1,000 episodes) and a tuned run (3,000 episodes) were compared, with checkpoints picked on separate validation seeds.
+- Repo: https://github.com/Geromola/pacman-dqn

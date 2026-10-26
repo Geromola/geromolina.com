@@ -144,3 +144,41 @@ No animation loop. Redraw a static steady-state frame after every change; the pa
 - The verification list in `docs/PLAN.md` passes.
 - Lighthouse on mobile: Performance ≥ 90, Accessibility ≥ 95.
 - Deployed to geromolina.com.
+
+
+## Home hero v2: projects first (supersedes "the map is the navigation")
+Decided 2026-10-25 after Gero's review: the first thing a visitor sees is a **profile with a menu of projects at the centre**. The grid is decoration behind it. The game is an opt-in secondary mode.
+
+### Projects mode (default on load)
+- **Background:** the grid canvas stays full-bleed behind everything, running ambient electrons only.
+  - There is no level panel, toast, ghost or click-to-place.
+  - Electrons flow between the project cards' anchor points along the conductors. Hovering or focusing a card pulls the flow toward that card's anchor. The heat layer is off.
+- **Profile header**, centred:
+  - a 72px round duotone portrait (same treatment as About, cyan ring)
+  - the mono kicker `GERONIMO MOLINA`
+  - the name `Gero` at `clamp(3rem, 7vw, 5.5rem)`
+  - the line `MBA + MEng Candidate · UC Berkeley, California`
+- **Section nav**, top right: a glass pill with About · Off the grid · Contact · a lock icon for My tools (linking to `#my-tools`). On phones it's a compact row.
+- **Project menu**, centred under the header:
+  - a responsive grid of glass cards: 2 columns on desktop, 1 column on phones, max width 60rem
+  - the order is Custom LLM, Spotify Insight, Personal Wiki, Pac-Man DQN, then Networking Tracker as a smaller full-width locked strip
+- **Each card:**
+  - a status badge: `● LIVE` (cyan), `‹/› CODE` (muted), or `🔒 MINE` (amber)
+  - the title, a one-line pitch (two lines max), and one key metric in mono cyan
+  - `Open →`
+  - Each card's top edge has a small terminal dot snapped to the nearest lattice vertex. That vertex is the card's anchor in the decorative flow, so cards look wired into the grid.
+- **Card interaction:**
+  - Hover lifts the card by 2px and brightens its border.
+  - Pointer-down scales it to 0.98 and charges its badge dot.
+  - A click opens the project page, which expands out of the card's dot (the view transition re-anchored from map node to card).
+- **Play entry:** under the cards, a secondary pill `▶ Play the grid`, small and muted.
+
+### Play mode
+- Pressing **Play** springs the cards and the header out (opacity and scale, damping 1) and fades the existing game map in: the node glyphs, the level panel and the level 1 intro. These are today's game, unchanged.
+- A `✕ Back to projects` pill sits at top centre and reverses the change.
+- The mode is in the URL hash (`#play`), so it is linkable and the back button works. Progress keeps persisting as it does today.
+
+### Nodes in the content collection
+- New field `status: 'live' | 'code' | 'private'`.
+- New field `inGame` (boolean, default true). The game map uses only `inGame` nodes; the two new code projects are `inGame: false`, so the game levels and tests are unchanged.
+- Code projects get `/projects/<slug>` pages the same way as live ones, but without an embed. They show the repo as the primary call to action.
