@@ -145,6 +145,12 @@ export interface MenuPoint {
   /** Glyph centre in map px, before snapping. */
   x: number;
   y: number;
+  /**
+   * Independent vertical flow it sits in (default 0). A top margin only pushes
+   * down the points of its own flow: side-by-side columns (the menu's two
+   * zones on desktop) are separate flows; one stacked column is a single flow.
+   */
+  flow?: number;
 }
 
 export interface MenuSnapOptions {
@@ -166,37 +172,51 @@ export interface MenuSnap {
   /**
    * Per point: `dx` is a horizontal nudge (px, either way, at most half a
    * spacing) and `dy` an extra top margin (px, ≥ 0) for its line. Margins push
-   * everything below down, so `dy` is a line's own shift, not a running total.
+   * everything below in the same flow down, so `dy` is a line's own shift, not
+   * a running total.
    * `col`/`row` is the vertex the glyph ends on.
    */
   snaps: { dx: number; dy: number; col: number; row: number }[];
-  /** Sum of every line's `dy`: how much taller the menu gets. */
+  /** The largest sum of `dy` over one flow: how much taller the menu gets. */
   grow: number;
 }
 
 const LINE_TOL = 2; // px: glyph centres this close in y share a line
 
 /**
- * Snap menu glyphs to lattice vertices. Lines (points sharing a y) keep their
- * order and land on distinct lattice rows: each one moves down to the next
- * row at or below it. Within a line, glyphs snap to the nearest column
- * through `anchorX`, so a centred row stays symmetric. A spacing that would
- * put two glyphs of a line on one vertex is never picked.
+ * Snap menu glyphs to lattice vertices. Lines (points of one flow sharing a
+ * y) keep their order and land on distinct lattice rows: each one moves down
+ * to the next row at or below it. Within a line, glyphs snap to the nearest
+ * column through `anchorX`, so a centred row stays symmetric. Without a fixed
+ * spacing, the one needing the smallest nudges (both ways) wins; a spacing
+ * that would put two glyphs at one y on one vertex is never picked.
  */
 export function snapMenu(points: readonly MenuPoint[], opts: MenuSnapOptions): MenuSnap {
   const min = opts.min ?? 56;
   const max = opts.max ?? 76;
   const prefer = opts.prefer ?? (min + max) / 2;
   const order = points.map((_, i) => i).sort((a, b) => points[a].y - points[b].y || points[a].x - points[b].x);
-  const lines: number[][] = [];
-  for (const i of order) {
-    const line = lines[lines.length - 1];
-    if (line && Math.abs(points[i].y - points[line[0]].y) <= LINE_TOL) line.push(i);
-    else lines.push([i]);
-  }
+  const group = (key: (i: number) => number) => {
+    const out: number[][] = [];
+    const open = new Map<number, number[]>(); // flow key → its current line
+    for (const i of order) {
+      const k = key(i);
+      const line = open.get(k);
+      if (line && Math.abs(points[i].y - points[line[0]].y) <= LINE_TOL) line.push(i);
+      else {
+        const fresh = [i];
+        open.set(k, fresh);
+        out.push(fresh);
+      }
+    }
+    return out;
+  };
+  const lines = group((i) => points[i].flow ?? 0);
+  const levels = group(() => 0); // every point at one y, whatever its flow
   const colOf = (x: number, s: number) => Math.round((x - opts.anchorX) / s);
   const clash = (s: number) =>
-    lines.some((line) => new Set(line.map((i) => colOf(points[i].x, s))).size !== line.length);
+    levels.some((line) => new Set(line.map((i) => colOf(points[i].x, s))).size !== line.length);
+  const y0 = points.length ? points[order[0]].y : 0;
 
   let spacing = opts.spacing ?? 0;
   if (!spacing) {
@@ -205,8 +225,9 @@ export function snapMenu(points: readonly MenuPoint[], opts: MenuSnapOptions): M
       if (clash(s)) continue;
       let cost = 0;
       for (const p of points) {
-        const r = p.x - opts.anchorX - colOf(p.x, s) * s;
-        cost += r * r;
+        const rx = p.x - opts.anchorX - colOf(p.x, s) * s;
+        const ry = p.y - y0 - Math.round((p.y - y0) / s) * s;
+        cost += rx * rx + ry * ry;
       }
       // Lean toward the preferred size when the fit is equally good.
       cost += 0.05 * points.length * (s - prefer) ** 2;
@@ -219,23 +240,23 @@ export function snapMenu(points: readonly MenuPoint[], opts: MenuSnapOptions): M
   }
 
   const s = spacing;
-  const y0 = points.length ? points[order[0]].y : 0;
   const ox = opts.anchorX - Math.ceil(opts.anchorX / s) * s; // (−s, 0]
   const oy = y0 - Math.ceil(y0 / s) * s;
   const snaps = points.map(() => ({ dx: 0, dy: 0, col: 0, row: 0 }));
-  let carry = 0;
+  const carry = new Map<number, number>(); // per flow
   for (const line of lines) {
-    const y = points[line[0]].y + carry;
+    const flow = points[line[0]].flow ?? 0;
+    const y = points[line[0]].y + (carry.get(flow) ?? 0);
     const row = Math.ceil((y - oy) / s - 1e-6);
     const dy = Math.max(0, oy + row * s - y);
-    carry += dy;
+    carry.set(flow, (carry.get(flow) ?? 0) + dy);
     for (const i of line) {
       const c = colOf(points[i].x, s);
       const col = Math.round((opts.anchorX - ox) / s) + c;
       snaps[i] = { dx: opts.anchorX + c * s - points[i].x, dy, col, row };
     }
   }
-  return { spacing: s, ox, oy, snaps, grow: carry };
+  return { spacing: s, ox, oy, snaps, grow: Math.max(0, ...carry.values()) };
 }
 
 /** The menu lattice for a map size, from a snap's spacing and origin (bleeds past every edge). */

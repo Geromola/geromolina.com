@@ -147,6 +147,31 @@ describe('snapMenu', () => {
     snapped(pts, snap).forEach((p) => expect(onVertex(snap, p.x, p.y)).toBe(true));
   });
 
+  it('v3.1 zones: a grid sized for 64px snaps with no nudges, and flows carry their own margins', () => {
+    // PROJECTS 3×2 at 256px × 192px, ABOUT ME a column 320px right of the last project column.
+    const x0 = 200;
+    const y0 = 170;
+    const pts: MenuPoint[] = [
+      ...[0, 1, 2, 3, 4, 5].map((k) => ({ x: x0 + (k % 3) * 256, y: y0 + Math.floor(k / 3) * 192, flow: 0 })),
+      ...[0, 1, 2].map((k) => ({ x: x0 + 2 * 256 + 320, y: y0 + k * 192, flow: 1 })),
+    ];
+    const snap = snapMenu(pts, { anchorX: x0, min: 52, max: 76, prefer: 64 });
+    expect(snap.spacing).toBe(64);
+    for (const s of snap.snaps) {
+      expect(Math.abs(s.dx)).toBeLessThan(1e-9);
+      expect(s.dy).toBeLessThan(1e-9);
+    }
+    // Off the 64px fit (another root size), the ABOUT ME column's margins don't move the projects.
+    const off = pts.map((p) => (p.flow === 1 && p.y > y0 ? { ...p, y: p.y + 10 } : p));
+    const snap2 = snapMenu(off, { anchorX: x0, spacing: 64 });
+    expect(snap2.snaps[3].dy).toBe(0);
+    expect(snap2.snaps[7].dy).toBeCloseTo(54, 6);
+    // Its next line already carries those 54px, which lands it exactly on a row (3 below).
+    expect(snap2.snaps[8].dy).toBeCloseTo(0, 6);
+    expect(snap2.snaps[8].row - snap2.snaps[7].row).toBe(3);
+    expect(snap2.grow).toBeCloseTo(54, 6);
+  });
+
   it('never picks a spacing that puts two glyphs of a row on one vertex', () => {
     const pts = [
       { x: 470, y: 300 },

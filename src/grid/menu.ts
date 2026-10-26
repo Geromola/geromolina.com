@@ -32,10 +32,14 @@ const PREWARM_DT = 1 / 20; // the engine's largest step: fewest steps for the sa
 const STILL_S = 3; // reduced motion: simulated seconds before each still frame
 const FOCUS_SHARE = 0.6; // share of the flow a hovered or focused node pulls toward itself
 const AMBIENT = 0.25; // ambient wanderers: fewer than the game, so the menu stays calm
-const IGNITE_S = 0.32; // the plants' charge sweep, before power leaves them
-const SWEEP_S = 0.9; // the power front takes this long to reach the farthest node
-const FRONT_S = 0.18; // corridors and electrons fade in over this as the front passes
-const INTRO_S = IGNITE_S + SWEEP_S + FRONT_S + 0.35; // plus the last ring's fill
+const IGNITE_S = 0.6; // the plants' charge sweep, before power leaves them
+const SWEEP_S = 1.6; // the power front takes this long to reach the farthest node
+const FRONT_S = 0.32; // corridors and electrons fade in over this as the front passes
+const RING_S = 0.45; // spring response of a ring filling (and a node lighting) as power arrives
+const INTRO_S = IGNITE_S + SWEEP_S + Math.max(FRONT_S, RING_S) + 0.2; // ≈ 2.85 s, the last ring settled
+/** Lattice spacing: desktop leans toward the 64px the NodeMenu grid is sized for; phones use 58. */
+const DESKTOP_SPACING = 64;
+const PHONE_SPACING = 58;
 const CORRIDOR_REST = 0.42; // corridor alpha at rest; a hovered node's corridor goes to 1
 const LIFT_PX = -2;
 const PRESS_SCALE = 0.98;
@@ -123,8 +127,8 @@ export function mountMenu(root: HTMLElement) {
       pulse: new Spring(0, 0.5),
       glow: new Spring(0, 0.25),
       charge: new Spring(0, 0.22, 1),
-      fill: new Spring(0, 0.35),
-      power: new Spring(0, 0.3),
+      fill: new Spring(0, RING_S),
+      power: new Spring(0, RING_S),
       hot: false,
       clicked: false,
       powered: false,
@@ -143,12 +147,11 @@ export function mountMenu(root: HTMLElement) {
   let corridorGlow = nodes.map(() => -1);
 
   if (introT === Infinity) for (const n of nodes) litNow(n);
-  else for (const n of nodes) if (n.source) n.charge.target = 1; // the plants' charge sweep
   nodes.forEach(paintNode);
 
   // ------------------------------------------------------------ layout
-  /** Glyph centres in map px, with the snap nudges and every transform off. */
-  function measure(): MenuPoint[] {
+  /** Glyph centres in map px, with the snap nudges and every transform off. Each zone is its own flow, except stacked on phones. */
+  function measure(phone: boolean): MenuPoint[] {
     root.classList.add('is-measuring');
     for (const n of nodes) {
       n.item.style.removeProperty('--snap-x');
@@ -157,7 +160,8 @@ export function mountMenu(root: HTMLElement) {
     const o = root.getBoundingClientRect();
     const pts = nodes.map((n) => {
       const r = n.glyph.getBoundingClientRect();
-      return { x: r.left + r.width / 2 - o.left, y: r.top + r.height / 2 - o.top };
+      const flow = phone ? 0 : Number(n.el.closest<HTMLElement>('[data-flow]')?.dataset.flow ?? 0);
+      return { x: r.left + r.width / 2 - o.left, y: r.top + r.height / 2 - o.top, flow };
     });
     root.classList.remove('is-measuring');
     return pts;
@@ -167,12 +171,11 @@ export function mountMenu(root: HTMLElement) {
   function build(): boolean {
     if (!nodes.length) return false;
     const phone = phoneQuery.matches;
-    const pts = measure();
-    const width0 = root.getBoundingClientRect().width;
-    // Desktop: a conductor runs down the menu's centre line. Phones: the spine through every glyph.
+    const pts = measure(phone);
+    // A conductor runs through the first glyph's column (on phones, the spine through every glyph).
     const snap = phone
-      ? snapMenu(pts, { anchorX: pts[0].x, spacing: Math.round(Math.min(64, Math.max(52, width0 / 6.5))) })
-      : snapMenu(pts, { anchorX: width0 / 2 });
+      ? snapMenu(pts, { anchorX: pts[0].x, spacing: PHONE_SPACING })
+      : snapMenu(pts, { anchorX: pts[0].x, min: 52, max: 76, prefer: DESKTOP_SPACING });
     nodes.forEach((n, k) => {
       const s = snap.snaps[k];
       if (Math.abs(s.dx) > 0.01) n.item.style.setProperty('--snap-x', `${s.dx.toFixed(2)}px`);
@@ -289,6 +292,9 @@ export function mountMenu(root: HTMLElement) {
   }
 
   function advanceIntro() {
+    // Ignition: the plants' charge arc sweeps round over IGNITE_S (eased), then lets go.
+    const t = Math.min(1, introT / IGNITE_S);
+    for (const n of nodes) if (n.source && !n.powered && !n.clicked) n.charge.snap(t * t * (3 - 2 * t));
     for (const n of nodes) {
       if (n.powered || introT < n.poweredAt) continue;
       n.powered = true;
