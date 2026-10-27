@@ -266,6 +266,8 @@ export function mountMenu(root: HTMLElement) {
   /** (Re)build positions and the scene for the menu's width. False when nothing changed. */
   function build(): boolean {
     const width = root.getBoundingClientRect().width;
+    // Not laid out yet (a hidden tab or a zero-size frame): the ResizeObserver builds once it has a width.
+    if (width < 160) return false;
     const gutter = Math.min(32, Math.max(16, width * 0.03));
     let layout = menuLayout(width, { about: kids(0).length, projects: kids(1).length, gutter });
     const key = `${width}|${layout.mode}|${window.devicePixelRatio}`;
