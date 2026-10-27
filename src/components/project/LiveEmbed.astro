@@ -25,7 +25,7 @@ const { title, liveUrl, framable = true } = Astro.props;
           />
           {/* Shield: the page keeps scrolling until the visitor opts into the embed. */}
           <button type="button" class="embed__shield" data-embed-shield>
-            <span class="embed__shield-label mono">Click to interact</span>
+            <span class="embed__shield-label mono"><span class="embed__click">Click</span><span class="embed__tap">Tap</span> to interact</span>
           </button>
         </>
       ) : (
@@ -137,5 +137,17 @@ const { title, liveUrl, framable = true } = Astro.props;
   .embed__fallback p {
     margin: 0;
     color: var(--ink-2);
+  }
+  /* Touch screens tap, everything else clicks. */
+  .embed__tap {
+    display: none;
+  }
+  @media (pointer: coarse) {
+    .embed__click {
+      display: none;
+    }
+    .embed__tap {
+      display: inline;
+    }
   }
 </style>

@@ -1,6 +1,7 @@
 ---
 // Section nav (SPEC "Home hero v2"): a fixed glass pill, top right; a compact pill at top centre
 // on phones. Hidden in Play mode (html[data-home-mode], set by GridMap.astro and main.ts).
+// On phones it slides away while you scroll down and comes back when you scroll up.
 ---
 
 <nav class="secnav glass" aria-label="Sections" data-secnav>
@@ -95,9 +96,52 @@
       padding: 0 0.625rem;
     }
   }
+  @media (max-width: 720px) {
+    .secnav {
+      transition:
+        opacity 200ms ease-out,
+        transform 260ms cubic-bezier(0.2, 0.9, 0.3, 1),
+        visibility 0s linear 0s;
+    }
+    .secnav[data-away] {
+      opacity: 0;
+      transform: translateY(calc(-100% - var(--gutter)));
+      visibility: hidden;
+      pointer-events: none;
+      transition:
+        opacity 200ms ease-out,
+        transform 260ms cubic-bezier(0.2, 0.9, 0.3, 1),
+        visibility 0s linear 260ms;
+    }
+  }
+  @media (max-width: 720px) and (prefers-reduced-motion: reduce) {
+    .secnav[data-away] {
+      transform: none;
+    }
+  }
   @media (prefers-contrast: more) {
     .secnav a {
       color: var(--ink);
     }
   }
 </style>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-secnav]');
+  if (nav) {
+    const phone = matchMedia('(max-width: 720px)');
+    let lastY = scrollY;
+    const update = () => {
+      const y = scrollY;
+      const dy = y - lastY;
+      // Ignore tiny jitters (iOS rubber-banding); keep it while a link inside has focus.
+      if (Math.abs(dy) < 6) return;
+      lastY = y;
+      const away = phone.matches && dy > 0 && y > 96 && !nav.contains(document.activeElement);
+      nav.toggleAttribute('data-away', away);
+    };
+    addEventListener('scroll', update, { passive: true });
+    nav.addEventListener('focusin', () => nav.removeAttribute('data-away'));
+    phone.addEventListener('change', () => phone.matches || nav.removeAttribute('data-away'));
+  }
+</script>

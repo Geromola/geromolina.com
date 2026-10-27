@@ -283,6 +283,15 @@ function plateBox(l: MenuLayout, sec: MenuLayout['about'], c: { col: number; row
   if (sec.style === 'hang') {
     return { c0: c.col - sec.plateW / 2 / s, c1: c.col + sec.plateW / 2 / s, r0: c.row - g / s, r1: c.row + MENU_PX.hangH / s };
   }
+  if (sec.style === 'compact') {
+    const cg = MENU_PX.compactGlyph / 2;
+    return {
+      c0: c.col - cg / s,
+      c1: c.col + (cg + MENU_PX.compactGap + sec.plateW) / s,
+      r0: c.row - MENU_PX.compactH / 2 / s,
+      r1: c.row + MENU_PX.compactH / 2 / s,
+    };
+  }
   return {
     c0: c.col - g / s,
     c1: c.col + (g + MENU_PX.sideGap + sec.plateW) / s,
@@ -371,6 +380,32 @@ describe('menuLayout (v3.2 sections)', () => {
     const wide = menuLayout(1440, { about: 3, projects: 6, gutter: 32 });
     const wideShut = menuLayout(1440, { about: 3, projects: 6, gutter: 32, collapsed: { about: true, projects: true } });
     expect(wideShut).toEqual(wide);
+  });
+
+  it('phones: ABOUT ME is compact (one row per child) and Projects makes the first screen', () => {
+    for (const [w, h] of [
+      [375, 812],
+      [375, 667],
+      [390, 844],
+    ] as const) {
+      const l = menuLayout(w, { about: 3, projects: 6, gutter: GUTTER(w) });
+      expect(l.mode).toBe('column');
+      expect(l.about.style).toBe('compact');
+      const rows = l.about.children.map((c) => c.row);
+      // Right under the switch, then one row each.
+      expect(rows[0]).toBe(l.about.switch.row + 1);
+      rows.forEach((r, k) => k && expect(r - rows[k - 1]).toBe(1));
+      // The plates fit a row: no two compact plates (or the switch) touch.
+      expect(MENU_PX.compactH).toBeLessThan(l.spacing - 8);
+      // The page puts the root's row about 114px down (nav pill, root plate). The Projects switch
+      // (44px tall) is on screen; on a 812px-class screen its first plate (84px) is too.
+      const y = (row: number) => 114 + row * l.spacing;
+      expect(y(l.projects.switch.row) + 22, `${w}×${h}`).toBeLessThanOrEqual(h);
+      if (h >= 800) expect(y(l.projects.children[0].row) + MENU_PX.sideH / 2, `${w}×${h}`).toBeLessThanOrEqual(h);
+      // Project children keep their size and spacing.
+      expect(l.projects.style).toBe('side');
+      expect(l.projects.children[1].row - l.projects.children[0].row).toBe(2);
+    }
   });
 
   it('fenceTop moves everything but the root down a row', () => {

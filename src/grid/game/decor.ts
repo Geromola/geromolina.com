@@ -443,10 +443,14 @@ export const MENU_PX = {
   sideH: 84,
   /** A hanging plate is this much narrower than 4 spacings (the gap between columns). */
   hangGap: 40,
+  /** Compact nodes (ABOUT ME on phones): one lattice row each, a smaller glyph, a one-line plate. */
+  compactGlyph: 30,
+  compactGap: 10,
+  compactH: 40,
 } as const;
 
 export type MenuMode = 'wide' | 'stacked' | 'column';
-export type MenuStyle = 'hang' | 'side';
+export type MenuStyle = 'hang' | 'side' | 'compact';
 
 export interface LatticeRect {
   c0: number;
@@ -580,8 +584,11 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
     s = inner / n;
     const c1 = n - 1;
     const room = c1 - 0.3;
-    const aBottom = 4 + 2 * (opts.about - 1) + 1;
-    about = section({ col: 0, row: 2 }, grid(opts.about, 1, 0, 4, 0, 2), 'side', sideW(s, room), {
+    // ABOUT ME is compact here: one row per child, starting right under the switch, so the
+    // Projects switch and its first plate make the first screen.
+    const aBottom = 3 + (opts.about - 1) + 1;
+    const compactW = room * s - MENU_PX.compactGlyph / 2 - MENU_PX.compactGap;
+    about = section({ col: 0, row: 2 }, grid(opts.about, 1, 0, 3, 0, 1), 'compact', compactW, {
       c0: -1,
       r0: 1,
       c1,

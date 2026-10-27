@@ -23,6 +23,8 @@ interface Entry {
   /** The one short line under the title: a metric (mono value + label) or a phrase. */
   value?: string;
   label: string;
+  /** A shorter phrase for the compact (phone) plate, where the label would truncate. */
+  short?: string;
   /** No href: not a link yet (rendered disabled). */
   href?: string;
   /** A live plant: it feeds the flow. */
@@ -95,9 +97,14 @@ const ABOUT_LINES: Record<string, string> = {
   'off-the-grid': 'Muay Thai, cycling, an ACS paper',
   contact: 'Email · LinkedIn · GitHub',
 };
+// Phone plates have about 16 characters of room.
+const ABOUT_SHORT: Record<string, string> = {
+  'off-the-grid': 'Muay Thai & more',
+  contact: 'Email · LinkedIn',
+};
 const ABOUT = ['about', 'off-the-grid', 'contact'];
 const sections = [...pick(ABOUT), ...all.filter((n) => n.kind === 'section' && !ABOUT.includes(n.id))];
-const about: Entry[] = sections.map((n) => ({ ...toEntry(n), label: ABOUT_LINES[n.id] ?? n.title }));
+const about: Entry[] = sections.map((n) => ({ ...toEntry(n), label: ABOUT_LINES[n.id] ?? n.title, short: ABOUT_SHORT[n.id] }));
 
 // The two sections, in DOM (and tab) order. Child indices (`data-menu-node`) run across both.
 const groups = [
@@ -161,7 +168,10 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
       <span class="mroot__plate glass">
         <p class="mroot__kicker mono">Geronimo Molina</p>
         <h1 class="mroot__name">Gero</h1>
-        <p class="mroot__line">MBA + MEng Candidate&nbsp;· UC Berkeley, California</p>
+        <p class="mroot__line">
+          <span class="mroot__part">MBA + MEng Candidate</span><span class="mroot__sep">&nbsp;· </span><span
+            class="mroot__part">UC Berkeley, California</span>
+        </p>
       </span>
     </header>
 
@@ -214,7 +224,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                         <path class="mnode__ring-fill" d={n.kind === 'substation' ? SQUARE : RING} pathLength="100" data-ring />
                       </svg>
                       <span class="mnode__charge" />
-                      {n.kind === 'plant' && <span class="mnode__core" />}
+                      {(n.kind === 'plant' || n.kind === 'section') && <span class="mnode__core" />}
                       {n.kind === 'substation' && (
                         <svg class="mnode__lock" viewBox="0 0 16 16">
                           <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor" />
@@ -250,7 +260,15 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                       )}
                       <span class="mnode__title">{n.title}</span>
                       <span class="mnode__line mono">
-                        {n.value && <span class="mnode__value">{n.value}</span>} {n.label}
+                        {n.value && <span class="mnode__value">{n.value}</span>}{' '}
+                        {n.short ? (
+                          <>
+                            <span class="mnode__full">{n.label}</span>
+                            <span class="mnode__short">{n.short}</span>
+                          </>
+                        ) : (
+                          n.label
+                        )}
                       </span>
                       {!n.href && (
                         <span class="mnode__hint mono" aria-hidden="true">
@@ -444,7 +462,21 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     font-size: 0.8125rem;
     line-height: 1.35;
     color: var(--ink-2);
-    text-wrap: balance;
+  }
+  /* Phones: two clean lines, no separator dot left hanging. */
+  @media (max-width: 767px) {
+    .mroot__plate {
+      padding: 0.3125rem 0.875rem 0.375rem;
+    }
+    .mroot__line {
+      line-height: 1.3;
+    }
+    .mroot__part {
+      display: block;
+    }
+    .mroot__sep {
+      display: none;
+    }
   }
 
   /* ---------- fences: a thin dashed outline on lattice lines, the label on the line ---------- */
@@ -601,9 +633,6 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
       rgba(var(--cyan-rgb), calc(var(--power) * 0.22 + var(--pulse) * 0.45 + var(--glow) * 0.12));
     transform: scale(calc(1 + var(--pulse) * 0.1));
   }
-  .mnode--section .mnode__glyph {
-    background: var(--bg);
-  }
   .mnode--substation .mnode__glyph {
     border-radius: 28%;
     color: var(--amber);
@@ -729,6 +758,58 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     justify-content: center;
     text-align: left;
   }
+  /* Plate, compact style (ABOUT ME on phones): one lattice row, a smaller glyph, title and line on one line. */
+  .msec[data-style='compact'] .mnode {
+    --glyph: 30px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  .msec[data-style='compact'] .mnode__plate {
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.625rem;
+    min-width: 0;
+    width: auto;
+    height: 2.5rem;
+    margin-top: 0;
+    padding: 0 0.875rem;
+    text-align: left;
+  }
+  .msec[data-style='compact'] .mnode__title {
+    flex: none;
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+  .msec[data-style='compact'] .mnode__line {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .msec[data-style='compact'] .mnode__charge {
+    inset: -3px;
+    border-width: 1.5px;
+  }
+  .mnode__short,
+  .msec[data-style='compact'] .mnode__full {
+    display: none;
+  }
+  .msec[data-style='compact'] .mnode__short {
+    display: inline;
+  }
+  /* Too narrow for the phrase: the title alone. */
+  @media (max-width: 369px) {
+    .msec[data-style='compact'] .mnode__line {
+      display: none;
+    }
+  }
   .mnode.is-hot .mnode__plate {
     border-color: rgba(var(--cyan-rgb), 0.36);
     border-top-color: rgba(var(--cyan-rgb), 0.5);
@@ -842,12 +923,27 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
   :global(html[data-motion='reduce']) :is(.mnode, .mswitch) {
     transform: none;
   }
+  /* Phones and touch screens: denser glass, so lattice lines and electrons don't cross the text. */
+  .nmenu[data-mode='column'] :is(.mnode__plate, .mroot__plate) {
+    background: color-mix(in srgb, var(--bg-raise) 86%, transparent);
+  }
+  @media (pointer: coarse) {
+    .nmenu :is(.mnode__plate, .mroot__plate) {
+      background: color-mix(in srgb, var(--bg-raise) 86%, transparent);
+    }
+  }
   @media (prefers-reduced-transparency: reduce) {
     .mfence__label {
       background: var(--bg);
     }
+    .nmenu[data-mode] :is(.mnode__plate, .mroot__plate) {
+      background: var(--bg-raise);
+    }
   }
   @media (prefers-contrast: more) {
+    .nmenu[data-mode] :is(.mnode__plate, .mroot__plate) {
+      background: var(--bg-raise);
+    }
     .mnode__plate {
       border-color: rgba(255, 255, 255, 0.5);
     }

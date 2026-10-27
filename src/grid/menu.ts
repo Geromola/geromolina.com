@@ -284,7 +284,9 @@ export function mountMenu(root: HTMLElement) {
     const rootHalf = Math.max(32, rootEl.offsetHeight / 2);
     const originY = layout.mode === 'column' ? 64 + rootHalf + 4 : gutter + Math.max(32, rootHalf - 8);
     // A tall root plate (it wraps on phones) pushes the fences a row down, clear of the fence label.
-    if (rootHalf + 14 > s) {
+    // (Clear of the fence label, 16px tall on the fence line, with 1px to spare.)
+    const tallRoot = rootHalf + 9 > s;
+    if (tallRoot) {
       layout = menuLayout(width, { about: kids(0).length, projects: kids(1).length, gutter, fenceTop: 2 });
     }
     const ext = layout.extent;
@@ -293,7 +295,7 @@ export function mountMenu(root: HTMLElement) {
     // The engine and the canvases keep the full (expanded) size; collapsing only slides the DOM
     // and squeezes the drawn flow, and the menu itself gets shorter.
     const height = Math.max(minHeight, fullHeight);
-    const lopts = { about: kids(0).length, projects: kids(1).length, gutter, fenceTop: rootHalf + 14 > s ? 2 : 1 };
+    const lopts = { about: kids(0).length, projects: kids(1).length, gutter, fenceTop: tallRoot ? 2 : 1 };
     const shutAbout = menuLayout(width, { ...lopts, collapsed: { about: true } });
     const shutBoth = menuLayout(width, { ...lopts, collapsed: { about: true, projects: true } });
     sections[0].rows = layout.projects.fence.r0 - shutAbout.projects.fence.r0;
@@ -331,13 +333,17 @@ export function mountMenu(root: HTMLElement) {
       place(sw, L.switch.col, L.switch.row);
       sec.button.style.left = `${sw.x - 14}px`;
       sw.top0 = sw.y;
-      const itemW = L.style === 'hang' ? L.plateW : MENU_PX.glyph + MENU_PX.sideGap + L.plateW;
+      // Placed by the glyph's vertex: hanging plates centred under it, side and compact plates beside it.
+      const g = L.style === 'compact' ? MENU_PX.compactGlyph : MENU_PX.glyph;
+      const plateH = L.style === 'compact' ? MENU_PX.compactH : MENU_PX.sideH;
+      const gap = L.style === 'compact' ? MENU_PX.compactGap : MENU_PX.sideGap;
+      const itemW = L.style === 'hang' ? L.plateW : g + gap + L.plateW;
       sec.children.forEach((k, j) => {
         const n = nodes[k];
         const c = L.children[j] ?? L.children[L.children.length - 1];
         place(n, c.col, c.row);
-        const left = L.style === 'hang' ? n.x - L.plateW / 2 : n.x - MENU_PX.glyph / 2;
-        const top = L.style === 'hang' ? n.y - MENU_PX.glyph / 2 : n.y - MENU_PX.sideH / 2;
+        const left = L.style === 'hang' ? n.x - L.plateW / 2 : n.x - g / 2;
+        const top = L.style === 'hang' ? n.y - g / 2 : n.y - Math.max(g, plateH) / 2;
         n.item.style.left = `${left}px`;
         n.top0 = top;
         n.item.style.setProperty('--item-w', `${itemW}px`);
@@ -347,6 +353,7 @@ export function mountMenu(root: HTMLElement) {
       });
     });
     root.dataset.laid = '';
+    root.dataset.mode = layout.mode;
 
     // The game: the root is the plant; switches and children are loads.
     const vertexOf = (n: MNode) => ({ col: Math.round((n.x - ox) / s), row: Math.round((n.y - oy) / s) });
