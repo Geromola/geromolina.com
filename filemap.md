@@ -49,6 +49,15 @@
 - `src/energy/game.ts` — `BallparkGame` run state machine, run summary (bias, mean factor), progress (de)serialization
 - `src/energy/main.ts` — Ballpark DOM wiring: log-scale slider, springs, reveal, summary, progress in `localStorage`
 - `tests/energy.test.ts` — Vitest for Ballpark: scale, formatting, scoring, catalog, generator, Leitner, game, storage
+- `src/pages/shells.astro` — Raup's Cube page (standalone while play-tested, not linked yet): markup, styles and mount
+- `src/shells/model.ts` — Raup's coiling model (W, D, T): surface points, whorl count, whorls-touch test, regions, presets, slider scales, URL hash
+- `src/shells/mesh.ts` — fixed-topology shell mesh (positions, normals, growth uv, bounds) and the orbit camera / 4×4 maths
+- `src/shells/morphospace.ts` — the cube as a map: log W × D, T strip, touch boundary, region slices, seeded empty point
+- `src/shells/lessons.ts` — the six guided steps and progress (de)serialization
+- `src/shells/render-gl.ts` — WebGL2 shell renderer (growth lines, amber growing edge, paired valve)
+- `src/shells/render-canvas.ts` — Canvas 2D fallback drawn like Raup's plotter: generating circles in painter's order
+- `src/shells/main.ts` — Raup's Cube DOM wiring: sliders, springs, orbit, lessons, cube map, presets, hash, progress in `localStorage`
+- `tests/shells.test.ts` — Vitest for Raup's Cube: model geometry, touch boundary, mesh, camera fit, morphospace, lessons
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
 - `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, and `/ballpark`

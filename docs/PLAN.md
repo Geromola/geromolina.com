@@ -35,3 +35,7 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
 8. [x] **Phone, a11y and perf pass** (careful), after 3, 4 and 6.
 9. [ ] Deploy. The orchestrator does this, confirming each outward step with Gero: push to GitHub, import into Vercel, set up Cloudflare DNS (DNS only), enable Analytics.
 10. [x] **Ballpark energy game** (careful). `/ballpark`, SPEC "Ballpark". DOM-free logic in `src/energy/`, Vitest in `tests/energy.test.ts`. Built and verified (tests, `astro check`, full runs at desktop and phone sizes, keyboard, `?motion=reduce`, storage blocked); play-tested by Gero, then launched as a `▶ PLAY` node in the home menu's PROJECTS section and added to the sitemap.
+11. [~] **Raup's Cube** (careful). `/shells`, SPEC "Raup's Cube".
+    - DOM-free model, mesh, morphospace and lessons in `src/shells/`; Vitest in `tests/shells.test.ts`.
+    - Built and verified: tests, `astro check`, the build, lessons 1–6, map drag, presets, random shell, hash, keyboard, `?motion=reduce`, `?renderer=canvas`, and 1440×900 and 375×812.
+    - Next: Gero play-tests it; check the region boxes against Raup's figure; decide how it appears on the site.

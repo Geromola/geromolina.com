@@ -207,3 +207,55 @@ Decided 2026-10-25. A second game at `/ballpark` for an intuition of how much **
 
 ### Data
 US references (120 V homes, gallons, miles). Every item carries a source; the main ones are EIA (home: 10,791 kWh/yr in 2022; per person: 279 MMBtu in 2023), EPA (33.7 kWh per gallon), Epoch AI (0.3 Wh per chat query), Patterson et al. 2021 (GPT-3: 1,287 MWh), DOE-method appliance wattages via Virginia Tech Extension. The flight seat (~30 gal of jet fuel, ~1.1 MWh) is a rough estimate.
+
+## Raup's Cube (shell morphospace)
+Decided 2026-10-26. A third interactive at `/shells` that recreates David Raup's theoretical morphology of coiled shells (Raup 1966, *Geometric analysis of shell coiling*). It is a standalone page while it is play-tested: nothing on the home page links to it and it is not in the sitemap.
+
+### The model
+A shell is one circular tube, the generating curve, that grows as it turns around a fixed axis. Three numbers set its form:
+- **W, whorl expansion rate:** how much the tube grows per turn (log scale, 1.01 to 10⁶).
+- **D, distance from the axis:** inner edge ÷ outer edge of the generating curve (0 to 0.95).
+- **T, translation rate:** axial slide per unit of distance from the axis (0 to 4).
+
+Geometry (`src/shells/model.ts`): aperture radius `a = W^(θ/2π)`, centre distance `r_c = a(1+D)/(1−D)`, axial position `z = −T·r_c`, with θ ≤ 0 and the aperture at θ = 0. The tube is drawn back to 1/1000 of the aperture's size, at most 8 whorls, so for W ≥ 10³ it is less than one turn: a clam or brachiopod valve falls out of the same rule.
+
+**Whorls touch** when the generating circle and the one a turn later overlap: `(W−1)·(1+D)/(1−D)·√(1+T²) < W+1`. At T = 0 that is Raup's hyperbola, W·D < 1.
+
+### The page
+- **The shell:** a sticky 3D view. On desktop it is the left column; on phones it is pinned under the top bar.
+  - WebGL2 surface with cyan growth lines, an amber growing edge and a darker inside.
+  - Drag sideways to turn it, with a flick and an idle turn. A mouse can also tilt it.
+  - It grows from the tip on load and with "Grow again".
+  - "Pair valves" mirrors a valve when W ≥ 30.
+  - The Canvas 2D fallback draws the generating circles in painter's order, like Raup's 1962 plots.
+- **Controls:** W, D and T sliders. Pointer-down jumps there, then the thumb follows 1:1. Keyboard: arrows move 1% of the track, Shift moves 10%. Each parameter is a `Spring`, with W springing in log space.
+- **Six lessons:**
+  1. One tube (a nautilus)
+  2. W
+  3. D (the touch line)
+  4. T (a snail)
+  5. Push W (a clam, then a brachiopod)
+  6. The cube
+
+  Each lesson springs the shell to a target and highlights one control without locking the others.
+- **The cube map:**
+  - log W across, D up, and a T strip on the right. Drag either to set the shell.
+  - The touch boundary for the current T is drawn in amber.
+  - Each region is shaded and named while the current T is inside its range, and drawn as a dashed outline otherwise.
+  - The regions appear after lesson 6, or with "Show where real shells live".
+  - Presets: Nautilus, Ammonite, Spirula, Turritella, Garden snail, Clam, Brachiopod.
+  - "Show me a shell that never existed" picks a seeded point outside every region.
+- **State:** the URL hash (`#W=2.20&D=0.10&T=1.20`) is written after map, slider and preset changes, and opens the page on the cube. Lesson progress and `cubeSeen` live in `localStorage` (`shells-progress`), wrapped in try/catch.
+- **Reduced motion:** there is no loop, growth or idle turn. One frame is drawn per change.
+
+### Regions (approximate)
+Boxes in (log10 W, D, T) after the textbook reproductions of Raup's cube; the page says they are approximate:
+
+| Region | log10 W | D | T |
+|---|---|---|---|
+| Coiled cephalopods | 0.2–0.7 | 0–0.6 | 0–0.15 |
+| Snails | 0.05–1 | 0–0.5 | 0.3–4 |
+| Brachiopods | 1.5–5.5 | 0–0.1 | 0–0.1 |
+| Bivalves | 1–4 | 0–0.5 | 0–0.6 |
+
+**Still to check:** these boxes against Raup's 1966 figure, or against McGhee's *Theoretical Morphology* (1999).
