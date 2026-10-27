@@ -34,3 +34,4 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
 7. [x] **PWA, sitemap, OG, analytics** (light), after 5.
 8. [x] **Phone, a11y and perf pass** (careful), after 3, 4 and 6.
 9. [ ] Deploy. The orchestrator does this, confirming each outward step with Gero: push to GitHub, import into Vercel, set up Cloudflare DNS (DNS only), enable Analytics.
+10. [x] **Ballpark energy game** (careful). `/ballpark`, SPEC "Ballpark". DOM-free logic in `src/energy/`, Vitest in `tests/energy.test.ts`. Built and verified (tests, `astro check`, full runs at desktop and phone sizes, keyboard, `?motion=reduce`, storage blocked); play-tested by Gero, then launched as a `▶ PLAY` node in the home menu's PROJECTS section and added to the sitemap.

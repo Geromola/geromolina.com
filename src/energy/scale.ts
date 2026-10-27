@@ -32,8 +32,8 @@ const UNITS = [
 export function roundSig(x: number, sig: number): number {
   if (x === 0 || !Number.isFinite(x)) return x;
   const p = sig - 1 - Math.floor(Math.log10(Math.abs(x)));
-  const f = 10 ** p;
-  return Math.round(x * f) / f;
+  // Divide by an exact power of ten for large x (1e9 * 1e-9 is not exactly 1).
+  return p >= 0 ? Math.round(x * 10 ** p) / 10 ** p : Math.round(x / 10 ** -p) * 10 ** -p;
 }
 
 /** Fixed-decimal string with exactly `sig` significant figures (never exponential). */
@@ -43,11 +43,15 @@ function sigString(x: number, sig: number): string {
   return x.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
 }
 
-/** "130 Wh", "1.0 kWh", "33.7 kWh" (sig = 3). Rounds first, so 999 Wh becomes "1.0 kWh". */
-export function formatEnergy(wh: number, sig = 2): { value: string; unit: string; text: string } {
+/**
+ * "130 Wh", "1.0 kWh", "33.7 kWh" (sig = 3). Rounds first, so 999 Wh becomes "1.0 kWh".
+ * `trim` drops trailing zeros ("90 kWh", not "90.0 kWh").
+ */
+export function formatEnergy(wh: number, sig = 2, trim = false): { value: string; unit: string; text: string } {
   const rounded = roundSig(wh, sig);
   const unit = UNITS.find((u) => rounded >= u.scale) ?? UNITS[UNITS.length - 1];
-  const value = sigString(roundSig(rounded / unit.scale, sig), sig);
+  let value = sigString(roundSig(rounded / unit.scale, sig), sig);
+  if (trim && value.includes('.')) value = value.replace(/\.?0+$/, '');
   return { value, unit: unit.name, text: `${value} ${unit.name}` };
 }
 
@@ -90,8 +94,8 @@ export function points(e: number): number {
   return Math.round(100 * Math.max(0, 1 - e));
 }
 
-/** Within ×2 counts as knowing it (moves the Leitner box up). */
-export const LEARNED_DECADES = 0.3;
+/** Within ×2 counts as knowing it (moves the Leitner box up). Anything shown as "×2" counts. */
+export const LEARNED_DECADES = 0.31;
 
 export const TIERS = [
   { max: 0.1, label: 'Bullseye' },

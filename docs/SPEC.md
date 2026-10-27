@@ -182,3 +182,28 @@ Decided 2026-10-25 after Gero's review: the first thing a visitor sees is a **pr
 - New field `status: 'live' | 'code' | 'private'`.
 - New field `inGame` (boolean, default true). The game map uses only `inGame` nodes; the two new code projects are `inGame: false`, so the game levels and tests are unchanged.
 - Code projects get `/projects/<slug>` pages the same way as live ones, but without an embed. They show the repo as the primary call to action.
+
+## Ballpark (energy orders-of-magnitude game)
+Decided 2026-10-25. A second game at `/ballpark` for an intuition of how much **energy** everyday things take. Launched 2026-10-26 after Gero's play-test: it is a PROJECTS node in the home node menu (between Pac-Man DQN and Networking Tracker), with a `▶ PLAY` badge, the line `11 decades of energy` and a plain link to `/ballpark` (no glyph morph, since it is not a project page). It is a load in the flow, not a source. It is in the sitemap.
+
+### Lessons
+1. **Energy = power × time.** A laptop for 8 h beats a kettle for 5 min.
+2. **In a sum, the biggest term wins.**
+3. **A ladder of landmarks**, about one per decade, to estimate anything new by comparison.
+
+### A run (10 rounds)
+- **Each round** shows 1–3 lines, each an item with a count and a duration or amount (`Kettle · 5 min`, `Drive an EV · 30 miles`). Rounds 1–3 have one line (mostly unlearned landmarks), 4–7 have two, 8–10 have three, and round 8 is a **trap** (high power for a short time next to low power for a long time).
+- **The guess** goes on a **fixed log scale from 0.1 Wh to 10 GWh**: tap or drag (pointer-down jumps there, then 1:1), or use the keyboard (←/→ 0.05 decade, Shift a decade, Enter). The readout shows the guess and a live equivalence (`≈ 28 phone charges`). Nothing is pre-placed, so there is no anchoring.
+- **The reveal** springs the truth marker in, draws the error as an amber bracket and states it as a factor (`×2.4 high`). It shows per-line maths (`1,500 W × 5 min = 125 Wh`), a linear share bar, the power-vs-energy or biggest-term lesson, and the dominant item's fact with its source.
+- **The summary** shows the score out of 1000, the geometric-mean factor off, bias (high/low) for under 1 kWh and for 1 kWh and up, and the ladder of landmarks.
+
+### Scoring
+`e = |log10(guess / truth)|` decades; `points = round(100 · max(0, 1 − e))`. Tiers: Bullseye ≤ 0.1, Ballpark ≤ 0.31 (anything shown as ×2), Close-ish ≤ 0.6, Off by ~10× ≤ 1, Different planet beyond.
+
+### Memory
+- Each item has a **Leitner box** (1–5). A guess within ×2 moves every item in the round up a box; a miss sends the dominant item to box 1. Items are drawn with weight `1 / 2^box`.
+- **Landmarks:** 12 anchors (`src/energy/catalog.ts` `ANCHORS`). Guessing one within ×2 twice pins it to the scale as a dot; the one used in the live equivalence glows and shows its label.
+- Progress lives in `localStorage` (`ballpark-progress`), wrapped in try/catch.
+
+### Data
+US references (120 V homes, gallons, miles). Every item carries a source; the main ones are EIA (home: 10,791 kWh/yr in 2022; per person: 279 MMBtu in 2023), EPA (33.7 kWh per gallon), Epoch AI (0.3 Wh per chat query), Patterson et al. 2021 (GPT-3: 1,287 MWh), DOE-method appliance wattages via Virginia Tech Extension. The flight seat (~30 gal of jet fuel, ~1.1 MWh) is a rough estimate.

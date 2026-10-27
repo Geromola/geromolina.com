@@ -4,7 +4,8 @@ import { getCollection } from 'astro:content';
 export const GET: APIRoute = async ({ site }) => {
   const base = site ?? new URL('https://geromolina.com');
   const plants = await getCollection('nodes', (n) => n.data.kind === 'plant');
-  const paths = ['/', ...plants.map((n) => n.data.href)];
+  // Ballpark is a game page, not in the collection (src/components/NodeMenu.astro).
+  const paths = ['/', ...plants.map((n) => n.data.href), '/ballpark'];
   const urls = [...new Set(paths)]
     .map((p) => `  <url><loc>${new URL(p, base).href}</loc></url>`)
     .join('\n');

@@ -1,0 +1,686 @@
+---
+// Ballpark (SPEC "Ballpark"): guess how much energy everyday things take, on a fixed log scale.
+import Base from '../layouts/Base.astro';
+import TopBar from '../components/project/TopBar.astro';
+import { decadeTicks } from '../energy/scale';
+import { ROUNDS_PER_RUN } from '../energy/rounds';
+
+const ticks = decadeTicks();
+---
+
+<Base
+  title="Ballpark · Gero Molina"
+  description="Ballpark: guess how much energy everyday things take, from an AI query to training GPT-3. Scored by orders of magnitude."
+>
+  <TopBar title="Ballpark" />
+  <main class="bp" data-ballpark data-phase="guessing">
+    <header class="bp__head">
+      <p class="bp__kicker mono">Game · Orders of magnitude</p>
+      <h1 class="bp__title">Ballpark</h1>
+      <p class="bp__lede">
+        How much energy does it take? Guess on the scale. Off by 2× is a good guess; off by 10× is the lesson.
+      </p>
+    </header>
+
+    <section class="stage glass" data-stage aria-labelledby="bp-q">
+      <div class="stage__status mono">
+        <span>Round <b data-round>1</b> / {ROUNDS_PER_RUN}</span>
+        <span>Score <b data-score>0</b></span>
+      </div>
+      <div class="stage__q">
+        <h2 id="bp-q">How much energy?</h2>
+        <span class="badge mono" data-landmark-badge hidden>Landmark</span>
+      </div>
+      <ul class="lines" data-lines role="list"></ul>
+
+      <div class="readout" aria-hidden="true">
+        <p class="readout__value mono"><span data-guess-value>—</span> <span class="readout__unit" data-guess-unit></span></p>
+        <p class="readout__eq" data-guess-eq>Tap or drag the scale</p>
+      </div>
+
+      <div class="axis">
+        <div class="axis__track" data-track>
+          <span class="axis__line" aria-hidden="true"></span>
+          <span class="axis__ticks" aria-hidden="true">
+            {
+              ticks.map((t) => (
+                <span class:list={['tick', { 'tick--major': t.major }]} style={`left: ${t.pos * 100}%`}>
+                  <span class="tick__label mono">{t.label}</span>
+                </span>
+              ))
+            }
+          </span>
+          <span class="axis__landmarks" data-landmarks aria-hidden="true"></span>
+          <span class="axis__bracket" data-bracket aria-hidden="true"></span>
+          <span class="axis__truth" data-truth aria-hidden="true"><span class="axis__truth-label mono" data-truth-label></span></span>
+          <span class="axis__thumb" data-thumb role="slider" tabindex="0" aria-label="Your guess, in watt-hours (log scale)"></span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="button" data-lock disabled>Lock in</button>
+        <p class="hint">←/→ to nudge · Shift for a whole decade · Enter to lock in</p>
+      </div>
+
+      <div class="reveal" data-reveal hidden>
+        <p class="verdict">
+          <span class="verdict__tier" data-tier></span>
+          <span class="verdict__points mono" data-points></span>
+        </p>
+        <p class="verdict__detail">
+          <span class="mono" data-truth-text></span> · <span data-factor></span> · <span data-truth-eq></span>
+        </p>
+        <div class="share" data-share aria-hidden="true"></div>
+        <p class="lesson" data-lesson></p>
+        <p class="fact">
+          <span data-fact></span>
+          <a class="fact__source" data-source target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a>
+        </p>
+        <p class="learned" data-learned hidden></p>
+        <button class="btn" type="button" data-next>Next round</button>
+      </div>
+    </section>
+
+    <section class="summary glass" data-summary hidden aria-labelledby="bp-sum">
+      <p class="bp__kicker mono">Run complete</p>
+      <h2 id="bp-sum" class="summary__total">
+        <span class="mono" data-sum-total>0</span><span class="summary__max mono" data-sum-max></span>
+      </h2>
+      <p class="summary__best" data-sum-best></p>
+      <p class="summary__factor" data-sum-factor></p>
+      <ul class="summary__bias" data-sum-bias role="list"></ul>
+      <h3 class="summary__ladder-title">Your ladder</h3>
+      <p class="summary__ladder-note">Nail a landmark twice and it is pinned to your scale.</p>
+      <ol class="ladder" data-ladder role="list"></ol>
+      <button class="btn" type="button" data-again>Play again</button>
+    </section>
+
+    <p class="vh" data-live role="status" aria-live="polite"></p>
+    <noscript><p class="bp__lede">Ballpark needs JavaScript.</p></noscript>
+  </main>
+</Base>
+
+<script>
+  import { mountBallpark } from '../energy/main';
+  const root = document.querySelector<HTMLElement>('[data-ballpark]');
+  if (root) mountBallpark(root);
+</script>
+
+<style>
+  .bp {
+    /* main.ts overrides these inline on this element. */
+    --guess: 0.5;
+    --truth: 0;
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3.5rem) var(--gutter) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .bp__kicker {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .bp__title {
+    margin: 0;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+  .bp__lede {
+    max-width: 34rem;
+    margin: 1rem 0 0;
+    font-size: clamp(1.0625rem, 2vw, 1.25rem);
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  /* ---------- stage ---------- */
+  .stage,
+  .summary {
+    scroll-margin-top: 4.5rem;
+    border-radius: var(--radius-lg);
+    padding: clamp(1.25rem, 4vw, 2rem);
+  }
+  .stage[hidden],
+  .summary[hidden] {
+    display: none;
+  }
+  .stage__status {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .stage__status b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .stage__q {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.25rem 0 0.75rem;
+  }
+  .stage__q h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  .badge {
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--amber-rgb), 0.45);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .badge[hidden] {
+    display: none;
+  }
+
+  .lines {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .lines :global(.line) {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    padding: 0.75rem 0.875rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.035);
+  }
+  .lines :global(.line__swatch) {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  [data-phase='revealed'] .lines :global(.line__swatch) {
+    opacity: 1;
+  }
+  .lines :global(.line__main) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.375rem 0.5rem;
+  }
+  .lines :global(.line__name) {
+    font-size: 1.0625rem;
+    font-weight: 550;
+  }
+  .lines :global(.chip) {
+    padding: 0.0625rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(var(--cyan-rgb), 0.1);
+    font-size: 0.875rem;
+    color: var(--cyan);
+  }
+  .lines :global(.line__math) {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+    text-align: right;
+    white-space: pre;
+  }
+  .lines :global(.line__math:empty) {
+    display: none;
+  }
+
+  /* ---------- readout ---------- */
+  .readout {
+    margin-top: 1.75rem;
+    text-align: center;
+  }
+  [data-phase='revealed'] .readout {
+    opacity: 0.55;
+  }
+  .readout__value {
+    margin: 0;
+    font-size: clamp(2.25rem, 7vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--cyan);
+  }
+  .readout__unit {
+    font-size: 0.5em;
+    color: var(--ink-2);
+  }
+  .readout__eq {
+    margin: 0.5rem 0 0;
+    min-height: 1.5em;
+    color: var(--ink-2);
+  }
+
+  /* ---------- axis ---------- */
+  .axis {
+    padding: 2.25rem 0.75rem 2.25rem;
+  }
+  .axis__track {
+    position: relative;
+    height: 2.75rem;
+    touch-action: none;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  [data-phase='revealed'] .axis__track {
+    cursor: default;
+  }
+  .axis__line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+    border-radius: 1px;
+    background: linear-gradient(90deg, rgba(var(--cyan-rgb), 0.15), rgba(var(--cyan-rgb), 0.45), rgba(var(--amber-rgb), 0.5));
+  }
+  .tick {
+    position: absolute;
+    top: calc(50% + 0.375rem);
+    width: 1px;
+    height: 0.375rem;
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .tick--major {
+    height: 0.625rem;
+    background: rgba(255, 255, 255, 0.5);
+  }
+  .tick__label {
+    position: absolute;
+    top: 0.875rem;
+    left: 0;
+    transform: translateX(-50%);
+    font-size: 0.6875rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .tick--major .tick__label {
+    color: var(--ink-2);
+  }
+
+  .axis__landmarks :global(.landmark) {
+    position: absolute;
+    top: calc(50% - 0.875rem);
+    width: 0.375rem;
+    height: 0.375rem;
+    margin-left: -0.1875rem;
+    border-radius: 50%;
+    background: rgba(var(--cyan-rgb), 0.55);
+  }
+  .axis__landmarks :global(.landmark.is-near) {
+    background: var(--cyan);
+    box-shadow: 0 0 0.5rem rgba(var(--cyan-rgb), 0.8);
+  }
+  .axis__landmarks :global(.landmark__label) {
+    position: absolute;
+    bottom: 0.625rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.6875rem;
+    color: var(--cyan);
+    white-space: nowrap;
+  }
+
+  .axis__bracket {
+    position: absolute;
+    top: 50%;
+    height: 0.375rem;
+    margin-top: -0.1875rem;
+    border-radius: 999px;
+    background: rgba(var(--amber-rgb), 0.55);
+    width: 0;
+  }
+  [data-phase='guessing'] .axis__bracket,
+  [data-phase='guessing'] .axis__truth {
+    visibility: hidden;
+  }
+  .axis__truth {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--truth) * 100%);
+    width: 3px;
+    border-radius: 2px;
+    background: var(--hot);
+    box-shadow: 0 0 0.75rem rgba(255, 255, 255, 0.6);
+    opacity: 0;
+  }
+  .axis__truth-label {
+    position: absolute;
+    bottom: calc(100% + 0.375rem);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--hot);
+    white-space: nowrap;
+  }
+
+  /* 44px hit target around a 22px knob. */
+  .axis__thumb {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--guess) * 100%);
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: -1.375rem 0 0 -1.375rem;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 120ms ease-out;
+  }
+  .axis__thumb::before {
+    content: '';
+    position: absolute;
+    inset: 0.6875rem;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow:
+      0 0 0 4px rgba(var(--cyan-rgb), 0.2),
+      0 0 1rem rgba(var(--cyan-rgb), 0.7);
+  }
+  [data-has-guess] .axis__thumb,
+  .axis__thumb:focus-visible {
+    opacity: 1;
+  }
+  .axis__thumb:focus-visible {
+    outline-offset: -4px;
+    border-radius: 50%;
+  }
+  [data-phase='revealed'] .axis__thumb::before {
+    background: rgba(var(--cyan-rgb), 0.7);
+    box-shadow: none;
+  }
+
+  /* ---------- buttons ---------- */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    min-width: 9rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--cyan-rgb), 0.45);
+    background: rgba(var(--cyan-rgb), 0.12);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 100ms ease-out,
+      background-color 150ms ease-out,
+      border-color 150ms ease-out,
+      opacity 150ms ease-out;
+  }
+  .btn:hover:not(:disabled) {
+    background: rgba(var(--cyan-rgb), 0.2);
+    border-color: rgba(var(--cyan-rgb), 0.7);
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .btn:focus-visible {
+    border-radius: 999px;
+  }
+  .btn[hidden] {
+    display: none;
+  }
+  .hint {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  [data-phase='revealed'] .hint {
+    display: none;
+  }
+  @media (pointer: coarse) {
+    .hint {
+      display: none;
+    }
+  }
+
+  /* ---------- reveal ---------- */
+  .reveal {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding-top: 0.5rem;
+  }
+  .reveal[hidden] {
+    display: none;
+  }
+  .verdict {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  .verdict__tier {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .verdict__points {
+    display: inline-block;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--cyan);
+    transform-origin: left center;
+  }
+  .verdict__detail {
+    margin: 0;
+    color: var(--ink-2);
+  }
+  .verdict__detail .mono {
+    color: var(--hot);
+  }
+  .share {
+    display: flex;
+    width: 100%;
+    height: 0.625rem;
+    border-radius: 999px;
+    overflow: hidden;
+    gap: 2px;
+    transform-origin: left center;
+  }
+  .share[hidden] {
+    display: none;
+  }
+  .share :global(.share__seg) {
+    flex-basis: 0;
+    min-width: 2px;
+  }
+  .lesson {
+    margin: 0;
+    font-weight: 550;
+  }
+  .lesson[hidden] {
+    display: none;
+  }
+  .fact {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .fact__source {
+    margin-left: 0.375rem;
+    color: var(--muted);
+    font-size: 0.875rem;
+    white-space: nowrap;
+  }
+  .fact__source:hover {
+    color: var(--cyan);
+  }
+  .learned {
+    margin: 0;
+    padding: 0.625rem 0.875rem;
+    border-radius: var(--radius-md);
+    background: rgba(var(--cyan-rgb), 0.1);
+    color: var(--cyan);
+  }
+  .learned[hidden] {
+    display: none;
+  }
+  .reveal .btn {
+    align-self: center;
+    margin-top: 0.5rem;
+  }
+
+  /* ---------- summary ---------- */
+  .summary__total {
+    margin: 0;
+    font-size: clamp(3rem, 10vw, 4.5rem);
+    font-weight: 650;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--cyan);
+  }
+  .summary__max {
+    font-size: 0.4em;
+    color: var(--muted);
+    letter-spacing: 0;
+  }
+  .summary__best,
+  .summary__factor {
+    margin: 0.5rem 0 0;
+    color: var(--ink-2);
+  }
+  .summary__best {
+    color: var(--ink);
+    font-weight: 550;
+  }
+  .summary__bias {
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: var(--amber);
+  }
+  .summary__ladder-title {
+    margin: 2rem 0 0.25rem;
+    font-size: 1.125rem;
+    font-weight: 650;
+  }
+  .summary__ladder-note {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .ladder {
+    margin: 0 0 1.75rem;
+    padding: 0;
+    list-style: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .ladder :global(.rung) {
+    display: grid;
+    grid-template-columns: auto 6rem 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.3125rem 0 0.3125rem 0;
+    margin-left: -0.25rem;
+    color: var(--muted);
+  }
+  .ladder :global(.rung__dot) {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    border: 1px solid var(--muted);
+    background: var(--bg);
+  }
+  .ladder :global(.rung__value) {
+    font-size: 0.875rem;
+    text-align: right;
+  }
+  .ladder :global(.rung__label)::first-letter {
+    text-transform: uppercase;
+  }
+  .ladder :global(.rung.is-learned) {
+    color: var(--ink);
+  }
+  .ladder :global(.rung.is-learned .rung__dot) {
+    border-color: var(--cyan);
+    background: var(--cyan);
+  }
+  .ladder :global(.rung.is-learned .rung__value) {
+    color: var(--cyan);
+  }
+  .ladder :global(.rung.is-new .rung__label)::after {
+    content: ' · new';
+    color: var(--cyan);
+  }
+
+  .vh {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Phones: only the unit ticks keep labels. */
+  @media (max-width: 560px) {
+    .tick:not(.tick--major) .tick__label {
+      display: none;
+    }
+    .lines :global(.line) {
+      grid-template-columns: auto 1fr;
+    }
+    .lines :global(.line__math) {
+      grid-column: 2;
+      text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .axis__thumb,
+    .lines :global(.line__swatch) {
+      transition: none;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .lines :global(.line) {
+      background: var(--bg-raise);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .tick__label,
+    .hint,
+    .fact__source {
+      color: var(--ink-2);
+    }
+  }
+</style>

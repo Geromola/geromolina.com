@@ -13,11 +13,11 @@ import gero from '../assets/gero.jpg';
 import SectionNav from './SectionNav.astro';
 
 type Kind = 'plant' | 'substation' | 'section';
-type Badge = 'live' | 'code' | 'private' | 'soon' | null;
+type Badge = 'live' | 'code' | 'private' | 'play' | 'soon' | null;
 
 interface Entry {
   id: string;
-  kind: Kind | 'soon';
+  kind: Kind | 'game' | 'soon';
   badge: Badge;
   title: string;
   /** The one short line under the title: a metric (mono value + label) or a phrase. */
@@ -64,21 +64,19 @@ const toEntry = (n: (typeof all)[number]): Entry => ({
   source: n.kind === 'plant' && n.status === 'live',
 });
 
-/* ========================= Ballpark placeholder (SPEC "Home hero v3") =========================
-   Hardcoded, not from the collection: a PROJECTS node that is a load in the flow, but its ring
-   stays half-lit while it's under construction. No href, so it renders as a disabled link
-   (role="link", aria-disabled, tabindex -1). To launch it, add `href: '/ballpark'`, set the badge
-   to 'code' (or the game's own), swap the line for a metric and drop `fill`. */
+// Ballpark (SPEC "Ballpark"): hardcoded, not from the collection, since it is a game page rather
+// than a project page. A PROJECTS node that is a load in the flow, with a ▶ PLAY badge.
 const BALLPARK: Entry = {
   id: 'ballpark',
-  kind: 'soon',
-  badge: 'soon',
+  kind: 'game',
+  badge: 'play',
   title: 'Ballpark',
-  label: 'In construction',
+  value: '11',
+  label: 'decades of energy',
+  short: 'decades',
+  href: '/ballpark',
   source: false,
-  fill: 0.5,
 };
-/* ===================== end of the Ballpark placeholder ===================== */
 
 // PROJECTS, in this order (don't reorder `order` in the content for it); any other plant or
 // substation joins at the end.
@@ -224,7 +222,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                         <path class="mnode__ring-fill" d={n.kind === 'substation' ? SQUARE : RING} pathLength="100" data-ring />
                       </svg>
                       <span class="mnode__charge" />
-                      {(n.kind === 'plant' || n.kind === 'section') && <span class="mnode__core" />}
+                      {(n.kind === 'plant' || n.kind === 'section' || n.kind === 'game') && <span class="mnode__core" />}
                       {n.kind === 'substation' && (
                         <svg class="mnode__lock" viewBox="0 0 16 16">
                           <rect x="3" y="7" width="10" height="7" rx="1.5" fill="currentColor" />
@@ -246,6 +244,10 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                                 <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.6" />
                               </svg>{' '}
                               Mine
+                            </>
+                          ) : n.badge === 'play' ? (
+                            <>
+                              <span aria-hidden="true">▶</span> Play
                             </>
                           ) : n.badge === 'soon' ? (
                             <>
@@ -839,7 +841,8 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     text-transform: uppercase;
     color: var(--muted);
   }
-  .mnode--live .mnode__badge {
+  .mnode--live .mnode__badge,
+  .mnode--play .mnode__badge {
     color: var(--cyan);
   }
   .mnode--private .mnode__badge {
@@ -959,7 +962,8 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     .mswitch__count {
       color: var(--ink);
     }
-    .mnode--live .mnode__badge {
+    .mnode--live .mnode__badge,
+    .mnode--play .mnode__badge {
       color: var(--cyan);
     }
     .mnode--private .mnode__badge {

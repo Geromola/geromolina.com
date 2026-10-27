@@ -42,9 +42,16 @@
 - `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars; `decorative` option (lossless, no heat, nothing placeable, no solver) and `setFocus` (bias the flow toward a node)
 - `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, blocked hero/panel zones, solver timing, faults, step)
 - `tests/decor.test.ts` — Vitest for the decorative flow: lattice alignment, anchors, decorative engine, focus (and that the default flow is unchanged)
+- `src/pages/ballpark.astro` — Ballpark page (linked from the home node menu): markup, styles and mount for the energy game
+- `src/energy/catalog.ts` — Ballpark items (power × time or energy per unit, with sources) and the anchor ladder
+- `src/energy/scale.ts` — Ballpark log axis (0.1 Wh … 10 GWh), unit formatting, scoring by orders of magnitude, equivalences
+- `src/energy/rounds.ts` — Ballpark seeded scenario generator (1/2/3-line curve, trap round) and Leitner scheduler
+- `src/energy/game.ts` — `BallparkGame` run state machine, run summary (bias, mean factor), progress (de)serialization
+- `src/energy/main.ts` — Ballpark DOM wiring: log-scale slider, springs, reveal, summary, progress in `localStorage`
+- `tests/energy.test.ts` — Vitest for Ballpark: scale, formatting, scoring, catalog, generator, Leitner, game, storage
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
-- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` plus every `kind: plant` node `href`
+- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, and `/ballpark`
 - `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)
 - `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`, `public/apple-touch-icon.png` — PNG app icons (generated from SVG via qlmanage + sips)
 - `public/og.png` — 1200×630 Open Graph image

@@ -64,8 +64,8 @@ const MONTH = 730;
 const YEAR = 8760;
 
 const DOE: Source = {
-  label: 'DOE Energy Saver: appliance energy use',
-  url: 'https://www.energy.gov/energysaver/estimating-appliance-and-home-electronic-energy-use',
+  label: 'Virginia Tech Extension: estimating appliance energy use (DOE method and typical wattages)',
+  url: 'https://www.pubs.ext.vt.edu/2901/2901-9014/2901-9014.html',
 };
 const EIA_HOME: Source = {
   label: 'EIA: how much electricity does an American home use?',
@@ -314,7 +314,7 @@ export const ITEMS: Item[] = [
     unit: { one: 'mile', many: 'miles' },
     amounts: [5, 30, 300, 12000],
     fact: 'At 30 mpg, every mile burns 1.1 kWh of gasoline, and ~75% of it leaves as heat.',
-    source: { label: 'EPA: 33.7 kWh per gallon of gasoline', url: 'https://www.fueleconomy.gov/feg/label/learn-more-electric-label.jsp' },
+    source: { label: 'EPA: 33.7 kWh per gallon of gasoline', url: 'https://www.fueleconomy.gov/feg/label/learn-more-electric-label.shtml' },
   },
   {
     id: 'gasoline',
@@ -324,7 +324,7 @@ export const ITEMS: Item[] = [
     unit: { one: 'gallon', many: 'gallons' },
     amounts: [1, 12, 500],
     fact: 'One gallon holds 33.7 kWh: more than a US home uses in a day.',
-    source: { label: 'EPA: 33.7 kWh per gallon of gasoline', url: 'https://www.fueleconomy.gov/feg/label/learn-more-electric-label.jsp' },
+    source: { label: 'EPA: 33.7 kWh per gallon of gasoline', url: 'https://www.fueleconomy.gov/feg/label/learn-more-electric-label.shtml' },
   },
   {
     id: 'ev-charge',
