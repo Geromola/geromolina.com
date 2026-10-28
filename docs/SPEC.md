@@ -278,3 +278,58 @@ Boxes in (log10 W, D, T) after the textbook reproductions of Raup's cube; the pa
   - All 16 are rendered on the server with lazy `<Image>`, and JS shows the match.
   - It springs in, and dims as "Shell changed: identify again" when the shell moves.
   - "Grow the real one" springs to the entry, and "Read more" links to Wikipedia.
+
+## Conway's Life
+Decided 2026-10-27. A fourth interactive at `/life`: Conway's Game of Life (B3/S23), built to show why it matters, not just to run it. It is a `▶ PLAY` node in the home menu's PROJECTS section, after Raup's Cube ("1 rule, a whole universe"), and it is in the sitemap. The skin is the site's own (`tokens.css`).
+
+### The board
+- 1024 × 1024 cells (`src/life/engine.ts`). Each row keeps the span of its live cells, so a step only scans those spans: a long diagonal stream costs its length, not its bounding box.
+- **Absorbing border:** an object that touches the 4-cell band at the edge is erased whole (live cells chained within two cells). Gliders and gun streams leave cleanly, with no wrap-round and no clipped debris. The page says so in one line.
+- **Look:** live cells are round cyan dots with a soft glow from their neighbours. Births by the rule flash `--hot` and cool to cyan over three generations; deaths leave an amber trail for six. Cells placed by hand or by a scene start cyan. Faint grid lines fade in when zoomed in. Zoomed out (under 5 px per cell) cells are flat.
+- WebGL2 renderer with a Canvas 2D fallback (`?renderer=canvas`).
+
+### Interaction
+- **Draw:** pointer-down toggles a cell at once and a drag paints with the state the first cell took, while running too. A second finger turns the stroke into a pinch and takes the stroke back.
+- **Move:** the Move tool, a middle or right drag, two-finger scroll, or a pinch. Zoom with the wheel or a pinch, round the pointer. Gestures follow 1:1; fitting a scene and keyboard zoom spring.
+- **Stamp:** from a library card. A ghost follows the pointer; R rotates, F flips, Escape stops.
+- **Keyboard:** on the board, arrows move a cursor, Enter toggles a cell (or places the stamp), Shift + arrows pan, + and − zoom. Anywhere: Space plays or pauses, `.` steps, ⌘/Ctrl-Z undoes.
+- **Dock:** play/pause, step, speed (1, 2, 4, 8, 15, 30 and 60 per second, or Max at 9 ms of stepping per frame), Draw/Move, "Next gen", Soup (a 64 × 64 square at 37% density), Undo (40 steps), Clear.
+- **Next gen:** while paused, births are drawn as white rings and deaths as amber rings. Hovering a cell when paused shows its neighbour count and fate, and lights the matching line of the B3/S23 card.
+- **Readout:** generation, population, a 240-generation population chart and a status from `src/life/detect.ts`. Statuses: Ready, Empty, Still life, Oscillator · pN, Spaceship · c/N, Steady stream · pN (a gun feeding the border) and Evolving. Each generation is hashed by shape and by place; periods up to 120 are found.
+
+### Tour (seven steps)
+1. One rule: the R-pentomino, paused, with Next gen on.
+2. Things that stay: a garden of still lifes and oscillators.
+3. Things that move: a glider and the three c/2 spaceships.
+4. Chaos from five cells: the R-pentomino and its chart.
+5. Machines that make machines: the Gosper gun.
+6. Gliders as messages: two guns.
+7. Life computes: the message scene.
+
+### Library
+Still lifes, oscillators, spaceships (with Copperhead, 2016), methuselahs (R-pentomino 1103, Diehard 130, Acorn 5206) and infinite growth (Gosper and Simkin guns, a puffer train, Callahan's ten-cell seed). Every card has a server-drawn thumbnail, who found it and when, and one line on why it matters. Every period, speed and lifespan the cards state is checked in `tests/life.test.ts`; Acorn's 5206 is quoted from LifeWiki because a 1024 board absorbs its gliders. Sir Robin was planned but left out: LifeWiki's pattern files sit behind a bot check.
+
+### Signals
+1. A glider is a bit.
+2. A gun is a clock.
+3. An eater is a receiver.
+4. Two guns talk: they cancel stream for stream.
+5. A collision is logic: a NOT gate, with a live truth table.
+6. Send a message: up to four printable ASCII characters, 8 bits each. Lamps light as bits arrive, and the characters are decoded.
+
+After those, "Where this goes" cards link to LifeWiki: the Snark, Rendell's Turing machine, Gemini and the OTCA metapixel.
+
+**Construction** (`src/life/scenes.ts`):
+- Gun B is a mirrored Gosper gun at (64, 13) from gun A. Found by search, at that offset every B glider meets an A glider at the crossing and both vanish.
+- To send data, B sits K × (15, −15) further up its line (a whole number of periods later), both guns run 60K generations, then B is removed. The eraser in its train is deleted wherever the output bit should be 1.
+- Clock gliders already past the receiver are dropped. An Eater 1 at (98, 84) eats the output, and a 2 × 2 window at (86, 72) reads it: bit j arrives at generation 215 + 30j.
+- The simulation is real; only the lamps are an overlay.
+
+### State
+- The URL hash holds `#p=<id>` for a library pattern or a scene, `#msg=<text>` for a message, or `#rle=<pattern>` after an edit, up to 3,000 cells.
+- Tour progress lives in `localStorage` (`life-progress`), wrapped in try/catch.
+- **Reduced motion:** no autoplay, no birth flash and no trails. The camera and the sheet snap. Play and Step still work.
+
+### Layout
+- **Desktop:** the board fills the window under the top bar. The readout is top-left, the dock bottom-centre and the glass panel (Tour / Library / Signals) on the right.
+- **Phones:** the panel is a bottom sheet with peek, half and full stops, dragged 1:1 and released on a `Spring` with flick projection. The dock sits above the peek in two rows.

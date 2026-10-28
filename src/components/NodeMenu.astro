@@ -92,6 +92,19 @@ const RAUP: Entry = {
   source: false,
 };
 
+// Conway's Life (SPEC "Conway's Life"): hardcoded like Ballpark, an interactive page. Same ▶ PLAY badge.
+const LIFE: Entry = {
+  id: 'life',
+  kind: 'game',
+  badge: 'play',
+  title: "Conway's Life",
+  value: '1',
+  label: 'rule, a whole universe',
+  short: 'rule',
+  href: '/life',
+  source: false,
+};
+
 // PROJECTS, in this order (don't reorder `order` in the content for it); any other plant or
 // substation joins at the end.
 const LISTED = ['spotify-insight', 'custom-llm', 'personal-wiki', 'pacman-dqn', 'networking-tracker'];
@@ -100,6 +113,7 @@ const projects: Entry[] = [
   ...pick(LISTED.slice(0, 4)).map(toEntry),
   BALLPARK,
   RAUP,
+  LIFE,
   ...pick(LISTED.slice(4)).map(toEntry),
   ...extraProjects.map(toEntry),
 ];

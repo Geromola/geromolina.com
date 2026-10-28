@@ -41,3 +41,14 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
     - Identifier ("What shell is this?"): 16-shell cached catalog with checked facts and credited Commons photos, nearest-match tiers, coil chip. Verified with tests, `astro check` and the browser (desktop, phone, `?renderer=canvas`, `?motion=reduce`).
     - Launched: a `▶ PLAY` node in the home menu's PROJECTS section, and in the sitemap; live on geromolina.com.
     - Next: check the region boxes against Raup's figure; plan B (a model-based identifier behind the `Identifier` interface).
+12. [x] **Conway's Life** (careful). `/life`, SPEC "Conway's Life".
+    - DOM-free engine, RLE, detector, library, scenes (signal line, NOT gate, message), camera and tour in `src/life/`; Vitest in `tests/life.test.ts` (38 tests: rules, border, every library claim, scenes, NOT truth table, message round-trip).
+    - WebGL2 and Canvas renderers, the page and DOM wiring.
+    - Verified: tests, `astro check`, the build, and in the browser preview (built site):
+      - 1024×768 and 375×812, `?renderer=canvas`, `?motion=reduce`;
+      - drawing, stamping and keyboard;
+      - the NOT gate table and the message lamps.
+    - Not verified: real-time playback and the sheet's spring in a visible window. The preview pane was hidden, so frames were stepped by hand.
+    - Play-tested by Gero, then launched: a `▶ PLAY` node after Raup's Cube in the home menu's PROJECTS section, and in the sitemap.
+    - Later, maybe: Sir Robin, an ash census for soups, a Snark scene.
+

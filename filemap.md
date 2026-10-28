@@ -61,9 +61,21 @@
 - `src/shells/render-canvas.ts` — Canvas 2D fallback drawn like Raup's plotter: generating circles in painter's order
 - `src/shells/main.ts` — Raup's Cube DOM wiring: sliders, springs, orbit, lessons, cube map, presets, hash, progress in `localStorage`
 - `tests/shells.test.ts` — Vitest for Raup's Cube: model geometry, touch boundary, mesh, camera fit, morphospace, lessons
+- `src/pages/life.astro` — Conway's Life page (linked from the home node menu): board, readout, dock, Tour / Library / Signals panel (phone bottom sheet), styles and mount
+- `src/life/engine.ts` — `LifeBoard`: B3/S23 on a 1024² board, per-row live spans, absorbing border (erases whole objects), render shade (birth flash, trails), preview, fate
+- `src/life/rle.ts` — RLE parse/serialize and the 8 symmetries
+- `src/life/detect.ts` — status detector (still, oscillator, spaceship, steady stream), shape hash, region test, speed notation
+- `src/life/patterns.ts` — the library (RLE, who found it, period/speed, why it matters) plus Eater 1, glider and Gosper gun
+- `src/life/scenes.ts` — composite scenes (garden, flotilla, signal series), the two-gun NOT gate and message sender, ASCII ↔ bits, `ReceiverReader`
+- `src/life/view.ts` — camera maths: screen ↔ cell, zoom round a point, fit into the free area
+- `src/life/tour.ts` — the seven tour steps and progress (de)serialization
+- `src/life/render-gl.ts` — WebGL2 board renderer (shade and overlay textures, dots, glow, trails, grid, cursor)
+- `src/life/render-canvas.ts` — Canvas 2D fallback
+- `src/life/main.ts` — Life DOM wiring: pointer/pinch/wheel/keyboard, stamp, dock, readout and chart, tour, library, signals lamps, phone sheet, URL hash, progress in `localStorage`
+- `tests/life.test.ts` — Vitest for Life: rules, border, RLE, every library claim, scenes, NOT gate, message round-trip, detector, camera, tour progress
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
-- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, `/ballpark` and `/shells`
+- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, `/ballpark`, `/shells` and `/life`
 - `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)
 - `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`, `public/apple-touch-icon.png` — PNG app icons (generated from SVG via qlmanage + sips)
 - `public/og.png` — 1200×630 Open Graph image

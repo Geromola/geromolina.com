@@ -1,0 +1,1241 @@
+---
+// Conway's Life (SPEC "Conway's Life"): one rule, a grid of cells, and gliders that carry messages.
+import Base from '../layouts/Base.astro';
+import TopBar from '../components/project/TopBar.astro';
+import { GROUPS, LIBRARY } from '../life/patterns';
+import { parseRLE } from '../life/rle';
+import { MAX_CHARS } from '../life/scenes';
+import { TOUR } from '../life/tour';
+
+const thumbs = new Map(LIBRARY.map((e) => [e.id, parseRLE(e.rle)]));
+
+const SIGNALS = [
+  {
+    scene: 'bit',
+    title: 'A glider is a bit',
+    body: 'Five cells that keep their shape while they travel. Where a glider is, read a 1. Where one is missing, read a 0.',
+  },
+  {
+    scene: 'clock',
+    title: 'A gun is a clock',
+    body: 'The Gosper gun fires a glider every 30 generations: a wire carrying 1, 1, 1… forever. Every signal below runs on this beat.',
+  },
+  {
+    scene: 'eater',
+    title: 'An eater is a receiver',
+    body: 'Seven cells that swallow a glider and repair themselves within four generations. Point a stream at one and it eats forever.',
+  },
+  {
+    scene: 'two-guns',
+    title: 'Two guns talk',
+    body: 'A second gun fires across the first. At this offset every pair of gliders meets at the crossing and both vanish without a trace.',
+  },
+  {
+    scene: 'not-gate',
+    title: 'A collision is logic',
+    body: 'Feed the crossing a stream with gaps. A clock glider only gets through where the data has a gap, so the output is the data inverted: a NOT gate.',
+  },
+];
+
+const BEYOND = [
+  { title: 'Bend the wire', by: 'Mike Playle, 2013', body: 'The Snark is a still life that reflects a glider 90°, so signals can turn corners.', href: 'https://conwaylife.com/wiki/Snark' },
+  { title: 'A Turing machine', by: 'Paul Rendell, 2000', body: 'Tape, head and states, all built from guns, eaters and glider streams. Later made universal.', href: 'https://conwaylife.com/wiki/Turing_machine' },
+  { title: 'A pattern that copies itself', by: 'Andrew Wade, 2010', body: 'Gemini builds a copy of itself and destroys the original, every 34 million generations.', href: 'https://conwaylife.com/wiki/Gemini' },
+  { title: 'Life inside Life', by: 'Brice Due, 2006', body: 'The OTCA metapixel is a 2048 × 2048 pattern that behaves like one cell. Tile them and Life simulates itself.', href: 'https://conwaylife.com/wiki/OTCA_metapixel' },
+];
+
+const SPEEDS = ['1', '2', '4', '8', '15', '30', '60', 'Max'];
+---
+
+<Base
+  title="Conway's Life · Gero Molina"
+  description="Conway's Game of Life: one rule on a grid of cells. Draw a pattern and watch it evolve, explore still lifes, spaceships and guns, and send a message across the board in gliders."
+>
+  <TopBar title="Conway's Life" />
+  <main class="life" data-life data-focus="" data-tool="draw" data-sheet="peek">
+    <div class="board" data-board>
+      <canvas
+        class="board__canvas"
+        data-canvas
+        tabindex="0"
+        role="application"
+        aria-roledescription="Life board"
+        aria-label="Life board. Tap or drag to draw cells."
+        aria-describedby="life-keys"></canvas>
+      <div class="labels" data-labels aria-hidden="true"></div>
+      <p class="tip mono" data-tip aria-hidden="true" hidden></p>
+      <p class="visually-hidden" id="life-keys">
+        Arrow keys move the cursor, Enter toggles a cell, Shift and arrows pan, plus and minus zoom. Space plays or pauses, period steps one generation.
+      </p>
+    </div>
+
+    <div class="readout glass" data-readout>
+      <div class="readout__row mono">
+        <span><span class="readout__k">Gen</span> <b data-gen>0</b></span>
+        <span><span class="readout__k">Pop</span> <b data-pop>0</b></span>
+      </div>
+      <canvas class="readout__chart" data-chart data-target="chart" aria-hidden="true"></canvas>
+      <p class="readout__status mono" data-status data-target="status">Empty</p>
+    </div>
+
+    <div class="dock glass" data-dock role="toolbar" aria-label="Simulation">
+      <button class="tool tool--play" type="button" data-play data-target="play" aria-pressed="false" aria-label="Play">
+        <svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.2v11.6a.7.7 0 0 0 1.06.6l9.3-5.8a.7.7 0 0 0 0-1.2l-9.3-5.8A.7.7 0 0 0 6 4.2Z"></path></svg>
+        <svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.5" height="12" rx="1"></rect><rect x="11.5" y="4" width="3.5" height="12" rx="1"></rect></svg>
+      </button>
+      <button class="tool" type="button" data-step data-target="step" aria-label="Step one generation">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 4.6v10.8a.6.6 0 0 0 .93.5l7.6-5.4a.6.6 0 0 0 0-1L4.93 4.1A.6.6 0 0 0 4 4.6Z"></path><rect x="13.5" y="4" width="2.6" height="12" rx="1"></rect></svg>
+      </button>
+      <label class="speed">
+        <span class="visually-hidden">Speed, generations per second</span>
+        <input type="range" min="0" max={SPEEDS.length - 1} step="1" value="4" data-speed aria-valuetext="15 per second" />
+        <span class="speed__v mono" data-speed-label>15/s</span>
+      </label>
+      <span class="dock__sep" aria-hidden="true"></span>
+      <div class="seg" role="group" aria-label="Pointer">
+        <button class="seg__b" type="button" data-tool-btn="draw" aria-pressed="true">Draw</button>
+        <button class="seg__b" type="button" data-tool-btn="move" aria-pressed="false">Move</button>
+      </div>
+      <button class="chip" type="button" data-preview aria-pressed="false" title="Show the next generation while paused">Next gen</button>
+      <span class="dock__sep" aria-hidden="true"></span>
+      <button class="chip" type="button" data-soup>Soup</button>
+      <button class="chip" type="button" data-undo disabled>Undo</button>
+      <button class="chip" type="button" data-clear>Clear</button>
+      <p class="stamp mono" data-stamp hidden>
+        <span data-stamp-name></span> · tap to place · <kbd>R</kbd> rotate · <kbd>F</kbd> flip
+        <button class="chip chip--small" type="button" data-stamp-cancel>Done</button>
+      </p>
+    </div>
+
+    <aside class="panel glass" data-panel aria-labelledby="life-title">
+      <div class="grab" data-grab aria-hidden="true"><span></span></div>
+      <header class="head" data-head>
+        <p class="kicker mono">Cellular automaton · 1970</p>
+        <h1 class="title" id="life-title">Conway's Life</h1>
+        <p class="lede">One rule on a grid of cells, and a universe that can compute anything.</p>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab" type="button" role="tab" id="tab-tour" aria-controls="pane-tour" aria-selected="true" data-tab="tour">Tour</button>
+        <button class="tab" type="button" role="tab" id="tab-library" aria-controls="pane-library" aria-selected="false" tabindex="-1" data-tab="library" data-target="library">Library</button>
+        <button class="tab" type="button" role="tab" id="tab-signals" aria-controls="pane-signals" aria-selected="false" tabindex="-1" data-tab="signals" data-target="signals">Signals</button>
+      </div>
+
+      <div class="panes" data-panes>
+        <section class="pane" id="pane-tour" role="tabpanel" aria-labelledby="tab-tour" data-pane="tour">
+          <p class="step mono">Step <b data-step-n>1</b> / {TOUR.length}</p>
+          <h2 class="pane__title" data-tour-title>{TOUR[0].title}</h2>
+          <p class="pane__body" data-tour-body>{TOUR[0].body}</p>
+          <div class="nav">
+            <button class="btn btn--quiet" type="button" data-prev disabled>Back</button>
+            <button class="btn" type="button" data-next>Next</button>
+          </div>
+          <ol class="dots" role="list">
+            {
+              TOUR.map((s, i) => (
+                <li>
+                  <button class="dot" type="button" data-dot={i} aria-label={`Step ${i + 1}: ${s.title}`} />
+                </li>
+              ))
+            }
+          </ol>
+
+          <div class="rule" data-rule>
+            <p class="rule__name mono">B3/S23</p>
+            <ul class="rule__list" role="list">
+              <li data-clause="born"><span class="rule__n mono">3</span> An empty cell with exactly three neighbours is <b>born</b>.</li>
+              <li data-clause="survives"><span class="rule__n mono">2–3</span> A live cell with two or three <b>survives</b>.</li>
+              <li data-clause="dies"><span class="rule__n mono">else</span> Any other live cell <b>dies</b>, of loneliness or crowding.</li>
+            </ul>
+            <p class="rule__hint">Pause and hover a cell to see which line applies.</p>
+          </div>
+        </section>
+
+        <section class="pane" id="pane-library" role="tabpanel" aria-labelledby="tab-library" data-pane="library" hidden>
+          {
+            GROUPS.map((g) => (
+              <div class="group">
+                <h2 class="group__title">{g.title}</h2>
+                <p class="group__blurb">{g.blurb}</p>
+                <ul class="cards" role="list">
+                  {LIBRARY.filter((e) => e.group === g.id).map((e) => {
+                    const p = thumbs.get(e.id)!;
+                    const pad = 1;
+                    return (
+                      <li class="card" data-entry={e.id}>
+                        <button class="card__main" type="button" data-load={e.id}>
+                          <svg class="card__thumb" viewBox={`${-pad} ${-pad} ${p.w + pad * 2} ${p.h + pad * 2}`} aria-hidden="true">
+                            {p.cells.map(([x, y]) => (
+                              <circle cx={x + 0.5} cy={y + 0.5} r="0.38" />
+                            ))}
+                          </svg>
+                          <span class="card__text">
+                            <span class="card__name">{e.name}</span>
+                            <span class="card__meta mono">
+                              {e.meta}
+                              {e.year && ` · ${e.year}`}
+                            </span>
+                            <span class="card__why">{e.why}</span>
+                            {e.by && <span class="card__by">Found by {e.by}</span>}
+                          </span>
+                        </button>
+                        <button class="chip chip--small card__stamp" type="button" data-stamp-id={e.id} aria-label={`Stamp ${e.name} onto the board`}>
+                          Stamp
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))
+          }
+        </section>
+
+        <section class="pane" id="pane-signals" role="tabpanel" aria-labelledby="tab-signals" data-pane="signals" hidden>
+          <p class="pane__intro">How patterns in Life send each other messages, one glider at a time. Every step is a real pattern running on the board.</p>
+          <ol class="sig" role="list">
+            {
+              SIGNALS.map((s, i) => (
+                <li class="sig__item" data-sig={s.scene}>
+                  <span class="sig__n mono">{i + 1}</span>
+                  <div class="sig__text">
+                    <h2 class="sig__title">{s.title}</h2>
+                    <p class="sig__body">{s.body}</p>
+                    {s.scene === 'not-gate' && (
+                      <table class="truth mono" data-truth>
+                        <caption class="visually-hidden">NOT gate, bit by bit</caption>
+                        <tr>
+                          <th scope="row">Data</th>
+                          {Array.from({ length: 8 }, (_, j) => (
+                            <td data-in={j} />
+                          ))}
+                        </tr>
+                        <tr>
+                          <th scope="row">Out</th>
+                          {Array.from({ length: 8 }, (_, j) => (
+                            <td data-out={j} />
+                          ))}
+                        </tr>
+                      </table>
+                    )}
+                    <button class="chip" type="button" data-run={s.scene}>
+                      Run it
+                    </button>
+                  </div>
+                </li>
+              ))
+            }
+            <li class="sig__item" data-sig="message">
+              <span class="sig__n mono">6</span>
+              <div class="sig__text">
+                <h2 class="sig__title">Send a message</h2>
+                <p class="sig__body">
+                  Type up to {MAX_CHARS} characters. Each one becomes 8 bits. The sender's tape keeps an eraser for every 0, so only the 1s reach the receiver, where the lamps read them.
+                </p>
+                <form class="msg" data-msg>
+                  <label class="visually-hidden" for="life-msg">Message</label>
+                  <input class="msg__in mono" id="life-msg" maxlength={MAX_CHARS} value="LIFE" autocomplete="off" spellcheck="false" data-msg-in />
+                  <button class="btn" type="submit">Send</button>
+                </form>
+                <div class="lamps" data-lamps aria-live="polite">
+                  {
+                    Array.from({ length: MAX_CHARS }, (_, c) => (
+                      <div class="lamps__byte" data-byte={c}>
+                        <span class="lamps__row">
+                          {Array.from({ length: 8 }, (_, k) => (
+                            <span class="lamp" data-lamp={c * 8 + k} />
+                          ))}
+                        </span>
+                        <span class="lamps__char mono" data-char={c} />
+                      </div>
+                    ))
+                  }
+                </div>
+                <p class="msg__got mono" data-got></p>
+              </div>
+            </li>
+          </ol>
+
+          <h2 class="group__title">Where this goes</h2>
+          <ul class="beyond" role="list">
+            {
+              BEYOND.map((b) => (
+                <li class="beyond__card">
+                  <a href={b.href} target="_blank" rel="noopener">
+                    <span class="beyond__title">
+                      {b.title} <span aria-hidden="true">↗</span>
+                    </span>
+                    <span class="beyond__by mono">{b.by}</span>
+                    <span class="beyond__body">{b.body}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+      </div>
+      <p class="foot">The board is 1024 × 1024 cells. Anything that reaches its edge is erased, so streams leave cleanly instead of wrapping round.</p>
+    </aside>
+
+    <p class="visually-hidden" aria-live="polite" data-live></p>
+  </main>
+</Base>
+
+<script>
+  import { mountLife } from '../life/main';
+  const root = document.querySelector<HTMLElement>('[data-life]');
+  if (root) mountLife(root);
+</script>
+
+<style>
+  .life {
+    --panel-w: 23.5rem;
+    --top: calc(3.5rem + env(safe-area-inset-top, 0px));
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+  :global(body:has(.life)) {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  :global(body:has(.life) .topbar) {
+    position: fixed;
+    inset: 0 0 auto;
+  }
+
+  /* ---------- board ---------- */
+  .board {
+    position: absolute;
+    inset: 0;
+  }
+  .board__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+    cursor: crosshair;
+  }
+  .board__canvas:focus-visible {
+    outline: none;
+  }
+  .life[data-tool='move'] .board__canvas {
+    cursor: grab;
+  }
+  .life[data-panning] .board__canvas {
+    cursor: grabbing;
+  }
+  .labels {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .labels :global(.label) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--ink-2);
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    translate: -50% 0;
+  }
+  .tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    background: var(--bg-raise);
+    border: 1px solid var(--glass-edge);
+    color: var(--ink);
+    font-size: 0.75rem;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .tip[hidden] {
+    display: none;
+  }
+
+  /* ---------- readout ---------- */
+  .readout {
+    position: absolute;
+    top: calc(var(--top) + 0.75rem);
+    left: var(--gutter);
+    width: 12.5rem;
+    padding: 0.625rem 0.75rem 0.5rem;
+    border-radius: var(--radius-md);
+  }
+  .readout__row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+  }
+  .readout__row b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .readout__k {
+    color: var(--muted);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .readout__chart {
+    display: block;
+    width: 100%;
+    height: 2.25rem;
+    margin: 0.375rem 0 0.25rem;
+    border-radius: 0.375rem;
+  }
+  .readout__status {
+    margin: 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .readout__status[data-kind='evolving'],
+  .readout__status[data-kind='new'],
+  .readout__status[data-kind='empty'] {
+    color: var(--ink-2);
+  }
+
+  /* ---------- dock (transport) ---------- */
+  .dock {
+    position: absolute;
+    left: calc((100% - var(--panel-w) - var(--gutter)) / 2);
+    bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
+    translate: -50% 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: max-content;
+    padding: 0.5rem;
+    border-radius: 1.75rem;
+    max-width: calc(100% - var(--panel-w) - var(--gutter) * 3);
+  }
+  .dock__sep {
+    width: 1px;
+    height: 1.5rem;
+    background: var(--glass-border);
+  }
+  .tool {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .tool svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: currentColor;
+  }
+  .tool:hover {
+    border-color: rgba(var(--cyan-rgb), 0.45);
+  }
+  .tool:active {
+    transform: scale(0.94);
+  }
+  .tool:focus-visible {
+    border-radius: 50%;
+  }
+  .tool--play {
+    width: 3rem;
+    height: 3rem;
+    border-color: rgba(var(--cyan-rgb), 0.5);
+    background: rgba(var(--cyan-rgb), 0.16);
+    color: var(--cyan);
+  }
+  .tool--play .i-pause,
+  .tool--play[aria-pressed='true'] .i-play {
+    display: none;
+  }
+  .tool--play[aria-pressed='true'] .i-pause {
+    display: block;
+  }
+  .speed {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+  .speed input {
+    width: 6.5rem;
+    accent-color: var(--cyan);
+  }
+  .speed__v {
+    min-width: 2.75rem;
+    font-size: 0.75rem;
+    color: var(--ink-2);
+  }
+  .seg {
+    display: flex;
+    padding: 0.1875rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+  }
+  .seg__b {
+    min-height: 2.125rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    cursor: pointer;
+  }
+  .seg__b[aria-pressed='true'] {
+    background: rgba(var(--cyan-rgb), 0.16);
+    color: var(--ink);
+  }
+  .seg__b:focus-visible {
+    border-radius: 999px;
+  }
+  .stamp {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 0.625rem);
+    translate: -50% 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0.375rem 0.375rem 0.375rem 0.875rem;
+    border-radius: 999px;
+    background: var(--bg-raise);
+    border: 1px solid rgba(var(--cyan-rgb), 0.45);
+    color: var(--ink-2);
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+  .stamp[hidden] {
+    display: none;
+  }
+  .stamp kbd {
+    font: inherit;
+    color: var(--ink);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.25rem;
+    padding: 0 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .chip:hover:not(:disabled) {
+    color: var(--ink);
+    border-color: rgba(var(--cyan-rgb), 0.45);
+  }
+  .chip:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  .chip:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .chip[aria-pressed='true'] {
+    color: var(--ink);
+    border-color: rgba(var(--cyan-rgb), 0.7);
+    background: rgba(var(--cyan-rgb), 0.14);
+  }
+  .chip:focus-visible {
+    border-radius: 999px;
+  }
+  .chip--small {
+    min-height: 2rem;
+    padding: 0 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--cyan-rgb), 0.45);
+    background: rgba(var(--cyan-rgb), 0.12);
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .btn:hover:not(:disabled) {
+    background: rgba(var(--cyan-rgb), 0.2);
+    border-color: rgba(var(--cyan-rgb), 0.7);
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .btn:focus-visible {
+    border-radius: 999px;
+  }
+  .btn--quiet {
+    border-color: var(--glass-border);
+    background: transparent;
+    color: var(--ink-2);
+  }
+
+  /* ---------- focus highlight from the tour ---------- */
+  [data-target] {
+    transition: box-shadow 200ms ease-out;
+  }
+  .life[data-focus='step'] [data-target='step'],
+  .life[data-focus='play'] [data-target='play'],
+  .life[data-focus='library'] [data-target='library'],
+  .life[data-focus='signals'] [data-target='signals'] {
+    box-shadow:
+      0 0 0 2px rgba(var(--cyan-rgb), 0.8),
+      0 0 18px 2px rgba(var(--cyan-rgb), 0.35);
+  }
+  .life[data-focus='status'] [data-target='status'],
+  .life[data-focus='chart'] [data-target='chart'] {
+    box-shadow: 0 0 0 1px rgba(var(--cyan-rgb), 0.8);
+    border-radius: 0.375rem;
+  }
+  .life[data-focus='status'] [data-target='status'] {
+    padding: 0.125rem 0.25rem;
+    margin: 0 -0.25rem;
+  }
+
+  /* ---------- panel ---------- */
+  .panel {
+    position: absolute;
+    top: calc(var(--top) + 0.75rem);
+    right: var(--gutter);
+    bottom: var(--gutter);
+    width: var(--panel-w);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .grab {
+    display: none;
+  }
+  .head {
+    padding: 1.25rem 1.375rem 0.75rem;
+  }
+  .kicker {
+    margin: 0 0 0.5rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .lede {
+    margin: 0.5rem 0 0;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  .tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0 1.125rem;
+    padding: 0.1875rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+  }
+  .tab {
+    flex: 1;
+    min-height: 2.25rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tab[aria-selected='true'] {
+    background: rgba(var(--cyan-rgb), 0.16);
+    color: var(--ink);
+  }
+  .tab:focus-visible {
+    border-radius: 999px;
+  }
+  .panes {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1.125rem 1.375rem 0.5rem;
+  }
+  .pane[hidden] {
+    display: none;
+  }
+  .foot {
+    margin: 0;
+    padding: 0.75rem 1.375rem 1rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* tour */
+  .step {
+    margin: 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .step b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .pane__title {
+    margin: 0.375rem 0 0.5rem;
+    font-size: 1.3125rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  .pane__body,
+  .pane__intro {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.5;
+    font-size: 0.9375rem;
+  }
+  .pane__body {
+    min-height: 9em;
+  }
+  .nav {
+    display: flex;
+    gap: 0.625rem;
+    margin-top: 1rem;
+  }
+  .nav .btn {
+    min-width: 6.5rem;
+  }
+  .dots {
+    display: flex;
+    gap: 0.125rem;
+    margin: 0.625rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dot {
+    position: relative;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .dot::before {
+    content: '';
+    position: absolute;
+    inset: 50%;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    margin: -0.21875rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: background 150ms ease-out;
+  }
+  .dot.is-seen::before {
+    background: rgba(var(--cyan-rgb), 0.45);
+  }
+  .dot[aria-current='step']::before {
+    background: var(--cyan);
+  }
+  .rule {
+    margin: 1.25rem 0 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .rule__name {
+    margin: 0 0 0.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--cyan);
+  }
+  .rule__list {
+    display: grid;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+  .rule__list li {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.5rem;
+    padding: 0.25rem 0.375rem;
+    margin: 0 -0.375rem;
+    border-radius: 0.5rem;
+    transition: background 150ms ease-out;
+  }
+  .rule__list b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .rule__n {
+    color: var(--muted);
+  }
+  .rule__list li.is-on {
+    background: rgba(var(--cyan-rgb), 0.12);
+  }
+  .rule__list li[data-clause='dies'].is-on {
+    background: rgba(var(--amber-rgb), 0.14);
+  }
+  .rule__hint {
+    margin: 0.5rem 0 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* library */
+  .group + .group {
+    margin-top: 1.5rem;
+  }
+  .group__title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 650;
+  }
+  .group__blurb {
+    margin: 0.25rem 0 0.625rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+  .cards {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .card {
+    position: relative;
+  }
+  .card__main {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 0.625rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.025);
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .card__main:hover {
+    border-color: rgba(var(--cyan-rgb), 0.4);
+    background: rgba(var(--cyan-rgb), 0.05);
+  }
+  .card__main:active {
+    transform: scale(0.99);
+  }
+  .card.is-current .card__main {
+    border-color: rgba(var(--cyan-rgb), 0.7);
+  }
+  .card__thumb {
+    width: 3.5rem;
+    height: 3.5rem;
+    fill: var(--cyan);
+    filter: drop-shadow(0 0 3px rgba(var(--cyan-rgb), 0.45));
+  }
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+    padding-right: 4rem;
+  }
+  .card__name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .card__meta {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .card__why {
+    margin-top: 0.25rem;
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+  .card__by {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+  .card__stamp {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+  }
+
+  /* signals */
+  .pane__intro {
+    margin-bottom: 1rem;
+  }
+  .sig {
+    display: grid;
+    gap: 1rem;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .sig__item {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+  .sig__n {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--cyan-rgb), 0.5);
+    color: var(--cyan);
+    font-size: 0.75rem;
+  }
+  .sig__item.is-current .sig__n {
+    background: rgba(var(--cyan-rgb), 0.18);
+  }
+  .sig__title {
+    margin: 0.0625rem 0 0.25rem;
+    font-size: 0.9375rem;
+    font-weight: 650;
+  }
+  .sig__body {
+    margin: 0 0 0.5rem;
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+  .truth {
+    border-collapse: separate;
+    border-spacing: 0.25rem;
+    margin: 0 0 0.5rem -0.25rem;
+    font-size: 0.75rem;
+  }
+  .truth th {
+    padding-right: 0.25rem;
+    color: var(--muted);
+    font-weight: 500;
+    text-align: left;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.625rem;
+  }
+  .truth td {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--glass-border);
+    text-align: center;
+    color: var(--ink-2);
+  }
+  .truth td[data-v='1'] {
+    color: var(--ink);
+    border-color: rgba(var(--cyan-rgb), 0.55);
+    background: rgba(var(--cyan-rgb), 0.12);
+  }
+  .msg {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .msg__in {
+    flex: 1;
+    min-width: 0;
+    min-height: 2.75rem;
+    padding: 0 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-edge);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+  }
+  .msg__in:focus-visible {
+    border-radius: 999px;
+    border-color: rgba(var(--cyan-rgb), 0.7);
+  }
+  .lamps {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+    gap: 0.625rem 1rem;
+  }
+  .lamps__byte {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .lamps__byte[hidden] {
+    display: none;
+  }
+  .lamps__row {
+    display: flex;
+    gap: 0.25rem;
+  }
+  .lamp {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+    border: 1px solid var(--glass-edge);
+    transition:
+      background 150ms ease-out,
+      box-shadow 150ms ease-out;
+  }
+  .lamp[data-v='0'] {
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .lamp[data-v='1'] {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px rgba(var(--cyan-rgb), 0.7);
+  }
+  .lamps__char {
+    min-height: 1.25rem;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .msg__got {
+    margin: 0.5rem 0 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .beyond {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0.625rem 0 1rem;
+    padding: 0;
+    list-style: none;
+  }
+  .beyond__card a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem 0.875rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    text-decoration: none;
+    transition: border-color 150ms ease-out;
+  }
+  .beyond__card a:hover {
+    border-color: rgba(var(--cyan-rgb), 0.45);
+  }
+  .beyond__title {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .beyond__by {
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--cyan);
+  }
+  .beyond__body {
+    color: var(--ink-2);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  /* ---------- phones: the panel is a bottom sheet ---------- */
+  @media (max-width: 899px) {
+    .life {
+      --panel-w: 0px;
+      --peek: 8.75rem;
+    }
+    .readout {
+      left: 0.75rem;
+      top: calc(var(--top) + 0.5rem);
+      width: 10.5rem;
+      padding: 0.5rem 0.625rem 0.375rem;
+    }
+    .readout__chart {
+      height: 1.75rem;
+    }
+    .panel {
+      top: var(--top);
+      left: 0;
+      right: 0;
+      bottom: auto;
+      width: auto;
+      height: calc(100% - var(--top));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-bottom: 0;
+      translate: 0 var(--sheet-y, calc(100% - var(--peek)));
+      will-change: translate;
+    }
+    .grab {
+      display: grid;
+      place-items: center;
+      height: 1.375rem;
+      cursor: grab;
+      touch-action: none;
+    }
+    .grab span {
+      width: 2.5rem;
+      height: 0.3125rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .head {
+      padding: 0 1.125rem 0.625rem;
+      touch-action: none;
+    }
+    .title {
+      font-size: 1.5rem;
+    }
+    .kicker,
+    .lede {
+      display: none;
+    }
+    .life[data-sheet='full'] .kicker,
+    .life[data-sheet='full'] .lede,
+    .life[data-sheet='half'] .lede {
+      display: block;
+    }
+    .foot {
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+    .dock {
+      left: 50%;
+      bottom: calc(var(--peek) + 0.625rem);
+      max-width: calc(100% - 1.25rem);
+      flex-wrap: wrap;
+      justify-content: center;
+      border-radius: 1.5rem;
+      gap: 0.375rem;
+    }
+    .dock__sep {
+      display: none;
+    }
+    .speed input {
+      width: 4.5rem;
+    }
+    /* Two rows: transport and Undo, then the pointer tools and the board actions. */
+    .dock > * {
+      order: 5;
+    }
+    .dock > .tool,
+    .dock > .speed {
+      order: 1;
+    }
+    .dock > [data-undo] {
+      order: 2;
+    }
+    .dock .chip {
+      min-height: 2.25rem;
+      padding: 0 0.6875rem;
+      font-size: 0.75rem;
+    }
+    .seg__b {
+      padding: 0 0.625rem;
+      font-size: 0.75rem;
+    }
+    .dock .stamp {
+      order: 0;
+    }
+    .life[data-sheet='full'] .dock,
+    .life[data-sheet='half'] .dock {
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chip,
+    .btn,
+    .tool,
+    .lamp,
+    [data-target] {
+      transition: none;
+    }
+  }
+  :global(html[data-motion='reduce']) .lamp {
+    transition: none;
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .labels :global(.label) {
+      background: var(--bg-raise);
+    }
+  }
+  @media (prefers-contrast: more) {
+    .card__main,
+    .chip,
+    .truth td,
+    .lamp {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+</style>
