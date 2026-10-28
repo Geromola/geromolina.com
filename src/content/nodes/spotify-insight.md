@@ -7,7 +7,9 @@ kicker: Plant · live
 href: /projects/spotify-insight
 land: [0.84, 0.22]
 port: [0.74, 0.47]
-order: 1
+order: 0
+category: solutions
+tags: ['Multi-agent', 'Berkeley']
 pitch: 'A team of AI agents read all 660,622 Spotify app reviews and argued their way to one product priority. Every number on the dashboard traces back to evidence.'
 liveUrl: https://spotify-insight-dashboard-seven.vercel.app
 repo: https://github.com/Geromola/spotify-insight-pipeline

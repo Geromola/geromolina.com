@@ -8,7 +8,9 @@ kicker: Code · open source
 href: /projects/personal-wiki
 land: [0.5, 0.5]
 port: [0.5, 0.5]
-order: 6
+order: 2
+category: solutions
+tags: ['Offline', 'RAG']
 pitch: 'An offline AI research assistant over my own energy research and class notes. It answers with cited sources, and nothing ever leaves my laptop.'
 repo: https://github.com/Geromola/personal-wiki
 embed: false

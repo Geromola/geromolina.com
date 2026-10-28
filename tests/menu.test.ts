@@ -583,3 +583,256 @@ describe('load switching', () => {
     expect(game.setLoadEnabled(42, false)).toBe(false);
   });
 });
+
+// ------------------------------------------------------- by category
+import { CATEGORIES, groupByCategory } from '../src/grid/categories';
+import { CATEGORY_GRID, bandSqueeze, menuAnchors, menuBands, squeezeRow } from '../src/grid/game/decor';
+import { MENU_NODES } from './fixtures/nodes';
+
+const PROJECT_NODES = MENU_NODES.filter((n) => n.kind !== 'section');
+/** Cards per category on the site today: Math & Nature, Games, Solutions. */
+const COUNTS = groupByCategory(PROJECT_NODES).map((g) => g.items.length);
+const WIDTHS = [1440, 1280, 1180, 1024, 860, 768, 760, 390, 375, 320] as const;
+/** Half the header's text block (one line wide, label over tagline on phones). */
+const headerHalf = (l: MenuLayout) => (l.mode === 'column' ? 26 : 12);
+/** The Show more control's box, at its row (lattice units). Wide enough for "Show 12 more". */
+function moreBox(l: MenuLayout, m: NonNullable<import('../src/grid/game/decor').MenuCategoryLayout['more']>, row = m.row) {
+  const s = l.spacing;
+  const w = 150 / s;
+  if (m.align === 'end') {
+    const right = m.col + l.projects.plateW / 2 / s;
+    const top = row + (MENU_PX.hangH + MENU_PX.moreGap) / s;
+    return { c0: right - w, c1: right, r0: top, r1: top + MENU_PX.moreH / s };
+  }
+  const left = m.col - MENU_PX.glyph / 2 / s;
+  const top = row + (MENU_PX.sideH / 2 + MENU_PX.moreGap) / s;
+  return { c0: left, c1: left + w, r0: top, r1: top + MENU_PX.moreH / s };
+}
+
+describe('categories', () => {
+  it('groups projects in the fixed order, each by `order`, and leaves empty categories out', () => {
+    const groups = groupByCategory(PROJECT_NODES);
+    expect(groups.map((g) => g.id)).toEqual(['math-nature', 'games', 'solutions']);
+    expect(groups.map((g) => g.items.map((n) => n.id))).toEqual([
+      ['life', 'shells'],
+      ['pacman-dqn', 'ballpark'],
+      ['spotify-insight', 'custom-llm', 'personal-wiki', 'networking-tracker'],
+    ]);
+    // Sections have no category: never grouped.
+    expect(
+      groupByCategory(MENU_NODES)
+        .flatMap((g) => g.items)
+        .some((n) => n.kind === 'section'),
+    ).toBe(false);
+    // No games: that category isn't rendered at all.
+    const noGames = groupByCategory(PROJECT_NODES.filter((n) => n.category !== 'games'));
+    expect(noGames.map((g) => g.id)).toEqual(['math-nature', 'solutions']);
+    expect(groupByCategory([])).toEqual([]);
+    // Ties keep their input order.
+    const tie = groupByCategory([
+      { id: 'b', category: 'games', order: 1 },
+      { id: 'a', category: 'games', order: 1 },
+      { id: 'c', category: 'games', order: 0 },
+    ]);
+    expect(tie[0].items.map((n) => n.id)).toEqual(['c', 'b', 'a']);
+    expect(CATEGORIES.map((c) => c.label)).toEqual(['Math & Nature', 'Games', 'Solutions']);
+  });
+
+  it('the fixture mirrors src/content/nodes/*.md (one source of truth for category and tags)', () => {
+    const raw = import.meta.glob<string>('../src/content/nodes/*.md', { query: '?raw', import: 'default', eager: true });
+    const parsed = Object.keys(raw)
+      .sort()
+      .map((f) => {
+        const front = raw[f].split('---')[1];
+        const field = (k: string) => front.match(new RegExp(`^${k}: (.*)$`, 'm'))?.[1]?.trim();
+        const tags = field('tags');
+        return {
+          id: field('id'),
+          kind: field('kind'),
+          order: Number(field('order')),
+          ...(field('category') && { category: field('category') }),
+          tags: tags ? [...tags.matchAll(/'([^']*)'/g)].map((m) => m[1]) : [],
+        };
+      });
+    expect(parsed).toEqual([...MENU_NODES].sort((a, b) => (a.id < b.id ? -1 : 1)));
+    for (const n of parsed) expect(n.kind === 'section', n.id!).toBe(!('category' in n));
+  });
+
+  for (const w of WIDTHS) {
+    it(`${w}px: headers down the trunk, cards under them, Show more clear of everything (expanded and collapsed)`, () => {
+      for (const counts of [COUNTS, [1, 5, 7], [3, 4, 2]]) {
+        const l = menuLayout(w, { about: 3, projects: counts, gutter: GUTTER(w) });
+        const P = l.projects;
+        const cats = P.categories!;
+        const label = `${w} ${counts}`;
+        expect(cats, label).toHaveLength(counts.length);
+        expect(P.children).toEqual(cats.flatMap((c) => c.cards));
+        expect(isLines(P.fence)).toBe(true);
+        const s = l.spacing;
+        // Every state: all collapsed, all expanded, and each one expanded alone.
+        const states = [counts.map(() => false), counts.map(() => true), ...counts.map((_, k) => counts.map((__, j) => j === k))];
+        for (const open of states) {
+          const bands = menuBands(l, { categories: open.map((o) => (o ? 0 : 1)) });
+          const at = (p: { col: number; row: number }) => ({ ...p, row: squeezeRow(p.row, p.col, bands) });
+          const boxes: LatticeRect[] = [];
+          let prevBottom = P.switch.row + 22 / s;
+          cats.forEach((c, k) => {
+            const n = open[k] ? c.cards.length : c.visible;
+            expect(c.visible).toBe(Math.min(counts[k], CATEGORY_GRID[l.mode].visible));
+            // The header: a vertex on the trunk, under the switch, clear of what's above it.
+            const h = at(c.header);
+            expect(c.header.col, label).toBe(P.switch.col);
+            expect(Number.isInteger(h.row), label).toBe(true);
+            expect(h.row - headerHalf(l) / s, `${label} header ${k}`).toBeGreaterThan(prevBottom + 4 / s);
+            const shown = c.cards.slice(0, n).map(at);
+            for (const p of shown) {
+              expect(Number.isInteger(p.col) && Number.isInteger(p.row)).toBe(true);
+              const box = plateBox(l, P, p);
+              expect(box.r0, `${label} card under header ${k}`).toBeGreaterThan(h.row + headerHalf(l) / s);
+              expect(
+                inside(box, { ...P.fence, r1: squeezeRow(P.fence.r1, P.fence.c0, bands) }),
+                `${label} ${p.col},${p.row}`,
+              ).toBe(true);
+              for (const b of boxes) expect(overlap(box, b), label).toBe(false);
+              boxes.push(box);
+            }
+            prevBottom = Math.max(...shown.map((p) => plateBox(l, P, p).r1));
+            if (c.more) {
+              const m = moreBox(l, c.more, squeezeRow(c.more.row, c.more.col, bands));
+              expect(m.r0, label).toBeGreaterThan(prevBottom);
+              for (const b of boxes) expect(overlap(m, b), label).toBe(false);
+              expect(m.r1, label).toBeLessThan(squeezeRow(P.fence.r1, P.fence.c0, bands));
+              expect(m.c1, label).toBeLessThanOrEqual(P.fence.c1);
+              prevBottom = l.mode === 'column' ? m.r1 : prevBottom;
+            } else expect(counts[k], label).toBeLessThanOrEqual(c.visible);
+          });
+        }
+      }
+    });
+  }
+
+  it('anchors: only visible cards (plus headers) feed the flow, and the set follows expand and collapse', () => {
+    for (const w of [1440, 1024, 375]) {
+      const l = menuLayout(w, { about: 3, projects: COUNTS, gutter: GUTTER(w) });
+      const V = CATEGORY_GRID[l.mode].visible;
+      const shut = menuAnchors(l, [false, false, false]);
+      const fixed = 1 + 2 + 3 + COUNTS.length; // root, switches, ABOUT ME, headers
+      expect(shut, `${w}`).toHaveLength(fixed + COUNTS.reduce((a, n) => a + Math.min(n, V), 0));
+      const all = menuAnchors(l, [true, true, true]);
+      expect(all).toHaveLength(fixed + COUNTS.reduce((a, n) => a + n, 0));
+      // Expanding Solutions (4 cards) adds exactly its hidden cards; nothing else changes.
+      const solutions = menuAnchors(l, [false, false, true]);
+      const ids = (a: { id: string }[]) => new Set(a.map((p) => p.id));
+      const added = [...ids(solutions)].filter((id) => !ids(shut).has(id));
+      expect(added).toEqual(
+        Array.from({ length: COUNTS[2] - Math.min(COUNTS[2], V) }, (_, j) => `cat/2/${Math.min(COUNTS[2], V) + j}`),
+      );
+      for (const p of shut) expect(solutions.find((q) => q.id === p.id)).toEqual(p);
+      // Anchors sit on vertices, never two on one.
+      for (const set of [shut, all, solutions]) {
+        expect(set.every((p) => Number.isInteger(p.row))).toBe(true);
+        expect(new Set(set.map((p) => `${p.col},${p.row}`)).size).toBe(set.length);
+      }
+    }
+    // Phones: Games and Math & Nature fit (2 each); Solutions shows 2 of 4.
+    const phone = menuLayout(375, { about: 3, projects: COUNTS, gutter: 16 });
+    expect(phone.projects.categories!.map((c) => c.more !== null)).toEqual([false, false, true]);
+  });
+
+  it('a collapsed category squeezes its band: what follows moves up by whole rows, inside closes up', () => {
+    const l = menuLayout(1440, { about: 3, projects: [2, 7, 1], gutter: 32 });
+    const cats = l.projects.categories!;
+    const games = cats[1];
+    expect(games.band.rows).toBe(6); // two more card rows, 3 apart
+    const bands = menuBands(l, { categories: [1, 1, 1] });
+    expect(bands).toHaveLength(1);
+    const next = cats[2].header;
+    expect(squeezeRow(next.row, next.col, bands)).toBe(next.row - 6);
+    // Halfway: half the rows.
+    const half = menuBands(l, { categories: [1, 0.5, 1] });
+    expect(squeezeRow(next.row, next.col, half)).toBe(next.row - 3);
+    // Open: nothing moves.
+    expect(squeezeRow(next.row, next.col, menuBands(l, { categories: [0, 0, 0] }))).toBe(next.row);
+    // Inside the band, hidden rows close up onto its start, and fade with it.
+    const hidden = games.cards[6];
+    expect(squeezeRow(hidden.row, hidden.col, bands)).toBe(games.band.at);
+    expect(bandSqueeze(games.cards[3].row, games.cards[3].col, half)).toBe(0.5);
+    expect(bandSqueeze(games.cards[0].row, games.cards[0].col, half)).toBe(0);
+    // Wide: ABOUT ME sits beside PROJECTS, so its column never moves.
+    const a = l.about.children.at(-1)!;
+    expect(squeezeRow(a.row + 20, a.col, bands)).toBe(a.row + 20);
+    // Stacked and column: ABOUT ME's band and the categories' add up.
+    const s = menuLayout(375, { about: 3, projects: [2, 2, 4], gutter: 16 });
+    const both = menuBands(s, { about: 1, categories: [1, 1, 1] });
+    const sol = s.projects.categories![2];
+    const up = s.about.fence.r1 - s.about.collapsed.r1;
+    expect(squeezeRow(sol.cards[3].row + 5, 0, both)).toBe(sol.cards[3].row + 5 - up - sol.band.rows);
+  });
+
+  it('phones: the first card still makes an 812px screen; tablets show 2, wide 3', () => {
+    const l = menuLayout(375, { about: 3, projects: COUNTS, gutter: 16 });
+    const first = l.projects.categories![0].cards[0];
+    expect(114 + first.row * l.spacing + MENU_PX.sideH / 2).toBeLessThanOrEqual(812);
+    expect(menuLayout(1024, { about: 3, projects: COUNTS, gutter: 31 }).projects.categories![2].visible).toBe(2);
+    expect(menuLayout(1440, { about: 3, projects: COUNTS, gutter: 32 }).projects.categories![2].visible).toBe(3);
+  });
+
+  it('nothing grouped: PROJECTS keeps the v3.2 grid, and ABOUT ME is the same either way', () => {
+    for (const w of WIDTHS) {
+      const flat = menuLayout(w, { about: 3, projects: 8, gutter: GUTTER(w) });
+      const grouped = menuLayout(w, { about: 3, projects: COUNTS, gutter: GUTTER(w) });
+      expect(flat.projects.categories).toBeUndefined();
+      expect(menuBands(flat, { categories: [1, 1, 1] }).every((b) => b.at === flat.about.collapsed.r1)).toBe(true);
+      expect(grouped.about.switch).toEqual(flat.about.switch);
+      expect(grouped.about.children).toEqual(flat.about.children);
+      expect(grouped.projects.switch).toEqual(flat.projects.switch);
+      expect(grouped.mode).toBe(flat.mode);
+      expect(grouped.spacing).toBe(flat.spacing);
+    }
+  });
+
+  for (const w of [1440, 1024, 375]) {
+    it(`${w}px circuit: root → switches → headers → cards, every leg routed and fed`, () => {
+      const l = menuLayout(w, { about: 3, projects: COUNTS, gutter: GUTTER(w) });
+      const offC = 1 - l.extent.c0 + 1;
+      const at = (p: { col: number; row: number }) => ({ col: p.col + offC, row: p.row + 1 });
+      const cats = l.projects.categories!;
+      const places = [l.root, l.about.switch, l.projects.switch, ...l.about.children];
+      const feeds = [
+        { from: 0, to: 1 },
+        { from: 0, to: 2 },
+        { from: 1, to: 3 },
+        { from: 1, to: 4 },
+        { from: 1, to: 5 },
+      ];
+      for (const c of cats) {
+        const head = places.push(c.header) - 1;
+        feeds.push({ from: 2, to: head });
+        for (const p of c.cards) feeds.push({ from: head, to: places.push(p) - 1 });
+      }
+      const nodes = places.map((p, i) => ({ id: `n${i}`, kind: i === 0 ? ('plant' as const) : ('section' as const), ...at(p) }));
+      const game = new GridGame({
+        cols: l.extent.c1 - l.extent.c0 + 4,
+        rows: l.extent.r1 + 3,
+        nodes,
+        levels: [{ title: 'Menu', plants: ['n0'], loads: nodes.slice(1).map((n) => n.id), budget: 0 }],
+        count: 900,
+        seed: 3,
+        decorative: true,
+      });
+      const vOf = (k: number) => game.board.vertex(nodes[k].col, nodes[k].row);
+      game.setDecorTransformers(
+        circuitTransformers(
+          game.board,
+          game.bounds,
+          new Set(nodes.map((_, k) => vOf(k))),
+          feeds.map((f) => ({ from: vOf(f.from), to: vOf(f.to) })),
+        ),
+      );
+      for (const f of feeds) if (f.from !== 0) game.setLoadSource(f.to, f.from);
+      for (const p of circuitPaths(game, feeds)) expect(p.steps.length, `n${p.from}→n${p.to}`).toBeGreaterThan(0);
+      run(game, w < 720 ? 40 : 30);
+      for (const k of game.activeLoads) expect(game.delivered[k], game.nodes[k].id).toBeGreaterThan(0);
+    });
+  }
+});

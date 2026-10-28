@@ -8,7 +8,7 @@ import SectionNav from './SectionNav.astro';
 // The game map uses only `inGame` nodes (code projects are cards only), so levels are unchanged.
 const MAP_NODES: MapNode[] = (await getCollection('nodes'))
   .map((e) => e.data)
-  .filter((n) => (n as { inGame?: boolean }).inGame !== false)
+  .filter((n): n is typeof n & MapNode => n.inGame !== false && n.kind !== 'game')
   .sort((a, b) => a.order - b.order);
 
 // A circle as a path (starts at the top, clockwise), so `pathLength` works everywhere.

@@ -8,7 +8,9 @@ kicker: Code · open source
 href: /projects/pacman-dqn
 land: [0.5, 0.5]
 port: [0.5, 0.5]
-order: 7
+order: 0
+category: games
+tags: ['Reinforcement learning']
 pitch: 'An agent that learned Ms. Pac-Man from raw pixels, and more than tripled its score.'
 repo: https://github.com/Geromola/pacman-dqn
 embed: false

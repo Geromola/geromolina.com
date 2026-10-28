@@ -6,10 +6,15 @@
 // (`menuLayout` in src/grid/game/decor.ts), runs the power-on intro and the decorative flow
 // (root → switch → child, along lit corridors), and animates the sections.
 //
+// PROJECTS by category (SPEC "Projects menu by category"): Math & Nature, Games, Solutions, from
+// each node's `category` in the collection. A header per category on the trunk, its cards under
+// it; a category shows its first few cards and a "Show more" button reveals the rest.
+//
 // Without JS the menu is a plain stacked list (the switches do nothing and everything is shown).
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import gero from '../assets/gero.jpg';
+import { groupByCategory } from '../grid/categories';
 import SectionNav from './SectionNav.astro';
 
 type Kind = 'plant' | 'substation' | 'section';
@@ -31,92 +36,59 @@ interface Entry {
   source: boolean;
   /** How far its ring fills once powered (1 unless under construction). */
   fill?: number;
+  /** Small chips on the plate (`var(--mono)`). */
+  tags: string[];
 }
 
-// Only these kinds are menu nodes; anything else in the collection (e.g. `kind: game`) is ignored.
-const KINDS: readonly string[] = ['plant', 'substation', 'section'];
-const all = (await getCollection('nodes'))
-  .map((e) => e.data)
-  .filter((n): n is typeof n & { kind: Kind } => KINDS.includes(n.kind))
-  .sort((a, b) => a.order - b.order);
+const all = (await getCollection('nodes')).map((e) => e.data).sort((a, b) => a.order - b.order);
 const byId = new Map(all.map((n) => [n.id, n]));
 const pick = (ids: string[]) => ids.flatMap((id) => (byId.has(id) ? [byId.get(id)!] : []));
 
 // The tracker has no metric in the collection.
 const TRACKER_LINE = 'Private · sign-in';
 
-// Short map lines that fit the plate without an ellipsis (the full metrics live on the project pages).
-const SHORT: Record<string, { value: string; label: string }> = {
+// Short map lines that fit the plate without an ellipsis (the full metrics live on the project
+// pages); games have no metrics, so their line lives here too, with a shorter phone phrase.
+const SHORT: Record<string, { value: string; label: string; short?: string }> = {
   'spotify-insight': { value: '660,622', label: 'reviews' },
   'custom-llm': { value: '122K', label: 'parameters' },
   'personal-wiki': { value: '100%', label: 'offline' },
   'pacman-dqn': { value: '3.4×', label: 'baseline score' },
+  ballpark: { value: '11', label: 'decades of energy', short: 'decades' },
+  shells: { value: '3', label: 'numbers shape a shell', short: 'numbers' },
+  life: { value: '1', label: 'rule, a whole universe', short: 'rule' },
 };
 
 const toEntry = (n: (typeof all)[number]): Entry => ({
   id: n.id,
   kind: n.kind,
-  badge: n.kind === 'section' ? null : n.status === 'live' ? 'live' : n.status === 'private' ? 'private' : 'code',
+  // Games (Ballpark, Raup's Cube, Conway's Life) are interactive pages: ▶ PLAY.
+  badge:
+    n.kind === 'section'
+      ? null
+      : n.kind === 'game'
+        ? 'play'
+        : n.status === 'live'
+          ? 'live'
+          : n.status === 'private'
+            ? 'private'
+            : 'code',
   title: n.title,
   value: SHORT[n.id]?.value ?? n.metrics?.[0]?.value,
   label: SHORT[n.id]?.label ?? n.metrics?.[0]?.label ?? (n.kind === 'substation' ? TRACKER_LINE : n.kicker),
+  short: SHORT[n.id]?.short,
   href: n.href,
   source: n.kind === 'plant' && n.status === 'live',
+  tags: n.tags,
 });
 
-// Ballpark (SPEC "Ballpark"): hardcoded, not from the collection, since it is a game page rather
-// than a project page. A PROJECTS node that is a load in the flow, with a ▶ PLAY badge.
-const BALLPARK: Entry = {
-  id: 'ballpark',
-  kind: 'game',
-  badge: 'play',
-  title: 'Ballpark',
-  value: '11',
-  label: 'decades of energy',
-  short: 'decades',
-  href: '/ballpark',
-  source: false,
-};
-
-// Raup's Cube (SPEC "Raup's Cube"): hardcoded like Ballpark, an interactive page rather than a
-// project page. Same ▶ PLAY badge.
-const RAUP: Entry = {
-  id: 'shells',
-  kind: 'game',
-  badge: 'play',
-  title: "Raup's Cube",
-  value: '3',
-  label: 'numbers shape a shell',
-  short: 'numbers',
-  href: '/shells',
-  source: false,
-};
-
-// Conway's Life (SPEC "Conway's Life"): hardcoded like Ballpark, an interactive page. Same ▶ PLAY badge.
-const LIFE: Entry = {
-  id: 'life',
-  kind: 'game',
-  badge: 'play',
-  title: "Conway's Life",
-  value: '1',
-  label: 'rule, a whole universe',
-  short: 'rule',
-  href: '/life',
-  source: false,
-};
-
-// PROJECTS, in this order (don't reorder `order` in the content for it); any other plant or
-// substation joins at the end.
-const LISTED = ['spotify-insight', 'custom-llm', 'personal-wiki', 'pacman-dqn', 'networking-tracker'];
-const extraProjects = all.filter((n) => n.kind !== 'section' && !LISTED.includes(n.id));
-const projects: Entry[] = [
-  ...pick(LISTED.slice(0, 4)).map(toEntry),
-  BALLPARK,
-  RAUP,
-  LIFE,
-  ...pick(LISTED.slice(4)).map(toEntry),
-  ...extraProjects.map(toEntry),
-];
+// PROJECTS: every plant, substation and game, by category, each by `order` within it. A new node
+// file with a category lands in its row with no code change; empty categories aren't rendered.
+const categories = groupByCategory(all.filter((n) => n.kind !== 'section')).map((g) => ({
+  ...g,
+  entries: g.items.map(toEntry),
+}));
+const projects = categories.flatMap((c) => c.entries);
 
 // ABOUT ME: the page sections, each with a short line in place of a metric.
 const ABOUT_LINES: Record<string, string> = {
@@ -133,11 +105,26 @@ const ABOUT = ['about', 'off-the-grid', 'contact'];
 const sections = [...pick(ABOUT), ...all.filter((n) => n.kind === 'section' && !ABOUT.includes(n.id))];
 const about: Entry[] = sections.map((n) => ({ ...toEntry(n), label: ABOUT_LINES[n.id] ?? n.title, short: ABOUT_SHORT[n.id] }));
 
-// The two sections, in DOM (and tab) order. Child indices (`data-menu-node`) run across both.
+// The two sections, in DOM (and tab) order: ABOUT ME is one plain block, PROJECTS a block per
+// category. Child indices (`data-menu-node`) run across everything.
+interface Block {
+  cat: { id: string; label: string; tagline: string } | null;
+  entries: (Entry & { index: number })[];
+}
+let index = 0;
+const block = (cat: Block['cat'], entries: Entry[]): Block => ({ cat, entries: entries.map((e) => ({ ...e, index: index++ })) });
 const groups = [
-  { key: 'about', label: 'About me', count: `${about.length} nodes`, entries: about, offset: 0 },
-  { key: 'projects', label: 'Projects', count: `${projects.length} projects`, entries: projects, offset: about.length },
+  { key: 'about', label: 'About me', count: `${about.length} nodes`, blocks: [block(null, about)] },
+  {
+    key: 'projects',
+    label: 'Projects',
+    count: `${projects.length} projects`,
+    blocks: categories.map(({ id, label, tagline, entries }) => block({ id, label, tagline }, entries)),
+  },
 ];
+// Phones and tablets show this many cards per category until "Show more" (menu.ts sets the real
+// count per width; this is the markup's starting label).
+const SHOWN = 2;
 
 // A circle and a rounded square as paths (start at the top, clockwise), so `pathLength` works everywhere.
 const RING = 'M50 4 a46 46 0 1 1 0 92 a46 46 0 1 1 0 -92';
@@ -232,8 +219,42 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                 {group.count}
               </span>
             </button>
-            <ul class="msec__list" id={`msec-${group.key}`} role="list" data-list>
-              {group.entries.map((n, j) => (
+            <div class="msec__list" id={`msec-${group.key}`} data-list>
+              {group.blocks.map(({ cat, entries }) => (
+                <div
+                  class:list={['mcat', !cat && 'mcat--plain']}
+                  data-cat={cat?.id}
+                  role={cat ? 'group' : undefined}
+                  aria-labelledby={cat ? `mcat-${cat.id}` : undefined}>
+                  {cat && (
+                    <div class="mcat__head" data-cat-head data-id={`cat-${cat.id}`}>
+                      <span class="mcat__glyph" data-cat-glyph aria-hidden="true">
+                        <svg class="mnode__ring" viewBox="0 0 100 100">
+                          <path class="mnode__ring-base" d={RING} pathLength="100" />
+                          <path class="mnode__ring-fill" d={RING} pathLength="100" data-ring />
+                        </svg>
+                        <span class="mnode__charge" />
+                        <span class="mswitch__core" />
+                      </span>
+                      <span class="mcat__text">
+                        <span class="mcat__title">
+                          <span class="mcat__label" id={`mcat-${cat.id}`}>
+                            {cat.label}
+                          </span>
+                          <span class="mcat__count mono" aria-hidden="true">
+                            {entries.length}
+                          </span>
+                        </span>
+                        <span class="mcat__tagline">{cat.tagline}</span>
+                      </span>
+                    </div>
+                  )}
+                  <ul
+                    class="mcat__list"
+                    id={cat ? `mcat-${cat.id}-list` : undefined}
+                    role="list"
+                    data-cat-list={cat ? '' : undefined}>
+                    {entries.map((n) => (
                 <li class="mitem" data-menu-item>
                   <a
                     class:list={['mnode', `mnode--${n.kind}`, n.badge && `mnode--${n.badge}`]}
@@ -241,7 +262,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                     role={n.href ? undefined : 'link'}
                     aria-disabled={n.href ? undefined : 'true'}
                     tabindex={n.href ? undefined : -1}
-                    data-menu-node={group.offset + j}
+                    data-menu-node={n.index}
                     data-id={n.id}
                     data-soon={n.href ? undefined : ''}
                     data-fill={n.fill === undefined ? undefined : String(n.fill)}>
@@ -301,6 +322,13 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                           n.label
                         )}
                       </span>
+                      {n.tags.length > 0 && (
+                        <span class="mnode__tags">
+                          {n.tags.map((t) => (
+                            <span class="mnode__tag mono">{t}</span>
+                          ))}
+                        </span>
+                      )}
                       {!n.href && (
                         <span class="mnode__hint mono" aria-hidden="true">
                           Coming soon
@@ -309,8 +337,25 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
                     </span>
                   </a>
                 </li>
+                    ))}
+                  </ul>
+                  {cat && entries.length > SHOWN && (
+                    <button
+                      class="mcat__more"
+                      type="button"
+                      data-cat-more
+                      aria-expanded="false"
+                      aria-controls={`mcat-${cat.id}-list`}
+                      hidden>
+                      <span data-more-label>Show {entries.length - SHOWN} more</span>
+                      <span class="mcat__chev" aria-hidden="true">
+                        ▾
+                      </span>
+                    </button>
+                  )}
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         ))
       }
@@ -379,6 +424,16 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     gap: 1rem;
   }
   .msec__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .mcat {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .mcat__list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
     gap: 2.5rem 1.5rem;
@@ -396,17 +451,17 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     padding: 0;
   }
   /* The wrappers keep their semantics but stop taking part in layout: full-size, click-through layers. */
-  .nmenu[data-laid] :is(.nmenu__sections, .msec, .msec__list) {
+  .nmenu[data-laid] :is(.nmenu__sections, .msec, .msec__list, .mcat, .mcat__list) {
     display: block;
     position: absolute;
     inset: 0;
     margin: 0;
     pointer-events: none;
   }
-  .nmenu[data-laid] :is(.mroot, .mswitch, .mitem, .mfence) {
+  .nmenu[data-laid] :is(.mroot, .mswitch, .mitem, .mfence, .mcat__head, .mcat__more) {
     position: absolute;
   }
-  .nmenu[data-laid] :is(.mswitch, .mitem) {
+  .nmenu[data-laid] :is(.mswitch, .mitem, .mcat__head, .mcat__more) {
     pointer-events: auto;
   }
   .nmenu[data-laid] .mfence {
@@ -567,7 +622,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     outline: 2px solid var(--cyan);
     outline-offset: 2px;
   }
-  .mswitch__glyph {
+  :is(.mswitch__glyph, .mcat__glyph) {
     position: relative;
     flex: none;
     display: grid;
@@ -610,6 +665,139 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     }
   }
 
+  /* ---------- category header: a small glyph on the trunk, the label, a count and the tagline ---------- */
+  .mcat__head {
+    --power: 1;
+    --charge: 0;
+    --pulse: 0;
+    --glow: 0;
+    --press: 1;
+    --shown: 1;
+    --fx: 0px;
+    --fy: 0px;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--ink);
+  }
+  .nmenu[data-laid] .mcat__head {
+    max-width: var(--head-w);
+    translate: 0 -50%;
+    opacity: var(--shown);
+    transform: translate(calc((1 - var(--shown)) * var(--fx)), calc((1 - var(--shown)) * var(--fy)));
+  }
+  .mcat__head .mnode__charge {
+    inset: -3px;
+    border-width: 1.5px;
+  }
+  /* A dark backing, like the fence labels', so corridors and electrons don't run through the text. */
+  .mcat__text {
+    display: flex;
+    align-items: baseline;
+    gap: 0.625rem;
+    min-width: 0;
+    margin-left: -0.25rem;
+    padding: 0.125rem 0.5rem 0.125rem 0.25rem;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+  }
+  .mcat__title {
+    flex: none;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4375rem;
+  }
+  .mcat__label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .mcat__count {
+    font-size: 0.6875rem;
+    color: var(--cyan);
+  }
+  .mcat__tagline {
+    min-width: 0;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--ink-2);
+  }
+  /* Phones: the tagline under the label, wrapping. */
+  .nmenu[data-mode='column'] .mcat__text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.0625rem;
+  }
+  .nmenu[data-mode='column'] .mcat__tagline {
+    font-size: 0.75rem;
+    white-space: normal;
+  }
+  .mcat__head.is-hot .mcat__label {
+    color: var(--hot);
+  }
+
+  /* ---------- Show more / Show less: a real button under the category's last row ---------- */
+  .mcat__more {
+    --shown: 1;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 2rem;
+    margin: 0;
+    padding: 0 0.875rem;
+    border: 1px solid var(--glass-edge);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-raise) 86%, transparent);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    color: var(--ink);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      border-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  /* A 44px target on touch, without growing the pill. */
+  .mcat__more::before {
+    content: '';
+    position: absolute;
+    inset: -6px -4px;
+  }
+  .mcat__more[hidden],
+  .nmenu:not([data-laid]) .mcat__more {
+    display: none;
+  }
+  .nmenu[data-laid] .mcat__more {
+    opacity: var(--shown);
+  }
+  .mcat__more[data-align='end'] {
+    translate: -100% 0;
+  }
+  .mcat__chev {
+    font-size: 0.6875rem;
+    color: var(--ink-2);
+  }
+  .mcat__more[aria-expanded='true'] .mcat__chev {
+    rotate: 180deg;
+  }
+  .mcat__more:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
+  @media (hover: hover) {
+    .mcat__more:hover {
+      border-color: rgba(var(--cyan-rgb), 0.5);
+      color: var(--hot);
+    }
+  }
+
   /* ---------- children: one node object, plates hanging (projects, desktop) or beside ---------- */
   .mitem {
     --shown: 1;
@@ -645,7 +833,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
   .mnode[href] {
     cursor: pointer;
   }
-  .nmenu[data-intro] :is(.mnode, .mswitch, .mroot) {
+  .nmenu[data-intro] :is(.mnode, .mswitch, .mroot, .mcat__head) {
     --power: 0;
   }
 
@@ -702,7 +890,7 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     stroke: var(--amber);
     filter: drop-shadow(0 0 calc(1px + var(--power) * 2px + var(--glow) * 4px) rgba(var(--amber-rgb), 0.7));
   }
-  :is(.mnode, .mswitch).is-hot .mnode__ring-fill {
+  :is(.mnode, .mswitch, .mcat__head).is-hot .mnode__ring-fill {
     stroke: var(--hot);
   }
   .mnode--substation.is-hot .mnode__ring-fill {
@@ -761,7 +949,8 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: 6.5rem;
+    /* MENU_PX.hangH (126px): badge, title, line and a row of tags. */
+    height: 7.875rem;
     margin-top: calc(var(--glyph) / -2);
     padding: calc(var(--glyph) / 2 + 0.5rem) 1rem 0.625rem;
     border-radius: var(--radius-md);
@@ -778,16 +967,40 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     align-items: center;
     gap: 0.75rem;
   }
+  /* Title, line, then the badge and the tags on one row (MENU_PX.sideH, 88px). */
   .msec[data-style='side'] .mnode__plate {
     flex: 1;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'title title'
+      'line line'
+      'badge tags';
+    align-content: center;
+    justify-items: start;
+    column-gap: 0.5rem;
     min-width: 0;
     width: auto;
-    height: 5.25rem;
+    height: 5.5rem;
     margin-top: 0;
     padding: 0.625rem 1rem;
-    align-items: flex-start;
-    justify-content: center;
     text-align: left;
+  }
+  .msec[data-style='side'] .mnode__title {
+    grid-area: title;
+    margin-top: 0;
+  }
+  .msec[data-style='side'] .mnode__line {
+    grid-area: line;
+  }
+  .msec[data-style='side'] .mnode__badge {
+    grid-area: badge;
+    align-self: center;
+    margin-top: 0.3125rem;
+  }
+  .msec[data-style='side'] .mnode__tags {
+    grid-area: tags;
+    justify-content: flex-start;
   }
   /* Plate, compact style (ABOUT ME on phones): one lattice row, a smaller glyph, title and line on one line. */
   .msec[data-style='compact'] .mnode {
@@ -905,6 +1118,30 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
   .mnode__value {
     color: var(--cyan);
   }
+  /* Tags: one row of small chips; a chip that doesn't fit wraps out of sight rather than being cut. */
+  .mnode__tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+    max-width: 100%;
+    height: 1.0625rem;
+    margin-top: 0.3125rem;
+    overflow: hidden;
+  }
+  .mnode__tag {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 0.4375rem;
+    border: 1px solid var(--glass-edge);
+    border-radius: 999px;
+    font-size: 0.625rem;
+    line-height: calc(1.0625rem - 2px);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    color: var(--ink-2);
+  }
   /* ABOUT ME has no badge row, so its phrase may take two lines instead of an ellipsis. */
   .mnode--section .mnode__line {
     white-space: normal;
@@ -968,13 +1205,22 @@ const SQUARE = 'M50 4 H74 a22 22 0 0 1 22 22 V74 a22 22 0 0 1 -22 22 H26 a22 22 
     .mfence__label {
       background: var(--bg);
     }
-    .nmenu[data-mode] :is(.mnode__plate, .mroot__plate) {
+    .nmenu[data-mode] :is(.mnode__plate, .mroot__plate, .mcat__more) {
       background: var(--bg-raise);
     }
   }
   @media (prefers-contrast: more) {
-    .nmenu[data-mode] :is(.mnode__plate, .mroot__plate) {
+    .nmenu[data-mode] :is(.mnode__plate, .mroot__plate, .mcat__more) {
       background: var(--bg-raise);
+    }
+    .mcat__more,
+    .mnode__tag {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .mcat__tagline,
+    .mnode__tag,
+    .mcat__chev {
+      color: var(--ink);
     }
     .mnode__plate {
       border-color: rgba(255, 255, 255, 0.5);

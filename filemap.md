@@ -6,16 +6,17 @@
 - `src/assets/gero.jpg` — portrait for the About section
 - `src/styles/tokens.css` — colour, type and glass tokens, plus global base styles
 - `src/layouts/Base.astro` — html shell, meta tags, global CSS; `?motion=reduce` debug flag (html[data-motion]), view-transition script (expand from / collapse into a card's terminal dot in Projects mode, the map node in Play mode), analytics (skipped on localhost)
-- `src/pages/index.astro` — home page: "Skip to About" link, the home hero (GridMap), then the sections below and the footer
+- `src/pages/index.astro` — home page: "Skip to About" link, the home hero (NodeMenu), then the sections below and the footer
+- `src/components/NodeMenu.astro` — home hero v3.2: the root node "Gero", fenced ABOUT ME and PROJECTS sections behind switch buttons; PROJECTS by category (SPEC "Projects menu by category"): a header per category (`data-cat`, `data-cat-head`), its cards (glyph + glass plate with badge, title, one line and `tags` chips) and a Show more `<button>` (`data-cat-more`, `aria-expanded`, `aria-controls`); categories, order and tags come from the `nodes` collection; plain stacked list without JS
 - `src/components/sections/Section.astro` — shared section shell: column, rhythm, divider, kicker + h2
 - `src/components/sections/About.astro` — `#about`: duotone round portrait (inline SVG filter) and bio
 - `src/components/sections/OffTheGrid.astro` — `#off-the-grid`: four fact cards (ACS card links to the DOI)
 - `src/components/sections/MyTools.astro` — `#my-tools`: locked Networking Tracker tile
 - `src/components/sections/Contact.astro` — `#contact`: email, LinkedIn, GitHub pills
-- `src/components/sections/NodeIndex.astro` — `#node-index`: accessible list of every map node (from the `nodes` collection)
+- `src/components/sections/NodeIndex.astro` — `#node-index`: accessible list of every node (from the `nodes` collection): projects by category, then the sections
 - `src/components/sections/Footer.astro` — site footer line
-- `src/components/GridMap.astro` — home hero (`[data-home]`, `data-mode` projects/play, set before first render from `#play`): section nav, project menu, and the map: canvases, the game layer (`[data-game]`: Back to projects pill (`data-block`), nodes with target-load rings, transformer layer and template, ghost, level panel, toast, screen-reader live region), styles, client mount. Only `inGame` nodes go on the game map
-- `src/components/ProjectMenu.astro` — Projects mode: profile header (duotone portrait via About's filter), project cards from the `nodes` collection (plants and substations by `order`, `status` badge, terminal dot `data-card-dot`), the locked strip for `private` nodes, the `#play` pill
+- `src/components/GridMap.astro` — v2 home hero, no longer mounted (the transformer game is parked) (`[data-home]`, `data-mode` projects/play, set before first render from `#play`): section nav, project menu, and the map: canvases, the game layer (`[data-game]`: Back to projects pill (`data-block`), nodes with target-load rings, transformer layer and template, ghost, level panel, toast, screen-reader live region), styles, client mount. Only `inGame` nodes go on the game map
+- `src/components/ProjectMenu.astro` — v2 Projects mode (inside GridMap, not mounted): profile header (duotone portrait via About's filter), project cards from the `nodes` collection (plants and substations by `order`, `status` badge, terminal dot `data-card-dot`), the locked strip for `private` nodes, the `#play` pill
 - `src/components/SectionNav.astro` — fixed glass section nav (About, Off the grid, Contact, My tools lock); top centre on phones; hidden in Play mode (html[data-home-mode])
 - `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown; code projects without a `liveUrl` get no embed and a top-bar "Source" pill)
 - `src/pages/404.astro` — "Power outage" 404 page
@@ -26,8 +27,8 @@
 - `src/components/project/Pill.astro` — pill / full-width button link with press and focus states
 - `src/grid/main.ts` — DOM wiring for the home hero: Projects/Play mode switch (URL hash, history, Spring), the decorative flow (measures card dots, hover/focus pull, card view-transition source) and the Grid operator game: layout, blocked junctions (Back pill, resting panel), transformer place/move/remove, ghost, level panel, throttled live announcements, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
 - `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices (`PlacedNode`)
-- `src/content.config.ts` — content collections: `nodes` schema (glob loader)
-- `src/content/nodes/*.md` — map node data (one file per node; body is a plant's "How it works"; `status` live/code/private, `inGame: false` keeps a node off the game map — `personal-wiki` and `pacman-dqn` are code projects)
+- `src/content.config.ts` — content collections: `nodes` schema (glob loader); kinds plant / substation / section / game; `category` (required for everything but sections) and `tags` drive the home menu's category rows
+- `src/content/nodes/*.md` — node data, one file per node: the projects, the games (`ballpark`, `shells`, `life`: `kind: game`, no project page) and the page sections. Body is a plant's "How it works"; `status` live/code/private; `category` + `order` place it in the menu, `tags` are its chips; `inGame: false` keeps a node off the (parked) game map
 - `src/grid/nodes.ts` — `MapNode` and `NodeKind` types (data lives in the `nodes` collection)
 - `src/grid/renderers.ts` — WebGL2 and Canvas 2D renderers for electrons (colour by engine `hue`) and the per-edge heat glow; static mesh with faulted edges
 - `src/grid/spring.ts` — critically damped spring
@@ -38,10 +39,13 @@
 - `src/grid/game/levels.ts` — the 4 level definitions; seeded fault generation
 - `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
 - `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
-- `src/grid/game/decor.ts` — Projects-mode flow layout: lattice aligned to the card dots, anchors, the decorative level (live cards are plants)
+- `src/grid/game/decor.ts` — decorative flow layouts: v2's card-dot lattice and anchors; the v3.2 node menu (`menuLayout`: wide / stacked / column, sections, and PROJECTS as category rows with `CATEGORY_GRID` cards per row and shown while collapsed), the squeezed rows of collapsed sections and categories (`menuBands`, `squeezeRow`, `bandSqueeze`), the visible anchors (`menuAnchors`), and the circuit (`circuitTransformers`, `circuitPaths`)
+- `src/grid/menu.ts` — DOM wiring for the node menu: places everything on the lattice, the power-on intro, the decorative flow root → switch → category header → card, section and category expand/collapse on springs (hidden cards are disabled loads, `inert`; their rows squeeze shut), Show more state in `sessionStorage`, hover/focus pull, card view-transition source, reduced-motion still frames; `window.__menu` debug handle
+- `src/grid/categories.ts` — the three project categories (id, label, tagline, in order) and `groupByCategory` (DOM-free)
 - `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars; `decorative` option (lossless, no heat, nothing placeable, no solver) and `setFocus` (bias the flow toward a node)
 - `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, blocked hero/panel zones, solver timing, faults, step)
 - `tests/decor.test.ts` — Vitest for the decorative flow: lattice alignment, anchors, decorative engine, focus (and that the default flow is unchanged)
+- `tests/menu.test.ts` — Vitest for the node menu: snapping, corridors, load switching, `menuLayout` sections, and categories (grouping and order, fixture vs the node files, layout at 10 widths in every expand state, anchors, bands, the 4-level circuit)
 - `src/pages/ballpark.astro` — Ballpark page (linked from the home node menu): markup, styles and mount for the energy game
 - `src/energy/catalog.ts` — Ballpark items (power × time or energy per unit, with sources) and the anchor ladder
 - `src/energy/scale.ts` — Ballpark log axis (0.1 Wh … 10 GWh), unit formatting, scoring by orders of magnitude, equivalences
@@ -73,12 +77,12 @@
 - `src/life/render-canvas.ts` — Canvas 2D fallback
 - `src/life/main.ts` — Life DOM wiring: pointer/pinch/wheel/keyboard, stamp, dock, readout and chart, tour, library, signals lamps, phone sheet, URL hash, progress in `localStorage`
 - `tests/life.test.ts` — Vitest for Life: rules, border, RLE, every library claim, scenes, NOT gate, message round-trip, detector, camera, tour progress
-- `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
+- `tests/fixtures/nodes.ts` — game-map node ids, kinds and positions; `MENU_NODES` (every node's kind, order, category and tags, mirroring `src/content/nodes/*.md`); the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
-- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, `/ballpark`, `/shells` and `/life`
+- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` and every `kind: plant` or `kind: game` node `href`
 - `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)
 - `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`, `public/apple-touch-icon.png` — PNG app icons (generated from SVG via qlmanage + sips)
-- `public/og.png` — 1200×630 Open Graph image
+- `public/og.jpg` — 1200×630 Open Graph image (v3.2 node-menu style)
 - `public/manifest.webmanifest` — PWA manifest
 - `public/sw.js` — hand-written service worker (cache-first `/_astro/*` + icons, network-first HTML, same-origin only); registered from `Base.astro` in production
 - `public/robots.txt` — allow all, points to the sitemap

@@ -51,4 +51,9 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
     - Not verified: real-time playback and the sheet's spring in a visible window. The preview pane was hidden, so frames were stepped by hand.
     - Play-tested by Gero, then launched: a `▶ PLAY` node after Raup's Cube in the home menu's PROJECTS section, and in the sitemap.
     - Later, maybe: Sir Robin, an ash census for soups, a Snark scene.
-
+13. [x] **Projects menu by category** (careful). SPEC "Projects menu by category" (decided 2026-10-27).
+    - `category` and `tags` in the `nodes` schema; Ballpark, Raup's Cube and Conway's Life became `kind: game` node files; `src/grid/categories.ts`.
+    - Category rows, bands and anchors in `src/grid/game/decor.ts`; headers, Show more, springs and the 4-level flow in `src/grid/menu.ts` and `NodeMenu.astro`.
+    - Verified: Vitest (grouping, fixture vs files, layout at 10 widths in every expand state, anchors, bands, circuit), `astro check`, the build; WebKit renders at 1440, 1024 and 390 collapsed and expanded, expand/collapse/reverse timing, keyboard order and focus, `?renderer=canvas`, `?motion=reduce`.
+    - Not verified: real devices; the in-app browser pane was hidden, so animation was checked in an offscreen WebKit window.
+    - ⚑ Gero to confirm the tags (e.g. `Berkeley` on Custom LLM).

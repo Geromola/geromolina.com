@@ -7,10 +7,17 @@ export { solve, scoreMask, candidatesFor, type Problem, type Score, type Solutio
 export { layoutGame, visibleBounds, type GameLayout, type GameNode, type GameNodeKind, type NodeSpec } from './layout';
 export { GridGame, starsFor, type EngineOptions, type Evaluation, type LoadResult, type Transformer } from './engine';
 export {
+  CATEGORY_GRID,
   MENU_PX,
+  bandSqueeze,
   circuitPaths,
   circuitTransformers,
+  menuAnchors,
+  menuBands,
   menuLayout,
+  squeezeRow,
+  type Band,
+  type MenuCategoryLayout,
   type Feed,
   type FeedPath,
   type LatticeRect,

@@ -439,14 +439,19 @@ export const MENU_PX = {
   /** Gap between a side glyph and its plate. */
   sideGap: 12,
   /** Plate heights: hanging under the glyph (projects) and beside it (about, phones). */
-  hangH: 104,
-  sideH: 84,
+  hangH: 126,
+  sideH: 88,
   /** A hanging plate is this much narrower than 4 spacings (the gap between columns). */
   hangGap: 40,
   /** Compact nodes (ABOUT ME on phones): one lattice row each, a smaller glyph, a one-line plate. */
   compactGlyph: 30,
   compactGap: 10,
   compactH: 40,
+  /** Category header glyph diameter (like a switch's). */
+  headerGlyph: 28,
+  /** The Show more control: its height, and its gap under the last plate. */
+  moreH: 32,
+  moreGap: 8,
 } as const;
 
 export type MenuMode = 'wide' | 'stacked' | 'column';
@@ -468,7 +473,39 @@ export interface MenuSectionLayout {
   /** Fence when expanded, and shrunk to the switch when collapsed (lattice lines). */
   fence: LatticeRect;
   collapsed: LatticeRect;
+  /** The fence bottom its own children need (wide gives both fences the lower of the two). */
+  ownR1: number;
+  /** PROJECTS by category (SPEC "Projects menu by category"); `children` is then every card, in order. */
+  categories?: MenuCategoryLayout[];
 }
+
+/**
+ * One category row of PROJECTS. Positions are the expanded layout: a collapsed
+ * category squeezes its band shut (`menuBands`, `squeezeRow`), so everything
+ * under it moves up by whole rows.
+ */
+export interface MenuCategoryLayout {
+  /** The header's glyph: a vertex on the trunk. */
+  header: { col: number; row: number };
+  /** Every card, expanded. */
+  cards: { col: number; row: number }[];
+  /** Cards shown while collapsed (the first ones). */
+  visible: number;
+  /** Rows the hidden cards add under the visible ones, starting at the last visible row `at` (0 rows: they fit beside it). */
+  band: { at: number; rows: number };
+  /**
+   * The Show more control, under the last card row (expanded): `row` is that row, `col` the
+   * glyph column it lines up with (the plate's end, or the glyph's start). Null when nothing's hidden.
+   */
+  more: { row: number; col: number; align: 'end' | 'start' } | null;
+}
+
+/** Cards per row, and cards a collapsed category shows, per mode. */
+export const CATEGORY_GRID: Record<MenuMode, { perRow: number; visible: number }> = {
+  wide: { perRow: 3, visible: 3 },
+  stacked: { perRow: 3, visible: 2 },
+  column: { perRow: 1, visible: 2 },
+};
 
 export interface MenuLayout {
   mode: MenuMode;
@@ -481,9 +518,9 @@ export interface MenuLayout {
 }
 
 export interface MenuLayoutOptions {
-  /** Children per section. */
+  /** Children per section. PROJECTS as an array: cards per category, laid out in category rows. */
   about: number;
-  projects: number;
+  projects: number | readonly number[];
   /** Horizontal margin each side, px. */
   gutter: number;
   /** Lattice row the fences start on (default 1, right under the root): 2 when the root plate is tall. */
@@ -532,31 +569,86 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
     style: MenuStyle,
     plateW: number,
     fence: LatticeRect,
-  ): MenuSectionLayout => ({ switch: sw, children, style, plateW, fence, collapsed: collapsed(sw, fence) });
+    categories?: MenuCategoryLayout[],
+  ): MenuSectionLayout => ({
+    switch: sw,
+    children,
+    style,
+    plateW,
+    fence,
+    collapsed: collapsed(sw, fence),
+    ownR1: fence.r1,
+    ...(categories && { categories }),
+  });
   const rows = (n: number, perRow: number) => Math.max(1, Math.ceil(n / perRow));
+  // Whole rows a hanging plate needs under its glyph row (2 at 64px).
+  const hangRows = (sp: number) => Math.max(2, Math.ceil(MENU_PX.hangH / sp - 1e-9));
+  const counts = typeof opts.projects === 'number' ? null : opts.projects;
+  const nProjects = counts ? counts.reduce((a, b) => a + b, 0) : (opts.projects as number);
 
-  let mode: MenuMode;
+  const mode: MenuMode = inner / WIDE_COLS >= MIN_WIDE ? 'wide' : inner / STACKED_COLS >= MIN_STACKED ? 'stacked' : 'column';
+  /**
+   * Category rows from row `top` down: a header on the trunk (column `header`), its cards from
+   * column `card`, `dc` apart, under it. Returns them and the row under the last one.
+   */
+  const categoryRows = (top: number, at: { header: number; card: number; dc: number }) => {
+    const { perRow, visible } = CATEGORY_GRID[mode];
+    const first = mode === 'column' ? 2 : 1; // header → first card row
+    const step = mode === 'column' ? 2 : 3; // card row → card row
+    const tail = mode === 'column' ? 2 : 3; // last card row → the next header (one more under a Show more)
+    let h = top;
+    const cats = (counts ?? []).map((n): MenuCategoryLayout => {
+      const row0 = h + first;
+      const cards = Array.from({ length: n }, (_, k) => ({
+        col: at.card + (k % perRow) * at.dc,
+        row: row0 + Math.floor(k / perRow) * step,
+      }));
+      const lastShown = row0 + (rows(Math.min(n, visible), perRow) - 1) * step;
+      const last = row0 + (rows(n, perRow) - 1) * step;
+      const hidden = n > visible;
+      const cat: MenuCategoryLayout = {
+        header: { col: at.header, row: h },
+        cards,
+        visible: Math.min(n, visible),
+        band: { at: lastShown, rows: last - lastShown },
+        more: hidden
+          ? mode === 'column'
+            ? { row: last, col: at.card, align: 'start' }
+            : { row: last, col: at.card + (perRow - 1) * at.dc, align: 'end' }
+          : null,
+      };
+      h = last + tail + (hidden ? 1 : 0);
+      return cat;
+    });
+    return { cats, bottom: h };
+  };
+
   let s: number;
   let about: MenuSectionLayout;
   let projects: MenuSectionLayout;
-  if (inner / WIDE_COLS >= MIN_WIDE) {
-    mode = 'wide';
+  if (mode === 'wide') {
     s = Math.min(MAX_SPACING_MENU, inner / WIDE_COLS);
     // ABOUT ME: fence cols −1..4; switch (0, 2); children down the spine, 2 rows apart.
     const aKids = grid(opts.about, 1, 0, 4, 0, 2);
     const aBottom = Math.max(9, (aKids.at(-1)?.row ?? 2) + 1);
     // PROJECTS: fence cols 5..18; switch (6, 2); children 4 cols and 3 rows apart, hanging plates.
-    const pRows = rows(opts.projects, 3);
-    const pBottom = Math.max(aBottom, 4 + 3 * (pRows - 1) + 2);
-    about = section({ col: 0, row: 2 }, aKids, 'side', sideW(s, 3.7), { c0: -1, r0: 1, c1: 4, r1: Math.max(aBottom, pBottom) });
-    projects = section({ col: 6, row: 2 }, grid(opts.projects, 3, 8, 4, 4, 3), 'hang', 4 * s - MENU_PX.hangGap, {
-      c0: 5,
-      r0: 1,
-      c1: 18,
-      r1: Math.max(aBottom, pBottom),
-    });
-  } else if (inner / STACKED_COLS >= MIN_STACKED) {
-    mode = 'stacked';
+    // By category: the headers down the trunk (col 6) from row 3, each row of cards under its header.
+    const byCat = counts && categoryRows(3, { header: 6, card: 8, dc: 4 });
+    const pRows = rows(nProjects, 3);
+    const pBottom = byCat ? byCat.bottom : Math.max(aBottom, 4 + 3 * (pRows - 1) + hangRows(s));
+    const r1 = Math.max(aBottom, pBottom);
+    about = section({ col: 0, row: 2 }, aKids, 'side', sideW(s, 3.7), { c0: -1, r0: 1, c1: 4, r1 });
+    about.ownR1 = aBottom;
+    projects = section(
+      { col: 6, row: 2 },
+      byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 3, 8, 4, 4, 3),
+      'hang',
+      4 * s - MENU_PX.hangGap,
+      { c0: 5, r0: 1, c1: 18, r1 },
+      byCat?.cats,
+    );
+    projects.ownR1 = pBottom;
+  } else if (mode === 'stacked') {
     s = Math.min(MAX_SPACING_MENU, inner / STACKED_COLS);
     // ABOUT ME: fence −1..12 × 1..5; switch (0, 2); children in a row on row 4, 4 cols apart.
     const aRows = rows(opts.about, 3);
@@ -568,17 +660,19 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
       r1: aBottom,
     });
     // PROJECTS: the next fence down; switch one row in; children 4 cols and 3 rows apart.
+    // By category: the headers down the trunk (col 0), each row of cards under its header.
     const top = aBottom + 1;
-    const pRows = rows(opts.projects, 3);
+    const byCat = counts && categoryRows(top + 2, { header: 0, card: 2, dc: 4 });
+    const pRows = rows(nProjects, 3);
     projects = section(
       { col: 0, row: top + 1 },
-      grid(opts.projects, 3, 2, top + 3, 4, 3),
+      byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 3, 2, top + 3, 4, 3),
       'hang',
       4 * s - MENU_PX.hangGap,
-      { c0: -1, r0: top, c1: 12, r1: top + 3 + 3 * (pRows - 1) + 2 },
+      { c0: -1, r0: top, c1: 12, r1: byCat ? byCat.bottom : top + 3 + 3 * (pRows - 1) + hangRows(s) },
+      byCat?.cats,
     );
   } else {
-    mode = 'column';
     // An exact number of spacings across, near 58px; the fence spans them all.
     const n = Math.max(4, Math.round(inner / PHONE_SPACING_MENU));
     s = inner / n;
@@ -595,34 +689,25 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
       r1: aBottom,
     });
     const top = aBottom + 1;
+    // By category: the headers on the spine, right under the switch, each one's cards down the
+    // spine under it (the first card still makes an 812px screen).
+    const byCat = counts && categoryRows(top + 2, { header: 0, card: 0, dc: 0 });
     projects = section(
       { col: 0, row: top + 1 },
-      grid(opts.projects, 1, 0, top + 3, 0, 2),
+      byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 1, 0, top + 3, 0, 2),
       'side',
       sideW(s, room),
-      { c0: -1, r0: top, c1, r1: top + 3 + 2 * (opts.projects - 1) + 1 },
+      { c0: -1, r0: top, c1, r1: byCat ? byCat.bottom - 1 : top + 3 + 2 * (nProjects - 1) + 1 },
+      byCat?.cats,
     );
   }
   // Everything but the root moves down when the fences start lower.
   const dr = Math.max(0, Math.round(opts.fenceTop ?? 1) - 1);
-  if (dr) {
-    for (const sec of [about, projects]) {
-      sec.switch = { ...sec.switch, row: sec.switch.row + dr };
-      sec.children = sec.children.map((c) => ({ ...c, row: c.row + dr }));
-      sec.fence = { ...sec.fence, r0: sec.fence.r0 + dr, r1: sec.fence.r1 + dr };
-      sec.collapsed = { ...sec.collapsed, r0: sec.collapsed.r0 + dr, r1: sec.collapsed.r1 + dr };
-    }
-  }
+  if (dr) for (const sec of [about, projects]) moveSection(sec, dr);
   let bottom = Math.max(about.fence.r1, projects.fence.r1);
   if (mode !== 'wide') {
     // A collapsed section keeps only its switch row: what follows moves up by the rows it frees.
-    if (opts.collapsed?.about) {
-      const up = about.fence.r1 - about.collapsed.r1;
-      projects.switch = { ...projects.switch, row: projects.switch.row - up };
-      projects.children = projects.children.map((c) => ({ ...c, row: c.row - up }));
-      projects.fence = { ...projects.fence, r0: projects.fence.r0 - up, r1: projects.fence.r1 - up };
-      projects.collapsed = { ...projects.collapsed, r0: projects.collapsed.r0 - up, r1: projects.collapsed.r1 - up };
-    }
+    if (opts.collapsed?.about) moveSection(projects, -(about.fence.r1 - about.collapsed.r1));
     bottom = opts.collapsed?.projects ? projects.collapsed.r1 : projects.fence.r1;
   }
   const extent = {
@@ -632,6 +717,93 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
     r1: bottom,
   };
   return { mode, spacing: s, root: { col: 0, row: 0 }, about, projects, extent };
+}
+
+/** Move a section (switch, children, fences, categories) down `dr` whole rows. */
+function moveSection(sec: MenuSectionLayout, dr: number) {
+  const down = <T extends { row: number }>(p: T): T => ({ ...p, row: p.row + dr });
+  sec.switch = down(sec.switch);
+  sec.children = sec.children.map(down);
+  sec.fence = { ...sec.fence, r0: sec.fence.r0 + dr, r1: sec.fence.r1 + dr };
+  sec.collapsed = { ...sec.collapsed, r0: sec.collapsed.r0 + dr, r1: sec.collapsed.r1 + dr };
+  sec.ownR1 += dr;
+  sec.categories = sec.categories?.map((c) => ({
+    ...c,
+    header: down(c.header),
+    cards: c.cards.map(down),
+    band: { ...c.band, at: c.band.at + dr },
+    more: c.more && down(c.more),
+  }));
+}
+
+/**
+ * Rows squeezed shut, in layout rows: from row `at`, `rows` of them, for columns `c0..c1`,
+ * by `v` (0 open .. 1 shut). ABOUT ME's freed rows (stacked, column) and each category's
+ * hidden-card rows are bands; the engine keeps the expanded layout and the page draws it
+ * through them.
+ */
+export interface Band {
+  at: number;
+  rows: number;
+  c0: number;
+  c1: number;
+  v: number;
+}
+
+/**
+ * The menu's bands. `shut`: how far ABOUT ME (0 open .. 1 collapsed) and each category
+ * (0 expanded .. 1 collapsed) are squeezed. Wide keeps ABOUT ME's rows, and its category
+ * bands only cover the PROJECTS columns (ABOUT ME sits beside them).
+ */
+export function menuBands(l: MenuLayout, shut: { about?: number; categories?: readonly number[] }): Band[] {
+  const out: Band[] = [];
+  const aboutRows = l.mode === 'wide' ? 0 : l.about.fence.r1 - l.about.collapsed.r1;
+  if (aboutRows > 0) out.push({ at: l.about.collapsed.r1, rows: aboutRows, c0: -Infinity, c1: Infinity, v: shut.about ?? 0 });
+  l.projects.categories?.forEach((c, k) => {
+    if (c.band.rows <= 0) return;
+    const c0 = l.mode === 'wide' ? l.projects.fence.c0 : -Infinity;
+    out.push({ ...c.band, c0, c1: Infinity, v: shut.categories?.[k] ?? 0 });
+  });
+  return out;
+}
+
+/** Where layout row `row` (at column `col`) is drawn through the bands: under a band it moves up, inside it it closes up. */
+export function squeezeRow(row: number, col: number, bands: readonly Band[]): number {
+  let out = row;
+  for (const b of bands) {
+    if (b.v <= 0 || row <= b.at || col < b.c0 || col > b.c1) continue;
+    out -= b.v * Math.min(row - b.at, b.rows);
+  }
+  return out;
+}
+
+/** How squeezed the band holding row `row` (strictly inside it) is: 0 when it's in none. */
+export function bandSqueeze(row: number, col: number, bands: readonly Band[]): number {
+  let v = 0;
+  for (const b of bands) if (row > b.at && row < b.at + b.rows && col >= b.c0 && col <= b.c1) v = Math.max(v, b.v);
+  return v;
+}
+
+/**
+ * The flow's anchors, where they're drawn: the root, the switches, ABOUT ME's children, and
+ * in PROJECTS each category header plus its visible cards (all of them while `open[k]`). A
+ * collapsed category's hidden cards are no anchors, and its rows are squeezed shut.
+ */
+export function menuAnchors(l: MenuLayout, open: readonly boolean[] = []): { id: string; col: number; row: number }[] {
+  const cats = l.projects.categories;
+  const bands = menuBands(l, { categories: cats?.map((_, k) => (open[k] ? 0 : 1)) });
+  const out: { id: string; col: number; row: number }[] = [];
+  const add = (id: string, p: { col: number; row: number }) => out.push({ id, col: p.col, row: squeezeRow(p.row, p.col, bands) });
+  add('root', l.root);
+  add('about', l.about.switch);
+  l.about.children.forEach((c, k) => add(`about/${k}`, c));
+  add('projects', l.projects.switch);
+  if (!cats) l.projects.children.forEach((c, k) => add(`projects/${k}`, c));
+  cats?.forEach((c, k) => {
+    add(`cat/${k}`, c.header);
+    c.cards.slice(0, open[k] ? c.cards.length : c.visible).forEach((p, j) => add(`cat/${k}/${j}`, p));
+  });
+  return out;
 }
 
 /** One leg of the circuit: power flows from vertex `from` to vertex `to`. */

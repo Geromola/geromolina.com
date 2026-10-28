@@ -1,8 +1,14 @@
 ---
 import { getCollection } from 'astro:content';
+import { groupByCategory } from '../../grid/categories';
 import Section from './Section.astro';
 
-const nodes = (await getCollection('nodes')).map((e) => e.data).sort((a, b) => a.order - b.order);
+// The menu's order: projects by category (each by `order`), then the page sections.
+const all = (await getCollection('nodes')).map((e) => e.data);
+const nodes = [
+  ...groupByCategory(all).flatMap((g) => g.items),
+  ...all.filter((n) => n.kind === 'section').sort((a, b) => a.order - b.order),
+];
 ---
 
 <Section id="node-index" kicker="INDEX · THE GRID" title="Every node on the grid">
@@ -57,7 +63,7 @@ const nodes = (await getCollection('nodes')).map((e) => e.data).sort((a, b) => a
     text-transform: uppercase;
     color: var(--muted);
   }
-  .row--plant .row__kicker {
+  :is(.row--plant, .row--game) .row__kicker {
     color: var(--cyan);
   }
   .row--substation .row__kicker,

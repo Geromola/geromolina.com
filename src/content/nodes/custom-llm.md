@@ -7,7 +7,9 @@ kicker: Plant · live
 href: /projects/custom-llm
 land: [0.56, 0.3]
 port: [0.36, 0.33]
-order: 0
+order: 1
+category: solutions
+tags: ['From scratch', 'Berkeley']
 pitch: 'A 122,368-parameter language model I trained from scratch, then made sit a 48-question exam. The explorer runs the real weights in your browser, so you can watch it think.'
 liveUrl: https://geromola.github.io/custom-llm/viz/
 repo: https://github.com/Geromola/custom-llm

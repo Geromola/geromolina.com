@@ -333,3 +333,45 @@ After those, "Where this goes" cards link to LifeWiki: the Snark, Rendell's Turi
 ### Layout
 - **Desktop:** the board fills the window under the top bar. The readout is top-left, the dock bottom-centre and the glass panel (Tour / Library / Signals) on the right.
 - **Phones:** the panel is a bottom sheet with peek, half and full stops, dragged 1:1 and released on a `Spring` with flick projection. The dock sits above the peek in two rows.
+
+## Projects menu by category
+Decided 2026-10-27. The site is also Gero's calling card: a visitor should see in seconds what kind of work each project is. PROJECTS in the home node menu (v3.2) is now grouped into three fixed categories. A category says **what a project is and what a visitor does with it**, never where it came from. There is no "class projects" or "coursework" group; an origin (e.g. Berkeley) is only a small tag on the card.
+
+| id | Label | Tagline |
+|---|---|---|
+| `math-nature` | Math & Nature | Simple rules, living patterns. |
+| `games` | Games | Playable, with something to learn. |
+| `solutions` | Solutions | Systems that automate, organize or analyze real work. |
+
+- **Math & Nature:** Conway's Life (`/life`), Raup's Cube (`/shells`).
+- **Games:** Pac-Man DQN, Ballpark (`/ballpark`).
+- **Solutions:** Spotify Insight, Custom LLM, Personal Wiki, Networking Tracker (still the locked, amber node).
+
+### Data model
+- One source of truth: every project and game is a file in `src/content/nodes/`. Ballpark, Raup's Cube and Conway's Life are `kind: game` nodes (no project page; `▶ PLAY` badge).
+- `category`: one of the three ids. Required for plants, substations and games; absent for sections (the schema refuses either mistake).
+- `tags`: a list of short strings, default empty, shown as small mono chips on the plate (`Multi-agent`, `Reinforcement learning`, `WebGL`, `Berkeley`…).
+- `order`: the order inside a category. Categories render in the fixed order above; an empty one isn't rendered. A new node file with a category lands in its row with no code change.
+- `tests/fixtures/nodes.ts` (`MENU_NODES`) mirrors the files, and a test checks it against them.
+
+### Layout
+- A trunk runs down from the PROJECTS switch. Each category is a **header** on the trunk (a small glyph, the label, a count and the tagline) with its **row of cards** under it.
+- **Wide (≥ ~1128px):** the trunk on PROJECTS' left edge, cards 3 per row with hanging plates.
+- **Tablet (stacked):** the same with the trunk on the left of the full-width PROJECTS fence; cards 3 per row.
+- **Phones (column):** headers and cards along the single spine; the tagline wraps under the label.
+- Cards shown while collapsed: **3 on wide, 2 on tablet and phones**. A row with more ends with a **Show more** button (`Show 2 more` ↔ `Show less`): a real `<button>` with `aria-expanded` and `aria-controls` (the category's list), right-aligned under the row on wide and tablet, under the cards on phones. No hidden cards, no button.
+- Plates gained a row of tags: hanging plates are 126px tall, side plates 88px (one line of badge + tags on phones). A chip that doesn't fit drops out of sight rather than being cut; a single long one ends in an ellipsis.
+
+### Expand and collapse
+- `Spring`, critically damped, no CSS transition for the gesture. The header answers on pointer-down (its charge sweep); the click toggles, so keyboards work. A press mid-animation reverses from wherever the springs are.
+- Expand: the rows below slide open first, then the energy front runs out to the revealed cards and they spring in. Collapse: the front drains first, then the rows close.
+- Hidden cards are `inert` (out of the tab order and the accessibility tree) until revealed. Collapsing never loses focus: a focused card about to go hands focus to the button.
+- Reduced motion: instant state change and a fresh still frame. Reduced transparency and more contrast: solid button and plate backgrounds, stronger borders and text.
+- The expanded categories are remembered for the tab in `sessionStorage` (`gero-menu-cats`, wrapped in try/catch).
+
+### The flow
+- Same decorative engine as before, one more level: root → switch → **category header** → card. Every visible card and every header is a load (an anchor); hidden cards are disabled loads, so their packets fade out and nothing flows to them.
+- The engine always runs on the fully expanded layout. A collapsed category's extra rows are a **band** squeezed shut on screen (`menuBands`, `squeezeRow`, the same mechanism as ABOUT ME's collapse): corridors, electrons and DOM below it slide up by whole rows, so everything stays on the lattice. On wide the bands only cover the PROJECTS columns. Expanding re-opens the band and the flow reaches the new cards as soon as they power on. Resize and mode switches rebuild the layout (3 ↔ 2 shown).
+- Hover or focus on a card pulls the flow to it; hover on a header, or hover/focus on its Show more, pulls it to the header.
+- The reduced-motion still frame and the Canvas fallback (`?renderer=canvas`) work as before.
+- The v2 card menu (`ProjectMenu.astro`, `GridMap.astro`, `src/grid/main.ts`) is not mounted any more and was not changed beyond what the new `game` kind needed.

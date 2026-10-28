@@ -1,12 +1,17 @@
 import {
   GridGame,
   MENU_PX,
+  bandSqueeze,
   circuitPaths,
   circuitTransformers,
+  menuBands,
   menuLayout,
+  squeezeRow,
   visibleBounds,
+  type Band,
   type GameNode,
   type LatticeRect,
+  type MenuCategoryLayout,
   type MenuLayout,
   type MenuSectionLayout,
 } from './game';
@@ -23,6 +28,13 @@ import { Spring } from './spring';
  * corridors, and a section's children are only fed while it's open. On load
  * the power-on runs in sequence (root, About me, Projects); input works
  * throughout. The game itself stays DOM-free in `./game`.
+ *
+ * PROJECTS by category (SPEC "Projects menu by category"): the switch feeds a
+ * header per category down the trunk, and each header its cards. A category
+ * shows its first few cards; "Show more" reveals the rest. The engine always
+ * runs on the fully expanded layout: a collapsed category's hidden cards are
+ * disabled loads (no anchors), and its rows are squeezed shut on screen
+ * (`menuBands`), the way ABOUT ME's are.
  */
 
 /** sessionStorage: the clicked glyph's viewport circle, for the view transition (Base.astro). */
@@ -52,8 +64,10 @@ const PRESS_SCALE = 0.98;
 const HINT_MS = 1600;
 const PULL = 0.35; // a hidden child sits this share of the way toward its switch
 const PROJECT_PATH = /^\/projects\/[^/]+\/?$/;
+/** sessionStorage: the expanded categories, so a return visit in the tab keeps them. */
+const CATS_KEY = 'gero-menu-cats';
 
-type Role = 'root' | 'switch' | 'child';
+type Role = 'root' | 'switch' | 'header' | 'child';
 
 interface MNode {
   role: Role;
@@ -66,6 +80,11 @@ interface MNode {
   id: string;
   /** Section index (0 about, 1 projects), −1 for the root. */
   section: number;
+  /** The node a hidden plate retracts into (its switch, or its category header); −1 for the root. */
+  parent: number;
+  /** Its vertex in layout units (the root at 0, 0), expanded. */
+  col: number;
+  row: number;
   soon: boolean;
   fillTo: number;
   lift: Spring;
@@ -115,6 +134,38 @@ interface Section {
    */
   rows: number;
   shift: Spring;
+  /** Longest chain of corridors from the switch (segments): the front's full reach. */
+  reach: number;
+}
+
+/** A PROJECTS category: a header node, its cards, and a Show more control when some are hidden. */
+interface Category {
+  id: string;
+  el: HTMLElement;
+  list: HTMLElement;
+  more: HTMLButtonElement | null;
+  /** Node indices. */
+  head: number;
+  cards: number[];
+  /** Target state: every card shown. */
+  open: boolean;
+  /** The hidden cards' energy front (0 .. 1), and how far its band is squeezed (0 expanded .. 1 collapsed). */
+  front: Spring;
+  shift: Spring;
+  /** From the layout: cards shown while collapsed, and the rows the rest add. */
+  visible: number;
+  rows: number;
+  layout: MenuCategoryLayout | null;
+  /** Where its Show more control was last painted. */
+  moreShown: string;
+}
+
+/** Springs that open and close something in order: a section or a category. */
+interface Gated {
+  open: boolean;
+  rows: number;
+  front: Spring;
+  shift: Spring;
 }
 
 /** One leg of the circuit and its drawn corridor. */
@@ -127,6 +178,11 @@ interface FeedState {
   d: number;
   started: boolean;
   section: number;
+  /** The feed before it in the chain (switch → header → card), −1 when it leaves the switch. */
+  parent: number;
+  /** A card's category and its index in it (−1 otherwise): hidden cards also wait for the category's front. */
+  cat: number;
+  slot: number;
   /** Nodes whose hover brightens this feed. */
   users: number[];
 }
@@ -142,10 +198,11 @@ interface Scene {
   /** Per segment: the feeds through it and the step index along each. */
   uses: { feed: number; step: number }[][];
   alpha: Float32Array;
-  /** Lattice row where ABOUT ME's freed rows start (the flow squeezes them shut as it collapses). */
-  bandAt: number;
-  /** Menu height with nothing collapsed, and the least it may be. */
-  fullHeight: number;
+  /** The root's lattice vertex: layout units → lattice units (the engine's and the renderers'). */
+  rootCol: number;
+  rootRow: number;
+  /** Pixel position of layout row 0, and the least height the menu may be. */
+  originY: number;
   minHeight: number;
 }
 
@@ -170,7 +227,7 @@ export function mountMenu(root: HTMLElement) {
 
   // ------------------------------------------------------------- nodes
   const springs = (n: MNode) => [n.lift, n.press, n.pulse, n.glow, n.charge, n.fill, n.power, n.shown];
-  const makeNode = (role: Role, el: HTMLElement, item: HTMLElement, glyph: HTMLElement, section: number): MNode => ({
+  const makeNode = (role: Role, el: HTMLElement, item: HTMLElement, glyph: HTMLElement, section: number, parent = -1): MNode => ({
     role,
     el,
     item,
@@ -178,6 +235,9 @@ export function mountMenu(root: HTMLElement) {
     ring: glyph.querySelector<SVGPathElement>('[data-ring]'),
     id: el.dataset.id ?? role,
     section,
+    parent,
+    col: 0,
+    row: 0,
     soon: el.hasAttribute('data-soon'),
     fillTo: Number(el.dataset.fill ?? 1),
     lift: new Spring(0, 0.25, 1),
@@ -187,7 +247,7 @@ export function mountMenu(root: HTMLElement) {
     charge: new Spring(0, 0.22, 1),
     fill: new Spring(0, RING_S),
     power: new Spring(0, RING_S),
-    shown: new Spring(role === 'child' ? 0 : 1, SHOW_RESPONSE),
+    shown: new Spring(role === 'child' || role === 'header' ? 0 : 1, SHOW_RESPONSE),
     hot: false,
     clicked: false,
     powered: false,
@@ -222,32 +282,84 @@ export function mountMenu(root: HTMLElement) {
       fenceShown: '',
       rows: 0,
       shift: new Spring(0, SHIFT_RESPONSE, 1),
+      reach: 1,
     };
   });
+  // Categories expanded earlier in this tab.
+  let remembered: string[] = [];
+  try {
+    const v: unknown = JSON.parse(sessionStorage.getItem(CATS_KEY) || '[]');
+    if (Array.isArray(v)) remembered = v.filter((x): x is string => typeof x === 'string');
+  } catch {
+    /* storage unavailable: everything starts collapsed */
+  }
+  const cats: Category[] = [];
+  const child = (a: HTMLElement, s: number, parent: number) => {
+    nodes.push(makeNode('child', a, a.closest<HTMLElement>('[data-menu-item]') ?? a, $('[data-menu-glyph]', a), s, parent));
+    sections[s].children.push(nodes.length - 1);
+    return nodes.length - 1;
+  };
   sections.forEach((sec, i) => {
-    for (const a of sec.el.querySelectorAll<HTMLAnchorElement>('[data-menu-node]')) {
-      nodes.push(makeNode('child', a, a.closest<HTMLElement>('[data-menu-item]') ?? a, $('[data-menu-glyph]', a), i));
-      sec.children.push(nodes.length - 1);
+    const catEls = [...sec.el.querySelectorAll<HTMLElement>('[data-cat]')];
+    if (!catEls.length) {
+      for (const a of sec.el.querySelectorAll<HTMLElement>('[data-menu-node]')) child(a, i, sec.switchNode);
+      return;
+    }
+    for (const el of catEls) {
+      const headEl = $('[data-cat-head]', el);
+      nodes.push(makeNode('header', headEl, headEl, $('[data-cat-glyph]', headEl), i, sec.switchNode));
+      const head = nodes.length - 1;
+      sec.children.push(head);
+      const id = el.dataset.cat ?? String(cats.length);
+      const open = remembered.includes(id);
+      cats.push({
+        id,
+        el,
+        list: $('[data-cat-list]', el),
+        more: el.querySelector<HTMLButtonElement>('[data-cat-more]'),
+        head,
+        cards: [...el.querySelectorAll<HTMLElement>('[data-menu-node]')].map((a) => child(a, i, head)),
+        open,
+        front: new Spring(open ? 1 : 0, SECTION_RESPONSE, 1),
+        shift: new Spring(open ? 0 : 1, SHIFT_RESPONSE, 1),
+        visible: Infinity,
+        rows: 0,
+        layout: null,
+        moreShown: '',
+      });
     }
   });
-  const kids = (s: number) => sections[s].children;
+  const catOf = new Map(cats.flatMap((c, k) => [[c.head, k] as const, ...c.cards.map((n) => [n, k] as const)]));
 
-  // The circuit: root → each switch, each switch → its children.
-  const feeds: FeedState[] = [
-    ...sections.map((sec) => ({
-      from: 0,
-      to: sec.switchNode,
-      len: 1,
-      d: 0,
-      started: false,
-      section: -1,
-      users: [sec.switchNode, ...sec.children],
-    })),
-    ...sections.flatMap((sec, i) =>
-      sec.children.map((k) => ({ from: sec.switchNode, to: k, len: 1, d: 0, started: true, section: i, users: [k] })),
-    ),
-  ];
+  // The circuit: root → each switch → its children; in PROJECTS, switch → each header → its cards.
+  const feeds: FeedState[] = sections.map((sec) => ({
+    from: 0,
+    to: sec.switchNode,
+    len: 1,
+    d: 0,
+    started: false,
+    section: -1,
+    parent: -1,
+    cat: -1,
+    slot: -1,
+    users: [sec.switchNode, ...sec.children],
+  }));
+  sections.forEach((sec, i) => {
+    for (const k of sec.children) {
+      const n = nodes[k];
+      if (n.role === 'child' && n.parent !== sec.switchNode) continue;
+      const cat = catOf.get(k) ?? -1;
+      const users = cat >= 0 ? [k, ...cats[cat].cards] : [k];
+      feeds.push({ from: sec.switchNode, to: k, len: 1, d: 0, started: true, section: i, parent: -1, cat: -1, slot: -1, users });
+      if (cat < 0) continue;
+      const parent = feeds.length - 1;
+      cats[cat].cards.forEach((card, slot) =>
+        feeds.push({ from: k, to: card, len: 1, d: 0, started: true, section: i, parent, cat, slot, users: [card] }),
+      );
+    }
+  });
   const rootFeed = (s: number) => feeds[s];
+  computeReach();
 
   let scene: Scene | null = null;
   let dpr = 1;
@@ -269,7 +381,11 @@ export function mountMenu(root: HTMLElement) {
     // Not laid out yet (a hidden tab or a zero-size frame): the ResizeObserver builds once it has a width.
     if (width < 160) return false;
     const gutter = Math.min(32, Math.max(16, width * 0.03));
-    let layout = menuLayout(width, { about: kids(0).length, projects: kids(1).length, gutter });
+    const counts = {
+      about: sections[0].children.length,
+      projects: cats.length ? cats.map((c) => c.cards.length) : (sections[1]?.children.length ?? 0),
+    };
+    let layout = menuLayout(width, { ...counts, gutter });
     const key = `${width}|${layout.mode}|${window.devicePixelRatio}`;
     if (scene && scene.key === key) return false;
     const t0 = performance.now();
@@ -286,20 +402,27 @@ export function mountMenu(root: HTMLElement) {
     // A tall root plate (it wraps on phones) pushes the fences a row down, clear of the fence label.
     // (Clear of the fence label, 16px tall on the fence line, with 1px to spare.)
     const tallRoot = rootHalf + 9 > s;
-    if (tallRoot) {
-      layout = menuLayout(width, { about: kids(0).length, projects: kids(1).length, gutter, fenceTop: 2 });
-    }
+    if (tallRoot) layout = menuLayout(width, { ...counts, gutter, fenceTop: 2 });
     const ext = layout.extent;
     const minHeight = Math.max(window.innerHeight, 560);
-    const fullHeight = originY + (ext.r1 + 1) * s;
     // The engine and the canvases keep the full (expanded) size; collapsing only slides the DOM
     // and squeezes the drawn flow, and the menu itself gets shorter.
-    const height = Math.max(minHeight, fullHeight);
-    const lopts = { about: kids(0).length, projects: kids(1).length, gutter, fenceTop: tallRoot ? 2 : 1 };
-    const shutAbout = menuLayout(width, { ...lopts, collapsed: { about: true } });
-    const shutBoth = menuLayout(width, { ...lopts, collapsed: { about: true, projects: true } });
-    sections[0].rows = layout.projects.fence.r0 - shutAbout.projects.fence.r0;
-    if (sections[1]) sections[1].rows = shutAbout.extent.r1 - shutBoth.extent.r1;
+    const height = Math.max(minHeight, originY + (ext.r1 + 1) * s);
+    // Stacked and column: a collapsed ABOUT ME gives back its rows (a band), a collapsed PROJECTS
+    // only shortens the menu. Wide keeps both in place.
+    const stackedRows = (sec: MenuSectionLayout) => (layout.mode === 'wide' ? 0 : sec.fence.r1 - sec.collapsed.r1);
+    sections[0].rows = stackedRows(layout.about);
+    if (sections[1]) sections[1].rows = stackedRows(layout.projects);
+    cats.forEach((c, k) => {
+      const L = layout.projects.categories?.[k] ?? null;
+      c.layout = L;
+      c.visible = L?.visible ?? c.cards.length;
+      c.rows = L?.band.rows ?? 0;
+      c.moreShown = '';
+      // A category with nothing hidden at this width has no control (and stays as it is).
+      if (c.more) c.more.hidden = !L?.more;
+      markCat(c);
+    });
     mapEl.style.bottom = 'auto';
     mapEl.style.height = `${height}px`;
     const ox = originX - Math.ceil(originX / s) * s;
@@ -316,6 +439,8 @@ export function mountMenu(root: HTMLElement) {
     // Place the DOM.
     const place = (n: MNode, c: number, r: number) => {
       const p = px(c, r);
+      n.col = c;
+      n.row = r;
       n.x = p.x;
       n.y = p.y;
     };
@@ -338,24 +463,53 @@ export function mountMenu(root: HTMLElement) {
       const plateH = L.style === 'compact' ? MENU_PX.compactH : MENU_PX.sideH;
       const gap = L.style === 'compact' ? MENU_PX.compactGap : MENU_PX.sideGap;
       const itemW = L.style === 'hang' ? L.plateW : g + gap + L.plateW;
-      sec.children.forEach((k, j) => {
+      // Category headers first (cards retract into them), on the trunk like a switch.
+      sec.children.forEach((k) => {
         const n = nodes[k];
-        const c = L.children[j] ?? L.children[L.children.length - 1];
+        if (n.role !== 'header') return;
+        const at = L.categories?.[catOf.get(k) ?? 0]?.header ?? L.switch;
+        place(n, at.col, at.row);
+        n.item.style.left = `${n.x - MENU_PX.headerGlyph / 2}px`;
+        n.top0 = n.y;
+        n.item.style.setProperty('--head-w', `${width - gutter - n.x + MENU_PX.headerGlyph / 2}px`);
+        n.item.style.setProperty('--fx', `${((sw.x - n.x) * PULL).toFixed(1)}px`);
+        n.item.style.setProperty('--fy', `${((sw.y - n.y) * PULL).toFixed(1)}px`);
+      });
+      let flat = 0;
+      sec.children.forEach((k) => {
+        const n = nodes[k];
+        if (n.role !== 'child') return;
+        const c = L.children[flat] ?? L.children[L.children.length - 1];
+        flat++;
         place(n, c.col, c.row);
         const left = L.style === 'hang' ? n.x - L.plateW / 2 : n.x - g / 2;
         const top = L.style === 'hang' ? n.y - g / 2 : n.y - Math.max(g, plateH) / 2;
         n.item.style.left = `${left}px`;
         n.top0 = top;
         n.item.style.setProperty('--item-w', `${itemW}px`);
-        // Hidden, a child sits part of the way toward its switch (the plate retracts into it).
-        n.item.style.setProperty('--fx', `${((sw.x - n.x) * PULL).toFixed(1)}px`);
-        n.item.style.setProperty('--fy', `${((sw.y - n.y) * PULL).toFixed(1)}px`);
+        // Hidden, a child sits part of the way toward its switch or header (the plate retracts into it).
+        const into = nodes[n.parent] ?? sw;
+        n.item.style.setProperty('--fx', `${((into.x - n.x) * PULL).toFixed(1)}px`);
+        n.item.style.setProperty('--fy', `${((into.y - n.y) * PULL).toFixed(1)}px`);
       });
+    });
+    // Show more: under the last card row, at the row's end (hanging plates) or under the glyphs (phones).
+    const style = layout.projects.style;
+    cats.forEach((c) => {
+      const m = c.layout?.more;
+      if (!c.more || !m) return;
+      const p = px(m.col, m.row);
+      const x = m.align === 'end' ? p.x + layout.projects.plateW / 2 : p.x - MENU_PX.glyph / 2;
+      const top =
+        style === 'hang' ? p.y + MENU_PX.hangH + MENU_PX.moreGap : p.y + MENU_PX.sideH / 2 + MENU_PX.moreGap;
+      c.more.style.left = `${x}px`;
+      c.more.dataset.align = m.align;
+      c.more.dataset.top0 = String(top);
     });
     root.dataset.laid = '';
     root.dataset.mode = layout.mode;
 
-    // The game: the root is the plant; switches and children are loads.
+    // The game: the root is the plant; switches, headers and children are loads.
     const vertexOf = (n: MNode) => ({ col: Math.round((n.x - ox) / s), row: Math.round((n.y - oy) / s) });
     const gameNodes: GameNode[] = nodes.map((n) => ({
       id: n.id,
@@ -392,8 +546,9 @@ export function mountMenu(root: HTMLElement) {
     const segIndex = new Map<number, number>();
     const segs: CorridorSegment[] = [];
     const uses: { feed: number; step: number }[][] = [];
+    paths.forEach((p, f) => (feeds[f].len = Math.max(1, p.steps.length)));
+    computeReach();
     paths.forEach((p, f) => {
-      feeds[f].len = Math.max(1, p.steps.length);
       if (feeds[f].section < 0 && Number.isFinite(feeds[f].d) && feeds[f].d > feeds[f].len + FRONT_STEPS) {
         feeds[f].d = feeds[f].len + FRONT_STEPS;
       }
@@ -420,8 +575,9 @@ export function mountMenu(root: HTMLElement) {
       segs,
       uses,
       alpha: new Float32Array(segs.length),
-      bandAt: (originY + layout.about.collapsed.r1 * s - oy) / s,
-      fullHeight,
+      rootCol: Math.round((originX - ox) / s),
+      rootRow: Math.round((originY - oy) / s),
+      originY,
       minHeight,
     };
     for (const n of nodes) n.paint.top = NaN;
@@ -440,13 +596,28 @@ export function mountMenu(root: HTMLElement) {
   }
 
   // ----------------------------------------------------------- circuit
-  /** Front position (segments) of feed `f`. */
+  /**
+   * Front position (segments) of feed `f`. A section's front runs down its chains (switch →
+   * header → card) in one sweep; a hidden card's feed also waits for its category's front.
+   */
   function feedD(f: number): number {
     const feed = feeds[f];
     if (feed.section < 0) return feed.d;
-    const sec = sections[feed.section];
-    const longest = Math.max(1, ...sec.children.map((k) => feeds.find((g) => g.to === k)?.len ?? 1));
-    return Math.max(0, sec.front.value) * (longest + FRONT_STEPS);
+    const d =
+      feed.parent >= 0
+        ? feedD(feed.parent) - feeds[feed.parent].len
+        : Math.max(0, sections[feed.section].front.value) * (sections[feed.section].reach + FRONT_STEPS);
+    const cat = cats[feed.cat];
+    if (!cat || feed.slot < cat.visible) return d;
+    return Math.min(d, Math.max(0, cat.front.value) * (feed.len + FRONT_STEPS));
+  }
+
+  /** Each section's reach: its longest chain of corridors from the switch. */
+  function computeReach() {
+    const chain = (f: number): number => feeds[f].len + (feeds[f].parent >= 0 ? chain(feeds[f].parent) : 0);
+    sections.forEach((sec, s) => {
+      sec.reach = Math.max(1, ...feeds.map((f, i) => (f.section === s ? chain(i) : 0)));
+    });
   }
 
   function powerOn(n: MNode, now = false) {
@@ -478,19 +649,19 @@ export function mountMenu(root: HTMLElement) {
     if (k > 0) scene?.game.setLoadEnabled(k, false);
   }
 
-  /** Power follows the fronts: a switch once its corridor arrives, a child while its section's front covers it. */
+  /** Power follows the fronts: a switch once its corridor arrives, anything else while its feed's front covers it. */
   function updatePower() {
     sections.forEach((sec, s) => {
       const sw = nodes[sec.switchNode];
       const f = rootFeed(s);
       if (!sw.powered && f.started && f.d >= f.len) powerOn(sw);
-      for (const k of sec.children) {
-        const fi = feeds.findIndex((g) => g.to === k);
-        const reached = feedD(fi) >= feeds[fi].len;
-        const n = nodes[k];
-        if (reached && !n.powered) powerOn(n);
-        else if (!reached && n.powered) powerOff(n);
-      }
+    });
+    feeds.forEach((f, i) => {
+      if (f.section < 0) return;
+      const reached = feedD(i) >= f.len;
+      const n = nodes[f.to];
+      if (reached && !n.powered) powerOn(n);
+      else if (!reached && n.powered) powerOff(n);
     });
   }
 
@@ -512,10 +683,44 @@ export function mountMenu(root: HTMLElement) {
     }
     sec.button.setAttribute('aria-expanded', String(open));
     // Collapsed children are out of reach at once (the plates retract after).
+    if (!open && sec.list.contains(document.activeElement)) sec.button.focus();
     sec.list.inert = !open;
     updatePower();
     if (now || reduced()) settle();
     else kick();
+  }
+
+  /** Expand or collapse category `c` (Show more / Show less). A press mid-way reverses from where it is. */
+  function setCatOpen(c: number, open: boolean, now = false) {
+    const cat = cats[c];
+    cat.open = open;
+    gate(cat);
+    if (now || reduced()) land(cat);
+    markCat(cat);
+    updatePower();
+    if (reduced()) still();
+    else if (now) settle();
+    else kick();
+    try {
+      sessionStorage.setItem(CATS_KEY, JSON.stringify(cats.filter((x) => x.open).map((x) => x.id)));
+    } catch {
+      /* storage unavailable: the state just isn't remembered */
+    }
+  }
+
+  /** A category's control and its hidden cards: label, state, and out of reach while collapsed. */
+  function markCat(cat: Category) {
+    const hidden = cat.cards.length - Math.min(cat.cards.length, cat.visible);
+    if (cat.more) {
+      cat.more.setAttribute('aria-expanded', String(cat.open));
+      const label = cat.more.querySelector('[data-more-label]');
+      if (label) label.textContent = cat.open ? 'Show less' : `Show ${hidden} more`;
+    }
+    const items = cat.cards.map((k) => nodes[k].item);
+    const out = items.filter((_, j) => j >= cat.visible && !cat.open);
+    // Never lose focus: a card about to go out of reach hands it to the control.
+    if (out.some((el) => el.contains(document.activeElement))) cat.more?.focus();
+    items.forEach((el) => (el.inert = out.includes(el)));
   }
 
   // ------------------------------------------------------------- intro
@@ -593,49 +798,44 @@ export function mountMenu(root: HTMLElement) {
       }
       alpha[i] = a;
     }
-    const v = squeeze();
-    if (v > 0) {
-      // ABOUT ME's freed rows close up: corridors through them shrink (and fade), the rest slides.
-      const at = scene.bandAt;
-      const k = sections[0].rows;
+    const b = bands();
+    if (b.length) {
+      // Collapsed rows close up: corridors through them shrink (and fade), the rest slides.
+      const { rootCol, rootRow } = scene;
       const mapped = segs.map((seg, i) => {
-        const mid = (seg.r0 + seg.r1) / 2;
-        if (mid > at && mid < at + k) alpha[i] *= 1 - v;
-        return { ...seg, r0: mapRow(seg.r0), r1: mapRow(seg.r1) };
+        const col = (seg.c0 + seg.c1) / 2 - rootCol;
+        alpha[i] *= 1 - bandSqueeze((seg.r0 + seg.r1) / 2 - rootRow, col, b);
+        return { ...seg, r0: squeezeRow(seg.r0 - rootRow, col, b) + rootRow, r1: squeezeRow(seg.r1 - rootRow, col, b) + rootRow };
       });
       corridors.draw(mapped, alpha);
     } else corridors.draw(segs, alpha);
   }
 
-  /** How far ABOUT ME's freed rows are squeezed shut (0 open .. 1 shut); 0 in wide. */
-  function squeeze() {
-    return sections[0]?.rows ? Math.min(1, Math.max(0, sections[0].shift.value)) : 0;
+  /**
+   * The rows squeezed shut right now (layout units): ABOUT ME's while it collapses (stacked,
+   * column) and each collapsed category's hidden rows. Empty when nothing is squeezed.
+   */
+  function bands(): Band[] {
+    if (!scene) return [];
+    const v = (x: Spring) => Math.min(1, Math.max(0, x.value));
+    return menuBands(scene.layout, {
+      about: sections[0] ? v(sections[0].shift) : 0,
+      categories: cats.map((c) => v(c.shift)),
+    }).filter((b) => b.v > 0);
   }
 
-  /** A lattice row in the engine's (expanded) layout → where it's drawn now. */
-  function mapRow(y: number) {
-    const v = squeeze();
-    if (!scene || v <= 0) return y;
-    const at = scene.bandAt;
-    const k = sections[0].rows;
-    if (y <= at) return y;
-    if (y >= at + k) return y - v * k;
-    return at + (y - at) * (1 - v);
-  }
-
-  /** Electrons follow the squeeze: below the freed rows they slide up, inside them they shrink and fade. */
+  /** Electrons follow the squeeze: below squeezed rows they slide up, inside them they shrink and fade. */
   function mapElectrons() {
-    const v = squeeze();
-    if (!scene || v <= 0) return;
+    const b = bands();
+    if (!scene || !b.length) return;
     const g = scene.game;
-    const at = scene.bandAt;
-    const k = sections[0].rows;
-    const fade = Math.max(0, 1 - 2 * v);
+    const { rootCol, rootRow } = scene;
     for (let i = 0; i < g.count; i++) {
-      const y = g.y[i];
-      if (y <= at) continue;
-      if (y < at + k) g.bright[i] *= fade;
-      g.y[i] = mapRow(y);
+      const row = g.y[i] - rootRow;
+      const col = g.x[i] - rootCol;
+      const v = bandSqueeze(row, col, b);
+      if (v > 0) g.bright[i] *= Math.max(0, 1 - 2 * v);
+      g.y[i] = squeezeRow(row, col, b) + rootRow;
     }
   }
 
@@ -652,7 +852,7 @@ export function mountMenu(root: HTMLElement) {
    * the slide comes back down first, then the front goes out. Both follow `open` from
    * wherever the springs are, so a click mid-way reverses cleanly.
    */
-  function gate(sec: Section) {
+  function gate(sec: Gated) {
     if (sec.open) {
       sec.shift.target = 0;
       sec.front.target = !sec.rows || sec.shift.value < OPEN_AFTER ? 1 : 0;
@@ -663,7 +863,7 @@ export function mountMenu(root: HTMLElement) {
   }
 
   /** Reduced motion or no loop: land a section's front and slide in order. */
-  function land(sec: Section) {
+  function land(sec: Gated) {
     gate(sec);
     sec.shift.snap(sec.shift.target);
     gate(sec);
@@ -672,21 +872,47 @@ export function mountMenu(root: HTMLElement) {
     sec.shift.snap(sec.shift.target);
   }
 
-  /** What follows ABOUT ME slides with it; the menu shortens by every collapsed section's rows. */
+  /**
+   * Everything under squeezed rows slides up with them (the Show more controls too); the menu
+   * ends under the lower fence (wide), or under PROJECTS, shut as far as its switch (stacked, column).
+   */
   function paintShift() {
     if (!scene) return;
     const s = scene.lat.spacing;
-    const dy = -squeeze() * (sections[0]?.rows ?? 0) * s;
+    const b = bands();
+    const up = (row: number, col: number) => (row - squeezeRow(row, col, b)) * s;
     for (const n of nodes) {
-      const top = n.top0 + (n.section === 1 ? dy : 0);
+      const top = n.top0 - (n.role === 'root' ? 0 : up(n.row, n.col));
       if (n.paint.top === top) continue;
       n.paint.top = top;
       n.item.style.top = `${top}px`;
     }
-    const freed = sections.reduce((sum, sec) => sum + Math.min(1, Math.max(0, sec.shift.value)) * sec.rows, 0);
-    const h = Math.max(scene.minHeight, scene.fullHeight - freed * s);
+    for (const c of cats) paintMore(c, up);
+    const L = scene.layout;
+    const pc = L.projects.fence.c0 + 1;
+    const open = squeezeRow(L.projects.fence.r1, pc, b);
+    let bottom: number;
+    if (L.mode === 'wide') bottom = Math.max(L.about.ownR1, open);
+    else {
+      const shut = squeezeRow(L.projects.collapsed.r1, pc, b);
+      bottom = open + (shut - open) * Math.min(1, Math.max(0, sections[1]?.shift.value ?? 0));
+    }
+    const h = Math.max(scene.minHeight, scene.originY + (bottom + 1) * s);
     const shown = `${h.toFixed(1)}px`;
     if (content.style.height !== shown) content.style.height = shown;
+  }
+
+  /** A category's Show more control: under its last shown row, there as soon as its header is. */
+  function paintMore(c: Category, up: (row: number, col: number) => number) {
+    const m = c.layout?.more;
+    if (!c.more || !m) return;
+    const top = Number(c.more.dataset.top0) - up(m.row, m.col);
+    const shown = Math.min(1, Math.max(0, nodes[c.head].shown.value));
+    const key = `${top.toFixed(1)}|${shown.toFixed(3)}`;
+    if (key === c.moreShown) return;
+    c.moreShown = key;
+    c.more.style.top = `${top}px`;
+    c.more.style.setProperty('--shown', shown.toFixed(3));
   }
 
   function paintNode(n: MNode) {
@@ -702,7 +928,7 @@ export function mountMenu(root: HTMLElement) {
     set('--glow', Math.max(0, n.glow.value));
     set('--charge', Math.min(1, Math.max(0, n.charge.value)));
     set('--power', Math.min(1, Math.max(0, n.power.value)));
-    if (n.role === 'child') set('--shown', Math.min(1, Math.max(0, n.shown.value)));
+    if (n.role === 'child' || n.role === 'header') set('--shown', Math.min(1, Math.max(0, n.shown.value)));
     const f = Number((Math.min(1, Math.max(0, n.fill.value)) * 100).toFixed(1));
     if (n.ring && n.paint.fill !== f) {
       n.paint.fill = f;
@@ -717,16 +943,25 @@ export function mountMenu(root: HTMLElement) {
     const t = Math.min(1, Math.max(0, sec.front.value * 1.6));
     const e = t * t * (3 - 2 * t);
     const lerp = (a: number, b: number) => a + (b - a) * e;
+    // Both rects as drawn through the squeezed rows. Wide: both fences end on the lower bottom.
+    const b = bands();
+    const col = L.fence.c0 + 1;
+    const at = (row: number) => squeezeRow(row, col, b);
+    const lay = scene.layout;
+    const r1 =
+      lay.mode === 'wide'
+        ? Math.max(lay.about.ownR1, squeezeRow(lay.projects.fence.r1, lay.projects.fence.c0 + 1, b))
+        : at(L.fence.r1);
     const r: LatticeRect = {
       c0: lerp(L.collapsed.c0, L.fence.c0),
-      r0: lerp(L.collapsed.r0, L.fence.r0),
+      r0: lerp(at(L.collapsed.r0), at(L.fence.r0)),
       c1: lerp(L.collapsed.c1, L.fence.c1),
-      r1: lerp(L.collapsed.r1, L.fence.r1),
+      r1: lerp(at(L.collapsed.r1), r1),
     };
     const s = scene.lat.spacing;
     const root0 = nodes[0];
     const x0 = root0.x + r.c0 * s;
-    const y0 = root0.y + r.r0 * s - (sec === sections[1] ? squeeze() * sections[0].rows * s : 0);
+    const y0 = root0.y + r.r0 * s;
     const key = `${x0.toFixed(1)},${y0.toFixed(1)},${((r.c1 - r.c0) * s).toFixed(1)},${((r.r1 - r.r0) * s).toFixed(1)}`;
     if (key !== sec.fenceShown) {
       sec.fenceShown = key;
@@ -754,6 +989,11 @@ export function mountMenu(root: HTMLElement) {
       sec.shift.step(dt);
       sec.chev.step(dt);
     }
+    for (const c of cats) {
+      gate(c);
+      c.front.step(dt);
+      c.shift.step(dt);
+    }
     paintAll();
   }
 
@@ -764,6 +1004,7 @@ export function mountMenu(root: HTMLElement) {
       land(sec);
       sec.chev.snap(sec.chev.target);
     }
+    for (const c of cats) land(c);
     updatePower();
     for (const n of nodes) for (const s of springs(n)) s.snap(s.target);
     paintAll();
@@ -838,6 +1079,8 @@ export function mountMenu(root: HTMLElement) {
     if (n.role === 'root') return;
     n.el.addEventListener('pointerenter', () => setHot(k, true));
     n.el.addEventListener('pointerleave', () => setHot(k, false));
+    // A header isn't a control: hovering it pulls the flow, its Show more does the rest.
+    if (n.role === 'header') return;
     n.el.addEventListener('focus', () => setHot(k, true));
     n.el.addEventListener('blur', () => setHot(k, false));
     n.el.addEventListener('pointerdown', (e) => {
@@ -854,6 +1097,27 @@ export function mountMenu(root: HTMLElement) {
       n.clicked = false;
       window.setTimeout(() => discharge(n), 260);
       setOpen(s, !sec.open, true);
+    });
+  });
+
+  // Show more / Show less: the header answers on pointer-down (its charge sweep) and pulls the
+  // flow while the control is hovered or focused; the click toggles, so keyboards work too.
+  cats.forEach((c, i) => {
+    const btn = c.more;
+    if (!btn) return;
+    const head = nodes[c.head];
+    btn.addEventListener('pointerenter', () => setHot(c.head, true));
+    btn.addEventListener('pointerleave', () => setHot(c.head, false));
+    btn.addEventListener('focus', () => setHot(c.head, true));
+    btn.addEventListener('blur', () => setHot(c.head, false));
+    btn.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      press(head, e);
+    });
+    btn.addEventListener('click', () => {
+      head.clicked = false;
+      window.setTimeout(() => discharge(head), 260);
+      setCatOpen(i, !c.open);
     });
   });
 
@@ -1014,6 +1278,27 @@ export function mountMenu(root: HTMLElement) {
     toggle(key: string) {
       const s = sections.findIndex((sec) => sec.key === key);
       if (s >= 0) setOpen(s, !sections[s].open, true);
+    },
+    /** Category state: open (target), cards shown while collapsed, squeeze, which cards are anchors (fed loads). */
+    get categories() {
+      return cats.map((c) => ({
+        id: c.id,
+        open: c.open,
+        cards: c.cards.length,
+        visible: c.visible,
+        rows: c.rows,
+        front: Number(c.front.value.toFixed(3)),
+        shift: Number(c.shift.value.toFixed(3)),
+        more: c.more && !c.more.hidden ? c.more.textContent?.replace(/\s+/g, ' ').trim() : null,
+        expanded: c.more?.getAttribute('aria-expanded') ?? null,
+        inert: c.cards.filter((k) => nodes[k].item.inert).length,
+        headFed: scene?.game.isLoadEnabled(c.head) ?? false,
+        fed: c.cards.filter((k) => scene?.game.isLoadEnabled(k)).map((k) => nodes[k].id),
+      }));
+    },
+    toggleCategory(id: string) {
+      const c = cats.findIndex((x) => x.id === id);
+      if (c >= 0) setCatOpen(c, !cats[c].open);
     },
     get layout() {
       return scene?.layout;

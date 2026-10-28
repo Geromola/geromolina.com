@@ -3,9 +3,9 @@ import { getCollection } from 'astro:content';
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site ?? new URL('https://geromolina.com');
-  const plants = await getCollection('nodes', (n) => n.data.kind === 'plant');
-  // Ballpark, Raup's Cube and Conway's Life are interactive pages, not in the collection (src/components/NodeMenu.astro).
-  const paths = ['/', ...plants.map((n) => n.data.href), '/ballpark', '/shells', '/life'];
+  // Project pages (plants) and the interactive pages (games: Ballpark, Raup's Cube, Conway's Life).
+  const pages = await getCollection('nodes', (n) => n.data.kind === 'plant' || n.data.kind === 'game');
+  const paths = ['/', ...pages.map((n) => n.data.href)];
   const urls = [...new Set(paths)]
     .map((p) => `  <url><loc>${new URL(p, base).href}</loc></url>`)
     .join('\n');
