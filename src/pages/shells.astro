@@ -25,15 +25,17 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
 ---
 
 <Base
-  title="Raup's Cube · Gero Molina"
-  description="Raup's Cube: every coiled shell is one tube that grows as it turns. Three numbers, W, D and T, decide how it looks. Grow a nautilus, a snail and a clam, then explore the shells evolution never built."
+  title="Every shell in the world in three numbers: Raup's Cube · Gero Molina"
+  description="Every shell in the world in three numbers: Raup's Cube. Every coiled shell is one tube that grows as it turns. Three numbers, W, D and T, decide how it looks. Grow a nautilus, a snail and a clam, then explore the shells evolution never built."
 >
   <TopBar title="Raup's Cube" />
   <main class="rc" data-shells data-focus="" data-cube="hidden">
     <header class="rc__head">
       <p class="rc__kicker mono">Theoretical morphology · 1966</p>
-      <h1 class="rc__title">Raup's Cube</h1>
-      <p class="rc__lede">Every coiled shell is one tube that grows as it turns. Three numbers decide how it looks.</p>
+      <h1 class="rc__title">Every shell in the world in three numbers: <span class="rc__name">Raup's Cube</span></h1>
+      <p class="rc__lede">
+        Every coiled shell is one tube that grows as it turns. Three numbers, W, D and T, decide how it looks.
+      </p>
     </header>
 
     <div class="lab">
@@ -161,12 +163,30 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
           <p class="rc__kicker mono">Morphospace</p>
           <h2 class="cube__title" id="rc-cube-title">The cube</h2>
         </div>
-        <p class="cube__lede">
-          Each point is a shell. Drag across the map to set W and D, and the strip on the right for T. Below the amber
-          line, whorls touch.
-        </p>
+        <div class="seg" role="group" aria-label="View">
+          <button class="seg__btn" type="button" data-view-mode="cube" aria-pressed="true">Cube</button>
+          <button class="seg__btn" type="button" data-view-mode="slice" aria-pressed="false">Slice</button>
+        </div>
       </div>
-      <div class="map" data-map-wrap>
+      <p class="cube__lede" data-lede="cube">
+        Every point in the cube is a shell: W across, D deep, T up. Drag to turn it. The amber sheet is where whorls stop
+        touching; once real shells are shown, tap a dot to grow that one.
+      </p>
+      <p class="cube__lede" data-lede="slice" hidden>
+        A flat slice of the cube at the current T. Drag across the map to set W and D, and the strip on the right for T.
+        Below the amber line, whorls touch.
+      </p>
+      <div class="cube3d" data-cube-wrap>
+        <canvas class="cube3d__canvas" data-cube3d aria-hidden="true"></canvas>
+      </div>
+      <ul class="legend" role="list" aria-label="Where real shells live">
+        <li class="legend__item legend__item--cephalopods">Coiled cephalopods</li>
+        <li class="legend__item legend__item--gastropods">Snails</li>
+        <li class="legend__item legend__item--bivalves">Bivalves</li>
+        <li class="legend__item legend__item--brachiopods">Brachiopods</li>
+        <li class="legend__item legend__item--sheet">Whorls stop touching</li>
+      </ul>
+      <div class="map" data-map-wrap hidden>
         <canvas class="map__canvas" data-map aria-hidden="true"></canvas>
       </div>
       <p class="where" data-where aria-hidden="true"></p>
@@ -233,11 +253,18 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
     color: var(--cyan);
   }
   .rc__title {
+    max-width: 18ch;
     margin: 0;
-    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-size: clamp(2.25rem, 5.5vw, 3.75rem);
     font-weight: 700;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .rc__name {
+    display: block;
+    margin-top: 0.15em;
+    color: var(--cyan);
   }
   .rc__lede {
     max-width: 34rem;
@@ -769,6 +796,99 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
     margin: 0;
     font-size: 0.875rem;
     color: var(--ink-2);
+  }
+  .seg {
+    display: inline-flex;
+    padding: 0.1875rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .seg__btn {
+    min-height: 2rem;
+    padding: 0 0.875rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .seg__btn[aria-pressed='true'] {
+    background: rgba(var(--cyan-rgb), 0.16);
+    color: var(--ink);
+  }
+  .seg__btn:focus-visible {
+    border-radius: 999px;
+  }
+  .cube__lede[hidden] {
+    display: none;
+  }
+  .cube3d {
+    position: relative;
+    aspect-ratio: 1;
+    max-height: 30rem;
+  }
+  .legend {
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.375rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.75rem;
+    color: var(--ink-2);
+  }
+  [data-cube='revealed'] .legend {
+    display: flex;
+  }
+  .cube3d[hidden] + .legend {
+    display: none;
+  }
+  .legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+  .legend__item::before {
+    content: '';
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 2px;
+    background: var(--swatch);
+  }
+  .legend__item--cephalopods {
+    --swatch: var(--cyan);
+  }
+  .legend__item--gastropods {
+    --swatch: var(--hot);
+  }
+  .legend__item--bivalves {
+    --swatch: var(--amber);
+  }
+  .legend__item--brachiopods {
+    --swatch: var(--ink-2);
+  }
+  .legend__item--sheet::before {
+    height: 2px;
+    border-radius: 1px;
+    background: rgba(var(--amber-rgb), 0.6);
+  }
+  .cube3d[hidden],
+  .map[hidden] {
+    display: none;
+  }
+  .cube3d__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+    /* Sideways drags turn the cube; vertical swipes still scroll the page. */
+    touch-action: pan-y;
   }
   .map {
     position: relative;

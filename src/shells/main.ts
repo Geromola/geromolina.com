@@ -5,6 +5,7 @@
  */
 import { Spring } from '../grid/spring';
 import { getEntry } from './catalog';
+import { CubeView } from './cube-view';
 import { identifyFromCache, type Identification } from './identify';
 import { LESSONS, STEP_KEY, parseProgress, serializeProgress, type Progress } from './lessons';
 import { ShellMesh, orbitCamera } from './mesh';
@@ -310,6 +311,28 @@ export function mountShells(root: HTMLElement) {
   };
   let mapSize = { w: 1, h: 1 };
 
+  // The 3D cube is the default view; "Slice" swaps in the flat map for precise dragging.
+  const cubeWrap = $('[data-cube-wrap]');
+  let viewMode: 'cube' | 'slice' = 'cube';
+  const cube = new CubeView(
+    $<HTMLCanvasElement>('[data-cube3d]'),
+    { line: palette.line, edge: palette.edge, base: palette.base, muted, regions: regionColour },
+    mono,
+    { onPick: (e) => growEntry(e.id), onChange: () => schedule(), reduced },
+  );
+  const modeBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-view-mode]')];
+  const ledes = [...root.querySelectorAll<HTMLElement>('[data-lede]')];
+  for (const b of modeBtns) {
+    b.addEventListener('click', () => {
+      viewMode = b.dataset.viewMode === 'slice' ? 'slice' : 'cube';
+      for (const m of modeBtns) m.setAttribute('aria-pressed', String(m === b));
+      for (const l of ledes) l.hidden = l.dataset.lede !== viewMode;
+      cubeWrap.hidden = viewMode !== 'cube';
+      mapWrap.hidden = viewMode !== 'slice';
+      resize();
+    });
+  }
+
   function revealCube() {
     root.dataset.cube = 'revealed';
     if (!progress.cubeSeen) {
@@ -577,12 +600,15 @@ export function mountShells(root: HTMLElement) {
 
   identifyBtn.addEventListener('click', identify);
 
+  /** Spring to a real shell and open its card (now an exact match, so the card says so). */
+  function growEntry(id: string) {
+    const e = getEntry(id)!;
+    jump(e, e.name, e.W >= PAIR_MIN_W);
+    identify();
+  }
+
   for (const b of root.querySelectorAll<HTMLButtonElement>('[data-grow]')) {
-    b.addEventListener('click', () => {
-      const e = getEntry(b.dataset.grow!)!;
-      jump(e, e.name, e.W >= PAIR_MIN_W);
-      identify(); // now an exact match, so the card says so
-    });
+    b.addEventListener('click', () => growEntry(b.dataset.grow!));
   }
 
   // A runner-up opens its own card; the shell stays as it is until "Grow the real one".
@@ -679,10 +705,15 @@ export function mountShells(root: HTMLElement) {
     const vr = shellCanvas.getBoundingClientRect();
     view = { w: Math.max(1, vr.width), h: Math.max(1, vr.height) };
     shellRenderer.resize(view.w, view.h, dpr);
-    const mr = mapWrap.getBoundingClientRect();
-    mapSize = { w: Math.max(1, mr.width), h: Math.max(1, mr.height) };
-    mapCanvas.width = Math.round(mapSize.w * dpr);
-    mapCanvas.height = Math.round(mapSize.h * dpr);
+    if (viewMode === 'slice') {
+      const mr = mapWrap.getBoundingClientRect();
+      mapSize = { w: Math.max(1, mr.width), h: Math.max(1, mr.height) };
+      mapCanvas.width = Math.round(mapSize.w * dpr);
+      mapCanvas.height = Math.round(mapSize.h * dpr);
+    } else {
+      const cr = cubeWrap.getBoundingClientRect();
+      cube.resize(cr.width, cr.height, dpr);
+    }
     schedule();
   }
 
@@ -715,6 +746,7 @@ export function mountShells(root: HTMLElement) {
       yaw += vYaw * dt;
       vYaw += (IDLE_YAW - vYaw) * (1 - Math.exp(-dt / 1.2));
     }
+    if (viewMode === 'cube') cube.step(dt);
     render();
     if (moving()) schedule();
     else lastFrame = 0;
@@ -749,7 +781,8 @@ export function mountShells(root: HTMLElement) {
     const camera = orbitCamera([fit.x.value, fit.y.value, fit.z.value], Math.max(1e-6, fit.r.value), yaw, pitch.value, view.w / view.h);
     const edge = Math.min(0.012, Math.max(0.0025, EDGE_TURNS / Math.max(mesh.whorls, 0.01)));
     shellRenderer.draw({ camera, grow: Math.min(grow.value, GROW_END), edge, paired });
-    drawMap(p);
+    if (viewMode === 'cube') cube.draw(p, root.dataset.cube === 'revealed');
+    else drawMap(p);
     resultEl.style.setProperty('--in', cardIn.value.toFixed(3));
   }
 

@@ -40,6 +40,7 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
     - Built and verified: tests, `astro check`, the build, lessons 1–6, map drag, presets, random shell, hash, keyboard, `?motion=reduce`, `?renderer=canvas`, and 1440×900 and 375×812.
     - Identifier ("What shell is this?"): 16-shell cached catalog with checked facts and credited Commons photos, nearest-match tiers, coil chip. Verified with tests, `astro check` and the browser (desktop, phone, `?renderer=canvas`, `?motion=reduce`).
     - Launched: a `▶ PLAY` node in the home menu's PROJECTS section, and in the sitemap; live on geromolina.com.
+    - A 3D cube view (Cube · Slice switch), and the title "Every shell in the world in three numbers: Raup's Cube".
     - Next: check the region boxes against Raup's figure; plan B (a model-based identifier behind the `Identifier` interface).
 12. [x] **Conway's Life** (careful). `/life`, SPEC "Conway's Life".
     - DOM-free engine, RLE, detector, library, scenes (signal line, NOT gate, message), camera and tour in `src/life/`; Vitest in `tests/life.test.ts` (38 tests: rules, border, every library claim, scenes, NOT truth table, message round-trip).

@@ -222,6 +222,7 @@ Geometry (`src/shells/model.ts`): aperture radius `a = W^(θ/2π)`, centre dista
 **Whorls touch** when the generating circle and the one a turn later overlap: `(W−1)·(1+D)/(1−D)·√(1+T²) < W+1`. At T = 0 that is Raup's hyperbola, W·D < 1.
 
 ### The page
+- **Title:** "Every shell in the world in three numbers: Raup's Cube". The home menu node is "Raup's Cube", with the line "3 numbers, every shell".
 - **The shell:** a sticky 3D view. On desktop it is the left column; on phones it is pinned under the top bar.
   - WebGL2 surface with cyan growth lines, an amber growing edge and a darker inside.
   - Drag sideways to turn it, with a flick and an idle turn. A mouse can also tilt it.
@@ -238,11 +239,17 @@ Geometry (`src/shells/model.ts`): aperture radius `a = W^(θ/2π)`, centre dista
   6. The cube
 
   Each lesson springs the shell to a target and highlights one control without locking the others.
-- **The cube map:**
-  - log W across, D up, and a T strip on the right. Drag either to set the shell.
-  - The touch boundary for the current T is drawn in amber.
-  - Each region is shaded and named while the current T is inside its range, and drawn as a dashed outline otherwise.
-  - The regions appear after lesson 6, or with "Show where real shells live".
+- **The cube:** two views behind a "Cube · Slice" switch.
+  - **Cube (default):** a 3D box with log W across, D deep and T up (`src/shells/cube-view.ts`, Canvas 2D).
+    - Dragging turns it; on touch, only sideways drags do, so the page still scrolls. It turns slowly on its own while the pointer is away.
+    - The regions are translucent boxes, named in a legend underneath.
+    - The 16 catalog shells are dots: tap one to grow it and open its card.
+    - The amber sheet is where whorls stop touching.
+    - The current shell is a glowing point with dashed lines dropped to the floor.
+  - **Slice:** the flat map, with log W across, D up and a T strip on the right. Drag either to set the shell.
+    - The touch boundary for the current T is drawn in amber.
+    - Each region is shaded and named while the current T is inside its range, and drawn as a dashed outline otherwise.
+  - The regions and dots appear after lesson 6, or with "Show where real shells live".
   - Presets: Nautilus, Ammonite, Spirula, Turritella, Garden snail, Clam, Brachiopod.
   - "Show me a shell that never existed" picks a seeded point outside every region.
 - **State:** the URL hash (`#W=2.20&D=0.10&T=1.20`) is written after map, slider and preset changes, and opens the page on the cube. Lesson progress and `cubeSeen` live in `localStorage` (`shells-progress`), wrapped in try/catch.

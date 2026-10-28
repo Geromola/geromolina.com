@@ -31,7 +31,20 @@ import {
   whorlCount,
   whorlsTouch,
 } from '../src/shells/model';
-import { boundaryPolyline, fromMap, fromStrip, mapPoint, randomEmptyPoint, regionSlices, stripPos } from '../src/shells/morphospace';
+import {
+  CUBE_EDGES,
+  boundaryPolyline,
+  boxFaces,
+  cubePoint,
+  fromMap,
+  fromStrip,
+  mapPoint,
+  randomEmptyPoint,
+  regionBox,
+  regionSlices,
+  stripPos,
+  touchSheet,
+} from '../src/shells/morphospace';
 
 const TAU = Math.PI * 2;
 const dist = (p: number[]) => Math.hypot(p[0], p[1]);
@@ -354,5 +367,55 @@ describe('coil kind', () => {
     expect(coilKind(by['garden-snail'])).toBe('overlapping');
     expect(coilKind(by.spirula)).toBe('loose');
     expect(coilKind(by.wentletrap)).toBe('loose');
+  });
+});
+
+describe('the cube in 3D', () => {
+  const inUnit = (v: number) => v >= -1e-9 && v <= 1 + 1e-9;
+
+  it('places shells on the same scales as the slice map, T up', () => {
+    const p = { W: 37, D: 0.42, T: 2.5 };
+    const [x, y, z] = cubePoint(p);
+    expect([x, y]).toEqual(mapPoint(p));
+    expect(z).toBeCloseTo(stripPos(2.5), 12);
+    for (const e of CATALOG) expect(cubePoint(e).every(inUnit), e.id).toBe(true);
+  });
+
+  it('has 12 unit edges, each along one axis', () => {
+    expect(CUBE_EDGES).toHaveLength(12);
+    for (const [a, b] of CUBE_EDGES) {
+      const diff = a.map((v, k) => Math.abs(v - b[k]));
+      expect(diff.filter((d) => d === 1)).toHaveLength(1);
+      expect(diff.filter((d) => d === 0)).toHaveLength(2);
+    }
+  });
+
+  it('region boxes sit inside the cube and contain their real shells', () => {
+    for (const r of REGIONS) {
+      const box = regionBox(r);
+      expect(box.every(inUnit), r.id).toBe(true);
+      expect(box[0]).toBeLessThan(box[3]);
+      expect(box[1]).toBeLessThan(box[4]);
+      expect(box[2]).toBeLessThan(box[5]);
+      expect(boxFaces(box)).toHaveLength(6);
+    }
+    for (const p of PRESETS) {
+      const box = regionBox(REGIONS.find((r) => r.id === p.group)!);
+      const [x, y, z] = cubePoint(p);
+      expect(x >= box[0] && x <= box[3] && y >= box[1] && y <= box[4] && z >= box[2] && z <= box[5], p.id).toBe(true);
+    }
+  });
+
+  it('the touch sheet matches the slice boundary at each height, inside the cube', () => {
+    const sheet = touchSheet(5, 40);
+    expect(sheet.length).toBe(5 + 7);
+    for (const l of sheet) for (const p of l) expect(p.every(inUnit)).toBe(true);
+    const base = sheet[0];
+    const flat = boundaryPolyline(fromStrip(0), 40);
+    base.forEach((p, i) => {
+      expect(p[0]).toBeCloseTo(flat[i][0], 12);
+      expect(p[1]).toBeCloseTo(flat[i][1], 12);
+      expect(p[2]).toBe(0);
+    });
   });
 });

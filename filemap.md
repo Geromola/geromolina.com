@@ -56,7 +56,8 @@
 - `src/pages/shells.astro` — Raup's Cube page (linked from the home node menu): markup, styles and mount
 - `src/shells/model.ts` — Raup's coiling model (W, D, T): surface points, whorl count, whorls-touch test, coil kind, regions, presets (from the catalog), slider scales, URL hash
 - `src/shells/mesh.ts` — fixed-topology shell mesh (positions, normals, growth uv, bounds) and the orbit camera / 4×4 maths
-- `src/shells/morphospace.ts` — the cube as a map: log W × D, T strip, touch boundary, region slices, seeded empty point
+- `src/shells/morphospace.ts` — the cube as geometry: the flat slice (log W × D, T strip, touch boundary, region slices) and the 3D cube (points, edges, region boxes, touch sheet), seeded empty point
+- `src/shells/cube-view.ts` — the 3D cube view (Canvas 2D): drag to turn, region boxes, touch sheet, pickable real-shell dots, the current shell
 - `src/shells/lessons.ts` — the six guided steps and progress (de)serialization
 - `src/shells/catalog.ts` — the identifier's cache: 16 real shells with W/D/T, habitat, what the shell is for, facts, photo credit and Wikipedia link
 - `src/shells/identify.ts` — "What shell is this?": cube distance, nearest catalog entry, tiers, runners-up (`Identifier` interface for a later model-based version)
