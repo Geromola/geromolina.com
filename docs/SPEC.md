@@ -259,3 +259,22 @@ Boxes in (log10 W, D, T) after the textbook reproductions of Raup's cube; the pa
 | Bivalves | 1–4 | 0–0.5 | 0–0.6 |
 
 **Still to check:** these boxes against Raup's 1966 figure, or against McGhee's *Theoretical Morphology* (1999).
+
+### Identify ("What shell is this?")
+- **Catalog** (`src/shells/catalog.ts`): 16 real shells placed in the cube. Each entry has its W, D and T, habitat, what the shell is for, three facts and a credited Wikimedia Commons photo (`src/assets/shells/<id>.jpg`, 900 px wide). Facts were checked against Wikipedia on 2026-10-27. The preset chips are the entries marked `preset`.
+- **Matching** (`src/shells/identify.ts`): nearest entry by distance in cube units: Δlog10 W / 0.4, ΔD / 0.12 and ΔT / 0.5. The tiers are:
+  - `match` when the distance is ≤ 1.5 ("This is a real shell");
+  - `resembles` when it is ≤ 4, or the shell is inside one of Raup's regions ("Closest real shell");
+  - `none` otherwise ("No known animal builds this · nearest real shell").
+
+  The next two entries show as "Also close" chips. `Identifier` is the interface a model-based identifier can replace later.
+- **Coil chip:** `coilKind` compares the generating circle with the one a turn later:
+  - `involute`: the old circle lies inside the new one (a nautilus);
+  - `overlapping`: most snails;
+  - `loose`: the circles don't touch, which is rare (Spirula, wentletrap). `loose` ⇔ `!whorlsTouch`.
+
+  Nothing is called physically impossible: Raup's geometry never truly passes through itself. Where whorls overlap, the card notes that the animal reuses the old whorl as its inner wall.
+- **Card:**
+  - All 16 are rendered on the server with lazy `<Image>`, and JS shows the match.
+  - It springs in, and dims as "Shell changed: identify again" when the shell moves.
+  - "Grow the real one" springs to the entry, and "Read more" links to Wikipedia.

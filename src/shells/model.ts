@@ -10,6 +10,7 @@
  * Coordinates: the coiling axis is z, the spire points up (+z), the aperture sits at θ = 0
  * with radius 1, and earlier growth is θ < 0.
  */
+import { CATALOG } from './catalog';
 
 export interface ShellParams {
   W: number;
@@ -80,6 +81,20 @@ export function whorlsTouch(p: ShellParams): boolean {
   return gap < p.W + 1;
 }
 
+export type CoilKind = 'involute' | 'overlapping' | 'loose';
+
+/**
+ * How each whorl meets the one before, from the two generating circles a turn apart (centres
+ * (W − 1)·r_c·√(1 + T²) apart, radii a and W·a): the old one swallowed whole (a nautilus),
+ * overlapping and joined (most snails), or not touching at all (Spirula). `loose` is exactly
+ * `!whorlsTouch`.
+ */
+export function coilKind(p: ShellParams): CoilKind {
+  const g = (p.W - 1) * ((1 + p.D) / (1 - p.D)) * Math.hypot(1, p.T);
+  if (g >= p.W + 1) return 'loose';
+  return g <= p.W - 1 ? 'involute' : 'overlapping';
+}
+
 /** The D below which whorls touch, for a given W and T (Raup's 1/W when T = 0). */
 export function touchBoundaryD(W: number, T: number): number {
   const k = (W + 1) / ((W - 1) * Math.hypot(1, T));
@@ -120,21 +135,8 @@ export const classify = (p: ShellParams): Region | null => REGIONS.find((r) => i
 
 // ------------------------------------------------------------- presets
 
-export interface Preset extends ShellParams {
-  id: string;
-  name: string;
-  region: Region['id'];
-}
-
-export const PRESETS: readonly Preset[] = [
-  { id: 'nautilus', name: 'Nautilus', W: 3, D: 0, T: 0, region: 'cephalopods' },
-  { id: 'ammonite', name: 'Ammonite', W: 2, D: 0.4, T: 0, region: 'cephalopods' },
-  { id: 'spirula', name: 'Spirula', W: 2, D: 0.55, T: 0, region: 'cephalopods' },
-  { id: 'turritella', name: 'Turritella', W: 1.25, D: 0.05, T: 3.5, region: 'gastropods' },
-  { id: 'snail', name: 'Garden snail', W: 2.2, D: 0.1, T: 1.2, region: 'gastropods' },
-  { id: 'clam', name: 'Clam', W: 300, D: 0.1, T: 0.25, region: 'bivalves' },
-  { id: 'brachiopod', name: 'Brachiopod', W: 1e5, D: 0, T: 0, region: 'brachiopods' },
-];
+/** The preset chips: the catalog entries marked `preset`, so the two never drift apart. */
+export const PRESETS = CATALOG.filter((e) => e.preset);
 
 // ------------------------------------------------------------- slider scales
 

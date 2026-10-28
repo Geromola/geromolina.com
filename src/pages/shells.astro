@@ -1,9 +1,21 @@
 ---
 // Raup's Cube (SPEC "Raup's Cube"): three numbers that decide how a coiled shell looks.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import TopBar from '../components/project/TopBar.astro';
+import { CATALOG } from '../shells/catalog';
 import { LESSONS } from '../shells/lessons';
-import { PRESETS, ticks, type ParamKey } from '../shells/model';
+import { PRESETS, ticks, type ParamKey, type Region } from '../shells/model';
+
+const photos = import.meta.glob<{ default: ImageMetadata }>('../assets/shells/*.jpg', { eager: true });
+const photo = (id: string) => photos[`../assets/shells/${id}.jpg`].default;
+const GROUP: Record<Region['id'], string> = {
+  cephalopods: 'Cephalopod',
+  gastropods: 'Snail',
+  bivalves: 'Bivalve',
+  brachiopods: 'Brachiopod',
+};
 
 const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = [
   { key: 'W', name: 'Whorl expansion', help: 'How much the tube grows in one turn', aria: 'W, whorl expansion rate (log scale)' },
@@ -80,6 +92,67 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
             ))
           }
         </div>
+
+        <div class="ident">
+          <button class="btn btn--wide" type="button" data-identify>What shell is this?</button>
+          <div class="result" data-result hidden>
+            <p class="result__stale" data-stale>Shell changed: identify again</p>
+            <p class="result__tier mono" data-tier></p>
+            {
+              CATALOG.map((e) => (
+                <article class="entry" data-entry={e.id} hidden aria-label={`${e.name}, ${e.latin}`}>
+                  <figure class="entry__photo">
+                    <Image
+                      src={photo(e.id)}
+                      width={640}
+                      widths={[360, 640, 900]}
+                      sizes="(max-width: 860px) 92vw, 26rem"
+                      alt={`${e.name} (${e.latin})`}
+                      loading="lazy"
+                    />
+                    <figcaption class="entry__credit">
+                      Photo: <a href={e.image.source} target="_blank" rel="noopener">{e.image.author}</a>, {e.image.license}
+                    </figcaption>
+                  </figure>
+                  <h3 class="entry__name">
+                    {e.name} <i>{e.latin}</i>
+                  </h3>
+                  <p class="entry__meta">
+                    <span class="entry__group mono">{GROUP[e.group]}</span> {e.habitat}
+                  </p>
+                  <h4 class="entry__h">What the shell is for</h4>
+                  <p class="entry__use">{e.use}</p>
+                  <ul class="entry__facts" role="list">
+                    {e.facts.map((f) => (
+                      <li>{f}</li>
+                    ))}
+                  </ul>
+                  <div class="entry__actions">
+                    <button class="btn" type="button" data-grow={e.id}>
+                      Grow the real one
+                    </button>
+                    <a class="chip" href={e.wiki} target="_blank" rel="noopener">
+                      Read more <span aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                </article>
+              ))
+            }
+            <p class="result__also">
+              <span>Also close:</span>
+              {
+                CATALOG.map((e) => (
+                  <button class="chip" type="button" data-also={e.id} hidden>
+                    {e.name}
+                  </button>
+                ))
+              }
+            </p>
+            <p class="result__note" data-note>
+              Where whorls overlap, the animal reuses the old whorl as its inner wall. The render shows the buried part too.
+            </p>
+          </div>
+        </div>
       </section>
 
       <section class="cube glass" data-cube-panel aria-labelledby="rc-cube-title">
@@ -101,7 +174,7 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
         {
           PRESETS.map((p) => (
             <button class="chip" type="button" data-preset={p.id} aria-pressed="false">
-              {p.name}
+              {p.chip ?? p.name}
             </button>
           ))
         }
@@ -232,7 +305,7 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
     color: var(--cyan);
     pointer-events: none;
   }
-  .view__touch[data-state='apart'] {
+  .view__touch[data-state='loose'] {
     color: var(--amber);
   }
 
@@ -249,6 +322,7 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
     font: inherit;
     font-size: 0.8125rem;
     font-weight: 550;
+    text-decoration: none;
     cursor: pointer;
     transition:
       background 150ms ease-out,
@@ -518,6 +592,159 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
     }
   }
 
+  /* ---------- identify ---------- */
+  .ident {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .btn--wide {
+    width: 100%;
+  }
+  .result {
+    --in: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    opacity: var(--in);
+    transform: translateY(calc((1 - var(--in)) * 0.75rem));
+  }
+  .result[hidden] {
+    display: none;
+  }
+  .result__stale {
+    display: none;
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--amber);
+  }
+  .result.is-stale .result__stale {
+    display: block;
+  }
+  .result.is-stale .entry,
+  .result.is-stale .result__tier,
+  .result.is-stale .result__also {
+    opacity: 0.45;
+    transition: opacity 200ms ease-out;
+  }
+  .result__tier {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .result__tier[data-tier='none'] {
+    color: var(--amber);
+  }
+  .entry[hidden] {
+    display: none;
+  }
+  .entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .entry__photo {
+    margin: 0;
+  }
+  .entry__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--bg-raise);
+  }
+  .entry__credit {
+    margin-top: 0.375rem;
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+  .entry__credit a {
+    color: var(--ink-2);
+  }
+  .entry__name {
+    margin: 0.25rem 0 0;
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+  .entry__name i {
+    font-size: 0.9375rem;
+    font-weight: 450;
+    color: var(--ink-2);
+  }
+  .entry__meta,
+  .entry__use {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--ink-2);
+  }
+  .entry__group {
+    margin-right: 0.375rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .entry__h {
+    margin: 0.5rem 0 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .entry__facts {
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+  .entry__facts li {
+    position: relative;
+    padding-left: 1rem;
+  }
+  .entry__facts li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: rgba(var(--cyan-rgb), 0.7);
+  }
+  .entry__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem;
+    margin-top: 0.5rem;
+  }
+  .result__also {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .result__note {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .result__note[hidden] {
+    display: none;
+  }
+
   /* ---------- cube ---------- */
   .cube {
     display: flex;
@@ -640,6 +867,11 @@ const CONTROLS: { key: ParamKey; name: string; help: string; aria: string }[] = 
     }
     .lesson__body {
       min-height: 0;
+    }
+    /* Scrolled-to content lands below the pinned shell, not under it. */
+    .ident,
+    .result {
+      scroll-margin-top: calc(44svh + 5rem + env(safe-area-inset-top, 0px));
     }
   }
 

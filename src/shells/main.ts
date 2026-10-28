@@ -4,18 +4,21 @@
  * progress in localStorage. The model and geometry live in the DOM-free modules next to this.
  */
 import { Spring } from '../grid/spring';
+import { getEntry } from './catalog';
+import { identifyFromCache, type Identification } from './identify';
 import { LESSONS, STEP_KEY, parseProgress, serializeProgress, type Progress } from './lessons';
 import { ShellMesh, orbitCamera } from './mesh';
 import {
   PRESETS,
   classify,
   clampParams,
+  coilKind,
   formatParam,
   fromPos,
   parseParams,
   serializeParams,
   toPos,
-  whorlsTouch,
+  type CoilKind,
   type ParamKey,
   type ShellParams,
 } from './model';
@@ -32,6 +35,17 @@ const PITCH_PER_PX = 0.006;
 const PITCH_LIMIT = 1.35;
 const FINE = 0.01; // track fraction per arrow key
 const COARSE = 0.1; // with Shift
+/** The coil chip under the shell: how each whorl meets the last. */
+const COIL_TEXT: Record<CoilKind, string> = {
+  involute: 'Involute · each whorl swallows the last',
+  overlapping: 'Whorls overlap and join',
+  loose: 'Loose coil · whorls apart (rare)',
+};
+const TIER_TEXT = {
+  match: 'This is a real shell',
+  resembles: 'Closest real shell',
+  none: 'No known animal builds this · nearest real shell',
+} as const;
 const GROW_END = 1.0005; // just past the aperture, so the last row is never cut
 /** The amber growing edge spans this many turns (at most 1.2% of the tube). */
 const EDGE_TURNS = 0.008;
@@ -273,11 +287,12 @@ export function mountShells(root: HTMLElement) {
       const same = KEYS.every((k) => Math.abs(toPos(k, p[k]) - toPos(k, t[k])) < 0.002);
       b.setAttribute('aria-pressed', String(same));
     }
-    const touch = whorlsTouch(t);
-    touchEl.dataset.state = touch ? 'touch' : 'apart';
-    touchEl.textContent = touch ? 'Whorls touch' : 'Whorls apart';
+    const kind = coilKind(t);
+    touchEl.dataset.state = kind;
+    touchEl.textContent = COIL_TEXT[kind];
     pairBtn.hidden = t.W < PAIR_MIN_W;
     syncWhere(t);
+    syncStale(t);
   }
 
   // ------------------------------------------------------------ cube
@@ -508,6 +523,79 @@ export function mountShells(root: HTMLElement) {
     commit(name);
   }
 
+  // ------------------------------------------------------------ identify
+  const identifyBtn = $<HTMLButtonElement>('[data-identify]');
+  const resultEl = $('[data-result]');
+  const tierEl = $('[data-tier]');
+  const noteEl = $('[data-note]');
+  const entryEls = [...root.querySelectorAll<HTMLElement>('[data-entry]')];
+  const alsoBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-also]')];
+  const cardIn = new Spring(1, 0.35);
+  /** The shell the open card describes, as a hash string; null while no card is open. */
+  let identified: string | null = null;
+
+  function identify() {
+    const t = target();
+    const result = identifyFromCache(t);
+    identified = serializeParams(t);
+    showResult(result, TIER_TEXT[result.tier]);
+    noteEl.hidden = coilKind(t) === 'loose';
+    const lead = result.tier === 'none' ? 'No known animal builds this. Nearest real shell' : TIER_TEXT[result.tier];
+    live.textContent = `${lead}: ${result.entry.name}, ${result.entry.latin}.`;
+  }
+
+  /** Open the card for `result.entry`, with its runners-up as chips. */
+  function showResult(result: Pick<Identification, 'entry' | 'runnersUp'> & { tier?: Identification['tier'] }, tierText: string) {
+    const wasHidden = resultEl.hidden;
+    resultEl.hidden = false;
+    resultEl.classList.remove('is-stale');
+    tierEl.textContent = tierText;
+    tierEl.dataset.tier = result.tier ?? 'resembles';
+    for (const el of entryEls) el.hidden = el.dataset.entry !== result.entry.id;
+    const also = result.runnersUp.map((e) => e.id);
+    for (const b of alsoBtns) {
+      const k = also.indexOf(b.dataset.also!);
+      b.hidden = k < 0;
+      b.style.order = String(k);
+    }
+    if (wasHidden) {
+      if (reduced()) cardIn.snap(1);
+      else {
+        cardIn.snap(0);
+        cardIn.target = 1;
+      }
+      resultEl.scrollIntoView({ block: 'nearest', behavior: reduced() ? 'auto' : 'smooth' });
+    }
+    schedule();
+  }
+
+  /** The card dims once the shell no longer matches what it describes. */
+  function syncStale(t: ShellParams) {
+    if (identified === null) return;
+    resultEl.classList.toggle('is-stale', serializeParams(t) !== identified);
+  }
+
+  identifyBtn.addEventListener('click', identify);
+
+  for (const b of root.querySelectorAll<HTMLButtonElement>('[data-grow]')) {
+    b.addEventListener('click', () => {
+      const e = getEntry(b.dataset.grow!)!;
+      jump(e, e.name, e.W >= PAIR_MIN_W);
+      identify(); // now an exact match, so the card says so
+    });
+  }
+
+  // A runner-up opens its own card; the shell stays as it is until "Grow the real one".
+  for (const b of alsoBtns) {
+    b.addEventListener('click', () => {
+      const e = getEntry(b.dataset.also!)!;
+      const r = identifyFromCache(target());
+      const runnersUp = [r.entry, ...r.runnersUp].filter((x) => x.id !== e.id).slice(0, 2);
+      showResult({ entry: e, runnersUp }, 'Also close');
+      live.textContent = `Also close: ${e.name}, ${e.latin}.`;
+    });
+  }
+
   /** Tilt for the shell's kind, and turn a valve to face the camera. */
   function frame3d(p: ShellParams) {
     pitch.target = preferredPitch(p);
@@ -611,7 +699,7 @@ export function mountShells(root: HTMLElement) {
     const dt = lastFrame ? Math.min(0.05, (now - lastFrame) / 1000) : 0;
     lastFrame = now;
     const still = reduced();
-    for (const s of [...KEYS.map((k) => springs[k]), grow, pitch, ...Object.values(fit)]) {
+    for (const s of [...KEYS.map((k) => springs[k]), grow, pitch, cardIn, ...Object.values(fit)]) {
       if (still) s.snap(s.target);
       else s.step(dt);
     }
@@ -662,6 +750,7 @@ export function mountShells(root: HTMLElement) {
     const edge = Math.min(0.012, Math.max(0.0025, EDGE_TURNS / Math.max(mesh.whorls, 0.01)));
     shellRenderer.draw({ camera, grow: Math.min(grow.value, GROW_END), edge, paired });
     drawMap(p);
+    resultEl.style.setProperty('--in', cardIn.value.toFixed(3));
   }
 
   // ------------------------------------------------------------ start

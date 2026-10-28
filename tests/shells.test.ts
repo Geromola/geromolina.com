@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import { CATALOG } from '../src/shells/catalog';
+import { MATCH_MAX, cubeDistance, identifyFromCache } from '../src/shells/identify';
 import { LESSONS, parseProgress, serializeProgress } from '../src/shells/lessons';
 import {
   ShellMesh,
@@ -18,6 +20,7 @@ import {
   W_MIN,
   centre,
   classify,
+  coilKind,
   formatParam,
   fromPos,
   parseParams,
@@ -91,7 +94,7 @@ describe('Raup model', () => {
   });
 
   it('places every preset in its region', () => {
-    for (const p of PRESETS) expect(classify(p)?.id, p.id).toBe(p.region);
+    for (const p of PRESETS) expect(classify(p)?.id, p.id).toBe(p.group);
   });
 
   it('round-trips control positions and ticks span the track', () => {
@@ -267,5 +270,89 @@ describe('lessons', () => {
     expect(parseProgress('{"step":99,"cubeSeen":true}')).toEqual({ step: 5, cubeSeen: true });
     const p = { step: 3, cubeSeen: false };
     expect(parseProgress(serializeProgress(p))).toEqual(p);
+  });
+});
+
+describe('catalog and identifier', () => {
+  it('every entry is a valid shell with facts, a credit and a source', () => {
+    const ids = new Set<string>();
+    for (const e of CATALOG) {
+      expect(ids.has(e.id), e.id).toBe(false);
+      ids.add(e.id);
+      expect(e.W).toBeGreaterThanOrEqual(W_MIN);
+      expect(e.W).toBeLessThanOrEqual(W_MAX);
+      expect(e.D).toBeGreaterThanOrEqual(0);
+      expect(e.D).toBeLessThanOrEqual(D_MAX);
+      expect(e.T).toBeGreaterThanOrEqual(0);
+      expect(e.T).toBeLessThanOrEqual(T_MAX);
+      expect(e.facts).toHaveLength(3);
+      for (const f of [e.habitat, e.use, ...e.facts]) expect(f.length).toBeGreaterThan(10);
+      expect(e.image.author.length).toBeGreaterThan(0);
+      expect(e.image.license).toMatch(/^(CC BY|Public domain)/);
+      expect(e.image.source).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+      expect(e.wiki).toMatch(/^https:\/\/en\.wikipedia\.org\/wiki\//);
+    }
+    expect(CATALOG.length).toBe(16);
+  });
+
+  it('presets are catalog entries', () => {
+    expect(PRESETS.length).toBeGreaterThanOrEqual(5);
+    for (const p of PRESETS) expect(CATALOG).toContain(p);
+  });
+
+  it('every entry identifies as itself, and the others are told apart', () => {
+    for (const e of CATALOG) {
+      const id = identifyFromCache(e);
+      expect(id.entry.id, e.id).toBe(e.id);
+      expect(id.tier).toBe('match');
+      expect(id.distance).toBe(0);
+    }
+    // No two entries are so close that one could never be told from the other.
+    for (const a of CATALOG) for (const b of CATALOG) if (a !== b) expect(cubeDistance(a, b), `${a.id}/${b.id}`).toBeGreaterThan(MATCH_MAX / 2);
+  });
+
+  it('runners-up are the next two, distinct and in order', () => {
+    const p = { W: 2.1, D: 0.2, T: 0.4 };
+    const id = identifyFromCache(p);
+    const all = [id.entry, ...id.runnersUp];
+    expect(new Set(all.map((e) => e.id)).size).toBe(3);
+    const d = all.map((e) => cubeDistance(p, e));
+    expect(d[0]).toBeLessThanOrEqual(d[1]);
+    expect(d[1]).toBeLessThanOrEqual(d[2]);
+  });
+
+  it('a shell far from every real one and outside the regions is flagged', () => {
+    const p = { W: 1e3, D: 0.85, T: 3.5 };
+    expect(classify(p)).toBeNull();
+    const id = identifyFromCache(p);
+    expect(id.tier).toBe('none');
+    expect(id.distance).toBeGreaterThan(4);
+  });
+
+  it('a near miss resembles its neighbour', () => {
+    const id = identifyFromCache({ W: 2.6, D: 0.1, T: 1.6 });
+    expect(id.entry.id).toBe('garden-snail');
+    expect(id.tier).not.toBe('none');
+  });
+});
+
+describe('coil kind', () => {
+  it('agrees with whorlsTouch: loose exactly when whorls do not touch', () => {
+    for (const W of [1.05, 1.4, 2, 3, 10, 300]) {
+      for (const D of [0, 0.1, 0.3, 0.5, 0.7, 0.9]) {
+        for (const T of [0, 0.5, 2, 4]) {
+          const p = { W, D, T };
+          expect(coilKind(p) === 'loose', JSON.stringify(p)).toBe(!whorlsTouch(p));
+        }
+      }
+    }
+  });
+
+  it('names the classic shells', () => {
+    const by = Object.fromEntries(CATALOG.map((e) => [e.id, e]));
+    expect(coilKind(by.nautilus)).toBe('involute');
+    expect(coilKind(by['garden-snail'])).toBe('overlapping');
+    expect(coilKind(by.spirula)).toBe('loose');
+    expect(coilKind(by.wentletrap)).toBe('loose');
   });
 });
