@@ -4,8 +4,8 @@ import { getCollection } from 'astro:content';
 export const GET: APIRoute = async ({ site }) => {
   const base = site ?? new URL('https://geromolina.com');
   const plants = await getCollection('nodes', (n) => n.data.kind === 'plant');
-  // Ballpark is a game page, not in the collection (src/components/NodeMenu.astro).
-  const paths = ['/', ...plants.map((n) => n.data.href), '/ballpark'];
+  // Ballpark and Raup's Cube are interactive pages, not in the collection (src/components/NodeMenu.astro).
+  const paths = ['/', ...plants.map((n) => n.data.href), '/ballpark', '/shells'];
   const urls = [...new Set(paths)]
     .map((p) => `  <url><loc>${new URL(p, base).href}</loc></url>`)
     .join('\n');

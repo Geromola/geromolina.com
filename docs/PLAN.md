@@ -39,4 +39,5 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
     - DOM-free model, mesh, morphospace and lessons in `src/shells/`; Vitest in `tests/shells.test.ts`.
     - Built and verified: tests, `astro check`, the build, lessons 1–6, map drag, presets, random shell, hash, keyboard, `?motion=reduce`, `?renderer=canvas`, and 1440×900 and 375×812.
     - Identifier ("What shell is this?"): 16-shell cached catalog with checked facts and credited Commons photos, nearest-match tiers, coil chip. Verified with tests, `astro check` and the browser (desktop, phone, `?renderer=canvas`, `?motion=reduce`).
-    - Next: Gero play-tests it; check the region boxes against Raup's figure; plan B (a model-based identifier behind the `Identifier` interface); decide how it appears on the site.
+    - Launched: a `▶ PLAY` node in the home menu's PROJECTS section, and in the sitemap; live on geromolina.com.
+    - Next: check the region boxes against Raup's figure; plan B (a model-based identifier behind the `Identifier` interface).

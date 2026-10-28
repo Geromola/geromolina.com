@@ -49,7 +49,7 @@
 - `src/energy/game.ts` — `BallparkGame` run state machine, run summary (bias, mean factor), progress (de)serialization
 - `src/energy/main.ts` — Ballpark DOM wiring: log-scale slider, springs, reveal, summary, progress in `localStorage`
 - `tests/energy.test.ts` — Vitest for Ballpark: scale, formatting, scoring, catalog, generator, Leitner, game, storage
-- `src/pages/shells.astro` — Raup's Cube page (standalone while play-tested, not linked yet): markup, styles and mount
+- `src/pages/shells.astro` — Raup's Cube page (linked from the home node menu): markup, styles and mount
 - `src/shells/model.ts` — Raup's coiling model (W, D, T): surface points, whorl count, whorls-touch test, coil kind, regions, presets (from the catalog), slider scales, URL hash
 - `src/shells/mesh.ts` — fixed-topology shell mesh (positions, normals, growth uv, bounds) and the orbit camera / 4×4 maths
 - `src/shells/morphospace.ts` — the cube as a map: log W × D, T strip, touch boundary, region slices, seeded empty point
@@ -63,7 +63,7 @@
 - `tests/shells.test.ts` — Vitest for Raup's Cube: model geometry, touch boundary, mesh, camera fit, morphospace, lessons
 - `tests/fixtures/nodes.ts` — node ids, kinds and positions (mirrors `src/content/nodes/*.md`), the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
-- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, and `/ballpark`
+- `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/`, every `kind: plant` node `href`, `/ballpark` and `/shells`
 - `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)
 - `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`, `public/apple-touch-icon.png` — PNG app icons (generated from SVG via qlmanage + sips)
 - `public/og.png` — 1200×630 Open Graph image

@@ -209,7 +209,7 @@ Decided 2026-10-25. A second game at `/ballpark` for an intuition of how much **
 US references (120 V homes, gallons, miles). Every item carries a source; the main ones are EIA (home: 10,791 kWh/yr in 2022; per person: 279 MMBtu in 2023), EPA (33.7 kWh per gallon), Epoch AI (0.3 Wh per chat query), Patterson et al. 2021 (GPT-3: 1,287 MWh), DOE-method appliance wattages via Virginia Tech Extension. The flight seat (~30 gal of jet fuel, ~1.1 MWh) is a rough estimate.
 
 ## Raup's Cube (shell morphospace)
-Decided 2026-10-26. A third interactive at `/shells` that recreates David Raup's theoretical morphology of coiled shells (Raup 1966, *Geometric analysis of shell coiling*). It is a standalone page while it is play-tested: nothing on the home page links to it and it is not in the sitemap.
+Decided 2026-10-26. A third interactive at `/shells` that recreates David Raup's theoretical morphology of coiled shells (Raup 1966, *Geometric analysis of shell coiling*). Launched 2026-10-27 as a `▶ PLAY` node in the home menu's PROJECTS section, after Ballpark ("3 numbers shape a shell"), and listed in the sitemap.
 
 ### The model
 A shell is one circular tube, the generating curve, that grows as it turns around a fixed axis. Three numbers set its form:

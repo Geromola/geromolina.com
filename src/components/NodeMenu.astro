@@ -78,6 +78,20 @@ const BALLPARK: Entry = {
   source: false,
 };
 
+// Raup's Cube (SPEC "Raup's Cube"): hardcoded like Ballpark, an interactive page rather than a
+// project page. Same ▶ PLAY badge.
+const RAUP: Entry = {
+  id: 'shells',
+  kind: 'game',
+  badge: 'play',
+  title: "Raup's Cube",
+  value: '3',
+  label: 'numbers shape a shell',
+  short: 'numbers',
+  href: '/shells',
+  source: false,
+};
+
 // PROJECTS, in this order (don't reorder `order` in the content for it); any other plant or
 // substation joins at the end.
 const LISTED = ['spotify-insight', 'custom-llm', 'personal-wiki', 'pacman-dqn', 'networking-tracker'];
@@ -85,6 +99,7 @@ const extraProjects = all.filter((n) => n.kind !== 'section' && !LISTED.includes
 const projects: Entry[] = [
   ...pick(LISTED.slice(0, 4)).map(toEntry),
   BALLPARK,
+  RAUP,
   ...pick(LISTED.slice(4)).map(toEntry),
   ...extraProjects.map(toEntry),
 ];
