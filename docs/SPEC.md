@@ -208,6 +208,48 @@ Decided 2026-10-25. A second game at `/ballpark` for an intuition of how much **
 ### Data
 US references (120 V homes, gallons, miles). Every item carries a source; the main ones are EIA (home: 10,791 kWh/yr in 2022; per person: 279 MMBtu in 2023), EPA (33.7 kWh per gallon), Epoch AI (0.3 Wh per chat query), Patterson et al. 2021 (GPT-3: 1,287 MWh), DOE-method appliance wattages via Virginia Tech Extension. The flight seat (~30 gal of jet fuel, ~1.1 MWh) is a rough estimate.
 
+
+
+## Home hero v3: the node menu (supersedes v2's card grid)
+Decided 2026-10-25 after Gero's review of v2. He loves the game's animation (nodes lighting up, electricity flowing between them) and wants it to *be* the menu: legible, navigable, ordered by importance. The transformer game is **parked**: no Play pill and no placing. The code stays, but there is no entry point.
+
+### Layout
+- The profile header (portrait, kicker, "Gero", the Berkeley line) and the section nav stay as in v2.
+- Below the header, the projects are **grid nodes arranged as an ordered menu**, snapped to lattice vertices in tidy rows, with the most important at the top. Order, from `order` in the collection:
+  1. **Featured row:** Spotify Insight, then Custom LLM. Large plant nodes.
+  2. **Second row:** Personal Wiki, then Pac-Man DQN. Medium nodes.
+  3. **Third row:** Networking Tracker (locked, amber), About, Off the grid and Contact. Small nodes.
+- **Leave real space between nodes**, so the conductors and the flowing electrons stay visible. This is a map, not a wall of boxes.
+- **Phones:** one column. The nodes sit along a vertical "spine" conductor, with their plates to the right of the glyph. The flow runs down the spine and branches into each node.
+
+### The node object (tangible)
+Each node is a **glyph plus a plate**, fused into one link:
+- **Glyph:** the existing plant, substation or section ring, scaled per row: 56, 40 and 20px.
+- **Plate:** a glass plate attached to the glyph.
+  - On desktop it hangs under the glyph, centred, with the glyph overlapping its top edge.
+  - On phones it sits to the right of the glyph.
+- **Plate content:**
+  - **Featured:** badge (`● LIVE` / `‹/› CODE` / `🔒 MINE`), title, a 2-line pitch and one mono metric. About 17–19rem wide.
+  - **Second row:** badge, title and a 1-line pitch. About 15rem.
+  - **Small:** title only, a compact pill.
+- **States:**
+  - **Rest:** lit.
+  - **Hover or focus:**
+    - the plate lifts 2px on a spring and its border brightens
+    - the glyph pulses and the ring brightens
+    - the flow surges toward that node (the engine's focus share)
+    - its corridor brightens
+  - **Pointer-down:** the charge sweep, plus scale 0.98.
+  - **Click:** opens the page, using the existing view transition from the glyph.
+
+### Flow and power-on
+- **Flow:** electrons run from the plant nodes to every other node along **lit corridors**. These look like a solved game board: white-hot 345 kV paths between nodes and cyan where they branch into a node. Transformer glyphs are hidden. Faults, heat glow and the level panel are all off.
+- **Power-on intro**, on load:
+  - Nodes start dark. The featured plants ignite first, with the charge sweep.
+  - Corridors then light progressively outward, and each node's ring fills and lights as power reaches it, staggered by distance. The whole intro takes about 1.2–1.6 s.
+  - Under reduced motion everything is lit at once, as a still frame.
+- **Ambient:** after the intro, the flow keeps running quietly. The whole map stays calm enough to read.
+
 ## Raup's Cube (shell morphospace)
 Decided 2026-10-26. A third interactive at `/shells` that recreates David Raup's theoretical morphology of coiled shells (Raup 1966, *Geometric analysis of shell coiling*). Launched 2026-10-27 as a `▶ PLAY` node in the home menu's PROJECTS section, after Ballpark ("3 numbers shape a shell"), and listed in the sitemap.
 
@@ -382,3 +424,97 @@ Decided 2026-10-27. The site is also Gero's calling card: a visitor should see i
 - Hover or focus on a card pulls the flow to it; hover on a header, or hover/focus on its Show more, pulls it to the header.
 - The reduced-motion still frame and the Canvas fallback (`?renderer=canvas`) work as before.
 - The v2 card menu (`ProjectMenu.astro`, `GridMap.astro`, `src/grid/main.ts`) is not mounted any more and was not changed beyond what the new `game` kind needed.
+
+## News wire
+Decided 2026-10-27. A daily feed at `/news` that Gero reads himself: clean tech, AI, and the world headlines he has to know (global, the US and Mexico). Public, in English, `noindex`, and left out of the sitemap. It doesn't break "no backend": a GitHub Action builds each edition ahead of time, and the site stays static.
+
+### The funnel (once a day, ~06:00 PT)
+1. **Fetch** about 30 RSS/Atom feeds (`src/news/sources.ts`). Each feed has a 10 s timeout and a failure skips only that feed. Keep items from the last 30 h, at most 25 per source.
+2. **Normalize and dedupe**:
+   - Canonicalize URLs: drop tracking parameters, fragments and AMP.
+   - Collapse duplicates by canonical URL.
+   - Drop what any of the last 3 editions already ran, by URL or by story key.
+3. **Classify** with Claude Haiku 5.5, structured output, in chunks of 20. Input is only the title, source, date and feed summary.
+   - **Categories:** `cleantech | ai | world | none`.
+   - **Relevance** 0–10: fit with Gero's interests (`src/news/profile.md`).
+   - **Importance** 0–10: global significance, independent of his interests, so the feed doesn't become a bubble.
+   - **Snippet:** one sentence of ≤ 30 words, in its own words.
+   - **English title** for Spanish-language sources.
+   - **Story key:** a short slug.
+4. **Cluster**: same category, plus the same story key or title-token Jaccard ≥ 0.5. Cluster size is the coverage signal. The representative comes from the highest-weight source.
+5. **Score**: a weighted sum of relevance, importance, log coverage and source weight, minus a recency decay. Candidates: the top 15 per category, plus the top 15 by importance.
+6. **Edit** with Claude Opus 5.5:
+   - It picks 3–5 **Must know** stories, then ≤ 6 per section in reading order, each with a ≤ 12-word "why it matters to Gero".
+   - It returns ids only. It never writes URLs or rewrites snippets.
+   - If it fails or its output doesn't validate, the scores alone pick the edition (`degraded`).
+7. **Brief** (Haiku 5.5): 2–3 sentences, 50–75 words, for each story picked: a little more than the headline, not the article.
+   - Written from the article text when the page can be fetched (honouring robots.txt), otherwise from every summary in the cluster.
+   - `basis` records which of the two it came from.
+8. **Validate and write** `src/content/news/YYYY-MM-DD.json`. The edition carries a `meta` block, the audit trail: counts per stage, failed feeds, tokens, estimated cost, models, and whether the fallback was used.
+
+### Guardrails
+- Feed and article text is untrusted. No tools in any call, and structured output only. Every link comes from the feed, never from the model, and must be http(s). All text is rendered escaped.
+- We publish a headline, our own sentence and paragraph, and the link. A snippet or brief that shares 8 or more consecutive words with its source is regenerated once, then dropped. Article text is never published.
+- The run aborts above $0.50 estimated (expected ≈ $0.10). Hard cap of 400 items.
+- If classification fails outright, nothing is committed and the page keeps the last edition.
+
+### The page
+- **Layout:** one column on phones, two from 760px, four from 1200px (Must know, Clean tech, AI, World side by side), so the day reads across instead of down. Each column grows on its own when a card opens.
+- `/news#s-<id>` (a story picked on the home page) opens that card, marks it read and scrolls it into view.
+- `/news` is the latest edition. `/news/YYYY-MM-DD` covers the last 14, with prev/next links.
+- Header: "Today's wire", the date and the update time (mono), and "N new".
+- Sections in order: **Must know**, **Clean tech**, **AI**, **World**. Under the header, a row of section links with counts, for jumping on a phone.
+- Headlines drop live-blog and media labels ("Live Updates:", ", live:", "– video explainer"); a live blog gets an amber `LIVE` chip instead.
+- The snippet adds what the headline doesn't say (a number, the cause, what's next). It's a teaser: when the card opens, the brief replaces it.
+- **Each story is a phone-style notification card**: a glass card with large radius.
+  - Top row: the category glyph, the source, an `ES` chip, and the age (mono).
+  - Then the bold title (2 lines) and the snippet (muted, 2 lines).
+  - **Pointer-down** presses it (0.98).
+  - **Tap** expands it in place on a `Spring` (interruptible, from the current height): the brief, the "why" line, "Also covered by" links, and a "Read on <source> ↗" pill.
+  - Several cards can be open at once, so nothing above jumps.
+  - Each card is a native `<details>`/`<summary>`, so it works without JS and from the keyboard. Under reduced motion it opens instantly.
+- **Read state:** expanding a story or opening its link marks it read, in `localStorage` (inside try/catch). Read cards dim; "N new" counts the rest.
+- **Stale banner:** if the edition is more than 36 h old, an amber "Wire stale since …" banner.
+- The PWA manifest has a "News" shortcut. On the home page, the news wire is the left section of the grid (SPEC "Home hero v4").
+
+### Automation
+- `.github/workflows/news.yml`: cron `0 13 * * *` plus a manual trigger. The job runs `npm run news`, then commits the edition to `main`, and Vercel redeploys.
+- The `ANTHROPIC_API_KEY` repository secret is set by Gero.
+- `npm run news -- --dry-run` runs the whole funnel on fixtures with a fake Claude.
+
+## Home hero v4: News wire on the grid
+Decided 2026-10-28 (supersedes v3's ABOUT ME section and the fixed section nav).
+- **Root:** the photo is 80px and the name 2.25rem (1.875rem on phones).
+- **The root's links:** About, Off the grid and Contact are small nodes (30px glyph, one-line glass plate), fed straight from the root (no switch) and lit with it.
+  - Wide: beside the root's plate, on its row, when they fit before the fences' right edge; otherwise in a row under the root.
+  - Stacked: in a row under the root.
+  - Phones: in a row under the root, each label centred under its glyph (it wraps on the narrowest phones).
+  - The fixed glass section nav (`SectionNav.astro`) is gone from the home page.
+- **NEWS WIRE** takes ABOUT ME's place (the left column on wide, the first section on stacked and phones), behind its switch like before:
+  - The latest edition's top 3 stories (Must know first), as side nodes. Each plate shows the outlet, `Live` for a live blog, and the age (live against the viewer's clock), then the headline in up to three lines.
+  - A story opens its card on `/news`.
+  - A last node, "All N stories · Today's wire", opens `/news`.
+  - The home page is rebuilt with every edition (the daily commit redeploys), so the section updates daily.
+  - Phones: side plates two rows apart (a headline needs two lines), so Projects starts below the first screen.
+- **Engine:**
+  - `menuLayout` takes `news`, `links` and `rootW` (the root plate's reach right of its vertex, measured from the plate), and returns `links` (vertices, style `compact | stack`, plate width, placement `beside | under`).
+  - Under-placed links push the fences down a row.
+  - The links are flow anchors (`link/k`), and each has a root feed.
+
+### v4.1 (2026-10-28, after Gero's review)
+- **Links:** wide puts them as far right as they go (the last plate ends by the fences' right edge, the row spread back toward the root, at least 3 spacings apart). Their pills fill their slots, so the row runs across the page.
+- **Headings outrank what they hold:**
+  - Section switches have a 56px glyph and a 1.25rem label; category headers a 46px glyph and a 1.125rem label (cards are 44px).
+  - The trunk (root → switch → header) is drawn 1.8× wider and brighter at rest (alpha 0.72, against 0.42 elsewhere).
+  - It carries more current: switches get 4 shares of new packets and headers 2 (`GridGame.setLoadWeight`).
+- **NEWS WIRE by category:** Must know · Clean tech · AI · World (empty ones left out), with headers on the trunk like PROJECTS.
+  - **The grid:** the featured category (the first) shows its top 3 stories as side nodes, then an **All N stories →** control. The other categories are off the map (dark, out of reach, not in the flow).
+  - **The full wire** (All N stories, or arriving on `/#news`):
+    - NEWS WIRE's front drains to its switch, the menu re-lays out, and the front runs out again: the fence grows to the full width, and every story powers on along the grid as the current reaches it.
+    - Wide puts 4 stories per row, stacked 3, phones 1, with hanging plates (outlet, age, headline).
+    - PROJECTS collapses under it (one tap opens it) and is restored on the way back.
+    - **← Back to the grid** sits on NEWS WIRE's fence, top right. The browser's back and forward move between the two views (`#news`).
+- **A story's panel:** tapping a story (in either view) opens a glass panel on a spring: section, outlet, `Live` / `ES`, age, headline, brief, why, also-in links, **Read on <outlet> ↗** and **On the wire** (its card on /news).
+  - Another story swaps the panel's content. Escape, × or a press elsewhere closes it, and focus returns to the story.
+  - It marks the story read (shared with /news, in `localStorage`).
+  - Desktop: bottom right, 27rem wide. Phones: full width within the gutters. Without JS, a story opens its card on /news.

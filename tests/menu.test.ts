@@ -275,9 +275,26 @@ describe('setDecorTransformers', () => {
 import { MENU_PX, circuitPaths, circuitTransformers, menuLayout, type LatticeRect, type MenuLayout } from '../src/grid/game/decor';
 
 const GUTTER = (w: number) => Math.min(32, Math.max(16, w * 0.03));
+/** The root plate's reach right of its vertex on desktop (80px glyph, kicker, name, the Berkeley line). */
+const ROOT_W = 430;
+
+/** A link's box (lattice units, relative to the root's vertex): a one-line plate beside the glyph, or the label under it. */
+function linkBox(l: MenuLayout, p: { col: number; row: number }): LatticeRect {
+  const s = l.spacing;
+  const cg = MENU_PX.compactGlyph / 2;
+  if (l.links.style === 'stack') {
+    return { c0: p.col - l.links.plateW / 2 / s, c1: p.col + l.links.plateW / 2 / s, r0: p.row - cg / s, r1: p.row + MENU_PX.stackH / s };
+  }
+  return {
+    c0: p.col - cg / s,
+    c1: p.col + (cg + MENU_PX.compactGap + l.links.plateW) / s,
+    r0: p.row - MENU_PX.compactH / 2 / s,
+    r1: p.row + MENU_PX.compactH / 2 / s,
+  };
+}
 
 /** Plate box (lattice units, relative to the glyph's vertex) for a section's style. */
-function plateBox(l: MenuLayout, sec: MenuLayout['about'], c: { col: number; row: number }): LatticeRect {
+function plateBox(l: MenuLayout, sec: MenuLayout['news'], c: { col: number; row: number }): LatticeRect {
   const s = l.spacing;
   const g = MENU_PX.glyph / 2;
   if (sec.style === 'hang') {
@@ -317,13 +334,13 @@ describe('menuLayout (v3.2 sections)', () => {
     [320, 'column'],
   ] as const) {
     it(`${w}px: ${mode}; fences on lattice lines, plates inside them, nothing overlaps, it fits`, () => {
-      const l = menuLayout(w, { about: 3, projects: 6, gutter: GUTTER(w) });
+      const l = menuLayout(w, { news: 4, projects: 6, links: 3, rootW: ROOT_W, gutter: GUTTER(w) });
       expect(l.mode).toBe(mode);
       expect(l.spacing).toBeGreaterThanOrEqual(52);
       expect(l.spacing).toBeLessThanOrEqual(64);
       expect((l.extent.c1 - l.extent.c0) * l.spacing).toBeLessThanOrEqual(w - 2 * GUTTER(w) + 1e-6);
       const boxes: LatticeRect[] = [];
-      for (const sec of [l.about, l.projects]) {
+      for (const sec of [l.news, l.projects]) {
         expect(isLines(sec.fence)).toBe(true);
         expect(isLines(sec.collapsed)).toBe(true);
         expect(inside(sec.collapsed, sec.fence)).toBe(true);
@@ -341,11 +358,26 @@ describe('menuLayout (v3.2 sections)', () => {
           boxes.push(box);
         }
       }
-      expect(overlap(l.about.fence, l.projects.fence)).toBe(false);
+      expect(overlap(l.news.fence, l.projects.fence)).toBe(false);
       // The root sits above both fences.
-      expect(l.about.fence.r0).toBeGreaterThan(l.root.row);
+      expect(l.news.fence.r0).toBeGreaterThan(l.root.row);
       expect(l.projects.fence.r0).toBeGreaterThan(l.root.row);
-      expect(l.about.children).toHaveLength(3);
+      expect(l.news.children).toHaveLength(4);
+      // The links: on vertices, above both fences, clear of each other and inside the width.
+      expect(l.links.nodes).toHaveLength(3);
+      const linkBoxes = l.links.nodes.map((p) => linkBox(l, p));
+      linkBoxes.forEach((b, k) => {
+        const p = l.links.nodes[k];
+        expect(Number.isInteger(p.col) && Number.isInteger(p.row)).toBe(true);
+        expect(b.r1, `${w} link ${k}`).toBeLessThan(Math.min(l.news.fence.r0, l.projects.fence.r0));
+        expect(b.c0).toBeGreaterThanOrEqual(l.extent.c0);
+        expect(b.c1).toBeLessThanOrEqual(l.extent.c1 + 1e-9);
+        for (const o of linkBoxes.slice(k + 1)) expect(overlap(b, o)).toBe(false);
+      });
+      // Beside the root, they start clear of its plate.
+      if (l.links.placement === 'beside') {
+        expect(l.links.nodes[0].col * l.spacing - MENU_PX.compactGlyph / 2).toBeGreaterThanOrEqual(ROOT_W + MENU_PX.linkGap);
+      }
       expect(l.projects.children).toHaveLength(6);
     });
   }
@@ -353,13 +385,13 @@ describe('menuLayout (v3.2 sections)', () => {
   it('a collapsed section moves what follows it up by whole rows (stacked, column); wide keeps everything', () => {
     for (const w of [1024, 768, 630, 375]) {
       const g = GUTTER(w);
-      const open = menuLayout(w, { about: 3, projects: 6, gutter: g });
-      const shut = menuLayout(w, { about: 3, projects: 6, gutter: g, collapsed: { about: true } });
-      const up = open.about.fence.r1 - open.about.collapsed.r1;
+      const open = menuLayout(w, { news: 3, projects: 6, gutter: g });
+      const shut = menuLayout(w, { news: 3, projects: 6, gutter: g, collapsed: { news: true } });
+      const up = open.news.fence.r1 - open.news.collapsed.r1;
       expect(up, `${w}`).toBeGreaterThan(0);
       expect(Number.isInteger(up)).toBe(true);
-      // ABOUT ME itself and the root stay put.
-      expect(shut.about).toEqual(open.about);
+      // NEWS WIRE itself and the root stay put.
+      expect(shut.news).toEqual(open.news);
       expect(shut.root).toEqual(open.root);
       // PROJECTS (fence, switch, children) moves up by exactly those rows, still on vertices.
       expect(shut.projects.fence.r0).toBe(open.projects.fence.r0 - up);
@@ -370,77 +402,103 @@ describe('menuLayout (v3.2 sections)', () => {
         expect(c.row).toBe(open.projects.children[k].row - up);
       });
       // It sits right under the collapsed switch area, with the same gap as before.
-      expect(shut.projects.fence.r0 - shut.about.collapsed.r1).toBe(open.projects.fence.r0 - open.about.fence.r1);
+      expect(shut.projects.fence.r0 - shut.news.collapsed.r1).toBe(open.projects.fence.r0 - open.news.fence.r1);
       expect(shut.extent.r1).toBe(open.extent.r1 - up);
       // Collapsing PROJECTS (last) only shortens the menu.
-      const both = menuLayout(w, { about: 3, projects: 6, gutter: g, collapsed: { about: true, projects: true } });
+      const both = menuLayout(w, { news: 3, projects: 6, gutter: g, collapsed: { news: true, projects: true } });
       expect(both.projects.switch).toEqual(shut.projects.switch);
       expect(both.extent.r1).toBe(shut.projects.collapsed.r1);
     }
-    const wide = menuLayout(1440, { about: 3, projects: 6, gutter: 32 });
-    const wideShut = menuLayout(1440, { about: 3, projects: 6, gutter: 32, collapsed: { about: true, projects: true } });
+    const wide = menuLayout(1440, { news: 3, projects: 6, gutter: 32 });
+    const wideShut = menuLayout(1440, { news: 3, projects: 6, gutter: 32, collapsed: { news: true, projects: true } });
     expect(wideShut).toEqual(wide);
   });
 
-  it('phones: ABOUT ME is compact (one row per child) and Projects makes the first screen', () => {
+  it('phones: the links in a row under the root, labels under their glyphs; NEWS WIRE stories two rows apart', () => {
     for (const [w, h] of [
       [375, 812],
       [375, 667],
       [390, 844],
     ] as const) {
-      const l = menuLayout(w, { about: 3, projects: 6, gutter: GUTTER(w) });
+      const l = menuLayout(w, { news: 4, projects: 6, links: 3, rootW: ROOT_W, gutter: GUTTER(w) });
       expect(l.mode).toBe('column');
-      expect(l.about.style).toBe('compact');
-      const rows = l.about.children.map((c) => c.row);
-      // Right under the switch, then one row each.
-      expect(rows[0]).toBe(l.about.switch.row + 1);
-      rows.forEach((r, k) => k && expect(r - rows[k - 1]).toBe(1));
-      // The plates fit a row: no two compact plates (or the switch) touch.
-      expect(MENU_PX.compactH).toBeLessThan(l.spacing - 8);
-      // The page puts the root's row about 114px down (nav pill, root plate). The Projects switch
-      // (44px tall) is on screen; on a 812px-class screen its first plate (84px) is too.
-      const y = (row: number) => 114 + row * l.spacing;
-      expect(y(l.projects.switch.row) + 22, `${w}×${h}`).toBeLessThanOrEqual(h);
-      if (h >= 800) expect(y(l.projects.children[0].row) + MENU_PX.sideH / 2, `${w}×${h}`).toBeLessThanOrEqual(h);
+      expect(l.links).toMatchObject({ style: 'stack', placement: 'under' });
+      expect(l.links.nodes.map((p) => p.row)).toEqual([1, 1, 1]);
+      expect(l.links.nodes[0].col).toBe(0);
+      // Each label has room for "Off the grid" (about 80px at 13px).
+      expect(l.links.plateW, `${w}`).toBeGreaterThanOrEqual(96);
+      // NEWS WIRE: side plates (a headline takes two or three lines), from two rows under the switch.
+      expect(l.news.style).toBe('side');
+      const rows = l.news.children.map((c) => c.row);
+      expect(rows[0]).toBe(l.news.switch.row + 2);
+      rows.forEach((r, k) => k && expect(r - rows[k - 1]).toBe(2));
+      // The page puts the root's row about 70px down (gutter, root plate): the switch and the first
+      // story make the first screen.
+      const y = (row: number) => 70 + row * l.spacing;
+      expect(y(l.news.children[0].row) + MENU_PX.sideH / 2, `${w}×${h}`).toBeLessThanOrEqual(h);
       // Project children keep their size and spacing.
       expect(l.projects.style).toBe('side');
       expect(l.projects.children[1].row - l.projects.children[0].row).toBe(2);
     }
   });
 
+  it('wide puts the links beside the root plate, or under the root when they don\'t fit; no links, nothing moves', () => {
+    const beside = menuLayout(1440, { news: 4, projects: 6, links: 3, rootW: ROOT_W, gutter: 32 });
+    expect(beside.links).toMatchObject({ style: 'compact', placement: 'beside' });
+    expect(beside.links.nodes.map((p) => p.row)).toEqual([0, 0, 0]);
+    // Beside the root, the fences keep their rows.
+    const none = menuLayout(1440, { news: 4, projects: 6, gutter: 32 });
+    expect(none.links.nodes).toEqual([]);
+    expect(beside.news).toEqual(none.news);
+    expect(beside.projects).toEqual(none.projects);
+    // A root plate too wide for them: a row under the root, and everything else a row lower.
+    const under = menuLayout(1440, { news: 4, projects: 6, links: 3, rootW: 900, gutter: 32 });
+    expect(under.links.placement).toBe('under');
+    expect(under.links.nodes.map((p) => p.row)).toEqual([1, 1, 1]);
+    expect(under.news.fence.r0).toBe(none.news.fence.r0 + 1);
+    expect(under.projects.switch.row).toBe(none.projects.switch.row + 1);
+    // Stacked: under, beside-style plates.
+    const stacked = menuLayout(1024, { news: 4, projects: 6, links: 3, rootW: ROOT_W, gutter: GUTTER(1024) });
+    expect(stacked.links).toMatchObject({ style: 'compact', placement: 'under' });
+    // fenceTop (a tall root) moves the links' row down with the fences.
+    const tall = menuLayout(375, { news: 4, projects: 6, links: 3, gutter: 16, fenceTop: 2 });
+    expect(tall.links.nodes.map((p) => p.row)).toEqual([2, 2, 2]);
+    expect(tall.news.fence.r0).toBe(3);
+  });
+
   it('fenceTop moves everything but the root down a row', () => {
-    const a = menuLayout(375, { about: 3, projects: 6, gutter: 16 });
-    const b = menuLayout(375, { about: 3, projects: 6, gutter: 16, fenceTop: 2 });
+    const a = menuLayout(375, { news: 3, projects: 6, gutter: 16 });
+    const b = menuLayout(375, { news: 3, projects: 6, gutter: 16, fenceTop: 2 });
     expect(b.root).toEqual(a.root);
-    expect(b.about.fence.r0).toBe(a.about.fence.r0 + 1);
+    expect(b.news.fence.r0).toBe(a.news.fence.r0 + 1);
     expect(b.projects.children[5].row).toBe(a.projects.children[5].row + 1);
     expect(b.projects.collapsed.r1).toBe(a.projects.collapsed.r1 + 1);
     expect(b.extent.r1).toBe(a.extent.r1 + 1);
   });
 
-  it('wide puts ABOUT ME left and PROJECTS right in 3×2; stacked and column put PROJECTS below', () => {
-    const wide = menuLayout(1440, { about: 3, projects: 6, gutter: 32 });
-    expect(wide.projects.fence.c0).toBeGreaterThan(wide.about.fence.c1 - 1);
+  it('wide puts NEWS WIRE left and PROJECTS right in 3×2; stacked and column put PROJECTS below', () => {
+    const wide = menuLayout(1440, { news: 3, projects: 6, gutter: 32 });
+    expect(wide.projects.fence.c0).toBeGreaterThan(wide.news.fence.c1 - 1);
     expect(new Set(wide.projects.children.map((c) => c.row)).size).toBe(2);
     expect(new Set(wide.projects.children.map((c) => c.col)).size).toBe(3);
     for (const w of [1024, 375]) {
-      const l = menuLayout(w, { about: 3, projects: 6, gutter: GUTTER(w) });
-      expect(l.projects.fence.r0).toBeGreaterThan(l.about.fence.r1 - 1);
+      const l = menuLayout(w, { news: 3, projects: 6, gutter: GUTTER(w) });
+      expect(l.projects.fence.r0).toBeGreaterThan(l.news.fence.r1 - 1);
     }
   });
 });
 
-/** The menu circuit on a real layout: root 0, switches 1–2, about children, then projects. */
+/** The menu circuit on a real layout: root 0, switches 1–2, news children, then projects. */
 function circuitGame(width: number) {
-  const l = menuLayout(width, { about: 3, projects: 6, gutter: GUTTER(width) });
+  const l = menuLayout(width, { news: 3, projects: 6, gutter: GUTTER(width) });
   // Lattice with the root at (2, 1), bleeding past the extent.
   const offC = 1 - l.extent.c0 + 1;
   const offR = 1;
   const cols = l.extent.c1 - l.extent.c0 + 4;
   const rows = l.extent.r1 + 3;
   const at = (p: { col: number; row: number }) => ({ col: p.col + offC, row: p.row + offR });
-  const ids = ['root', 'sw-about', 'sw-projects', 'a0', 'a1', 'a2', 'p0', 'p1', 'p2', 'p3', 'p4', 'p5'];
-  const places = [l.root, l.about.switch, l.projects.switch, ...l.about.children, ...l.projects.children].map(at);
+  const ids = ['root', 'sw-news', 'sw-projects', 'a0', 'a1', 'a2', 'p0', 'p1', 'p2', 'p3', 'p4', 'p5'];
+  const places = [l.root, l.news.switch, l.projects.switch, ...l.news.children, ...l.projects.children].map(at);
   const nodes = ids.map((id, i) => ({ id, kind: i === 0 ? ('plant' as const) : ('section' as const), ...places[i] }));
   const game = new GridGame({
     cols,
@@ -538,6 +596,20 @@ describe('load switching', () => {
     let lit = 0;
     for (let i = 0; i < game.count; i++) if (!game.ambient[i] && game.bright[i] > 0) lit++;
     expect(lit).toBeGreaterThan(20);
+  });
+
+  it('a weighted load gets more of the new packets; weight 1 changes nothing', () => {
+    const base = circuitGame(1440).game;
+    const same = circuitGame(1440).game;
+    expect(same.setLoadWeight(1, 1)).toBe(true);
+    run(base, 20);
+    run(same, 20);
+    expect(same.delivered[1]).toBe(base.delivered[1]);
+    const heavy = circuitGame(1440).game;
+    expect(heavy.setLoadWeight(0, 3)).toBe(false); // the root isn't a load
+    expect(heavy.setLoadWeight(1, 4)).toBe(true);
+    run(heavy, 20);
+    expect(heavy.delivered[1]).toBeGreaterThan(base.delivered[1] * 2);
   });
 
   it('a load source makes its packets leave from that node; −1 restores the plant', () => {
@@ -661,7 +733,7 @@ describe('categories', () => {
   for (const w of WIDTHS) {
     it(`${w}px: headers down the trunk, cards under them, Show more clear of everything (expanded and collapsed)`, () => {
       for (const counts of [COUNTS, [1, 5, 7], [3, 4, 2]]) {
-        const l = menuLayout(w, { about: 3, projects: counts, gutter: GUTTER(w) });
+        const l = menuLayout(w, { news: 3, projects: counts, gutter: GUTTER(w) });
         const P = l.projects;
         const cats = P.categories!;
         const label = `${w} ${counts}`;
@@ -713,10 +785,10 @@ describe('categories', () => {
 
   it('anchors: only visible cards (plus headers) feed the flow, and the set follows expand and collapse', () => {
     for (const w of [1440, 1024, 375]) {
-      const l = menuLayout(w, { about: 3, projects: COUNTS, gutter: GUTTER(w) });
+      const l = menuLayout(w, { news: 3, projects: COUNTS, gutter: GUTTER(w) });
       const V = CATEGORY_GRID[l.mode].visible;
       const shut = menuAnchors(l, [false, false, false]);
-      const fixed = 1 + 2 + 3 + COUNTS.length; // root, switches, ABOUT ME, headers
+      const fixed = 1 + 2 + 3 + COUNTS.length; // root, switches, NEWS WIRE, headers
       expect(shut, `${w}`).toHaveLength(fixed + COUNTS.reduce((a, n) => a + Math.min(n, V), 0));
       const all = menuAnchors(l, [true, true, true]);
       expect(all).toHaveLength(fixed + COUNTS.reduce((a, n) => a + n, 0));
@@ -735,12 +807,12 @@ describe('categories', () => {
       }
     }
     // Phones: Games and Math & Nature fit (2 each); Solutions shows 2 of 4.
-    const phone = menuLayout(375, { about: 3, projects: COUNTS, gutter: 16 });
+    const phone = menuLayout(375, { news: 3, projects: COUNTS, gutter: 16 });
     expect(phone.projects.categories!.map((c) => c.more !== null)).toEqual([false, false, true]);
   });
 
   it('a collapsed category squeezes its band: what follows moves up by whole rows, inside closes up', () => {
-    const l = menuLayout(1440, { about: 3, projects: [2, 7, 1], gutter: 32 });
+    const l = menuLayout(1440, { news: 3, projects: [2, 7, 1], gutter: 32 });
     const cats = l.projects.categories!;
     const games = cats[1];
     expect(games.band.rows).toBe(6); // two more card rows, 3 apart
@@ -758,33 +830,33 @@ describe('categories', () => {
     expect(squeezeRow(hidden.row, hidden.col, bands)).toBe(games.band.at);
     expect(bandSqueeze(games.cards[3].row, games.cards[3].col, half)).toBe(0.5);
     expect(bandSqueeze(games.cards[0].row, games.cards[0].col, half)).toBe(0);
-    // Wide: ABOUT ME sits beside PROJECTS, so its column never moves.
-    const a = l.about.children.at(-1)!;
+    // Wide: NEWS WIRE sits beside PROJECTS, so its column never moves.
+    const a = l.news.children.at(-1)!;
     expect(squeezeRow(a.row + 20, a.col, bands)).toBe(a.row + 20);
-    // Stacked and column: ABOUT ME's band and the categories' add up.
-    const s = menuLayout(375, { about: 3, projects: [2, 2, 4], gutter: 16 });
-    const both = menuBands(s, { about: 1, categories: [1, 1, 1] });
+    // Stacked and column: NEWS WIRE's band and the categories' add up.
+    const s = menuLayout(375, { news: 3, projects: [2, 2, 4], gutter: 16 });
+    const both = menuBands(s, { news: 1, categories: [1, 1, 1] });
     const sol = s.projects.categories![2];
-    const up = s.about.fence.r1 - s.about.collapsed.r1;
+    const up = s.news.fence.r1 - s.news.collapsed.r1;
     expect(squeezeRow(sol.cards[3].row + 5, 0, both)).toBe(sol.cards[3].row + 5 - up - sol.band.rows);
   });
 
-  it('phones: the first card still makes an 812px screen; tablets show 2, wide 3', () => {
-    const l = menuLayout(375, { about: 3, projects: COUNTS, gutter: 16 });
-    const first = l.projects.categories![0].cards[0];
-    expect(114 + first.row * l.spacing + MENU_PX.sideH / 2).toBeLessThanOrEqual(812);
-    expect(menuLayout(1024, { about: 3, projects: COUNTS, gutter: 31 }).projects.categories![2].visible).toBe(2);
-    expect(menuLayout(1440, { about: 3, projects: COUNTS, gutter: 32 }).projects.categories![2].visible).toBe(3);
+  it('categories: tablets show 2 cards, wide 3; on phones the first card follows right under its header', () => {
+    const l = menuLayout(375, { news: 4, projects: COUNTS, links: 3, gutter: 16 });
+    const cat = l.projects.categories![0];
+    expect(cat.cards[0].row).toBe(cat.header.row + 2);
+    expect(menuLayout(1024, { news: 3, projects: COUNTS, gutter: 31 }).projects.categories![2].visible).toBe(2);
+    expect(menuLayout(1440, { news: 3, projects: COUNTS, gutter: 32 }).projects.categories![2].visible).toBe(3);
   });
 
-  it('nothing grouped: PROJECTS keeps the v3.2 grid, and ABOUT ME is the same either way', () => {
+  it('nothing grouped: PROJECTS keeps the v3.2 grid, and NEWS WIRE is the same either way', () => {
     for (const w of WIDTHS) {
-      const flat = menuLayout(w, { about: 3, projects: 8, gutter: GUTTER(w) });
-      const grouped = menuLayout(w, { about: 3, projects: COUNTS, gutter: GUTTER(w) });
+      const flat = menuLayout(w, { news: 3, projects: 8, gutter: GUTTER(w) });
+      const grouped = menuLayout(w, { news: 3, projects: COUNTS, gutter: GUTTER(w) });
       expect(flat.projects.categories).toBeUndefined();
-      expect(menuBands(flat, { categories: [1, 1, 1] }).every((b) => b.at === flat.about.collapsed.r1)).toBe(true);
-      expect(grouped.about.switch).toEqual(flat.about.switch);
-      expect(grouped.about.children).toEqual(flat.about.children);
+      expect(menuBands(flat, { categories: [1, 1, 1] }).every((b) => b.at === flat.news.collapsed.r1)).toBe(true);
+      expect(grouped.news.switch).toEqual(flat.news.switch);
+      expect(grouped.news.children).toEqual(flat.news.children);
       expect(grouped.projects.switch).toEqual(flat.projects.switch);
       expect(grouped.mode).toBe(flat.mode);
       expect(grouped.spacing).toBe(flat.spacing);
@@ -792,19 +864,22 @@ describe('categories', () => {
   });
 
   for (const w of [1440, 1024, 375]) {
-    it(`${w}px circuit: root → switches → headers → cards, every leg routed and fed`, () => {
-      const l = menuLayout(w, { about: 3, projects: COUNTS, gutter: GUTTER(w) });
+    it(`${w}px circuit: root → links, root → switches → headers → cards, every leg routed and fed`, () => {
+      const l = menuLayout(w, { news: 4, projects: COUNTS, links: 3, rootW: ROOT_W, gutter: GUTTER(w) });
       const offC = 1 - l.extent.c0 + 1;
       const at = (p: { col: number; row: number }) => ({ col: p.col + offC, row: p.row + 1 });
       const cats = l.projects.categories!;
-      const places = [l.root, l.about.switch, l.projects.switch, ...l.about.children];
+      const places = [l.root, l.news.switch, l.projects.switch, ...l.news.children];
       const feeds = [
         { from: 0, to: 1 },
         { from: 0, to: 2 },
         { from: 1, to: 3 },
         { from: 1, to: 4 },
         { from: 1, to: 5 },
+        { from: 1, to: 6 },
       ];
+      // The root's links, fed straight from the root.
+      for (const p of l.links.nodes) feeds.push({ from: 0, to: places.push(p) - 1 });
       for (const c of cats) {
         const head = places.push(c.header) - 1;
         feeds.push({ from: 2, to: head });
@@ -835,4 +910,112 @@ describe('categories', () => {
       for (const k of game.activeLoads) expect(game.delivered[k], game.nodes[k].id).toBeGreaterThan(0);
     });
   }
+});
+
+describe('NEWS WIRE by category (v4)', () => {
+  const NEWS = [5, 6, 6, 5];
+  const PROJECTS = [2, 2, 4];
+  const boxesOf = (l: MenuLayout, sec: MenuLayout['news']) => sec.children.map((c) => plateBox(l, sec, c));
+
+  for (const w of [1440, 1180, 1024, 768, 390, 375]) {
+    it(`${w}px grid: the featured category's top 3 and its All-stories control; the other categories are off the map`, () => {
+      const l = menuLayout(w, { news: NEWS, newsTop: 3, projects: PROJECTS, links: 3, rootW: ROOT_W, gutter: GUTTER(w) });
+      expect(l.newsFull).toBe(false);
+      expect(l.stacked).toBe(l.mode !== 'wide');
+      const [featured, ...others] = l.news.categories!;
+      expect(featured.cards).toHaveLength(3);
+      expect(featured.visible).toBe(3);
+      expect(featured.hidden).toBeFalsy();
+      expect(featured.more).not.toBeNull();
+      expect(featured.band.rows).toBe(0);
+      for (const c of others) expect(c).toMatchObject({ hidden: true, cards: [], visible: 0, more: null });
+      expect(l.news.children).toEqual(featured.cards);
+      // The header sits between the switch and the stories, all on the spine.
+      expect(featured.header.row).toBeGreaterThan(l.news.switch.row);
+      for (const c of featured.cards) expect(c.row).toBeGreaterThan(featured.header.row);
+      // Plates inside the fence, clear of each other and of PROJECTS'.
+      const news = boxesOf(l, l.news);
+      const proj = boxesOf(l, l.projects);
+      news.forEach((b, k) => {
+        expect(inside(b, l.news.fence), `${w} story ${k}`).toBe(true);
+        for (const o of [...news.slice(k + 1), ...proj]) expect(overlap(b, o)).toBe(false);
+      });
+      // The All-stories control fits under the last story, inside the fence.
+      const last = featured.cards.at(-1)!;
+      expect(last.row + (MENU_PX.sideH / 2 + MENU_PX.moreGap + MENU_PX.moreH) / l.spacing).toBeLessThanOrEqual(l.news.fence.r1);
+    });
+
+    it(`${w}px full wire: every story across the width by category, PROJECTS under it`, () => {
+      const l = menuLayout(w, { news: NEWS, newsFull: true, projects: PROJECTS, links: 3, rootW: ROOT_W, gutter: GUTTER(w) });
+      expect(l.newsFull).toBe(true);
+      expect(l.stacked).toBe(true);
+      const cats = l.news.categories!;
+      cats.forEach((c, k) => {
+        expect(c.hidden).toBeFalsy();
+        expect(c.cards).toHaveLength(NEWS[k]);
+        expect(c.visible).toBe(NEWS[k]);
+        expect(c.more).toBeNull();
+        expect(c.band.rows).toBe(0);
+      });
+      // Wide puts 4 stories a row, stacked 3, phones 1.
+      const perRow = l.mode === 'wide' ? 4 : l.mode === 'stacked' ? 3 : 1;
+      expect(new Set(cats[1].cards.map((c) => c.col)).size).toBe(perRow);
+      expect(l.news.fence.c1).toBe(l.extent.c1);
+      expect(l.projects.fence.r0).toBeGreaterThan(l.news.fence.r1 - 1);
+      // Every glyph on its own vertex; plates inside the fence and clear of each other.
+      const verts = [l.news.switch, ...cats.flatMap((c) => [c.header, ...c.cards])].map((p) => `${p.col},${p.row}`);
+      expect(new Set(verts).size).toBe(verts.length);
+      const boxes = boxesOf(l, l.news);
+      boxes.forEach((b, k) => {
+        expect(inside(b, l.news.fence), `${w} story ${k}`).toBe(true);
+        for (const o of boxes.slice(k + 1)) expect(overlap(b, o)).toBe(false);
+      });
+      // Its anchors: every header and every story.
+      const ids = menuAnchors(l, [false, false, false]).map((a) => a.id);
+      expect(ids.filter((id) => id.startsWith('news-cat/') && id.split('/').length === 3)).toHaveLength(NEWS.reduce((a, b) => a + b, 0));
+    });
+  }
+
+  it('collapsing the full wire moves PROJECTS up by whole rows, even on wide', () => {
+    const open = menuLayout(1440, { news: NEWS, newsFull: true, projects: PROJECTS, gutter: 32 });
+    const shut = menuLayout(1440, { news: NEWS, newsFull: true, projects: PROJECTS, gutter: 32, collapsed: { news: true } });
+    const up = open.news.fence.r1 - open.news.collapsed.r1;
+    expect(up).toBeGreaterThan(0);
+    expect(shut.projects.switch.row).toBe(open.projects.switch.row - up);
+    expect(menuBands(open, { news: 1 }).filter((b) => b.v > 0)).toHaveLength(1);
+  });
+
+  it('1440px full wire circuit: root → switches → headers → stories, every leg routed and fed', () => {
+    const l = menuLayout(1440, { news: NEWS, newsFull: true, projects: PROJECTS, links: 3, rootW: ROOT_W, gutter: 32 });
+    const offC = 1 - l.extent.c0 + 1;
+    const at = (p: { col: number; row: number }) => ({ col: p.col + offC, row: p.row + 1 });
+    const places = [l.root, l.news.switch, l.projects.switch];
+    const feeds = [
+      { from: 0, to: 1 },
+      { from: 0, to: 2 },
+    ];
+    for (const c of l.news.categories!) {
+      const head = places.push(c.header) - 1;
+      feeds.push({ from: 1, to: head });
+      for (const p of c.cards) feeds.push({ from: head, to: places.push(p) - 1 });
+    }
+    const nodes = places.map((p, i) => ({ id: `n${i}`, kind: i === 0 ? ('plant' as const) : ('section' as const), ...at(p) }));
+    const game = new GridGame({
+      cols: l.extent.c1 - l.extent.c0 + 4,
+      rows: l.extent.r1 + 3,
+      nodes,
+      levels: [{ title: 'Menu', plants: ['n0'], loads: nodes.slice(1).map((n) => n.id), budget: 0 }],
+      count: 1200,
+      seed: 3,
+      decorative: true,
+    });
+    const vOf = (k: number) => game.board.vertex(nodes[k].col, nodes[k].row);
+    game.setDecorTransformers(
+      circuitTransformers(game.board, game.bounds, new Set(nodes.map((_, k) => vOf(k))), feeds.map((f) => ({ from: vOf(f.from), to: vOf(f.to) }))),
+    );
+    for (const f of feeds) if (f.from !== 0) game.setLoadSource(f.to, f.from);
+    for (const p of circuitPaths(game, feeds)) expect(p.steps.length, `n${p.from}→n${p.to}`).toBeGreaterThan(0);
+    run(game, 40);
+    for (const k of game.activeLoads) expect(game.delivered[k], game.nodes[k].id).toBeGreaterThan(0);
+  });
 });

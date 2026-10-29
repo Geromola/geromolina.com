@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture: fictional stories for tests and `npm run news -- --dry-run`. -->
+<rss version="2.0">
+  <channel>
+    <title>Fixture Utility</title>
+    <item>
+      <title>Sodium-ion battery plant from Northgate Energy enters service</title>
+      <description>Grid operators expect the four-hour system to shave evening peaks across southern Nevada starting this winter.</description>
+      <link>https://www.example-utility.test/news/northgate-battery/</link>
+      <pubDate>Tue, 27 Oct 2026 07:30:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Interconnection queue shrinks for the first time in a decade</title>
+      <description>New federal rules cleared stalled requests, and 180 GW of proposed projects left the queue this year.</description>
+      <link>https://www.example-utility.test/news/queue-shrinks/</link>
+      <pubDate>Mon, 26 Oct 2026 16:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

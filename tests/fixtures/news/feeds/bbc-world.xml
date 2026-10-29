@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture: fictional stories for tests and `npm run news -- --dry-run`. -->
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Fixture World</title>
+    <item>
+      <title>Leaders agree ceasefire framework at Geneva summit</title>
+      <description><![CDATA[<p>Negotiators from both sides signed a framework late on Monday that pauses fighting for ninety days while monitors deploy along the border.</p>]]></description>
+      <link>https://www.example-world.test/news/geneva-ceasefire?utm_source=rss&amp;utm_medium=feed</link>
+      <pubDate>Tue, 27 Oct 2026 05:10:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Central bank holds rates steady and signals patience</title>
+      <description>Policy makers kept the benchmark unchanged at 3.75% and said inflation needs to cool further before any cut next year.</description>
+      <link>https://www.example-world.test/news/rates-hold</link>
+      <pubDate>Mon, 26 Oct 2026 22:30:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Celebrity chef opens floating restaurant</title>
+      <description>The venue seats forty diners and moors in a different harbour each week.</description>
+      <link>https://www.example-world.test/news/floating-restaurant</link>
+      <pubDate>Tue, 27 Oct 2026 08:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Storm season review published last week</title>
+      <description>An older report that falls outside the freshness window.</description>
+      <link>https://www.example-world.test/news/storm-review</link>
+      <pubDate>Mon, 19 Oct 2026 10:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

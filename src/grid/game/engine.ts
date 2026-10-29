@@ -183,6 +183,10 @@ export class GridGame {
   // vertex its packets leave from (−1 = its best plant, see `setLoadSource`).
   private loadOff = new Uint8Array(0);
   private loadSrc = new Int32Array(0);
+  // Round-robin order of routing slots for new counted packets: each slot once, or more often
+  // for a weighted load (see `setLoadWeight`).
+  private loadWeight = new Uint8Array(0);
+  private schedule: number[] = [];
 
   constructor(opts: EngineOptions) {
     this.board = new Board(opts.cols, opts.rows);
@@ -300,6 +304,8 @@ export class GridGame {
     this.tablesArr = this.loadVerts.map(() => new Float64Array(this.board.V * 2));
     this.loadOff = new Uint8Array(this.loadVerts.length);
     this.loadSrc = new Int32Array(this.loadVerts.length).fill(-1);
+    this.loadWeight = new Uint8Array(this.loadVerts.length).fill(1);
+    this.schedule = this.loadVerts.map((_, j) => j);
     this.focusSourcesFor();
     for (const v of this.placed) this.isTransformer[v] = 0;
     this.placed.length = 0;
@@ -544,6 +550,23 @@ export class GridGame {
     }
     if (!Number.isInteger(source) || source >= this.nodes.length) return false;
     this.loadSrc[j] = this.vertexOfNode(source);
+    return true;
+  }
+
+  /**
+   * Load node `k` gets `weight` (1–8) shares of new counted packets instead of one, so more
+   * flow runs to it, e.g. a menu section's switch. The shares are interleaved through the
+   * round-robin. False when `k` isn't an active load.
+   */
+  setLoadWeight(k: number, weight: number): boolean {
+    const j = this.loadNodes.indexOf(k);
+    if (j < 0) return false;
+    this.loadWeight[j] = Math.min(8, Math.max(1, Math.round(weight)));
+    const max = Math.max(...this.loadWeight);
+    this.schedule = [];
+    for (let pass = 0; pass < max; pass++) {
+      for (let i = 0; i < this.loadWeight.length; i++) if (this.loadWeight[i] > pass) this.schedule.push(i);
+    }
     return true;
   }
 
@@ -798,10 +821,11 @@ export class GridGame {
       this.slot[i] = this.loadVerts.length;
       if (fresh) this.delay[i] = this.rand() * SPAWN_SPREAD;
     } else {
-      const L = this.loadVerts.length;
-      let j = this.rr++ % L;
+      const S = this.schedule;
+      const L = S.length;
+      let j = S[this.rr++ % L];
       // Skip disabled loads (no extra random numbers while every load is enabled).
-      for (let tries = 1; this.loadOff[j] && tries < L; tries++) j = this.rr++ % L;
+      for (let tries = 1; this.loadOff[j] && tries < L; tries++) j = S[this.rr++ % L];
       this.target[i] = this.loadNodes[j];
       this.slot[i] = j;
       if (this.loadOff[j]) {

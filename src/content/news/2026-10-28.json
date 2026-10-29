@@ -1,0 +1,410 @@
+{
+  "date": "2026-10-28",
+  "generatedAt": "2026-10-28T16:16:19.897Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "619c8dbf",
+      "section": "world",
+      "title": "Live Updates: At Least 68 Killed in Train Crash in Spain, Officials Say",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/live/2026/10/28/world/spain-train-crash-toledo",
+      "publishedAt": "2026-10-28T16:11:57.000Z",
+      "snippet": "",
+      "brief": "A high-speed passenger train struck the rear of another near Toledo on Wednesday morning, and officials put the death toll at 68 with more than 50 hurt. Investigators have not yet determined the cause, and the collision involves the same two rail operators as a January crash that killed 46. Because it came weeks before national elections, the accident has become a political flashpoint for Prime Minister Pedro Sánchez's government. Sánchez declared three days of mourning and pledged a firm response if negligence or safety failures are found.",
+      "basis": "article",
+      "why": "Europe's deadliest rail crash in years; high-speed safety under scrutiny",
+      "eventKey": "spain-toledo-high-speed-train-crash-oct-2026",
+      "alsoCovered": [
+        {
+          "source": "El País",
+          "url": "https://english.elpais.com/spain/2026-10-28/at-least-10-people-killed-in-high-speed-rail-crash-in-spain.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/oct/28/spain-train-crash-high-speed-toledo"
+        }
+      ]
+    },
+    {
+      "id": "4b6fda01",
+      "section": "world",
+      "title": "Israel 2026 election results, live: Netanyahu's party accuses Arab parties of 'stealing the election'",
+      "originalTitle": "Resultados de las elecciones en Israel 2026, en directo |El partido de Netanyahu acusa a los partidos árabes de “robar las elecciones”",
+      "lang": "es",
+      "source": "El País",
+      "url": "https://elpais.com/internacional/2026-10-28/resultados-y-reacciones-de-las-elecciones-en-israel-en-directo.html",
+      "publishedAt": "2026-10-28T15:52:33.000Z",
+      "snippet": "Israel's election results show neither Netanyahu's bloc nor Eisenkot's bloc reaching a majority without support from Arab parties.",
+      "brief": "Israel's vote this week left neither Benjamin Netanyahu's camp nor the bloc led by Gadi Eisenkot with a majority capable of forming a government alone. Support for Palestinian parties jumped in a closely fought race that drew the largest turnout in decades. Netanyahu has reportedly lost his governing majority, so his political future now hinges on whether opposition Jewish parties will join with Palestinian lists. Analysts say the rise of these parties in the Knesset could reshape Israel's political map.",
+      "basis": "summaries",
+      "why": "Hung Israeli result reshapes Gaza and Middle East war outlook",
+      "eventKey": "israel-election-2026-results",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/oct/28/israel-election-exit-polls-suggest-netanyahu-eisenkot-blocs-tied-ntwnfb"
+        }
+      ]
+    },
+    {
+      "id": "fe11b328",
+      "section": "world",
+      "title": "Flávio Bolsonaro Leaves Brazil for the U.S. After Election Defeat",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/10/27/world/americas/brazil-flavio-bolsonaro-flees-election.html",
+      "publishedAt": "2026-10-28T10:43:41.000Z",
+      "snippet": "Flávio Bolsonaro left Brazil for the US after his election defeat, reportedly entering Argentina by land before flying to Ecuador, as police sought his passports.",
+      "brief": "Flávio Bolsonaro, a senator, reportedly left Brazil with his family after losing the presidential runoff to incumbent Luiz Inácio Lula da Silva. Argentine officials said he crossed into their territory by land and then boarded a flight to Ecuador, while a Metrópoles report said he was headed to the United States. Brazilian authorities had sought his passports over an investigation, and a court order required him to surrender them. Lula called it shameful, and the U.S. said it would grant visas to him and his family.",
+      "basis": "summaries",
+      "why": "Brazil's defeated Bolsonaro heir flees to US; big LatAm shock",
+      "eventKey": "flavio-bolsonaro-leaves-brazil-oct-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/oct/27/flavio-bolsonaro-brazil-argentina-fled"
+        },
+        {
+          "source": "El País",
+          "url": "https://elpais.com/us/2026-10-28/flavio-bolsonaro-aterriza-en-miami-tras-huir-de-brasil-via-argentina.html"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/10/28/flavio-bolsonaro-lands-in-miami-after-losing-brazils-presidential-election?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "0b1def8c",
+      "section": "world",
+      "title": "Fed set to hold interest rates steady in last decision before midterms",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/business/2026/oct/28/fed-interest-rates-midterms",
+      "publishedAt": "2026-10-28T10:00:03.000Z",
+      "snippet": "The Federal Reserve is expected to hold interest rates steady at its last meeting before the midterms, after raising them last month amid rising inflation.",
+      "brief": "The US Federal Reserve is expected to keep interest rates unchanged at its final meeting before the midterm elections, after raising them last month for the first time since 2023. Inflation has run above the Fed's 2% target for years, and rose to 3.7% in September, driven largely by oil price spikes tied to the Iran conflict and the Strait of Hormuz closure. Donald Trump criticized the hike, and some economists argue rate increases do little to fix supply-driven inflation. Most Fed economists still expect one more rate increase before year's end.",
+      "basis": "article",
+      "why": "Last Fed call before midterms sets rates amid rising inflation",
+      "eventKey": "fed-holds-rates-oct-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "0ad4ffa9",
+      "section": "world",
+      "title": "Africa’s ‘unprecedented’ Ebola outbreak could reach UK, says top health official",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/global-development/2026/oct/28/africa-ebola-outbreak-could-reach-uk-says-top-health-official",
+      "publishedAt": "2026-10-28T09:37:49.000Z",
+      "snippet": "Africa CDC's director warns the Ebola outbreak, now at 10,000 cases and nearly 5,000 deaths, could reach the UK without more preparedness funding.",
+      "brief": "Africa CDC director general Jean Kaseya warned that Ebola could reach the UK and other countries because the outbreak has spread unusually widely across three African regions. The outbreak, caused by the Bundibugyo virus, has reached about 10,000 cases and nearly 5,000 deaths, mostly in DR Congo, and it is the largest and deadliest there so far. Kaseya compared the risk to early Covid, when many countries wrongly assumed they were safe. He said governments have pledged $3bn, but more than $2bn is still outstanding, and the Bundibugyo virus has no approved treatment while vaccine trials results are expected in three to six months.",
+      "basis": "article",
+      "why": "Ebola at 10,000 cases is a global health emergency",
+      "eventKey": "africa-ebola-outbreak-10000-cases",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "65661436",
+        "section": "cleantech",
+        "title": "DOE announces $10.1B in loans to Constellation, Alliant, for 3.7 GW",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/doe-loans-constellation-alliant-nuclear-gas/873011",
+        "publishedAt": "2026-10-28T12:51:00.000Z",
+        "snippet": "The DOE announced $10.1 billion in loans to Constellation and Alliant to finance uprates totaling 3.7 GW at existing generation facilities.",
+        "brief": "The Department of Energy announced conditional loan commitments totaling about $10.1 billion to Constellation and Alliant, which the department says could add roughly 3.7 GW of generation capacity. Constellation's share would fund uprates at existing nuclear plants in Illinois, Maryland and Pennsylvania, adding almost 1.1 GW in PJM and MISO markets. Alliant's $5.1 billion in loans would support lower electricity costs and grid reliability in Iowa and Wisconsin, including new gas plants, storage and upgrades. Constellation must still meet technical, legal, environmental and financial conditions before funds are released.",
+        "basis": "article",
+        "why": "$10.1B DOE loans for 3.7 GW nuclear-style uprates",
+        "eventKey": "doe-10b-loans-constellation-alliant-uprates",
+        "alsoCovered": []
+      },
+      {
+        "id": "dfb5edc7",
+        "section": "cleantech",
+        "title": "BNEF ups US energy storage deployment forecast by 30%",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/bnef-ups-us-energy-storage-deployment-forecast-by-30/872870",
+        "publishedAt": "2026-10-27T14:19:38.000Z",
+        "snippet": "BNEF raised its US energy storage deployment forecast by 30%, as hyperscalers place firm orders for on-site storage.",
+        "brief": null,
+        "basis": "article",
+        "why": "Hyperscaler storage orders push US BESS forecast up 30%",
+        "eventKey": "bnef-us-storage-forecast-raised-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f1e92ccd",
+        "section": "cleantech",
+        "title": "CATL pushes ahead with 20 Ah solid-state EV batteries, with 500 Wh/kg in sight",
+        "lang": "en",
+        "source": "Electrek",
+        "url": "https://electrek.co/2026/10/28/catl-pushes-ahead-20-ah-solid-state-ev-batteries-500-wh-kg",
+        "publishedAt": "2026-10-28T15:12:41.000Z",
+        "snippet": "CATL advanced its solid-state battery work to 20 Ah cells and targets small-scale production in 2027.",
+        "brief": "CATL has moved its solid-state battery program forward by reaching 20 Ah trial production for sulfide-based cells, with a target energy density of 500 Wh/kg. The company plans small-scale output starting in 2027 and broader mass production around 2030. Its chairman has said the technology currently sits at roughly level four on a nine-step scale. The timeline lines up with rivals Toyota, Samsung SDI, and BYD, who are also racing toward all-solid-state packs.",
+        "basis": "article",
+        "why": "CATL solid-state at 20 Ah, 500 Wh/kg, pilot 2027",
+        "eventKey": "catl-solid-state-20ah-cells-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "db8434d9",
+        "section": "cleantech",
+        "title": "Renewables to reach 40% of total generating capacity, beat gas within a year – EIA",
+        "lang": "en",
+        "source": "Electrek",
+        "url": "https://electrek.co/2026/10/27/renewables-to-reach-40-of-total-generating-capacity-beat-gas-within-a-year-eia",
+        "publishedAt": "2026-10-27T22:24:38.000Z",
+        "snippet": "EIA data shows renewables will rise from 37.7% to 40.4% of US generating capacity within a year, passing natural gas and outpacing nuclear fivefold.",
+        "brief": "Renewables' share of total US generating capacity is projected to rise from 37.7% to 40.4% over the coming year, passing natural gas and outstripping nuclear fivefold, according to EIA data reviewed by the SUN DAY Campaign. Renewable electricity output grew 10.2% year over year in the first two-thirds of 2026, led by utility-scale solar, while coal output fell 8.7%. EIA expects utility-scale renewables to reach 37.3% of capacity by August 2027, with battery storage adding about 23,656 MW. Advocates describe the expansion as accelerating and say fossil fuel and nuclear shares continue to shrink.",
+        "basis": "article",
+        "why": "Renewables overtaking gas in US capacity within a year",
+        "eventKey": "eia-renewables-40-percent-capacity",
+        "alsoCovered": []
+      },
+      {
+        "id": "178bff8b",
+        "section": "cleantech",
+        "title": "Trump says government to ‘terminate’ Biden-era methane emissions rules",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/oct/27/trump-biden-era-methane-emissions-rules-oil-gas",
+        "publishedAt": "2026-10-28T14:30:29.000Z",
+        "snippet": "Trump announced his administration is terminating Biden-era rules on methane leaks from oil and gas companies, claiming savings of billions.",
+        "brief": null,
+        "basis": "article",
+        "why": "Methane rule rollback shifts oil and gas compliance economics",
+        "eventKey": "trump-terminates-methane-rules",
+        "alsoCovered": []
+      },
+      {
+        "id": "5526ee68",
+        "section": "cleantech",
+        "title": "Ricoh announces GW-scale perovskite solar cell production in Japan",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/10/28/ricoh-announces-gw-scale-perovskite-solar-cell-production-in-japan",
+        "publishedAt": "2026-10-28T08:55:29.000Z",
+        "snippet": "Ricoh plans to produce perovskite solar cells in Japan by 2030, starting at several hundred megawatts a year using inkjet printing.",
+        "brief": "Ricoh plans to start making perovskite solar cells in Japan by 2030 at its Tohoku site in Shibata, Miyagi prefecture, using its own inkjet printing process. The company is targeting annual capacity of several hundred megawatts by then, with an eye toward eventual gigawatt-scale output. The move follows Ricoh's space testing with JAXA and comes as Japan's government pushes to build a domestic perovskite industry and aims for about 20 GW of capacity by 2040. Panasonic has also begun selling perovskite panels ahead of its planned 2029 mass production.",
+        "basis": "article",
+        "why": "Inkjet perovskite scale-up signals commercial tandem-solar timeline",
+        "eventKey": "ricoh-perovskite-production-japan-2030",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "028355a5",
+        "section": "ai",
+        "title": "DeepMind unveils Genie 4 world model promising more realistic physics and humans",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/google/2026/10/deepminds-genie-4-world-model-adds-audio-and-more-realistic-people-to-simulations",
+        "publishedAt": "2026-10-27T16:00:22.000Z",
+        "snippet": "DeepMind unveiled Genie 4, promising more realistic physics and humans; rollout to developers and Ultra subscribers is coming.",
+        "brief": "Google DeepMind has unveiled Genie 4, an updated world model that generates interactive environments frame by frame from text prompts, improving on Genie 3 in physics, human movement, and native audio. The company says it uses Gemini models to keep simulations on track, though worlds stay consistent only for a couple of minutes. Access will expand through trusted testers, with phased rollout to Google's AI Ultra plans starting at $100 per month and no pricing yet for developers. Google sees such models as a step toward artificial general intelligence and a source of training environments for robots.",
+        "basis": "article",
+        "why": "DeepMind's Genie 4 advances world models you can build on",
+        "eventKey": "deepmind-genie-4-world-model-oct-2026",
+        "alsoCovered": [
+          {
+            "source": "The Verge",
+            "url": "https://theverge.com/tech/1019076/google-genie-4-ai-model"
+          },
+          {
+            "source": "Hacker News",
+            "url": "https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation"
+          }
+        ]
+      },
+      {
+        "id": "581be06e",
+        "section": "ai",
+        "title": "Frontier AI labs say their models refuted the Exponential Time Hypothesis. What does that mean?",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/10/27/frontier-ai-labs-say-their-models-refuted-the-exponential-time-hypothesis-what-does-that-mean",
+        "publishedAt": "2026-10-27T17:08:08.000Z",
+        "snippet": "Frontier AI labs claim their models refuted the Exponential Time Hypothesis, a result an MIT computer scientist is explaining.",
+        "brief": "OpenAI and Anthropic both say their AI models produced algorithms that undercut the Exponential Time Hypothesis, a long-standing assumption in computer science about how hard certain puzzles are to solve. The hypothesis supports the widely held belief that P does not equal NP, so a refutation would challenge intuitions about which problems are tractable. MIT's Ryan Williams is helping organize the computer science response, including a conference and an open letter seeking feedback. Researchers must still verify the claims, and many published papers that rely on the hypothesis may need revisiting.",
+        "basis": "article",
+        "why": "AI claims refuting ETH would be a major research milestone",
+        "eventKey": "ai-models-exponential-time-hypothesis",
+        "alsoCovered": []
+      },
+      {
+        "id": "211cf5bd",
+        "section": "ai",
+        "title": "Anthropic’s elaborate plan to keep Wall Street at bay",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1019470/anthropic-ipo-resist-investor-pressure-cut-corners-safety",
+        "publishedAt": "2026-10-27T16:51:22.000Z",
+        "snippet": "Anthropic faces tension between its upcoming IPO and its safety mission, as shareholder return pressure grows with model capabilities.",
+        "brief": "Anthropic is preparing an IPO while saying it will keep its focus on developing AI safely. The company plans a governance structure that limits shareholder control, including a long-term benefit trust that will pick four of seven board directors and a founders' entity holding 50.1 percent of voting power. Legal experts say this shields Anthropic from forced cuts to safety testing, but they warn that capital needs and investor frustration could still erode those commitments over time.",
+        "basis": "article",
+        "why": "Anthropic IPO governance tests safety mission against shareholder pressure",
+        "eventKey": "anthropic-ipo-safety-tension",
+        "alsoCovered": []
+      },
+      {
+        "id": "6024ab9c",
+        "section": "ai",
+        "title": "VCs will make billions on Anthropic’s IPO, but Amazon is set to make much (much) more",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/10/27/vcs-will-make-billions-on-anthropics-ipo-but-amazon-is-set-to-make-much-much-more",
+        "publishedAt": "2026-10-28T01:15:28.000Z",
+        "snippet": "Amazon's stake in Anthropic appears far larger than VC holders, according to note conversions tied to Anthropic's IPO.",
+        "brief": "Venture firms such as Menlo Ventures, Sequoia, and Spark Capital stand to earn billions when Anthropic goes public, though none holds 5% according to its S-1 filing. Because the company is valued near $965 billion, even small stakes are worth a great deal, and Menlo's position is only about 1.5%. Amazon appears to be the largest financial beneficiary, holding convertible notes tied to $6.2 billion in principal and valued at $97.9 billion by its own filings. Amazon's conversion is capped at 12% of partially diluted shares, and Anthropic has committed to spending at least $110 billion on AWS over ten years.",
+        "basis": "article",
+        "why": "Amazon's outsized Anthropic stake shows who wins the IPO",
+        "eventKey": "anthropic-ipo-amazon-stake",
+        "alsoCovered": []
+      },
+      {
+        "id": "efd9fece",
+        "section": "ai",
+        "title": "Early progress on accelerating drug development with Claude",
+        "lang": "en",
+        "source": "anthropic.com",
+        "url": "https://anthropic.com/research/early-progress-drug-development",
+        "publishedAt": "2026-10-27T20:50:42.000Z",
+        "snippet": "Anthropic published early results on using Claude to speed up drug development research.",
+        "brief": "Anthropic's life sciences team has spent several months working with six drug developers, including Generate Biomedicines, Divergence Labs, BigHat Biosciences, Enveda, The Column Group, and Bristol Myers Squibb, while also starting its own programs. In one case, a Claude-designed CAR T-cell variant roughly 70% shorter performed better in lab tests, producing about ten times as many receptors. Enveda reported that Claude caught all 11 known documentation issues in tests and cut human review time by 89%. The company plans to scale this work up substantially, with the Bristol Myers Squibb effort expanding in 2027.",
+        "basis": "article",
+        "why": "Concrete Claude drug-discovery results show real deployment patterns",
+        "eventKey": "anthropic-claude-drug-development",
+        "alsoCovered": []
+      },
+      {
+        "id": "aced613b",
+        "section": "ai",
+        "title": "Voice AI in vogue: Nvidia releases new open transcription model",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/10/28/voice-ai-in-vogue-nvidia-releases-new-open-transcription-model",
+        "publishedAt": "2026-10-28T15:00:00.000Z",
+        "snippet": "Nvidia released a free open speech-to-text model covering 40 languages, though it works only on recordings, not live audio.",
+        "brief": null,
+        "basis": "article",
+        "why": "Free 40-language open ASR model useful for your pipelines",
+        "eventKey": "nvidia-open-transcription-model-2026",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "475f074c",
+        "section": "world",
+        "title": "U.S. Defends Military Campaign Against Cartels as Leaders Gather in Caribbean",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/10/27/us/politics/us-military-cartels-caribbean.html",
+        "publishedAt": "2026-10-28T01:18:49.000Z",
+        "snippet": "The US defended its military campaign against cartels as a regional coalition gathered in the Caribbean.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "US military anti-cartel campaign directly affects US–Mexico security ties",
+        "eventKey": "us-military-campaign-cartels-caribbean",
+        "alsoCovered": []
+      },
+      {
+        "id": "eb375045",
+        "section": "world",
+        "title": "Iran War Cost Rises to $47.1 Billion, Pentagon Told Lawmakers",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/10/27/us/politics/iran-war-cost-rises.html",
+        "publishedAt": "2026-10-28T01:09:55.000Z",
+        "snippet": "The Pentagon told lawmakers the Iran war has cost $47.1 billion through Oct. 16, with munitions over 60 percent of expenses.",
+        "brief": "The Pentagon told lawmakers that the cost of the Iran war has climbed to $47.1 billion, according to an estimate running through October 16. Munitions, including bombs and missiles, made up more than 60 percent of that spending. The figure gives Congress a clearer picture of how the conflict is draining defense funds. The source text does not describe further steps or future spending plans, so the brief stops there.",
+        "basis": "summaries",
+        "why": "$47B Iran war cost pressures budget, oil, and energy markets",
+        "eventKey": "iran-war-cost-47-billion",
+        "alsoCovered": []
+      },
+      {
+        "id": "57ca314f",
+        "section": "world",
+        "title": "How Trump is trying to disrupt the midterms – video explainer",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/video/2026/oct/28/how-trump-is-trying-to-disrupt-the-midterms-video-explainer",
+        "publishedAt": "2026-10-28T14:03:03.000Z",
+        "snippet": "Republicans are using redistricting and election-process uncertainty to shape the November midterms, as the president's popularity falls and control of Congress is at stake.",
+        "brief": "Republicans have used several tactics to try to tilt the upcoming midterm elections, scheduled for 3 November, in their favor. These include redrawing electoral maps and creating uncertainty around the voting process. The article notes that Trump's falling popularity makes keeping a congressional majority crucial, since losing control could bring investigations or even impeachment. A Guardian video explainer by political reporter Shrai Popat examines how Republicans have pursued these efforts and continue to pursue them.",
+        "basis": "summaries",
+        "why": "Midterm redistricting fights decide Congress control and energy policy",
+        "eventKey": "trump-midterms-election-tactics-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "4e32896b",
+        "section": "world",
+        "title": "Norway and Finland leaders hold rare call with Putin",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/c6vgj813mlelo",
+        "publishedAt": "2026-10-27T18:28:23.000Z",
+        "snippet": "Norway and Finland's leaders held a rare call with Vladimir Putin, with Finland's president saying Ukraine's conflict will not end through silence.",
+        "brief": "Finland's president Alexander Stubb and Norway's prime minister Jonas Gahr Støre joined a 90-minute call with Vladimir Putin, which is rare contact between the Kremlin and European leaders. Both sides described the talks as frank, but neither reported progress toward ending the war in Ukraine, and Støre noted large gaps in outlook. The pair stressed they spoke only for their own countries as Russian neighbours, and the call was prepared with Kyiv and Washington. Putin insisted any settlement must account for Russia's legal interests, and the parties agreed to keep communicating directly.",
+        "basis": "article",
+        "why": "Rare Nordic outreach to Putin hints at Ukraine diplomacy shifts",
+        "eventKey": "norway-finland-leaders-call-putin-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "7438289b",
+        "section": "world",
+        "title": "‘A pretty grim picture’: outlook for UK living standards slashed despite Healey’s budget",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/business/2026/oct/28/obr-slashes-uk-growth-forecast-for-2027-despite-healey-budget-measures",
+        "publishedAt": "2026-10-28T15:40:42.000Z",
+        "snippet": "The UK Office for Budget Responsibility sharply cut its growth outlook, citing the Middle East war, in its report on Healey's first budget.",
+        "brief": "Britain's independent forecaster, the Office for Budget Responsibility, has warned that household living standards face a bleak outlook as the Middle East conflict slows growth and fuels a renewed cost of living squeeze. Its estimate for 2027 growth was cut from 1.5% to 1%, while inflation this year is now expected to reach 3.5%. Per-person disposable incomes are forecast to dip before recovering only modestly, and income levels are seen just 2% above pre-pandemic levels by the early 2030s. The findings landed alongside John Healey's first budget, which included £100 payments to 20 million households.",
+        "basis": "article",
+        "why": "Middle East war dragging UK growth signals global spillover",
+        "eventKey": "uk-obr-budget-2026-growth-downgrade",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 31,
+      "failed": []
+    },
+    "counts": {
+      "fetched": 2747,
+      "fresh": 383,
+      "classified": 383,
+      "kept": 282,
+      "stories": 246,
+      "candidates": 48,
+      "picked": 22,
+      "briefs": 18
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 195422,
+      "outputTokens": 52587,
+      "costUsd": 0.0984
+    },
+    "notes": []
+  }
+}

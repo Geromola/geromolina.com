@@ -1,0 +1,19 @@
+---
+// The news wire (SPEC "News wire"): the latest edition. Public, but kept out of search results.
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import TopBar from '../../components/project/TopBar.astro';
+import Wire from '../../components/news/Wire.astro';
+import { ARCHIVE_PAGES, sortEditions } from '../../news/edition';
+
+const editions = sortEditions((await getCollection('news')).map((e) => e.data)).slice(0, ARCHIVE_PAGES);
+---
+
+<Base
+  title="News wire · Gero Molina"
+  description="Gero's daily news wire: clean tech, AI and the world headlines worth knowing, picked and summarised by Claude."
+  noindex
+>
+  <TopBar title="News wire" />
+  <Wire edition={editions[0] ?? null} dates={editions.map((e) => e.date)} latest />
+</Base>

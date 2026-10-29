@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture: fictional stories for tests and `npm run news -- --dry-run`. -->
+<rss version="2.0">
+  <channel>
+    <title>Fixture Times</title>
+    <item>
+      <title>Leaders agree Geneva ceasefire framework after marathon talks</title>
+      <description>The deal, reached after 19 hours of talks, sets a ninety-day pause and an international monitoring mission.</description>
+      <link>https://www.example-times.test/2026/10/27/world/geneva-talks.html</link>
+      <guid isPermaLink="false">example-times-geneva</guid>
+      <pubDate>Tue, 27 Oct 2026 06:45:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Election officials certify results in tight Senate race</title>
+      <description>The state board finished its count on Monday, ending a two-week wait for the final tally.</description>
+      <link>https://www.example-times.test/2026/10/26/us/senate-certify.html</link>
+      <pubDate>Mon, 26 Oct 2026 23:15:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Duplicate of the rates story, syndicated</title>
+      <description>Same URL as another feed, with tracking parameters.</description>
+      <link>https://example-world.test/news/rates-hold?utm_campaign=syndication#top</link>
+      <pubDate>Mon, 26 Oct 2026 22:40:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

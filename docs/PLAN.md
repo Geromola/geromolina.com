@@ -58,3 +58,24 @@ Status key: [x] accepted · [~] in progress · [ ] pending. Spec: `docs/SPEC.md`
     - Verified: Vitest (grouping, fixture vs files, layout at 10 widths in every expand state, anchors, bands, circuit), `astro check`, the build; WebKit renders at 1440, 1024 and 390 collapsed and expanded, expand/collapse/reverse timing, keyboard order and focus, `?renderer=canvas`, `?motion=reduce`.
     - Not verified: real devices; the in-app browser pane was hidden, so animation was checked in an offscreen WebKit window.
     - ⚑ Gero to confirm the tags (e.g. `Berkeley` on Custom LLM).
+15. [~] **Home hero v4: News wire on the grid** (careful), SPEC "Home hero v4".
+    - Done:
+      - the root's links (About, Off the grid, Contact) beside the name, fed from the root, with no section nav;
+      - a bigger root;
+      - NEWS WIRE in ABOUT ME's place (the top 3 stories plus "All N stories", each story opening its card on `/news`);
+      - `/news` in columns (1 / 2 / 4).
+    - Verified:
+      - `tests/menu.test.ts` (layouts at 10 widths with links, phones, beside and under, circuit with links), all 383 tests, `astro check` and the build;
+      - the preview (built site) at 1440×900, 1024×768 and 390×844 with `?motion=reduce`;
+      - the home → `/news#s-…` jump.
+    - Not verified: the power-on intro and hover springs in a visible window (the preview pane was hidden, so the intro's frames didn't run).
+    - v4.1 (2026-10-28):
+      - Done:
+        - links pushed right, their pills filling the row;
+        - bigger headings, a heavier trunk with more current (load weights);
+        - NEWS WIRE by category, with the full wire in place on the home page (`#news`, back control, PROJECTS collapsed under it);
+        - a story panel on the home page.
+      - Verified:
+        - 398 tests, `astro check` and the build;
+        - the preview (built site) at 1440, 1024 and 390 with `?motion=reduce`: the grid, the full wire, the panel (open, Escape, swap), back and history.
+      - Not verified: the drain-and-power-on animation and the panel's spring in a visible window (the pane was hidden).

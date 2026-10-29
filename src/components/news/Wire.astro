@@ -1,0 +1,361 @@
+---
+// The news wire page body (SPEC "News wire", "The page"): header, stale banner, Must know, the
+// three sections, and the archive links. Shared by `/news` and `/news/YYYY-MM-DD`.
+import StoryCard from './StoryCard.astro';
+import { clockPT, longDate } from '../../news/edition';
+import type { Edition } from '../../news/schema';
+import { SECTIONS, SECTION_LABELS } from '../../news/types';
+
+interface Props {
+  edition: Edition | null;
+  /** Archive dates, newest first, including this edition's. */
+  dates: string[];
+  latest: boolean;
+}
+const { edition, dates, latest } = Astro.props;
+const at = edition ? dates.indexOf(edition.date) : -1;
+const newer = at > 0 ? dates[at - 1] : null;
+const older = at >= 0 && at < dates.length - 1 ? dates[at + 1] : null;
+const href = (date: string) => (date === dates[0] ? '/news' : `/news/${date}`);
+const shortDate = (date: string) =>
+  new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T12:00:00Z`));
+const sections = edition ? SECTIONS.filter((s) => edition.sections[s].length > 0) : [];
+---
+
+<main class="wire" data-news data-generated={edition?.generatedAt} data-latest={latest ? '' : undefined}>
+  <header class="wire__head">
+    <p class="wire__kicker mono">
+      News wire{edition && <> · Updated <time datetime={edition.generatedAt}>{clockPT(edition.generatedAt)}</time></>}
+    </p>
+    <h1 class="wire__title">{latest ? 'Today’s wire' : 'The wire'}</h1>
+    {
+      edition && (
+        <p class="wire__sub">
+          <span>{longDate(edition.date)}</span>
+          <span class="wire__new mono" data-new-count aria-live="polite" hidden />
+        </p>
+      )
+    }
+  </header>
+
+  {
+    edition && (
+      <nav class="wire__jump" aria-label="Sections">
+        {edition.mustKnow.length > 0 && (
+          <a href="#sec-must">
+            Must know <span class="mono">{edition.mustKnow.length}</span>
+          </a>
+        )}
+        {sections.map((s) => (
+          <a href={`#sec-${s}`}>
+            {SECTION_LABELS[s]} <span class="mono">{edition.sections[s].length}</span>
+          </a>
+        ))}
+      </nav>
+    )
+  }
+
+  <p class="wire__stale mono" data-stale hidden>
+    <span aria-hidden="true">⚠</span> Wire stale since <span data-stale-since></span>. Today’s run hasn’t landed yet.
+  </p>
+  {
+    edition?.degraded && (
+      <p class="wire__degraded">This edition was picked by the scores alone, without the editor, so the order may be rougher than usual.</p>
+    )
+  }
+
+  {
+    !edition && (
+      <section class="wire__empty glass">
+        <h2>The first edition lands tomorrow morning.</h2>
+        <p>Every day at about 6:00 PT, the wire reads around thirty feeds and keeps the stories worth knowing: clean tech, AI and the world.</p>
+      </section>
+    )
+  }
+
+  <div class="wire__grid">
+  {
+    edition && edition.mustKnow.length > 0 && (
+      <section class="wire__section wire__section--must" aria-labelledby="sec-must">
+        <h2 class="wire__h2" id="sec-must">
+          Must know <span class="mono">{edition.mustKnow.length}</span>
+        </h2>
+        <ul class="wire__list" role="list">
+          {edition.mustKnow.map((entry) => (
+            <li>
+              <StoryCard entry={entry} generatedAt={edition.generatedAt} mustKnow />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    edition &&
+      sections.map((s) => (
+        <section class="wire__section" aria-labelledby={`sec-${s}`}>
+          <h2 class="wire__h2" id={`sec-${s}`}>
+            {SECTION_LABELS[s]} <span class="mono">{edition.sections[s].length}</span>
+          </h2>
+          <ul class="wire__list" role="list">
+            {edition.sections[s].map((entry) => (
+              <li>
+                <StoryCard entry={entry} generatedAt={edition.generatedAt} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+  }
+  </div>
+
+  {
+    dates.length > 1 && (
+      <nav class="wire__archive" aria-label="Earlier editions">
+        <div class="wire__step">
+          {older ? (
+            <a href={href(older)} rel="prev">
+              <span aria-hidden="true">←</span> {shortDate(older)}
+            </a>
+          ) : (
+            <span />
+          )}
+          {newer && (
+            <a href={href(newer)} rel="next">
+              {shortDate(newer)} <span aria-hidden="true">→</span>
+            </a>
+          )}
+        </div>
+        <ul class="wire__dates mono" role="list">
+          {dates.map((d) => (
+            <li>
+              <a href={href(d)} aria-current={edition?.date === d ? 'page' : undefined}>
+                {shortDate(d)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  <p class="wire__foot">
+    Titles are each outlet’s own (translated where marked ES). Snippets and briefs are written by Claude from the outlet’s feed and article, and every story links to the original.
+  </p>
+</main>
+
+<style>
+  /* One column on phones; on wider screens the sections sit side by side, so the day reads
+     across instead of down. Each column grows on its own when a card opens. */
+  .wire {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 1.5rem var(--gutter) calc(4rem + env(safe-area-inset-bottom, 0px));
+  }
+  .wire__grid {
+    display: grid;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (min-width: 760px) {
+    .wire {
+      max-width: 52rem;
+    }
+    .wire__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem 1rem;
+    }
+  }
+  @media (min-width: 1200px) {
+    .wire {
+      max-width: 88rem;
+    }
+    .wire__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .wire__head {
+    margin: 0.5rem 0 1.75rem;
+  }
+  .wire__kicker {
+    margin: 0 0 0.375rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cyan);
+  }
+  .wire__title {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  .wire__sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.75rem;
+    margin: 0.5rem 0 0;
+    color: var(--ink-2);
+  }
+  .wire__new {
+    font-size: 0.8125rem;
+    color: var(--cyan);
+  }
+  .wire__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: -0.75rem 0 1.5rem;
+  }
+  .wire__jump a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    min-height: 2.25rem;
+    padding: 0 0.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--ink);
+    font-size: 0.8125rem;
+    font-weight: 550;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      border-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .wire__jump a:hover {
+    border-color: rgba(var(--cyan-rgb), 0.45);
+    color: var(--cyan);
+  }
+  .wire__jump .mono {
+    font-size: 0.6875rem;
+    color: var(--muted);
+  }
+  /* Four columns: every section is in view, no jumping needed. */
+  @media (min-width: 1200px) {
+    .wire__jump {
+      display: none;
+    }
+  }
+  .wire__section {
+    /* Clear the sticky top bar when a section link jumps here. */
+    scroll-margin-top: 4.5rem;
+  }
+  .wire__stale,
+  .wire__degraded {
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+  .wire__stale {
+    border: 1px solid rgba(var(--amber-rgb), 0.5);
+    background: rgba(var(--amber-rgb), 0.08);
+    color: var(--amber);
+  }
+  .wire__degraded {
+    border: 1px solid var(--glass-border);
+    color: var(--ink-2);
+  }
+  .wire__empty {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+  .wire__empty h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.125rem;
+  }
+  .wire__empty p {
+    margin: 0;
+    color: var(--ink-2);
+  }
+  .wire__h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem 0.25rem;
+    font-size: 1.0625rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .wire__h2 .mono {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .wire__list {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .wire__archive {
+    margin-top: 2.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--glass-border);
+  }
+  .wire__step {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .wire__step a,
+  .wire__dates a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.75rem;
+    color: var(--ink);
+    font-weight: 550;
+    text-decoration: none;
+  }
+  .wire__step a:hover,
+  .wire__dates a:hover {
+    color: var(--cyan);
+  }
+  .wire__dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+  }
+  .wire__dates a {
+    min-height: 2.25rem;
+    color: var(--ink-2);
+    font-weight: 400;
+  }
+  .wire__dates a[aria-current='page'] {
+    color: var(--cyan);
+  }
+  .wire__foot {
+    margin: 2rem 0 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  @media (prefers-contrast: more) {
+    .wire__sub,
+    .wire__degraded {
+      color: var(--ink);
+    }
+    .wire__h2 .mono,
+    .wire__foot {
+      color: var(--ink-2);
+    }
+  }
+</style>
+
+<script>
+  import { mountNews } from '../../news/main';
+  mountNews();
+</script>

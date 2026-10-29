@@ -424,12 +424,14 @@ function tracePath(board: Board, isT: Uint8Array, faulted: Uint8Array, table: Fl
 
 // ------------------------------------------------- node menu v3.2: sections
 /*
- * v3.2 (SPEC "Home hero v3"): the root node "Gero" feeds two sections, ABOUT
- * ME and PROJECTS, each behind a switch node and inside a fence on the
- * lattice. `menuLayout` places everything in lattice units (the root is vertex
- * (0, 0)); the page positions the DOM from it, so every glyph sits exactly on
- * a vertex and every fence edge on a conductor. `circuitTransformers` and
- * `circuitPaths` wire the circuit: root → each switch → each child.
+ * v3.2 (SPEC "Home hero v3"), v4 (SPEC "Home hero v4"): the root node "Gero"
+ * feeds its links (About, Off the grid, Contact: small nodes beside it) and two
+ * sections, NEWS WIRE and PROJECTS, each behind a switch node and inside a
+ * fence on the lattice. `menuLayout` places everything in lattice units (the
+ * root is vertex (0, 0)); the page positions the DOM from it, so every glyph
+ * sits exactly on a vertex and every fence edge on a conductor.
+ * `circuitTransformers` and `circuitPaths` wire the circuit: root → each link
+ * and each switch → each child.
  */
 
 /** Node geometry in css px, shared with NodeMenu.astro's CSS. */
@@ -438,24 +440,44 @@ export const MENU_PX = {
   glyph: 44,
   /** Gap between a side glyph and its plate. */
   sideGap: 12,
-  /** Plate heights: hanging under the glyph (projects) and beside it (about, phones). */
+  /** Plate heights: hanging under the glyph (projects) and beside it (news, phones). */
   hangH: 126,
   sideH: 88,
   /** A hanging plate is this much narrower than 4 spacings (the gap between columns). */
   hangGap: 40,
-  /** Compact nodes (ABOUT ME on phones): one lattice row each, a smaller glyph, a one-line plate. */
+  /** Compact nodes (the root's links): a smaller glyph and a one-line plate beside it. */
   compactGlyph: 30,
   compactGap: 10,
   compactH: 40,
-  /** Category header glyph diameter (like a switch's). */
-  headerGlyph: 28,
+  /** Headings outrank what they hold: a section switch's glyph, and a category header's (both > `glyph`). */
+  switchGlyph: 56,
+  headerGlyph: 46,
   /** The Show more control: its height, and its gap under the last plate. */
   moreH: 32,
   moreGap: 8,
+  /** The root's glyph diameter, and the room kept between its plate and the first link. */
+  rootGlyph: 80,
+  linkGap: 24,
+  /** The narrowest a link's plate gets beside the root (wide). */
+  linkMinW: 120,
+  /** A stacked link (phones): its label sits under the glyph, ending this far below the vertex. */
+  stackH: 38,
 } as const;
 
 export type MenuMode = 'wide' | 'stacked' | 'column';
 export type MenuStyle = 'hang' | 'side' | 'compact';
+/** The root's links: a one-line plate beside the glyph, or the label under it (phones). */
+export type LinkStyle = 'compact' | 'stack';
+
+export interface MenuLinksLayout {
+  /** Glyph vertices, in order. */
+  nodes: { col: number; row: number }[];
+  style: LinkStyle;
+  /** Plate (compact) or label (stack) width, px. */
+  plateW: number;
+  /** On the root's row, beside its plate, or in a row under the root (the fences start lower). */
+  placement: 'beside' | 'under';
+}
 
 export interface LatticeRect {
   c0: number;
@@ -498,6 +520,8 @@ export interface MenuCategoryLayout {
    * glyph column it lines up with (the plate's end, or the glyph's start). Null when nothing's hidden.
    */
   more: { row: number; col: number; align: 'end' | 'start' } | null;
+  /** Not on the map in this layout (NEWS WIRE's other categories while only its top stories show). */
+  hidden?: boolean;
 }
 
 /** Cards per row, and cards a collapsed category shows, per mode. */
@@ -511,7 +535,15 @@ export interface MenuLayout {
   mode: MenuMode;
   spacing: number;
   root: { col: number; row: number };
-  about: MenuSectionLayout;
+  links: MenuLinksLayout;
+  /**
+   * One section above the other (stacked, column, and the full news wire), rather than side by
+   * side (wide): a collapsed NEWS WIRE then gives its rows back to what follows.
+   */
+  stacked: boolean;
+  /** NEWS WIRE takes the full width with every story (SPEC "Home hero v4", the full wire). */
+  newsFull: boolean;
+  news: MenuSectionLayout;
   projects: MenuSectionLayout;
   /** Union of the fences, in lattice units. */
   extent: LatticeRect;
@@ -519,8 +551,19 @@ export interface MenuLayout {
 
 export interface MenuLayoutOptions {
   /** Children per section. PROJECTS as an array: cards per category, laid out in category rows. */
-  about: number;
+  /**
+   * NEWS WIRE's children. As an array: stories per category (the first is featured), laid out
+   * like PROJECTS' categories: its top `newsTop` stories in the left column, or with `newsFull`
+   * every story across the full width (PROJECTS then sits under it).
+   */
+  news: number | readonly number[];
+  newsTop?: number;
+  newsFull?: boolean;
   projects: number | readonly number[];
+  /** The root's links (default none). */
+  links?: number;
+  /** How far the root's plate reaches right of its vertex, px: wide puts the links beside it when they fit. */
+  rootW?: number;
   /** Horizontal margin each side, px. */
   gutter: number;
   /** Lattice row the fences start on (default 1, right under the root): 2 when the root plate is tall. */
@@ -530,7 +573,7 @@ export interface MenuLayoutOptions {
    * back its rows below the switch, so everything after it moves up by whole
    * rows (and the extent shrinks). `wide` keeps every position.
    */
-  collapsed?: { about?: boolean; projects?: boolean };
+  collapsed?: { news?: boolean; projects?: boolean };
 }
 
 /** Lattice columns each layout needs, fence edge to fence edge. */
@@ -544,12 +587,15 @@ const PHONE_SPACING_MENU = 58;
 const SWITCH_COLS = 4;
 
 /**
- * Lay the menu out for a viewport width (SPEC "Home hero v3", v3.2):
- * - `wide`: ABOUT ME (a column of side nodes) left, PROJECTS (3 per row, plates hanging) right.
- * - `stacked`: ABOUT ME (a row of side nodes), then PROJECTS (3 per row) under it.
- * - `column` (phones, narrow tablets): one column on the spine, side nodes throughout.
- * The root is vertex (0, 0); each section's fence starts one row under the root and its
- * switch sits just inside the fence's top-left corner.
+ * Lay the menu out for a viewport width (SPEC "Home hero v3" v3.2, "Home hero v4"):
+ * - `wide`: the links beside the root's plate; NEWS WIRE (a column of side nodes) left,
+ *   PROJECTS (3 per row, plates hanging) right.
+ * - `stacked`: the links in a row under the root; NEWS WIRE (a row of side nodes), then
+ *   PROJECTS (3 per row) under it.
+ * - `column` (phones, narrow tablets): the links in a row under the root, labels under their
+ *   glyphs; then one column on the spine, side nodes throughout.
+ * The root is vertex (0, 0); each section's fence starts one row under the root (or under the
+ * links' row) and its switch sits just inside the fence's top-left corner.
  */
 export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
   const inner = width - 2 * opts.gutter;
@@ -591,13 +637,17 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
    * Category rows from row `top` down: a header on the trunk (column `header`), its cards from
    * column `card`, `dc` apart, under it. Returns them and the row under the last one.
    */
-  const categoryRows = (top: number, at: { header: number; card: number; dc: number }) => {
-    const { perRow, visible } = CATEGORY_GRID[mode];
+  const categoryRows = (
+    of: readonly number[],
+    top: number,
+    at: { header: number; card: number; dc: number },
+    { perRow, visible } = CATEGORY_GRID[mode],
+  ) => {
     const first = mode === 'column' ? 2 : 1; // header → first card row
     const step = mode === 'column' ? 2 : 3; // card row → card row
     const tail = mode === 'column' ? 2 : 3; // last card row → the next header (one more under a Show more)
     let h = top;
-    const cats = (counts ?? []).map((n): MenuCategoryLayout => {
+    const cats = of.map((n): MenuCategoryLayout => {
       const row0 = h + first;
       const cards = Array.from({ length: n }, (_, k) => ({
         col: at.card + (k % perRow) * at.dc,
@@ -623,100 +673,173 @@ export function menuLayout(width: number, opts: MenuLayoutOptions): MenuLayout {
     return { cats, bottom: h };
   };
 
+  const newsCounts = typeof opts.news === 'number' ? null : opts.news;
+  const nNews = newsCounts ? newsCounts.reduce((a, b) => a + b, 0) : (opts.news as number);
+  const full = Boolean(opts.newsFull && newsCounts);
+  const stacked = mode !== 'wide' || full;
   let s: number;
-  let about: MenuSectionLayout;
-  let projects: MenuSectionLayout;
+  let right: number;
+  let room = 0;
   if (mode === 'wide') {
     s = Math.min(MAX_SPACING_MENU, inner / WIDE_COLS);
-    // ABOUT ME: fence cols −1..4; switch (0, 2); children down the spine, 2 rows apart.
-    const aKids = grid(opts.about, 1, 0, 4, 0, 2);
-    const aBottom = Math.max(9, (aKids.at(-1)?.row ?? 2) + 1);
-    // PROJECTS: fence cols 5..18; switch (6, 2); children 4 cols and 3 rows apart, hanging plates.
-    // By category: the headers down the trunk (col 6) from row 3, each row of cards under its header.
-    const byCat = counts && categoryRows(3, { header: 6, card: 8, dc: 4 });
+    right = 18;
+  } else if (mode === 'stacked') {
+    s = Math.min(MAX_SPACING_MENU, inner / STACKED_COLS);
+    right = 12;
+  } else {
+    // An exact number of spacings across, near 58px; the fence spans them all.
+    const n = Math.max(4, Math.round(inner / PHONE_SPACING_MENU));
+    s = inner / n;
+    right = n - 1;
+    room = right - 0.3;
+  }
+  const sideKids = mode === 'wide' ? sideW(s, 3.7) : mode === 'stacked' ? 4 * s - 2 * g - MENU_PX.sideGap - 16 : sideW(s, room);
+  const hangW = 4 * s - MENU_PX.hangGap;
+
+  // NEWS WIRE.
+  let news: MenuSectionLayout;
+  const newsC1 = mode === 'wide' && !full ? 4 : right;
+  if (newsCounts && full) {
+    // Every story, by category, across the full width: wide 4 per row, stacked 3, phones 1.
+    const perRow = mode === 'wide' ? 4 : mode === 'stacked' ? 3 : 1;
+    const at = mode === 'column' ? { header: 0, card: 0, dc: 0 } : { header: 0, card: 2, dc: 4 };
+    const byCat = categoryRows(newsCounts, 3, at, { perRow, visible: Infinity });
+    const r1 = mode === 'column' ? byCat.bottom - 1 : byCat.bottom;
+    news = section(
+      { col: 0, row: 2 },
+      byCat.cats.flatMap((c) => c.cards),
+      mode === 'column' ? 'side' : 'hang',
+      mode === 'column' ? sideKids : hangW,
+      { c0: -1, r0: 1, c1: newsC1, r1 },
+      byCat.cats,
+    );
+  } else if (newsCounts) {
+    // The featured category's header under the switch, its top stories as side nodes under it
+    // (a row of them when stacked), and the All-stories control under the last one.
+    const top = Math.min(Math.max(1, opts.newsTop ?? 3), newsCounts[0] ?? 0);
+    const cards = mode === 'stacked' ? grid(top, 3, 0, 5, 4, 0) : grid(top, 1, 0, 5, 0, 2);
+    const last = cards.at(-1)?.row ?? 3;
+    const featured: MenuCategoryLayout = {
+      header: { col: 0, row: 3 },
+      cards,
+      visible: top,
+      band: { at: last, rows: 0 },
+      more: { row: last, col: 0, align: 'start' },
+    };
+    const others = newsCounts.slice(1).map(
+      (): MenuCategoryLayout => ({ header: { col: 0, row: 3 }, cards: [], visible: 0, band: { at: 3, rows: 0 }, more: null, hidden: true }),
+    );
+    const r1 = mode === 'wide' ? Math.max(9, last + 2) : last + 2;
+    news = section({ col: 0, row: 2 }, cards, 'side', sideKids, { c0: -1, r0: 1, c1: newsC1, r1 }, [featured, ...others]);
+  } else {
+    // Plain children: down the spine 2 rows apart (wide, phones), or in rows of 3 (stacked).
+    const kids = mode === 'stacked' ? grid(nNews, 3, 0, 4, 4, 2) : grid(nNews, 1, 0, 4, 0, 2);
+    const last = kids.at(-1)?.row ?? 2;
+    const r1 = mode === 'wide' ? Math.max(9, last + 1) : last + 1;
+    news = section({ col: 0, row: 2 }, kids, 'side', sideKids, { c0: -1, r0: 1, c1: newsC1, r1 });
+  }
+
+  // PROJECTS: beside NEWS WIRE (wide: fence cols 5..18, switch (6, 2), the category headers down
+  // the trunk at col 6, cards 4 cols and 3 rows apart with hanging plates), or the next fence down
+  // (stacked, phones, the full wire), with the trunk at col 0.
+  let projects: MenuSectionLayout;
+  if (!stacked) {
+    const nBottom = news.fence.r1;
+    const byCat = counts && categoryRows(counts, 3, { header: 6, card: 8, dc: 4 });
     const pRows = rows(nProjects, 3);
-    const pBottom = byCat ? byCat.bottom : Math.max(aBottom, 4 + 3 * (pRows - 1) + hangRows(s));
-    const r1 = Math.max(aBottom, pBottom);
-    about = section({ col: 0, row: 2 }, aKids, 'side', sideW(s, 3.7), { c0: -1, r0: 1, c1: 4, r1 });
-    about.ownR1 = aBottom;
+    const pBottom = byCat ? byCat.bottom : Math.max(nBottom, 4 + 3 * (pRows - 1) + hangRows(s));
+    const r1 = Math.max(nBottom, pBottom);
+    news.fence = { ...news.fence, r1 };
+    news.ownR1 = nBottom;
     projects = section(
       { col: 6, row: 2 },
       byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 3, 8, 4, 4, 3),
       'hang',
-      4 * s - MENU_PX.hangGap,
+      hangW,
       { c0: 5, r0: 1, c1: 18, r1 },
       byCat?.cats,
     );
     projects.ownR1 = pBottom;
-  } else if (mode === 'stacked') {
-    s = Math.min(MAX_SPACING_MENU, inner / STACKED_COLS);
-    // ABOUT ME: fence −1..12 × 1..5; switch (0, 2); children in a row on row 4, 4 cols apart.
-    const aRows = rows(opts.about, 3);
-    const aBottom = 4 + 2 * (aRows - 1) + 1;
-    about = section({ col: 0, row: 2 }, grid(opts.about, 3, 0, 4, 4, 2), 'side', 4 * s - 2 * g - MENU_PX.sideGap - 16, {
-      c0: -1,
-      r0: 1,
-      c1: 12,
-      r1: aBottom,
-    });
-    // PROJECTS: the next fence down; switch one row in; children 4 cols and 3 rows apart.
-    // By category: the headers down the trunk (col 0), each row of cards under its header.
-    const top = aBottom + 1;
-    const byCat = counts && categoryRows(top + 2, { header: 0, card: 2, dc: 4 });
+  } else if (mode === 'column') {
+    const top = news.fence.r1 + 1;
+    // By category: the headers on the spine, right under the switch, each one's cards down the
+    // spine under it.
+    const byCat = counts && categoryRows(counts, top + 2, { header: 0, card: 0, dc: 0 });
+    projects = section(
+      { col: 0, row: top + 1 },
+      byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 1, 0, top + 3, 0, 2),
+      'side',
+      sideKids,
+      { c0: -1, r0: top, c1: right, r1: byCat ? byCat.bottom - 1 : top + 3 + 2 * (nProjects - 1) + 1 },
+      byCat?.cats,
+    );
+  } else {
+    const top = news.fence.r1 + 1;
+    const byCat = counts && categoryRows(counts, top + 2, { header: 0, card: 2, dc: 4 });
     const pRows = rows(nProjects, 3);
     projects = section(
       { col: 0, row: top + 1 },
       byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 3, 2, top + 3, 4, 3),
       'hang',
-      4 * s - MENU_PX.hangGap,
-      { c0: -1, r0: top, c1: 12, r1: byCat ? byCat.bottom : top + 3 + 3 * (pRows - 1) + hangRows(s) },
-      byCat?.cats,
-    );
-  } else {
-    // An exact number of spacings across, near 58px; the fence spans them all.
-    const n = Math.max(4, Math.round(inner / PHONE_SPACING_MENU));
-    s = inner / n;
-    const c1 = n - 1;
-    const room = c1 - 0.3;
-    // ABOUT ME is compact here: one row per child, starting right under the switch, so the
-    // Projects switch and its first plate make the first screen.
-    const aBottom = 3 + (opts.about - 1) + 1;
-    const compactW = room * s - MENU_PX.compactGlyph / 2 - MENU_PX.compactGap;
-    about = section({ col: 0, row: 2 }, grid(opts.about, 1, 0, 3, 0, 1), 'compact', compactW, {
-      c0: -1,
-      r0: 1,
-      c1,
-      r1: aBottom,
-    });
-    const top = aBottom + 1;
-    // By category: the headers on the spine, right under the switch, each one's cards down the
-    // spine under it (the first card still makes an 812px screen).
-    const byCat = counts && categoryRows(top + 2, { header: 0, card: 0, dc: 0 });
-    projects = section(
-      { col: 0, row: top + 1 },
-      byCat ? byCat.cats.flatMap((c) => c.cards) : grid(nProjects, 1, 0, top + 3, 0, 2),
-      'side',
-      sideW(s, room),
-      { c0: -1, r0: top, c1, r1: byCat ? byCat.bottom - 1 : top + 3 + 2 * (nProjects - 1) + 1 },
+      hangW,
+      { c0: -1, r0: top, c1: right, r1: byCat ? byCat.bottom : top + 3 + 3 * (pRows - 1) + hangRows(s) },
       byCat?.cats,
     );
   }
-  // Everything but the root moves down when the fences start lower.
-  const dr = Math.max(0, Math.round(opts.fenceTop ?? 1) - 1);
-  if (dr) for (const sec of [about, projects]) moveSection(sec, dr);
-  let bottom = Math.max(about.fence.r1, projects.fence.r1);
-  if (mode !== 'wide') {
+  // The root's links: beside its plate (wide, when they fit before the fences' right edge), else
+  // in a row under the root, spread across, with the fences a row lower.
+  let dr = Math.max(0, Math.round(opts.fenceTop ?? 1) - 1);
+  const nLinks = Math.max(0, opts.links ?? 0);
+  const cg = MENU_PX.compactGlyph / 2;
+  let links: MenuLinksLayout = { nodes: [], style: 'compact', plateW: 0, placement: 'beside' };
+  if (nLinks > 0 && mode === 'wide') {
+    // As far right as they go: the last plate ends by the fences' right edge, the row spread
+    // evenly back toward the root's plate (at least 3 spacings apart).
+    const first = Math.ceil(((opts.rootW ?? 0) + MENU_PX.linkGap + cg) / s);
+    const last = Math.floor(right - (cg + MENU_PX.compactGap + MENU_PX.linkMinW) / s);
+    const step = nLinks > 1 ? Math.floor((last - first) / (nLinks - 1)) : 3;
+    if (step >= 3 || (nLinks === 1 && last >= first)) {
+      const start = last - step * (nLinks - 1);
+      const plateW = Math.min(step * s - 2 * cg - MENU_PX.compactGap - 12, (right - last) * s - cg - MENU_PX.compactGap);
+      links = { nodes: grid(nLinks, nLinks, start, 0, step, 0), style: 'compact', plateW, placement: 'beside' };
+    }
+  }
+  if (nLinks > 0 && !links.nodes.length) {
+    const row = dr + 1;
+    // Phones: evenly spread, each label centred under its glyph and kept inside the fences' edges.
+    const stackStep = nLinks > 1 ? Math.max(1, Math.floor((right - 1) / (nLinks - 1))) : 2;
+    const step = Math.max(2, Math.floor((right + 1) / nLinks));
+    links =
+      mode === 'column'
+        ? {
+            nodes: grid(nLinks, nLinks, 0, row, stackStep, 0),
+            style: 'stack',
+            plateW: Math.min(stackStep, 2) * s - 8,
+            placement: 'under',
+          }
+        : {
+            nodes: grid(nLinks, nLinks, 0, row, step, 0),
+            style: 'compact',
+            plateW: step * s - 2 * cg - MENU_PX.compactGap - 12,
+            placement: 'under',
+          };
+    dr += 1;
+  }
+  // Everything but the root (and its links) moves down when the fences start lower.
+  if (dr) for (const sec of [news, projects]) moveSection(sec, dr);
+  let bottom = Math.max(news.fence.r1, projects.fence.r1);
+  if (stacked) {
     // A collapsed section keeps only its switch row: what follows moves up by the rows it frees.
-    if (opts.collapsed?.about) moveSection(projects, -(about.fence.r1 - about.collapsed.r1));
+    if (opts.collapsed?.news) moveSection(projects, -(news.fence.r1 - news.collapsed.r1));
     bottom = opts.collapsed?.projects ? projects.collapsed.r1 : projects.fence.r1;
   }
   const extent = {
-    c0: Math.min(about.fence.c0, projects.fence.c0),
+    c0: Math.min(news.fence.c0, projects.fence.c0),
     r0: 0,
-    c1: Math.max(about.fence.c1, projects.fence.c1),
+    c1: Math.max(news.fence.c1, projects.fence.c1),
     r1: bottom,
   };
-  return { mode, spacing: s, root: { col: 0, row: 0 }, about, projects, extent };
+  return { mode, spacing: s, root: { col: 0, row: 0 }, links, stacked, newsFull: full, news, projects, extent };
 }
 
 /** Move a section (switch, children, fences, categories) down `dr` whole rows. */
@@ -738,7 +861,7 @@ function moveSection(sec: MenuSectionLayout, dr: number) {
 
 /**
  * Rows squeezed shut, in layout rows: from row `at`, `rows` of them, for columns `c0..c1`,
- * by `v` (0 open .. 1 shut). ABOUT ME's freed rows (stacked, column) and each category's
+ * by `v` (0 open .. 1 shut). NEWS WIRE's freed rows (stacked, column) and each category's
  * hidden-card rows are bands; the engine keeps the expanded layout and the page draws it
  * through them.
  */
@@ -751,17 +874,17 @@ export interface Band {
 }
 
 /**
- * The menu's bands. `shut`: how far ABOUT ME (0 open .. 1 collapsed) and each category
- * (0 expanded .. 1 collapsed) are squeezed. Wide keeps ABOUT ME's rows, and its category
- * bands only cover the PROJECTS columns (ABOUT ME sits beside them).
+ * The menu's bands. `shut`: how far NEWS WIRE (0 open .. 1 collapsed) and each category
+ * (0 expanded .. 1 collapsed) are squeezed. Wide keeps NEWS WIRE's rows, and its category
+ * bands only cover the PROJECTS columns (NEWS WIRE sits beside them).
  */
-export function menuBands(l: MenuLayout, shut: { about?: number; categories?: readonly number[] }): Band[] {
+export function menuBands(l: MenuLayout, shut: { news?: number; categories?: readonly number[] }): Band[] {
   const out: Band[] = [];
-  const aboutRows = l.mode === 'wide' ? 0 : l.about.fence.r1 - l.about.collapsed.r1;
-  if (aboutRows > 0) out.push({ at: l.about.collapsed.r1, rows: aboutRows, c0: -Infinity, c1: Infinity, v: shut.about ?? 0 });
+  const newsRows = l.stacked ? l.news.fence.r1 - l.news.collapsed.r1 : 0;
+  if (newsRows > 0) out.push({ at: l.news.collapsed.r1, rows: newsRows, c0: -Infinity, c1: Infinity, v: shut.news ?? 0 });
   l.projects.categories?.forEach((c, k) => {
     if (c.band.rows <= 0) return;
-    const c0 = l.mode === 'wide' ? l.projects.fence.c0 : -Infinity;
+    const c0 = l.stacked ? -Infinity : l.projects.fence.c0;
     out.push({ ...c.band, c0, c1: Infinity, v: shut.categories?.[k] ?? 0 });
   });
   return out;
@@ -785,7 +908,7 @@ export function bandSqueeze(row: number, col: number, bands: readonly Band[]): n
 }
 
 /**
- * The flow's anchors, where they're drawn: the root, the switches, ABOUT ME's children, and
+ * The flow's anchors, where they're drawn: the root, its links, the switches, NEWS WIRE's children, and
  * in PROJECTS each category header plus its visible cards (all of them while `open[k]`). A
  * collapsed category's hidden cards are no anchors, and its rows are squeezed shut.
  */
@@ -795,8 +918,14 @@ export function menuAnchors(l: MenuLayout, open: readonly boolean[] = []): { id:
   const out: { id: string; col: number; row: number }[] = [];
   const add = (id: string, p: { col: number; row: number }) => out.push({ id, col: p.col, row: squeezeRow(p.row, p.col, bands) });
   add('root', l.root);
-  add('about', l.about.switch);
-  l.about.children.forEach((c, k) => add(`about/${k}`, c));
+  l.links.nodes.forEach((p, k) => add(`link/${k}`, p));
+  add('news', l.news.switch);
+  const newsCats = l.news.categories?.filter((c) => !c.hidden);
+  if (!newsCats) l.news.children.forEach((c, k) => add(`news/${k}`, c));
+  newsCats?.forEach((c, k) => {
+    add(`news-cat/${k}`, c.header);
+    c.cards.forEach((p, j) => add(`news-cat/${k}/${j}`, p));
+  });
   add('projects', l.projects.switch);
   if (!cats) l.projects.children.forEach((c, k) => add(`projects/${k}`, c));
   cats?.forEach((c, k) => {

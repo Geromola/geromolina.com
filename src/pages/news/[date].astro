@@ -1,0 +1,31 @@
+---
+// One archived news wire edition (`/news/YYYY-MM-DD`, the newest `ARCHIVE_PAGES`).
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import TopBar from '../../components/project/TopBar.astro';
+import Wire from '../../components/news/Wire.astro';
+import { ARCHIVE_PAGES, longDate, sortEditions } from '../../news/edition';
+import type { Edition } from '../../news/schema';
+
+export const getStaticPaths = (async () => {
+  const editions = sortEditions((await getCollection('news')).map((e) => e.data)).slice(0, ARCHIVE_PAGES);
+  const dates = editions.map((e) => e.date);
+  return editions.map((edition) => ({ params: { date: edition.date }, props: { edition, dates } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  edition: Edition;
+  dates: string[];
+}
+const { edition, dates } = Astro.props;
+---
+
+<Base
+  title={`News wire, ${longDate(edition.date)} · Gero Molina`}
+  description={`Gero's news wire for ${longDate(edition.date)}: clean tech, AI and the world.`}
+  noindex
+>
+  <TopBar title="News wire" />
+  <Wire edition={edition} dates={dates} latest={false} />
+</Base>

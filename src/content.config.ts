@@ -2,6 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { CATEGORY_IDS } from './grid/categories';
+import { editionSchema } from './news/schema';
 
 const unit = z.number().min(0).max(1);
 const point = z.tuple([unit, unit]);
@@ -48,4 +49,10 @@ const nodes = defineCollection({
     }),
 });
 
-export const collections = { nodes };
+// News wire editions (SPEC "News wire"), one JSON file per day, written by `npm run news`.
+const news = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/news' }),
+  schema: editionSchema,
+});
+
+export const collections = { nodes, news };

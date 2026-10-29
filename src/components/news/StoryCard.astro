@@ -1,0 +1,283 @@
+---
+// One news wire story as a phone-style notification (SPEC "News wire", "The page"): the headline
+// at a glance; tap to expand in place to the brief, why it matters, and the link to the original.
+// A native <details>, so it works without JS and from the keyboard; `src/news/main.ts` adds the
+// spring and the read state.
+import { ageLabel, headline } from '../../news/edition';
+import type { Entry } from '../../news/schema';
+
+interface Props {
+  entry: Entry;
+  generatedAt: string;
+  mustKnow?: boolean;
+}
+const { entry, generatedAt, mustKnow = false } = Astro.props;
+const bodyId = `story-${entry.id}`;
+const title = headline(entry.title);
+---
+
+<details
+  class:list={['card', 'glass', `card--${entry.section}`, { 'card--must': mustKnow }]}
+  id={`s-${entry.id}`}
+  data-story={entry.id}>
+  <summary class="card__head" aria-describedby={entry.snippet ? `${bodyId}-snippet` : undefined}>
+    <span class="card__meta">
+      <span class="card__glyph" aria-hidden="true"></span>
+      <span class="card__source">{entry.source}</span>
+      {title.live && <span class="card__chip card__chip--live mono">LIVE</span>}
+      {entry.lang === 'es' && <span class="card__chip mono" title="Translated from Spanish">ES</span>}
+      {entry.alsoCovered.length > 0 && <span class="card__chip mono" title="Outlets also covering it">+{entry.alsoCovered.length}</span>}
+      <time class="card__age mono" datetime={entry.publishedAt} data-age>{ageLabel(entry.publishedAt, generatedAt)}</time>
+      <span class="card__unread" aria-hidden="true"></span>
+    </span>
+    <span class="card__title">{title.text}</span>
+    {
+      entry.snippet && (
+        <span class:list={['card__snippet', { 'card__snippet--teaser': entry.brief }]} id={`${bodyId}-snippet`}>
+          {entry.snippet}
+        </span>
+      )
+    }
+  </summary>
+  <div class="card__body" id={bodyId}>
+    {entry.brief && <p class="card__brief">{entry.brief}</p>}
+    {entry.why && <p class="card__why"><span class="mono">Why</span> {entry.why}</p>}
+    {entry.originalTitle && <p class="card__original" lang="es">{entry.originalTitle}</p>}
+    {
+      entry.alsoCovered.length > 0 && (
+        <p class="card__also">
+          Also in{' '}
+          {entry.alsoCovered.map((o, k) => (
+            <>
+              {k > 0 && ' · '}
+              <a href={o.url} target="_blank" rel="noopener noreferrer" data-read-link>
+                {o.source}
+              </a>
+            </>
+          ))}
+        </p>
+      )
+    }
+    <a class="card__open" href={entry.url} target="_blank" rel="noopener noreferrer" data-read-link>
+      Read on {entry.source} <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</details>
+
+<style>
+  .card {
+    display: block;
+    /* `/news#s-…` (a story on the home page) lands clear of the sticky top bar. */
+    scroll-margin-top: 4.5rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transform-origin: 50% 50%;
+    will-change: transform;
+    transition: opacity 200ms ease-out;
+  }
+  .card[data-read]:not([open]) {
+    opacity: 0.62;
+  }
+  .card__head {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.75rem 0.9375rem 0.8125rem;
+    cursor: pointer;
+    list-style: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .card__head::-webkit-details-marker {
+    display: none;
+  }
+  .card__head:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: -2px;
+    border-radius: var(--radius-lg);
+  }
+  .card__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4375rem;
+    min-width: 0;
+    font-size: 0.75rem;
+    color: var(--ink-2);
+  }
+  .card__glyph {
+    flex: none;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    border: 2px solid var(--ink-2);
+  }
+  .card--cleantech .card__glyph {
+    border-color: var(--cyan);
+    box-shadow: 0 0 8px -1px rgba(var(--cyan-rgb), 0.7);
+  }
+  .card--ai .card__glyph {
+    border-color: var(--hot);
+    box-shadow: 0 0 8px -1px color-mix(in srgb, var(--hot) 55%, transparent);
+  }
+  .card--must .card__glyph {
+    border-color: var(--amber);
+    background: rgba(var(--amber-rgb), 0.35);
+    box-shadow: 0 0 9px -1px rgba(var(--amber-rgb), 0.8);
+  }
+  .card__source {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+  .card__chip {
+    flex: none;
+    padding: 0.0625rem 0.3125rem;
+    border-radius: 0.3125rem;
+    border: 1px solid var(--glass-edge);
+    font-size: 0.625rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+  .card__chip--live {
+    border-color: rgba(var(--amber-rgb), 0.55);
+    color: var(--amber);
+  }
+  .card__age {
+    margin-left: auto;
+    flex: none;
+    color: var(--muted);
+  }
+  .card__unread {
+    flex: none;
+    width: 0.4375rem;
+    height: 0.4375rem;
+    border-radius: 50%;
+    background: var(--cyan);
+    opacity: 0;
+    transition: opacity 200ms ease-out;
+  }
+  :global(html[data-news-ready]) .card:not([data-read]) .card__unread {
+    opacity: 1;
+  }
+  .card__title {
+    font-size: 0.9375rem;
+    line-height: 1.32;
+    font-weight: 600;
+    letter-spacing: -0.008em;
+    color: var(--ink);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .card--must .card__title {
+    font-size: 1rem;
+  }
+  .card__snippet {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  /* Open, the brief replaces the snippet's teaser. */
+  .card[open]:not([data-closing]) .card__snippet--teaser {
+    display: none;
+  }
+  /* Collapsing re-clamps at once, so the spring heads for the real closed height. */
+  .card[open]:not([data-closing]) .card__title,
+  .card[open]:not([data-closing]) .card__snippet {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+  }
+  .card__body {
+    display: grid;
+    gap: 0.625rem;
+    padding: 0.125rem 0.9375rem 0.9375rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .card__body p {
+    margin: 0;
+  }
+  .card__brief {
+    color: var(--ink);
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--glass-border);
+  }
+  .card__why {
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+  .card__why .mono {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 0.25rem;
+  }
+  .card__original {
+    font-size: 0.8125rem;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .card__also {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .card__also a {
+    color: var(--ink-2);
+    text-underline-offset: 0.15em;
+  }
+  .card__also a:hover {
+    color: var(--cyan);
+  }
+  .card__open {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--cyan-rgb), 0.35);
+    background: rgba(var(--cyan-rgb), 0.08);
+    color: var(--ink);
+    font-size: 0.875rem;
+    font-weight: 550;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background-color 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .card__open:hover {
+    background: rgba(var(--cyan-rgb), 0.14);
+    border-color: rgba(var(--cyan-rgb), 0.55);
+  }
+  .card__open:focus-visible {
+    border-radius: 999px;
+  }
+  @media (prefers-contrast: more) {
+    .card[data-read]:not([open]) {
+      opacity: 0.8;
+    }
+    .card__source,
+    .card__snippet,
+    .card__why {
+      color: var(--ink);
+    }
+    .card__age,
+    .card__also,
+    .card__original {
+      color: var(--ink-2);
+    }
+  }
+</style>

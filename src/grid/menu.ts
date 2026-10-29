@@ -20,21 +20,23 @@ import { CanvasRenderer, CorridorLayer, WebGLRenderer, drawMesh, type CorridorSe
 import { Spring } from './spring';
 
 /**
- * DOM wiring for the home hero v3.2 (SPEC "Home hero v3: the node menu"). The
- * root node "Gero" powers two fenced sections, ABOUT ME and PROJECTS, each
+ * DOM wiring for the home hero (SPEC "Home hero v3: the node menu", "Home hero
+ * v4"). The root node "Gero" powers its links (About, Off the grid, Contact:
+ * small nodes beside it) and two fenced sections, NEWS WIRE and PROJECTS, each
  * behind a switch node that expands and collapses it like a dropdown on the
  * grid. Everything sits on lattice vertices (`menuLayout`); a decorative
- * `GridGame` runs the flow root → switch → child along hidden-transformer
- * corridors, and a section's children are only fed while it's open. On load
- * the power-on runs in sequence (root, About me, Projects); input works
- * throughout. The game itself stays DOM-free in `./game`.
+ * `GridGame` runs the flow root → link and root → switch → child along
+ * hidden-transformer corridors, and a section's children are only fed while
+ * it's open. On load the power-on runs in sequence (root and its links, News
+ * wire, Projects); input works throughout. The game itself stays DOM-free in
+ * `./game`.
  *
  * PROJECTS by category (SPEC "Projects menu by category"): the switch feeds a
  * header per category down the trunk, and each header its cards. A category
  * shows its first few cards; "Show more" reveals the rest. The engine always
  * runs on the fully expanded layout: a collapsed category's hidden cards are
  * disabled loads (no anchors), and its rows are squeezed shut on screen
- * (`menuBands`), the way ABOUT ME's are.
+ * (`menuBands`), the way NEWS WIRE's are.
  */
 
 /** sessionStorage: the clicked glyph's viewport circle, for the view transition (Base.astro). */
@@ -50,7 +52,7 @@ const AMBIENT = 0.25;
 const ROOT_IGNITE_S = 0.6; // the root's charge sweep
 const FEED_S = 0.55; // a root → switch corridor draws in this long
 const OPEN_DELAY_S = 0.12; // a powered switch opens its section after this
-const NEXT_FEED_S = 0.7; // after About me opens, the Projects corridor starts
+const NEXT_FEED_S = 0.7; // after News wire opens, the Projects corridor starts
 const SECTION_RESPONSE = 1.15; // Spring response of a section's energy front (both ways)
 const FRONT_STEPS = 2; // the front's soft edge, in corridor segments
 const RING_S = 0.45; // a ring filling (and a node lighting) as power arrives
@@ -66,6 +68,15 @@ const PULL = 0.35; // a hidden child sits this share of the way toward its switc
 const PROJECT_PATH = /^\/projects\/[^/]+\/?$/;
 /** sessionStorage: the expanded categories, so a return visit in the tab keeps them. */
 const CATS_KEY = 'gero-menu-cats';
+/** The root glyph's radius (its plate sits beside it). */
+const ROOT_R = MENU_PX.rootGlyph / 2;
+/** The full news wire's URL hash. */
+const NEWS_HASH = '#news';
+/** Shares of new packets a heading gets (a section switch, a category header): more current on the trunk. */
+const SWITCH_WEIGHT = 4;
+const HEADER_WEIGHT = 2;
+/** Corridor alpha at rest on the trunk (root → switch → header), and its stroke scale. */
+const TRUNK_REST = 0.72;
 
 type Role = 'root' | 'switch' | 'header' | 'child';
 
@@ -78,14 +89,16 @@ interface MNode {
   glyph: HTMLElement;
   ring: SVGPathElement | null;
   id: string;
-  /** Section index (0 about, 1 projects), −1 for the root. */
+  /** Section index (0 news, 1 projects), −1 for the root and its links. */
   section: number;
-  /** The node a hidden plate retracts into (its switch, or its category header); −1 for the root. */
+  /** The node a hidden plate retracts into (its switch, its category header, or the root for a link); −1 for the root. */
   parent: number;
   /** Its vertex in layout units (the root at 0, 0), expanded. */
   col: number;
   row: number;
   soon: boolean;
+  /** Not on the map in this layout (NEWS WIRE's other stories while only its top ones show). */
+  off: boolean;
   fillTo: number;
   lift: Spring;
   press: Spring;
@@ -141,6 +154,9 @@ interface Section {
 /** A PROJECTS category: a header node, its cards, and a Show more control when some are hidden. */
 interface Category {
   id: string;
+  /** Its section, and its index among that section's categories. */
+  section: number;
+  local: number;
   el: HTMLElement;
   list: HTMLElement;
   more: HTMLButtonElement | null;
@@ -158,6 +174,8 @@ interface Category {
   layout: MenuCategoryLayout | null;
   /** Where its Show more control was last painted. */
   moreShown: string;
+  /** On the map in this layout (a hidden one is dark, out of reach, and not in the flow). */
+  active: boolean;
 }
 
 /** Springs that open and close something in order: a section or a category. */
@@ -194,6 +212,8 @@ interface Scene {
   lat: Lattice;
   layout: MenuLayout;
   game: GridGame;
+  /** Node index → its index in the game (−1: not on the map). */
+  gi: Int32Array;
   segs: CorridorSegment[];
   /** Per segment: the feeds through it and the step index along each. */
   uses: { feed: number; step: number }[][];
@@ -239,6 +259,7 @@ export function mountMenu(root: HTMLElement) {
     col: 0,
     row: 0,
     soon: el.hasAttribute('data-soon'),
+    off: false,
     fillTo: Number(el.dataset.fill ?? 1),
     lift: new Spring(0, 0.25, 1),
     press: new Spring(1, 0.15, 1),
@@ -259,7 +280,9 @@ export function mountMenu(root: HTMLElement) {
   });
 
   const rootEl = $('[data-root]');
-  const nodes: MNode[] = [makeNode('root', rootEl, rootEl, $('[data-root-glyph]', rootEl), -1)];
+  const rootGlyph = $('[data-root-glyph]', rootEl);
+  const rootPlate = $('[data-root-plate]', rootEl);
+  const nodes: MNode[] = [makeNode('root', rootEl, rootEl, rootGlyph, -1)];
   const sectionEls = [...root.querySelectorAll<HTMLElement>('[data-section]')];
   const sections: Section[] = sectionEls.map((el, i) => {
     const button = $<HTMLButtonElement>('[data-switch]', el);
@@ -284,6 +307,11 @@ export function mountMenu(root: HTMLElement) {
       shift: new Spring(0, SHIFT_RESPONSE, 1),
       reach: 1,
     };
+  });
+  // The root's links: small nodes fed straight from the root (no switch).
+  const linkNodes = [...root.querySelectorAll<HTMLElement>('[data-link]')].map((a) => {
+    nodes.push(makeNode('child', a, a, $('[data-link-glyph]', a), -1, 0));
+    return nodes.length - 1;
   });
   // Categories expanded earlier in this tab.
   let remembered: string[] = [];
@@ -311,9 +339,13 @@ export function mountMenu(root: HTMLElement) {
       const head = nodes.length - 1;
       sec.children.push(head);
       const id = el.dataset.cat ?? String(cats.length);
-      const open = remembered.includes(id);
+      // NEWS WIRE's categories don't collapse: the wire shows its top stories or all of them.
+      const open = i === 0 ? false : remembered.includes(id);
       cats.push({
         id,
+        section: i,
+        local: cats.filter((c) => c.section === i).length,
+        active: true,
         el,
         list: $('[data-cat-list]', el),
         more: el.querySelector<HTMLButtonElement>('[data-cat-more]'),
@@ -329,7 +361,14 @@ export function mountMenu(root: HTMLElement) {
       });
     }
   });
+  const projectCats = cats.filter((c) => c.section === 1);
+  const newsCats = cats.filter((c) => c.section === 0);
   const catOf = new Map(cats.flatMap((c, k) => [[c.head, k] as const, ...c.cards.map((n) => [n, k] as const)]));
+  // The full news wire (SPEC "Home hero v4"): every story across the page, PROJECTS collapsed
+  // under it. Its back control sits on NEWS WIRE's fence, top right.
+  const backEl = root.querySelector<HTMLButtonElement>('[data-news-back]');
+  let newsFull = newsCats.length > 0 && location.hash === NEWS_HASH;
+  let projectsWasOpen = true;
 
   // The circuit: root → each switch → its children; in PROJECTS, switch → each header → its cards.
   const feeds: FeedState[] = sections.map((sec) => ({
@@ -359,6 +398,21 @@ export function mountMenu(root: HTMLElement) {
     }
   });
   const rootFeed = (s: number) => feeds[s];
+  /** The trunk: root → switch and switch → category header, drawn heavier. */
+  const isTrunk = (f: FeedState) => nodes[f.to].role === 'switch' || nodes[f.to].role === 'header';
+  const linkFeeds: FeedState[] = linkNodes.map((k) => ({
+    from: 0,
+    to: k,
+    len: 1,
+    d: 0,
+    started: false,
+    section: -1,
+    parent: -1,
+    cat: -1,
+    slot: -1,
+    users: [k],
+  }));
+  feeds.push(...linkFeeds);
   computeReach();
 
   let scene: Scene | null = null;
@@ -373,6 +427,12 @@ export function mountMenu(root: HTMLElement) {
     for (const f of feeds) if (f.section < 0) (f.started = true), (f.d = Infinity);
     sections.forEach((_, s) => setOpen(s, true, false, true));
   }
+  // Arriving on the full wire (`#news`): PROJECTS waits, collapsed, under it.
+  if (backEl) backEl.hidden = !newsFull;
+  if (newsFull && sections[1]) {
+    projectsWasOpen = true;
+    setOpen(1, false, true, true);
+  }
 
   // ------------------------------------------------------------ layout
   /** (Re)build positions and the scene for the menu's width. False when nothing changed. */
@@ -381,41 +441,49 @@ export function mountMenu(root: HTMLElement) {
     // Not laid out yet (a hidden tab or a zero-size frame): the ResizeObserver builds once it has a width.
     if (width < 160) return false;
     const gutter = Math.min(32, Math.max(16, width * 0.03));
+    rootEl.style.maxWidth = '';
     const counts = {
-      about: sections[0].children.length,
-      projects: cats.length ? cats.map((c) => c.cards.length) : (sections[1]?.children.length ?? 0),
+      news: newsCats.length ? newsCats.map((c) => c.cards.length) : sections[0].children.length,
+      newsFull,
+      projects: projectCats.length ? projectCats.map((c) => c.cards.length) : (sections[1]?.children.length ?? 0),
+      links: linkNodes.length,
+      // How far the root's plate reaches right of its vertex (the glyph's centre): the links go
+      // beside it when they fit. Measured on the plate itself, which never stretches.
+      rootW: rootPlate.getBoundingClientRect().right - (rootGlyph.getBoundingClientRect().left + ROOT_R),
     };
     let layout = menuLayout(width, { ...counts, gutter });
-    const key = `${width}|${layout.mode}|${window.devicePixelRatio}`;
+    const key = `${width}|${layout.mode}|${window.devicePixelRatio}|${newsFull}`;
     if (scene && scene.key === key) return false;
     const t0 = performance.now();
     const s = layout.spacing;
-    // Wide and stacked: centred. Column: the fence's left edge on the gutter. The root's row
-    // clears the section nav (a centred pill on phones).
+    // Wide and stacked: centred. Column: the fence's left edge on the gutter.
     const ext0 = layout.extent;
     const originX = layout.mode === 'column' ? gutter - ext0.c0 * s : (width - (ext0.c1 - ext0.c0) * s) / 2 - ext0.c0 * s;
-    // The root plate may not run past the right gutter; on phones it starts under the nav pill.
-    const rootLeft = originX + layout.root.col * s - 32;
+    // The root plate may not run past the right gutter.
+    const rootLeft = originX + layout.root.col * s - ROOT_R;
     rootEl.style.maxWidth = `${width - gutter - rootLeft}px`;
-    const rootHalf = Math.max(32, rootEl.offsetHeight / 2);
-    const originY = layout.mode === 'column' ? 64 + rootHalf + 4 : gutter + Math.max(32, rootHalf - 8);
-    // A tall root plate (it wraps on phones) pushes the fences a row down, clear of the fence label.
-    // (Clear of the fence label, 16px tall on the fence line, with 1px to spare.)
-    const tallRoot = rootHalf + 9 > s;
+    const rootHalf = Math.max(ROOT_R, rootEl.offsetHeight / 2);
+    const originY = layout.mode === 'column' ? gutter + rootHalf + 4 : gutter + rootHalf - 8;
+    // A tall root plate (it wraps on phones) pushes what's under it a row down: the fences clear of
+    // the fence label (16px tall on the fence line, with 1px to spare), or the links' glyphs.
+    const under = layout.links.placement === 'under' && layout.links.nodes.length > 0;
+    const tallRoot = rootHalf + (under ? MENU_PX.compactGlyph / 2 + 8 : 9) > s;
     if (tallRoot) layout = menuLayout(width, { ...counts, gutter, fenceTop: 2 });
     const ext = layout.extent;
     const minHeight = Math.max(window.innerHeight, 560);
     // The engine and the canvases keep the full (expanded) size; collapsing only slides the DOM
     // and squeezes the drawn flow, and the menu itself gets shorter.
     const height = Math.max(minHeight, originY + (ext.r1 + 1) * s);
-    // Stacked and column: a collapsed ABOUT ME gives back its rows (a band), a collapsed PROJECTS
+    // Stacked and column: a collapsed NEWS WIRE gives back its rows (a band), a collapsed PROJECTS
     // only shortens the menu. Wide keeps both in place.
-    const stackedRows = (sec: MenuSectionLayout) => (layout.mode === 'wide' ? 0 : sec.fence.r1 - sec.collapsed.r1);
-    sections[0].rows = stackedRows(layout.about);
+    const stackedRows = (sec: MenuSectionLayout) => (layout.stacked ? sec.fence.r1 - sec.collapsed.r1 : 0);
+    sections[0].rows = stackedRows(layout.news);
     if (sections[1]) sections[1].rows = stackedRows(layout.projects);
-    cats.forEach((c, k) => {
-      const L = layout.projects.categories?.[k] ?? null;
+    const secLayouts = [layout.news, layout.projects];
+    cats.forEach((c) => {
+      const L = secLayouts[c.section]?.categories?.[c.local] ?? null;
       c.layout = L;
+      c.active = !L?.hidden;
       c.visible = L?.visible ?? c.cards.length;
       c.rows = L?.band.rows ?? 0;
       c.moreShown = '';
@@ -445,10 +513,37 @@ export function mountMenu(root: HTMLElement) {
       n.y = p.y;
     };
     place(nodes[0], layout.root.col, layout.root.row);
-    rootEl.style.left = `${nodes[0].x - 32}px`;
+    rootEl.style.left = `${nodes[0].x - ROOT_R}px`;
     rootEl.style.top = `${nodes[0].y}px`;
     nodes[0].top0 = nodes[0].y;
-    const secLayouts = [layout.about, layout.projects];
+    // Off the map in this layout: a hidden category's header, and stories past those it lays out.
+    for (const n of nodes) n.off = false;
+    cats.forEach((c) => {
+      if (!c.active) nodes[c.head].off = true;
+      c.cards.forEach((k, j) => {
+        if (!c.active || j >= (c.layout?.cards.length ?? c.cards.length)) nodes[k].off = true;
+      });
+    });
+    for (const n of nodes) {
+      n.item.hidden = n.off;
+      if (n.off) n.item.inert = true;
+      else if (n.role === 'header') n.item.inert = false;
+    }
+    // The links: a one-line plate beside the glyph, or the label under it (phones).
+    const LL = layout.links;
+    root.dataset.links = LL.style;
+    linkNodes.forEach((k, j) => {
+      const n = nodes[k];
+      const p = LL.nodes[j] ?? LL.nodes[LL.nodes.length - 1] ?? layout.root;
+      const cg = MENU_PX.compactGlyph / 2;
+      place(n, p.col, p.row);
+      const stack = LL.style === 'stack';
+      n.item.style.left = `${stack ? n.x - LL.plateW / 2 : n.x - cg}px`;
+      n.top0 = stack ? n.y - cg : n.y - Math.max(cg, MENU_PX.compactH / 2);
+      n.item.style.setProperty('--item-w', `${stack ? LL.plateW : 2 * cg + MENU_PX.compactGap + LL.plateW}px`);
+      n.item.style.setProperty('--fx', `${((nodes[0].x - n.x) * PULL).toFixed(1)}px`);
+      n.item.style.setProperty('--fy', `${((nodes[0].y - n.y) * PULL).toFixed(1)}px`);
+    });
     sections.forEach((sec, i) => {
       const L = secLayouts[i];
       sec.layout = L;
@@ -456,7 +551,7 @@ export function mountMenu(root: HTMLElement) {
       sec.el.dataset.style = L.style;
       const sw = nodes[sec.switchNode];
       place(sw, L.switch.col, L.switch.row);
-      sec.button.style.left = `${sw.x - 14}px`;
+      sec.button.style.left = `${sw.x - MENU_PX.switchGlyph / 2}px`;
       sw.top0 = sw.y;
       // Placed by the glyph's vertex: hanging plates centred under it, side and compact plates beside it.
       const g = L.style === 'compact' ? MENU_PX.compactGlyph : MENU_PX.glyph;
@@ -466,12 +561,14 @@ export function mountMenu(root: HTMLElement) {
       // Category headers first (cards retract into them), on the trunk like a switch.
       sec.children.forEach((k) => {
         const n = nodes[k];
-        if (n.role !== 'header') return;
-        const at = L.categories?.[catOf.get(k) ?? 0]?.header ?? L.switch;
+        if (n.role !== 'header' || n.off) return;
+        const at = L.categories?.[cats[catOf.get(k) ?? 0]?.local ?? 0]?.header ?? L.switch;
         place(n, at.col, at.row);
         n.item.style.left = `${n.x - MENU_PX.headerGlyph / 2}px`;
         n.top0 = n.y;
-        n.item.style.setProperty('--head-w', `${width - gutter - n.x + MENU_PX.headerGlyph / 2}px`);
+        // The label and tagline stay inside the section's fence (NEWS WIRE sits beside PROJECTS on wide).
+        const fenceRight = originX + L.fence.c1 * s - 12;
+        n.item.style.setProperty('--head-w', `${Math.min(width - gutter, fenceRight) - n.x + MENU_PX.headerGlyph / 2}px`);
         n.item.style.setProperty('--fx', `${((sw.x - n.x) * PULL).toFixed(1)}px`);
         n.item.style.setProperty('--fy', `${((sw.y - n.y) * PULL).toFixed(1)}px`);
       });
@@ -479,8 +576,11 @@ export function mountMenu(root: HTMLElement) {
       sec.children.forEach((k) => {
         const n = nodes[k];
         if (n.role !== 'child') return;
-        const c = L.children[flat] ?? L.children[L.children.length - 1];
+        // A category's card takes its own slot there; plain children go in order.
+        const cat = cats[catOf.get(k) ?? -1];
+        const c = cat ? cat.layout?.cards[cat.cards.indexOf(k)] : (L.children[flat] ?? L.children[L.children.length - 1]);
         flat++;
+        if (!c || n.off) return;
         place(n, c.col, c.row);
         const left = L.style === 'hang' ? n.x - L.plateW / 2 : n.x - g / 2;
         const top = L.style === 'hang' ? n.y - g / 2 : n.y - Math.max(g, plateH) / 2;
@@ -493,15 +593,16 @@ export function mountMenu(root: HTMLElement) {
         n.item.style.setProperty('--fy', `${((into.y - n.y) * PULL).toFixed(1)}px`);
       });
     });
-    // Show more: under the last card row, at the row's end (hanging plates) or under the glyphs (phones).
-    const style = layout.projects.style;
+    // Show more (and NEWS WIRE's All-stories control): under the last card row, at the row's end
+    // (hanging plates) or under the glyphs (side plates).
     cats.forEach((c) => {
       const m = c.layout?.more;
       if (!c.more || !m) return;
+      const SL = secLayouts[c.section];
       const p = px(m.col, m.row);
-      const x = m.align === 'end' ? p.x + layout.projects.plateW / 2 : p.x - MENU_PX.glyph / 2;
+      const x = m.align === 'end' ? p.x + SL.plateW / 2 : p.x - MENU_PX.glyph / 2;
       const top =
-        style === 'hang' ? p.y + MENU_PX.hangH + MENU_PX.moreGap : p.y + MENU_PX.sideH / 2 + MENU_PX.moreGap;
+        SL.style === 'hang' ? p.y + MENU_PX.hangH + MENU_PX.moreGap : p.y + MENU_PX.sideH / 2 + MENU_PX.moreGap;
       c.more.style.left = `${x}px`;
       c.more.dataset.align = m.align;
       c.more.dataset.top0 = String(top);
@@ -511,38 +612,55 @@ export function mountMenu(root: HTMLElement) {
 
     // The game: the root is the plant; switches, headers and children are loads.
     const vertexOf = (n: MNode) => ({ col: Math.round((n.x - ox) / s), row: Math.round((n.y - oy) / s) });
-    const gameNodes: GameNode[] = nodes.map((n) => ({
-      id: n.id,
-      kind: n.role === 'root' ? 'plant' : 'section',
-      ...vertexOf(n),
-    }));
+    // Only what's on the map takes part: `gi` maps a node to its game index.
+    const gi = new Int32Array(nodes.length).fill(-1);
+    const gameNodes: GameNode[] = [];
+    nodes.forEach((n, k) => {
+      if (n.off) return;
+      gi[k] = gameNodes.length;
+      gameNodes.push({ id: n.id, kind: n.role === 'root' ? 'plant' : 'section', ...vertexOf(n) });
+    });
+    const onMap = (f: FeedState) => gi[f.from] >= 0 && gi[f.to] >= 0;
     const verts = lat.cols * lat.rows;
     const game = new GridGame({
       cols: lat.cols,
       rows: lat.rows,
       nodes: gameNodes,
       bounds: visibleBounds(lat, width, height),
-      levels: [{ title: 'Menu', plants: [nodes[0].id], loads: nodes.slice(1).map((n) => n.id), budget: 0 }],
+      levels: [{ title: 'Menu', plants: [nodes[0].id], loads: gameNodes.slice(1).map((n) => n.id), budget: 0 }],
       count: coarse ? Math.min(700, verts * 4) : Math.min(1500, verts * 6),
       ambientFraction: AMBIENT,
       seed: 0x6d656e75,
       decorative: true,
     });
-    const vOf = (k: number) => game.board.vertex(gameNodes[k].col, gameNodes[k].row);
+    const vOf = (k: number) => game.board.vertex(gameNodes[gi[k]].col, gameNodes[gi[k]].row);
+    const mapped = feeds.filter(onMap);
     game.setDecorTransformers(
       circuitTransformers(
         game.board,
         game.bounds,
-        new Set(gameNodes.map((_, k) => vOf(k))),
-        feeds.map((f) => ({ from: vOf(f.from), to: vOf(f.to) })),
+        new Set(gameNodes.map((g) => game.board.vertex(g.col, g.row))),
+        mapped.map((f) => ({ from: vOf(f.from), to: vOf(f.to) })),
       ),
     );
-    for (const f of feeds) if (f.from !== 0) game.setLoadSource(f.to, f.from);
-    for (let k = 1; k < nodes.length; k++) game.setLoadEnabled(k, nodes[k].powered);
-    if (focus >= 0) game.setFocus(focus, FOCUS_SHARE);
+    for (const f of mapped) if (f.from !== 0) game.setLoadSource(gi[f.to], gi[f.from]);
+    for (let k = 1; k < nodes.length; k++) if (gi[k] >= 0) game.setLoadEnabled(gi[k], nodes[k].powered);
+    // Headings draw more of the flow: switches, then category headers.
+    nodes.forEach((n, k) => {
+      if (gi[k] < 0) return;
+      if (n.role === 'switch') game.setLoadWeight(gi[k], SWITCH_WEIGHT);
+      else if (n.role === 'header') game.setLoadWeight(gi[k], HEADER_WEIGHT);
+    });
+    if (focus >= 0 && gi[focus] >= 0) game.setFocus(gi[focus], FOCUS_SHARE);
 
-    // Corridors: one segment per edge, with every feed (and step) that uses it.
-    const paths = circuitPaths(game, feeds);
+    // Corridors: one segment per edge, with every feed (and step) that uses it. Off-map feeds
+    // have none (and length 1).
+    const mappedPaths = circuitPaths(
+      game,
+      mapped.map((f) => ({ from: gi[f.from], to: gi[f.to] })),
+    );
+    let m = 0;
+    const paths = feeds.map((f) => (onMap(f) ? mappedPaths[m++] : { from: f.from, to: f.to, steps: [] }));
     const segIndex = new Map<number, number>();
     const segs: CorridorSegment[] = [];
     const uses: { feed: number; step: number }[][] = [];
@@ -554,12 +672,16 @@ export function mountMenu(root: HTMLElement) {
       }
       p.steps.forEach((step, d) => {
         let i = segIndex.get(step.edge);
+        const trunk = isTrunk(feeds[f]);
         if (i === undefined) {
           const { c0, r0, c1, r1 } = game.edgeVertices(step.edge);
-          i = segs.push({ c0, r0, c1, r1, high: step.high }) - 1;
+          i = segs.push({ c0, r0, c1, r1, high: step.high, trunk }) - 1;
           segIndex.set(step.edge, i);
           uses.push([]);
-        } else segs[i].high ||= step.high;
+        } else {
+          segs[i].high ||= step.high;
+          segs[i].trunk ||= trunk;
+        }
         uses[i].push({ feed: f, step: d });
       });
     });
@@ -572,6 +694,7 @@ export function mountMenu(root: HTMLElement) {
       lat,
       layout,
       game,
+      gi,
       segs,
       uses,
       alpha: new Float32Array(segs.length),
@@ -603,6 +726,8 @@ export function mountMenu(root: HTMLElement) {
   function feedD(f: number): number {
     const feed = feeds[f];
     if (feed.section < 0) return feed.d;
+    // Off the map: dark.
+    if (nodes[feed.to].off) return 0;
     const d =
       feed.parent >= 0
         ? feedD(feed.parent) - feeds[feed.parent].len
@@ -631,7 +756,7 @@ export function mountMenu(root: HTMLElement) {
       n.shown.snap(1);
     }
     const k = nodes.indexOf(n);
-    if (k > 0) scene?.game.setLoadEnabled(k, true);
+    if (k > 0 && scene && scene.gi[k] >= 0) scene.game.setLoadEnabled(scene.gi[k], true);
   }
 
   function powerOff(n: MNode) {
@@ -646,7 +771,7 @@ export function mountMenu(root: HTMLElement) {
       n.shown.snap(0);
     }
     const k = nodes.indexOf(n);
-    if (k > 0) scene?.game.setLoadEnabled(k, false);
+    if (k > 0 && scene && scene.gi[k] >= 0) scene.game.setLoadEnabled(scene.gi[k], false);
   }
 
   /** Power follows the fronts: a switch once its corridor arrives, anything else while its feed's front covers it. */
@@ -656,6 +781,7 @@ export function mountMenu(root: HTMLElement) {
       const f = rootFeed(s);
       if (!sw.powered && f.started && f.d >= f.len) powerOn(sw);
     });
+    for (const f of linkFeeds) if (!nodes[f.to].powered && f.started && f.d >= f.len) powerOn(nodes[f.to]);
     feeds.forEach((f, i) => {
       if (f.section < 0) return;
       const reached = feedD(i) >= f.len;
@@ -711,7 +837,8 @@ export function mountMenu(root: HTMLElement) {
   /** A category's control and its hidden cards: label, state, and out of reach while collapsed. */
   function markCat(cat: Category) {
     const hidden = cat.cards.length - Math.min(cat.cards.length, cat.visible);
-    if (cat.more) {
+    // NEWS WIRE's All-stories control opens the full wire instead (its label stays).
+    if (cat.more && !cat.more.hasAttribute('data-news-all')) {
       cat.more.setAttribute('aria-expanded', String(cat.open));
       const label = cat.more.querySelector('[data-more-label]');
       if (label) label.textContent = cat.open ? 'Show less' : `Show ${hidden} more`;
@@ -721,6 +848,48 @@ export function mountMenu(root: HTMLElement) {
     // Never lose focus: a card about to go out of reach hands it to the control.
     if (out.some((el) => el.contains(document.activeElement))) cat.more?.focus();
     items.forEach((el) => (el.inert = out.includes(el)));
+  }
+
+  /**
+   * The full news wire on or off (SPEC "Home hero v4"): NEWS WIRE's front drains back to its
+   * switch, the menu re-lays out (every story across the width, PROJECTS collapsed under it, or
+   * back to the top stories), and the front runs out again, so the stories power on along the
+   * grid one by one. `push`: record it in history (the browser's back returns).
+   */
+  function setNewsFull(full: boolean, push = true) {
+    if (!newsCats.length || full === newsFull) return;
+    newsFull = full;
+    if (push) {
+      try {
+        history.pushState({ news: full }, '', full ? NEWS_HASH : location.pathname + location.search);
+      } catch {
+        /* history unavailable: the view still changes */
+      }
+    }
+    const wire = sections[0];
+    const proj = sections[1];
+    if (proj && full) {
+      projectsWasOpen = proj.open;
+      if (proj.open) setOpen(1, false, true, true);
+    }
+    // Dark from the switch out, at once: the new layout's stories light as the front reaches them.
+    wire.front.snap(0);
+    for (const k of wire.children) {
+      const n = nodes[k];
+      n.shown.snap(0);
+      n.power.snap(0);
+      n.fill.snap(0);
+      n.powered = false;
+    }
+    build();
+    setOpen(0, true, true);
+    if (proj && !full && projectsWasOpen) setOpen(1, true, true);
+    if (backEl) backEl.hidden = !full;
+    // Bring the wire's switch into view.
+    const sw = nodes[wire.switchNode];
+    const top = root.getBoundingClientRect().top + window.scrollY + sw.y - 96;
+    window.scrollTo({ top: Math.max(0, top), behavior: reduced() ? 'auto' : 'smooth' });
+    kick();
   }
 
   // ------------------------------------------------------------- intro
@@ -744,16 +913,18 @@ export function mountMenu(root: HTMLElement) {
         }
       }
       if (r.powered && !rootFeed(0).started) rootFeed(0).started = true;
+      // The links light with the first corridor.
+      if (r.powered) for (const f of linkFeeds) f.started = true;
       sections.forEach((sec, s) => {
         if (sec.manual || sec.open) return;
         const sw = nodes[sec.switchNode];
         if (sw.powered && sec.openAt === Infinity) sec.openAt = introT + OPEN_DELAY_S;
         if (introT >= sec.openAt) setOpen(s, true, false);
       });
-      // About me open: the Projects corridor follows.
+      // News wire open: the Projects corridor follows.
       if (sections[1] && !rootFeed(1).started && introT >= sections[0].openedAt + NEXT_FEED_S) rootFeed(1).started = true;
       if (sections[1] && !rootFeed(1).started && sections[0].manual && !sections[0].open && r.powered) {
-        // About me was closed by hand before it opened: carry on to Projects.
+        // News wire was closed by hand before it opened: carry on to Projects.
         rootFeed(1).started = true;
       }
       const settled =
@@ -794,7 +965,8 @@ export function mountMenu(root: HTMLElement) {
       for (const u of uses[i]) {
         const lit = Math.min(1, Math.max(0, (d[u.feed] - u.step) / FRONT_STEPS));
         if (lit <= 0) continue;
-        a = Math.max(a, lit * (CORRIDOR_REST + (1 - CORRIDOR_REST) * Math.min(1, Math.max(0, hot[u.feed]))));
+        const rest = isTrunk(feeds[u.feed]) ? TRUNK_REST : CORRIDOR_REST;
+        a = Math.max(a, lit * (rest + (1 - rest) * Math.min(1, Math.max(0, hot[u.feed]))));
       }
       alpha[i] = a;
     }
@@ -812,15 +984,15 @@ export function mountMenu(root: HTMLElement) {
   }
 
   /**
-   * The rows squeezed shut right now (layout units): ABOUT ME's while it collapses (stacked,
+   * The rows squeezed shut right now (layout units): NEWS WIRE's while it collapses (stacked,
    * column) and each collapsed category's hidden rows. Empty when nothing is squeezed.
    */
   function bands(): Band[] {
     if (!scene) return [];
     const v = (x: Spring) => Math.min(1, Math.max(0, x.value));
     return menuBands(scene.layout, {
-      about: sections[0] ? v(sections[0].shift) : 0,
-      categories: cats.map((c) => v(c.shift)),
+      news: sections[0] ? v(sections[0].shift) : 0,
+      categories: projectCats.map((c) => v(c.shift)),
     }).filter((b) => b.v > 0);
   }
 
@@ -892,7 +1064,7 @@ export function mountMenu(root: HTMLElement) {
     const pc = L.projects.fence.c0 + 1;
     const open = squeezeRow(L.projects.fence.r1, pc, b);
     let bottom: number;
-    if (L.mode === 'wide') bottom = Math.max(L.about.ownR1, open);
+    if (!L.stacked) bottom = Math.max(L.news.ownR1, open);
     else {
       const shut = squeezeRow(L.projects.collapsed.r1, pc, b);
       bottom = open + (shut - open) * Math.min(1, Math.max(0, sections[1]?.shift.value ?? 0));
@@ -949,8 +1121,8 @@ export function mountMenu(root: HTMLElement) {
     const at = (row: number) => squeezeRow(row, col, b);
     const lay = scene.layout;
     const r1 =
-      lay.mode === 'wide'
-        ? Math.max(lay.about.ownR1, squeezeRow(lay.projects.fence.r1, lay.projects.fence.c0 + 1, b))
+      !lay.stacked
+        ? Math.max(lay.news.ownR1, squeezeRow(lay.projects.fence.r1, lay.projects.fence.c0 + 1, b))
         : at(L.fence.r1);
     const r: LatticeRect = {
       c0: lerp(L.collapsed.c0, L.fence.c0),
@@ -969,6 +1141,12 @@ export function mountMenu(root: HTMLElement) {
       sec.fence.style.top = `${y0}px`;
       sec.fence.style.width = `${(r.c1 - r.c0) * s}px`;
       sec.fence.style.height = `${(r.r1 - r.r0) * s}px`;
+    }
+    // The full wire's back control rides NEWS WIRE's fence, on its top edge at the right.
+    if (sec === sections[0] && backEl) {
+      backEl.style.left = `${x0 + (r.c1 - r.c0) * s - 12}px`;
+      backEl.style.top = `${y0}px`;
+      backEl.style.setProperty('--open', e.toFixed(3));
     }
     const sw = nodes[sec.switchNode];
     sw.el.style.setProperty('--chev', Math.min(1, Math.max(0, sec.chev.value)).toFixed(3));
@@ -1036,7 +1214,7 @@ export function mountMenu(root: HTMLElement) {
   function setFocus(k: number) {
     if (k === focus) return;
     focus = k;
-    scene?.game.setFocus(k, FOCUS_SHARE);
+    scene?.game.setFocus(k >= 0 ? scene.gi[k] : -1, FOCUS_SHARE);
     if (reduced()) still();
   }
 
@@ -1117,9 +1295,14 @@ export function mountMenu(root: HTMLElement) {
     btn.addEventListener('click', () => {
       head.clicked = false;
       window.setTimeout(() => discharge(head), 260);
-      setCatOpen(i, !c.open);
+      if (btn.hasAttribute('data-news-all')) setNewsFull(true);
+      else setCatOpen(i, !c.open);
     });
   });
+
+  // The full wire's back control, and the browser's back and forward between the two.
+  backEl?.addEventListener('click', () => setNewsFull(false));
+  window.addEventListener('popstate', () => setNewsFull(location.hash === NEWS_HASH, false));
 
   for (const n of nodes) {
     if (n.role !== 'child') continue;

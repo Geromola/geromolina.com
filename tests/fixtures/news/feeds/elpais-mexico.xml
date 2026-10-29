@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture: fictional stories for tests and `npm run news -- --dry-run`. -->
+<rss version="2.0">
+  <channel>
+    <title>Fixture México</title>
+    <item>
+      <title>El Senado aprueba la reforma de transmisión eléctrica</title>
+      <description>La reforma abre la construcción de nuevas líneas a inversión privada y fija un plazo de dos años para conectar parques solares del norte.</description>
+      <link>https://www.example-mx.test/mexico/2026-10-27/senado-transmision.html</link>
+      <pubDate>Tue, 27 Oct 2026 03:20:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Negociadores revisan el calendario de aranceles con Estados Unidos</title>
+      <description>Los equipos de comercio se reunirán en Monterrey el jueves para discutir las cuotas de acero y autopartes.</description>
+      <link>https://www.example-mx.test/mexico/2026-10-26/aranceles.html</link>
+      <pubDate>Mon, 26 Oct 2026 19:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

@@ -4,11 +4,14 @@ import '../styles/tokens.css';
 interface Props {
   title?: string;
   description?: string;
+  /** Keep the page out of search results (the news wire). */
+  noindex?: boolean;
 }
 
 const {
   title = 'Gero Molina',
   description = 'Gero Molina: MBA + MEng candidate at UC Berkeley, California. Projects, tools and how to reach me.',
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -27,6 +30,7 @@ const vtExpect = path === '/' ? '#menu-nodes' : /^\/projects\/[^/]+$/.test(path)
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#04070b" />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <title>{title}</title>
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />

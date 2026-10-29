@@ -600,6 +600,8 @@ export interface CorridorSegment {
   r1: number;
   /** 345 kV (white-hot) or 13.8 kV (cyan, where a corridor branches into a node). */
   high: boolean;
+  /** The menu's trunk (root → switch → category header): drawn heavier. */
+  trunk?: boolean;
 }
 
 const CORRIDOR_BUCKETS = 10; // strokes are batched by quantised alpha
@@ -636,32 +638,36 @@ export class CorridorLayer {
     ctx.globalCompositeOperation = 'lighter';
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    for (const high of [false, true]) {
-      const rgb = high ? '238, 247, 255' : '95, 227, 255'; // --hot, --cyan
-      for (let k = 1; k <= CORRIDOR_BUCKETS; k++) {
-        const lo = (k - 1) / CORRIDOR_BUCKETS;
-        const hi = k / CORRIDOR_BUCKETS;
-        ctx.beginPath();
-        let any = false;
-        for (let i = 0; i < segments.length; i++) {
-          const a = alpha[i];
-          const seg = segments[i];
-          if (seg.high !== high || a <= lo || a > hi + 1e-6) continue;
-          any = true;
-          ctx.moveTo(lat.ox + seg.c0 * s, lat.oy + seg.r0 * s);
-          ctx.lineTo(lat.ox + seg.c1 * s, lat.oy + seg.r1 * s);
+    for (const trunk of [false, true]) {
+      // The trunk carries more: a wider glow and a heavier core.
+      const w = trunk ? 1.8 : 1;
+      for (const high of [false, true]) {
+        const rgb = high ? '238, 247, 255' : '95, 227, 255'; // --hot, --cyan
+        for (let k = 1; k <= CORRIDOR_BUCKETS; k++) {
+          const lo = (k - 1) / CORRIDOR_BUCKETS;
+          const hi = k / CORRIDOR_BUCKETS;
+          ctx.beginPath();
+          let any = false;
+          for (let i = 0; i < segments.length; i++) {
+            const a = alpha[i];
+            const seg = segments[i];
+            if (seg.high !== high || Boolean(seg.trunk) !== trunk || a <= lo || a > hi + 1e-6) continue;
+            any = true;
+            ctx.moveTo(lat.ox + seg.c0 * s, lat.oy + seg.r0 * s);
+            ctx.lineTo(lat.ox + seg.c1 * s, lat.oy + seg.r1 * s);
+          }
+          if (!any) continue;
+          const a = (lo + hi) / 2;
+          ctx.strokeStyle = `rgba(${rgb}, ${(a * (trunk ? 0.1 : 0.07)).toFixed(3)})`;
+          ctx.lineWidth = 9 * w;
+          ctx.stroke();
+          ctx.strokeStyle = `rgba(${rgb}, ${(a * (trunk ? 0.22 : 0.16)).toFixed(3)})`;
+          ctx.lineWidth = 3 * w;
+          ctx.stroke();
+          ctx.strokeStyle = `rgba(${rgb}, ${(a * (high ? 0.62 : 0.5)).toFixed(3)})`;
+          ctx.lineWidth = (high ? 1.25 : 1) * w;
+          ctx.stroke();
         }
-        if (!any) continue;
-        const a = (lo + hi) / 2;
-        ctx.strokeStyle = `rgba(${rgb}, ${(a * 0.07).toFixed(3)})`;
-        ctx.lineWidth = 9;
-        ctx.stroke();
-        ctx.strokeStyle = `rgba(${rgb}, ${(a * 0.16).toFixed(3)})`;
-        ctx.lineWidth = 3;
-        ctx.stroke();
-        ctx.strokeStyle = `rgba(${rgb}, ${(a * (high ? 0.62 : 0.5)).toFixed(3)})`;
-        ctx.lineWidth = high ? 1.25 : 1;
-        ctx.stroke();
       }
     }
     ctx.globalCompositeOperation = 'source-over';

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic fixture: fictional stories for tests and `npm run news -- --dry-run`. -->
+<rss version="2.0">
+  <channel>
+    <title>Fixture Review</title>
+    <item>
+      <title>Atlas Labs releases Atlas 3 with long-running agents</title>
+      <description>The company says the model sets new marks on coding benchmarks and can work through multi-step tasks for an hour.</description>
+      <link>https://www.example-review.test/2026/10/27/atlas-3-release/</link>
+      <pubDate>Tue, 27 Oct 2026 01:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>Data centres will need 40 GW more power by 2030, utilities warn</title>
+      <description>A survey of grid planners finds AI training clusters are the fastest-growing source of new electricity demand.</description>
+      <link>https://www.example-review.test/2026/10/26/datacentre-power/</link>
+      <pubDate>Mon, 26 Oct 2026 15:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

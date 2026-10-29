@@ -5,9 +5,9 @@
 - `docs/PLAN.md` — task list and status
 - `src/assets/gero.jpg` — portrait for the About section
 - `src/styles/tokens.css` — colour, type and glass tokens, plus global base styles
-- `src/layouts/Base.astro` — html shell, meta tags, global CSS; `?motion=reduce` debug flag (html[data-motion]), view-transition script (expand from / collapse into a card's terminal dot in Projects mode, the map node in Play mode), analytics (skipped on localhost)
+- `src/layouts/Base.astro` — html shell, meta tags (optional `noindex`), global CSS; `?motion=reduce` debug flag (html[data-motion]), view-transition script (expand from / collapse into a card's terminal dot in Projects mode, the map node in Play mode), analytics (skipped on localhost)
 - `src/pages/index.astro` — home page: "Skip to About" link, the home hero (NodeMenu), then the sections below and the footer
-- `src/components/NodeMenu.astro` — home hero v3.2: the root node "Gero", fenced ABOUT ME and PROJECTS sections behind switch buttons; PROJECTS by category (SPEC "Projects menu by category"): a header per category (`data-cat`, `data-cat-head`), its cards (glyph + glass plate with badge, title, one line and `tags` chips) and a Show more `<button>` (`data-cat-more`, `aria-expanded`, `aria-controls`); categories, order and tags come from the `nodes` collection; plain stacked list without JS
+- `src/components/NodeMenu.astro` — home hero v4: the root node "Gero" (80px glyph) and its links (About, Off the grid, Contact: `data-link` nodes beside it), fenced NEWS WIRE (the latest edition by category: Must know first, its top 3 on the grid and an All-stories control, every story in the full wire, a `data-news-back` control, a story panel and its `<template data-story-tpl>`s) and PROJECTS sections behind switch buttons; PROJECTS by category (SPEC "Projects menu by category"): a header per category (`data-cat`, `data-cat-head`), its cards (glyph + glass plate with badge, title, one line and `tags` chips) and a Show more `<button>` (`data-cat-more`, `aria-expanded`, `aria-controls`); categories, order and tags come from the `nodes` collection; plain stacked list without JS
 - `src/components/sections/Section.astro` — shared section shell: column, rhythm, divider, kicker + h2
 - `src/components/sections/About.astro` — `#about`: duotone round portrait (inline SVG filter) and bio
 - `src/components/sections/OffTheGrid.astro` — `#off-the-grid`: four fact cards (ACS card links to the DOI)
@@ -17,7 +17,7 @@
 - `src/components/sections/Footer.astro` — site footer line
 - `src/components/GridMap.astro` — v2 home hero, no longer mounted (the transformer game is parked) (`[data-home]`, `data-mode` projects/play, set before first render from `#play`): section nav, project menu, and the map: canvases, the game layer (`[data-game]`: Back to projects pill (`data-block`), nodes with target-load rings, transformer layer and template, ghost, level panel, toast, screen-reader live region), styles, client mount. Only `inGame` nodes go on the game map
 - `src/components/ProjectMenu.astro` — v2 Projects mode (inside GridMap, not mounted): profile header (duotone portrait via About's filter), project cards from the `nodes` collection (plants and substations by `order`, `status` badge, terminal dot `data-card-dot`), the locked strip for `private` nodes, the `#play` pill
-- `src/components/SectionNav.astro` — fixed glass section nav (About, Off the grid, Contact, My tools lock); top centre on phones; hidden in Play mode (html[data-home-mode])
+- `src/components/SectionNav.astro` — fixed glass section nav (About, Off the grid, Contact, My tools lock); used only by the parked v2 hero (`GridMap.astro`) since Home hero v4
 - `src/pages/projects/[slug].astro` — plant project pages (one per `kind: plant` node; body from the node's Markdown; code projects without a `liveUrl` get no embed and a top-bar "Source" pill)
 - `src/pages/404.astro` — "Power outage" 404 page
 - `src/components/project/TopBar.astro` — sticky glass top bar: back to the grid, title, Launch pill
@@ -27,10 +27,10 @@
 - `src/components/project/Pill.astro` — pill / full-width button link with press and focus states
 - `src/grid/main.ts` — DOM wiring for the home hero: Projects/Play mode switch (URL hash, history, Spring), the decorative flow (measures card dots, hover/focus pull, card view-transition source) and the Grid operator game: layout, blocked junctions (Back pill, resting panel), transformer place/move/remove, ghost, level panel, throttled live announcements, progress in `localStorage`, fun-fact toasts, render loop, reduced-motion still frames
 - `src/grid/layout.ts` — lattice sizing; snaps nodes to vertices (`PlacedNode`)
-- `src/content.config.ts` — content collections: `nodes` schema (glob loader); kinds plant / substation / section / game; `category` (required for everything but sections) and `tags` drive the home menu's category rows
+- `src/content.config.ts` — content collections: `nodes` schema (glob loader) and `news` (edition JSON); kinds plant / substation / section / game; `category` (required for everything but sections) and `tags` drive the home menu's category rows
 - `src/content/nodes/*.md` — node data, one file per node: the projects, the games (`ballpark`, `shells`, `life`: `kind: game`, no project page) and the page sections. Body is a plant's "How it works"; `status` live/code/private; `category` + `order` place it in the menu, `tags` are its chips; `inGame: false` keeps a node off the (parked) game map
 - `src/grid/nodes.ts` — `MapNode` and `NodeKind` types (data lives in the `nodes` collection)
-- `src/grid/renderers.ts` — WebGL2 and Canvas 2D renderers for electrons (colour by engine `hue`) and the per-edge heat glow; static mesh with faulted edges
+- `src/grid/renderers.ts` — WebGL2 and Canvas 2D renderers for electrons (colour by engine `hue`) and the per-edge heat glow; static mesh with faulted edges; the menu's `CorridorLayer` (lit corridors, the trunk drawn heavier)
 - `src/grid/spring.ts` — critically damped spring
 - `src/grid/game/index.ts` — public surface of the DOM-free grid game (re-exports)
 - `src/grid/game/physics.ts` — game constants: LOW/HIGH, losses, LIT_THRESHOLD, PLANT_MW, routing temperature, drift, heat τ
@@ -39,13 +39,13 @@
 - `src/grid/game/levels.ts` — the 4 level definitions; seeded fault generation
 - `src/grid/game/solver.ts` — placement candidates, scoring, greedy + 1-swap solver
 - `src/grid/game/layout.ts` — adapter: map layout → game nodes with ids, plus visible bounds
-- `src/grid/game/decor.ts` — decorative flow layouts: v2's card-dot lattice and anchors; the v3.2 node menu (`menuLayout`: wide / stacked / column, sections, and PROJECTS as category rows with `CATEGORY_GRID` cards per row and shown while collapsed), the squeezed rows of collapsed sections and categories (`menuBands`, `squeezeRow`, `bandSqueeze`), the visible anchors (`menuAnchors`), and the circuit (`circuitTransformers`, `circuitPaths`)
-- `src/grid/menu.ts` — DOM wiring for the node menu: places everything on the lattice, the power-on intro, the decorative flow root → switch → category header → card, section and category expand/collapse on springs (hidden cards are disabled loads, `inert`; their rows squeeze shut), Show more state in `sessionStorage`, hover/focus pull, card view-transition source, reduced-motion still frames; `window.__menu` debug handle
+- `src/grid/game/decor.ts` — decorative flow layouts: v2's card-dot lattice and anchors; the node menu (`menuLayout`: wide / stacked / column, the root's links beside or under it (as far right as they go on wide), the NEWS WIRE and PROJECTS sections (NEWS WIRE by category: its top stories, or the full wire across the width with PROJECTS under it; `stacked` when one section sits above the other), and PROJECTS as category rows with `CATEGORY_GRID` cards per row and shown while collapsed), the squeezed rows of collapsed sections and categories (`menuBands`, `squeezeRow`, `bandSqueeze`), the visible anchors (`menuAnchors`), and the circuit (`circuitTransformers`, `circuitPaths`)
+- `src/grid/menu.ts` — DOM wiring for the node menu: places everything on the lattice (nodes off the map in a layout stay out of the game), the power-on intro, the decorative flow root → link and root → switch → category header → card (the trunk heavier, headings weighted), the full news wire on and off (`#news`, history, back control), section and category expand/collapse on springs (hidden cards are disabled loads, `inert`; their rows squeeze shut), Show more state in `sessionStorage`, hover/focus pull, card view-transition source, reduced-motion still frames; `window.__menu` debug handle
 - `src/grid/categories.ts` — the three project categories (id, label, tagline, in order) and `groupByCategory` (DOM-free)
-- `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars; `decorative` option (lossless, no heat, nothing placeable, no solver) and `setFocus` (bias the flow toward a node)
+- `src/grid/game/engine.ts` — `GridGame`: level, transformers, blocked vertices (`setBlocked`), routing tables, electron pool, heat, evaluate/stars; `decorative` option (lossless, no heat, nothing placeable, no solver) `setFocus` (bias the flow toward a node) and `setLoadWeight` (more of the new packets to a load)
 - `tests/engine.test.ts` — Vitest for the game engine (physics, routing, levels on 3 reference layouts and ~60 sampled viewports, blocked hero/panel zones, solver timing, faults, step)
 - `tests/decor.test.ts` — Vitest for the decorative flow: lattice alignment, anchors, decorative engine, focus (and that the default flow is unchanged)
-- `tests/menu.test.ts` — Vitest for the node menu: snapping, corridors, load switching, `menuLayout` sections, and categories (grouping and order, fixture vs the node files, layout at 10 widths in every expand state, anchors, bands, the 4-level circuit)
+- `tests/menu.test.ts` — Vitest for the node menu: snapping, corridors, load switching, `menuLayout` sections and the root's links (beside, under, phones), and categories (grouping and order, fixture vs the node files, layout at 10 widths in every expand state, anchors, bands, the 4-level circuit)
 - `src/pages/ballpark.astro` — Ballpark page (linked from the home node menu): markup, styles and mount for the energy game
 - `src/energy/catalog.ts` — Ballpark items (power × time or energy per unit, with sources) and the anchor ladder
 - `src/energy/scale.ts` — Ballpark log axis (0.1 Wh … 10 GWh), unit formatting, scoring by orders of magnitude, equivalences
@@ -78,12 +78,41 @@
 - `src/life/render-canvas.ts` — Canvas 2D fallback
 - `src/life/main.ts` — Life DOM wiring: pointer/pinch/wheel/keyboard, stamp, dock, readout and chart, tour, library, signals lamps, phone sheet, URL hash, progress in `localStorage`
 - `tests/life.test.ts` — Vitest for Life: rules, border, RLE, every library claim, scenes, NOT gate, message round-trip, detector, camera, tour progress
+- `src/pages/news/index.astro` — News wire (`/news`, SPEC "News wire"): the latest edition, `noindex`, not in the sitemap
+- `src/pages/news/[date].astro` — archived editions (`/news/YYYY-MM-DD`, the newest 14)
+- `src/components/news/Wire.astro` — the wire's page body: header, stale banner, Must know, the three sections, archive links; mounts `src/news/main.ts`
+- `src/components/news/StoryCard.astro` — one story as a phone-style notification card (`<details>`): headline and snippet; expanded, the brief, why, also-covered links and the link out
+- `src/content/news/*.json` — one edition per day, written by `npm run news` (the `news` collection, schema in `src/news/schema.ts`)
+- `src/news/types.ts` — wire types: sections, sources, items, stories, picks, briefs, and the `Classifier` / `Editor` / `Briefer` interfaces
+- `src/news/schema.ts` — the edition file's zod schema (shared by the pipeline and the content collection)
+- `src/news/sources.ts` — the feeds (section hint, weight, language)
+- `src/news/profile.md` — Gero's interests: the classifier's and editor's system prompt (edit this to tune the wire)
+- `src/news/feed.ts` — RSS / RDF / Atom parsing
+- `src/news/normalize.ts` — canonical URLs, plain-text summaries, freshness window, per-source cap, dedupe, what earlier editions ran
+- `src/news/cluster.ts` — join classifications, group items into stories (story key or title Jaccard, union-find)
+- `src/news/score.ts` — story score weights and the editor's candidates
+- `src/news/select.ts` — check the editor's picks; the score-only fallback
+- `src/news/overlap.ts` — the copy check (8-word runs)
+- `src/news/extract.ts` — article text from HTML; robots.txt rules
+- `src/news/edition.ts` — build and validate an edition; seen URLs/keys; dates, ages, staleness
+- `src/news/pipeline.ts` — the whole funnel with injected I/O (`runPipeline`), cost cap, retries
+- `src/news/fake.ts` — keyword fakes for the three Claude steps (tests and `--dry-run`)
+- `src/news/sheet.ts` — the home page's story panel: opens on a story (capture click), swaps, closes on Escape / × / a press elsewhere, on a `Spring`; marks the story read
+- `src/news/read.ts` — read state shared by /news and the panel (`localStorage`, wrapped)
+- `src/news/main.ts` — `/news` DOM wiring: spring expand/collapse and press, read state in `localStorage`, live ages, stale banner
+- `scripts/news/run.ts` — `npm run news` CLI: real run, `--dry-run`, `--eval`, `--date`, `--out`; writes and prunes editions
+- `scripts/news/claude.ts` — the Claude classifier and briefer (Haiku 5.5) and editor (Opus 5.5, fallbacks), prompts, cost from usage
+- `scripts/news/fetch.ts` — feed and article fetching (timeouts, User-Agent, robots.txt cache)
+- `.github/workflows/news.yml` — daily 13:00 UTC run: build the edition, commit it, Vercel redeploys
+- `tests/news.test.ts` — Vitest for the wire: parsing, normalize, cluster, score, picks, copy check, extraction, robots, edition, the pipeline end to end with fakes
+- `tests/fixtures/news/feeds/*.xml` — synthetic feeds (fictional stories), named after source ids
+- `tests/fixtures/news/golden.json` — 40 labelled items for `npm run news -- --eval`
 - `tests/fixtures/nodes.ts` — game-map node ids, kinds and positions; `MENU_NODES` (every node's kind, order, category and tags, mirroring `src/content/nodes/*.md`); the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
 - `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` and every `kind: plant` or `kind: game` node `href`
 - `public/icon.svg` — SVG favicon (glowing cyan bolt on dark rounded square)
 - `public/icon-192.png`, `public/icon-512.png`, `public/icon-maskable-512.png`, `public/apple-touch-icon.png` — PNG app icons (generated from SVG via qlmanage + sips)
 - `public/og.jpg` — 1200×630 Open Graph image (v3.2 node-menu style)
-- `public/manifest.webmanifest` — PWA manifest
+- `public/manifest.webmanifest` — PWA manifest (with a News shortcut)
 - `public/sw.js` — hand-written service worker (cache-first `/_astro/*` + icons, network-first HTML, same-origin only); registered from `Base.astro` in production
 - `public/robots.txt` — allow all, points to the sitemap
