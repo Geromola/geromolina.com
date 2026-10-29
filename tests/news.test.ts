@@ -298,6 +298,27 @@ describe('copy check', () => {
     expect(copiesSource('short', source)).toBe(false);
   });
 
+  it('lets figures, names and stock phrasing through, and still stops copied wording (cases from the first run)', () => {
+    const pass: [string, string][] = [
+      ['Alphabet reported 92.3bn in total revenue and more than 36.6bn in profit for the quarter.', 'The company booked $92.3bn in total revenue and more than $36.6bn in profit, it said.'],
+      ['Search ads grew 12% year over year in the third quarter, down from 17% earlier.', 'Ad sales rose 12% year over year in the third quarter, down from 17% in the second.'],
+      ['Spending runs at 7.38 billion per month with most of that on chips.', 'It now spends $7.38 billion per month, with most of that going to chips.'],
+      ['It has data centre projects in the U.K. and at xAI\'s Memphis site.', 'Siemens supplies turbines for projects in the U.K. and at xAI\'s campus.'],
+    ];
+    for (const [draft, source] of pass) expect(copiedRun(draft, source), draft).toBeNull();
+    const stop: [string, string][] = [
+      [
+        'Officials blamed an inexplicable decision by traffic control operators sent a train onto the wrong track.',
+        'Investigators said an inexplicable decision by traffic control operators sent a train into the path of another.',
+      ],
+      [
+        'Microsoft generated $10 billion in revenue from commercial arrangements with OpenAI, including revenue sharing payments.',
+        'It generated $10 billion in revenue from commercial arrangements with OpenAI, including revenue-sharing payments, in the quarter.',
+      ],
+    ];
+    for (const [draft, source] of stop) expect(copiedRun(draft, source), draft).not.toBeNull();
+  });
+
   it('names the longest reused run, for the retry prompt', () => {
     expect(copiedRun('So: the Nevada site is the largest grid storage project built yet.', source)).toBe(
       'the nevada site is the largest grid storage project built',

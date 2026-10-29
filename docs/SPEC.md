@@ -454,7 +454,7 @@ Decided 2026-10-27. A daily feed at `/news` that Gero reads himself: clean tech,
 
 ### Guardrails
 - Feed and article text is untrusted. No tools in any call, and structured output only. Every link comes from the feed, never from the model, and must be http(s). All text is rendered escaped.
-- We publish a headline, our own sentence and paragraph, and the link. A snippet or brief that shares 8 or more consecutive words with its source is regenerated once, then dropped. Article text is never published.
+- We publish a headline, our own sentence and paragraph, and the link. A snippet or brief that repeats a run of 8 or more consecutive words from its source, with at least 5 content words in it, is regenerated once (told the words it reused), then dropped. Figures, proper names and function words don't count, so restating numbers and names passes. Article text is never published.
 - The run aborts above $0.50 estimated (expected ≈ $0.10). Hard cap of 400 items.
 - If classification fails outright, nothing is committed and the page keeps the last edition.
 

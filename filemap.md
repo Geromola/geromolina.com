@@ -92,7 +92,7 @@
 - `src/news/cluster.ts` — join classifications, group items into stories (story key or title Jaccard, union-find)
 - `src/news/score.ts` — story score weights and the editor's candidates
 - `src/news/select.ts` — check the editor's picks; the score-only fallback
-- `src/news/overlap.ts` — the copy check (8-word runs)
+- `src/news/overlap.ts` — the copy check (8-word runs carrying at least 5 content words; figures, names and function words don't count)
 - `src/news/extract.ts` — article text from HTML; robots.txt rules
 - `src/news/edition.ts` — build and validate an edition; seen URLs/keys; dates, ages, staleness
 - `src/news/pipeline.ts` — the whole funnel with injected I/O (`runPipeline`), cost cap, retries
