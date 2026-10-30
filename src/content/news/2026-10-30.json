@@ -1,0 +1,396 @@
+{
+  "date": "2026-10-30",
+  "generatedAt": "2026-10-30T18:25:33.514Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "a3f1a120",
+      "section": "world",
+      "title": "Senators briefed on Trump’s ‘insane’ plan to restart war on Iran",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/video/newsfeed/2026/10/30/senators-briefed-on-trumps-insane-plan-to-restart-war-on-iran?traffic_source=rss",
+      "publishedAt": "2026-10-30T13:01:43.000Z",
+      "snippet": "Senator Chris Murphy called a reported Trump plan to resume the Iran war potentially devastating after a classified briefing.",
+      "brief": "Senator Chris Murphy has warned that a reported plan by President Donald Trump to restart the war with Iran could have devastating consequences. The source text is a brief feed summary, so it does not describe the plan's details, timeline, or how senators were briefed. Further reporting would be needed to explain what the proposal involves and how Congress is responding.",
+      "basis": "summaries",
+      "why": "Renewed US–Iran war would hit oil prices and regional stability",
+      "eventKey": "trump-plan-restart-iran-war-senators-briefed",
+      "alsoCovered": []
+    },
+    {
+      "id": "8edf72a7",
+      "section": "world",
+      "title": "After Crash, Spain Asks if Its Train System Is Too Old and Prone to Human Error",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/10/29/world/europe/spain-train-crash-renfe.html",
+      "publishedAt": "2026-10-30T17:52:18.000Z",
+      "snippet": "",
+      "brief": "Spain is facing hard questions about rail safety after its second major railway disaster within a year, which has shaken confidence in a network long admired abroad. Early signs point toward a breakdown in the operations room run by Adif, the national rail infrastructure manager, though investigators have not yet established exactly what went wrong. An official says he still trusts the system while probes continue.",
+      "basis": "summaries",
+      "why": "69 dead, second major crash in a year; rail safety questioned",
+      "eventKey": "spain-train-crash-oct-2026",
+      "alsoCovered": [
+        {
+          "source": "El País",
+          "url": "https://elpais.com/ciencia/2026-10-30/desaparecida-en-el-accidente-de-trenes-marta-shahbazi-una-de-las-cientificas-espanolas-mas-brillantes.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/live/2026/oct/30/spain-investigates-toledo-crash-pedro-sanchez-france-italy-protests-latest-news-updates"
+        }
+      ]
+    },
+    {
+      "id": "f09b50b2",
+      "section": "world",
+      "title": "Israel’s Election Results Show No Clear Winner. What Are the Paths to a New Government?",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/10/29/world/middleeast/israel-election-coalition-scenarios.html",
+      "publishedAt": "2026-10-30T06:31:57.000Z",
+      "snippet": "Neither Netanyahu's bloc nor his main challenger reached a majority, so a deadlock is possible while several coalition paths remain.",
+      "brief": "Israel's latest election produced no clear winner, as neither Prime Minister Benjamin Netanyahu's bloc nor his main challenger secured a majority. That leaves a real chance of deadlock, though the sources say several routes to forming a new government remain open. The result has been described as a significant dilemma, with the opposition holding a majority only if certain parties join together.",
+      "basis": "summaries",
+      "why": "Netanyahu lost his majority; coalition math could decide his survival",
+      "eventKey": "israel-election-2026-result",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/oct/30/friday-briefing-israel-has-a-dilemma-can-its-opposition-govern-with-palestinian-parties"
+        }
+      ]
+    },
+    {
+      "id": "9018686e",
+      "section": "world",
+      "title": "North Korea is likely culprit behind $6.3bn crypto hack, ‘largest heist in history’",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/business/2026/oct/29/binance-crypto-exchange-hack",
+      "publishedAt": "2026-10-30T16:35:44.000Z",
+      "snippet": "Binance has frozen about $3bn of the stolen assets and pledged to cover customer losses; North Korea is the suspected culprit.",
+      "brief": "Binance, the world's largest crypto exchange, suffered a hack worth a record $6.3bn, which researchers call the biggest theft on record. Blockchain analysts with high confidence link the attack to North Korea's state-backed hacking unit TraderTraitor, and Binance says it will cover all customer losses. About $3bn of the stolen assets had been frozen so far, while bitcoin fell about 5% in the hours after the news broke.",
+      "basis": "article",
+      "why": "Largest crypto theft ever; Binance froze half and pledges reimbursement",
+      "eventKey": "binance-6bn-crypto-hack-north-korea",
+      "alsoCovered": []
+    },
+    {
+      "id": "fda783be",
+      "section": "ai",
+      "title": "Google value plunges by $500bn as its own AI search hits ad sales",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cm9qzdqpxy48o",
+      "publishedAt": "2026-10-30T12:04:02.000Z",
+      "snippet": "Alphabet's stock fell to a six-month low after it disclosed that AI search summaries are reducing advertising revenue.",
+      "brief": "Alphabet, Google's parent, saw its market value drop by roughly $500bn after reporting that its own AI summaries were cutting into advertising income from traditional searches. Shares fell more than 12% to a six-month low, and the company's total value slid from $3.97 trillion to $3.46 trillion by Thursday's close. Executives remain upbeat about the AI-focused search direction, though investors are worried about the cost of heavy AI spending.",
+      "basis": "article",
+      "why": "First hard evidence AI answers cannibalise search advertising revenue",
+      "eventKey": "google-ai-search-ad-revenue-drop-oct-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "25143a1d",
+        "section": "cleantech",
+        "title": "Are data centers ready to pay double to unclog the grid?",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/are-data-centers-ready-to-pay-double-to-unclog-the-grid",
+        "publishedAt": "2026-10-29T19:27:08.000Z",
+        "snippet": "Hyperscaler groups back a Senate permitting deal that would raise data centers' grid costs, potentially doubling what they pay to connect.",
+        "brief": "A bipartisan Senate permitting bill, the Bipartisan American Affordability and Jobs Act, would require data centers and crypto miners to pay both for new transmission lines and for using the existing grid, a practice historically seen as illegal double charging. Computational loads above 20 megawatts would be forced to pay both costs under the proposal. Industry groups CEBA and ECA have endorsed it, while the Data Center Coalition is still reviewing it, and the Senate is scheduled to vote on November 9.",
+        "basis": "article",
+        "why": "Hyperscalers accept higher interconnection costs to speed grid access",
+        "eventKey": "senate-permitting-deal-data-centers-costs",
+        "alsoCovered": []
+      },
+      {
+        "id": "150ea496",
+        "section": "cleantech",
+        "title": "As Permitting Bill Debate Approaches, Senators Have Fresh Doubts and an Ultimatum",
+        "lang": "en",
+        "source": "Inside Climate News",
+        "url": "https://insideclimatenews.org/news/29102026/senate-debate-on-bipartisan-permitting-bill-approaches",
+        "publishedAt": "2026-10-29T22:34:38.000Z",
+        "snippet": "A Senate initial vote on the permitting reform bill is due in under two weeks, with environmental groups ramping up opposition.",
+        "brief": "U.S. Senate leaders plan an initial vote in under two weeks on a divisive permitting reform bill meant to ease regulatory hurdles that slow energy projects. As the vote approaches, leading environmental groups are increasing their opposition, arguing the measure would cause more harm than good. The source text is cut off, so it does not give the full details of their objections or any vote count.",
+        "basis": "summaries",
+        "why": "Senate permitting vote within two weeks decides transmission timelines",
+        "eventKey": "senate-permitting-reform-vote-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "48223cd3",
+        "section": "cleantech",
+        "title": "FERC’s rulings on PJM, home of ‘Data Centre Alley,’ put the spotlight on states",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/fercs-rulings-on-pjm-home-of-data-centre-alley-put-the-spotlight-on-states",
+        "publishedAt": "2026-10-30T11:37:05.000Z",
+        "snippet": "FERC's PJM decisions shift the fight over data-centre load and grid costs toward state regulators.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Data-centre cost allocation fight now moves to state regulators",
+        "eventKey": "ferc-pjm-rulings-data-centres-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "eab9276b",
+        "section": "cleantech",
+        "title": "Samsung SDI: 60GWh of ESS battery orders in 2026 so far, 53% year-over-year ‘revenue surge’",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/samsung-sdi-60gwh-of-ess-battery-orders-in-2026-so-far-53-year-over-year-revenue-surge",
+        "publishedAt": "2026-10-30T09:52:03.000Z",
+        "snippet": "Samsung SDI reports 60GWh of stationary storage orders so far in 2026 and a swing back to profit in Q3.",
+        "brief": "Samsung SDI reported its third-quarter 2026 earnings, with revenue climbing about 52.6% compared with a year earlier. The company is back in the black after a loss-making stretch, a turnaround that signals its battery business is regaining strength. The feed summary does not detail the energy storage order volume named in the headline, so that figure remains unconfirmed here.",
+        "basis": "summaries",
+        "why": "60GWh ESS orders show Korean cell makers pivoting to storage",
+        "eventKey": "samsung-sdi-q3-2026-results",
+        "alsoCovered": []
+      },
+      {
+        "id": "84da308f",
+        "section": "cleantech",
+        "title": "Xcel Energy rolls out $70B, 5-year capital plan focused on renewables",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/xcel-energy-renewables-wind-earnings/873273",
+        "publishedAt": "2026-10-30T12:00:00.000Z",
+        "snippet": "The utility's five-year plan includes 9.2 GW of renewables and 2.3 GW of storage alongside growing demand.",
+        "brief": "Xcel Energy has unveiled a five-year capital plan worth roughly $70 billion, with renewable energy at its center. The plan includes 9.2 gigawatts of new renewable generation and 2.3 gigawatts of energy storage. CEO Bob Frenzel framed the investment as a way to meet growing electricity demand while still pursuing environmental goals.",
+        "basis": "summaries",
+        "why": "9.2 GW renewables, 2.3 GW storage: utility capex keeps climbing",
+        "eventKey": "xcel-70b-capital-plan-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f6c1bab7",
+        "section": "cleantech",
+        "title": "First Solar cuts sales forecast as tariff uncertainty slows orders",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/10/30/first-solar-cuts-sales-forecast-as-tariff-uncertainty-slows-orders",
+        "publishedAt": "2026-10-30T16:15:00.000Z",
+        "snippet": "First Solar posted $1.23bn in quarterly sales and $571m net income, but lowered its outlook as Section 232 tariff uncertainty delays orders.",
+        "brief": "First Solar reported third-quarter 2026 net sales of $1.23 billion, down 23% from a year earlier as fewer modules went to outside buyers, while net income rose 25% to $571 million. The company cut its full-year sales outlook to $4.6 billion through $4.9 billion and trimmed its volume forecast to 16 to 17 GW. Management tied the slowdown to developers holding back purchases amid tariff rules, and it approved a new $500 million stock buyback.",
+        "basis": "article",
+        "why": "Section 232 tariff uncertainty freezing even domestic solar orders",
+        "eventKey": "first-solar-q3-2026-forecast-cut",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "eccc094a",
+        "section": "ai",
+        "title": "Amazon and Google, the real winners of Anthropic's stock market debut",
+        "originalTitle": "Amazon y Google, los verdaderos ganadores del debut en bolsa de Anthropic",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/tecnologia/2026/10/29/amazon-y-google-los-ganadores-debut-en-bolsa-anthropic",
+        "publishedAt": "2026-10-29T22:00:31.000Z",
+        "snippet": "Anthropic's stock market debut will send much of the raised money to Amazon and Google under multi-year infrastructure contracts lasting about a decade.",
+        "brief": "Amazon and Google are positioned as the biggest beneficiaries of Anthropic's planned stock market debut, rather than venture firms like Sequoia, which each hold under 5%. Amazon invested about $18 billion, including $6.2 billion in convertible notes that could give it up to 12% of the company, while Google holds roughly 8%. Anthropic's first-half 2026 net loss of $80.7 billion was driven mainly by a non-cash accounting charge tied to its share price, according to one analyst.",
+        "basis": "article",
+        "why": "IPO proceeds flow back to cloud partners via decade-long compute deals",
+        "eventKey": "anthropic-ipo-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "a8094dff",
+        "section": "ai",
+        "title": "The two most interesting risks to Anthropic",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/sections/planet-money/2026/10/30/nx-s1-6022515/the-two-most-interesting-risks-to-anthropic",
+        "publishedAt": "2026-10-30T11:00:00.000Z",
+        "snippet": "Anthropic's 94-page S-1 risk disclosure highlights two risks that stand out to analysts.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "S-1 risk factors reveal what could break Anthropic's business",
+        "eventKey": "anthropic-s1-risk-factors-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "9c3c0a12",
+        "section": "ai",
+        "title": "AWS will be a $1T business, Jassy says — but first, it will spend big",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/10/29/aws-will-be-a-1t-business-jassy-says-but-first-it-will-spend-big",
+        "publishedAt": "2026-10-29T23:42:22.000Z",
+        "snippet": "Jassy signalled that Amazon will keep up heavy capital spending on AI cloud infrastructure to pursue a $1 trillion revenue target.",
+        "brief": "Amazon CEO Andy Jassy said on the company's quarterly earnings call that AWS could grow into a trillion-dollar revenue business within five to ten years. Amazon expects roughly $220 billion in 2026 cash capital expenditures, mostly for AWS, and plans to spend meaningfully more in 2027. AWS revenue rose 39% year over year to a $184 billion annualized run rate, and Amazon shares fell about 6% in after-hours trading as investors worried about the spending.",
+        "basis": "article",
+        "why": "Amazon commits to sustained AI capex, driving power demand further",
+        "eventKey": "jassy-aws-trillion-capex-ai",
+        "alsoCovered": []
+      },
+      {
+        "id": "be222b81",
+        "section": "ai",
+        "title": "Making it easier for websites to express AI training preferences",
+        "lang": "en",
+        "source": "OpenAI",
+        "url": "https://openai.com/index/helping-websites-express-ai-training-preferences",
+        "publishedAt": "2026-10-30T09:30:00.000Z",
+        "snippet": "OpenAI will respect a shared robots.txt signal so site operators can state their AI training preferences.",
+        "brief": "OpenAI says it will honor a shared robots.txt signal that lets website operators state their preferences about whether their content may be used to train AI models. The signal is meant to work across participating AI providers, so a site can express its wishes through one standard mechanism instead of separate arrangements. The source text gives no further details on how the signal is formatted or when it takes effect.",
+        "basis": "summaries",
+        "why": "Shared robots.txt signal changes how training data gets collected",
+        "eventKey": "openai-robots-txt-ai-training-preferences",
+        "alsoCovered": []
+      },
+      {
+        "id": "84008c57",
+        "section": "ai",
+        "title": "Wikipedia’s operator says a bad AI copyright ruling could threaten the open web",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/policy/1022880/wikipedia-openai-new-york-times-copyright",
+        "publishedAt": "2026-10-30T09:00:00.000Z",
+        "snippet": "Wikimedia argues that courts should protect LLM training on copyrighted works while not shielding chatbots that reproduce that content to users.",
+        "brief": "The Wikimedia Foundation filed an amicus brief in the lawsuits brought by publishers such as The New York Times against OpenAI and Microsoft, taking neither side. It argues that training AI models on copyrighted work should count as fair use, but that chatbots reproducing articles for users, without a license, should not. The foundation warns that an overly simple ruling could harm free knowledge and open source tools that Wikipedia editors rely on.",
+        "basis": "article",
+        "why": "Court line between training and output reproduction shapes model legality",
+        "eventKey": "wikimedia-ai-copyright-cases-2026",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "c14eaaa7",
+        "section": "world",
+        "title": "Mexico urges respect for treaties after Texas seizes nine islands on Rio Grande",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://english.elpais.com/usa/2026-10-30/mexico-urges-respect-for-treaties-after-texas-seizes-nine-islands-in-rio-grande.html",
+        "publishedAt": "2026-10-30T11:40:49.000Z",
+        "snippet": "Texas authorized its National Guard to access nine Rio Grande islands; Mexico says the boundary commission decides ownership.",
+        "brief": "Texas has claimed nine islands in the Rio Grande between Laredo and McAllen and authorized its National Guard to access them, citing border security. Mexico responded by asking that the 1970 Boundary Treaty be respected, arguing that only the International Boundary and Water Commission can determine the border. Legal experts say the real dispute is whether the islands belong to Texas or the federal government, and the commission's decision is still pending.",
+        "basis": "article",
+        "why": "Border sovereignty clash tests US–Mexico treaty framework amid tensions",
+        "eventKey": "texas-seizes-rio-grande-islands-mexico",
+        "alsoCovered": []
+      },
+      {
+        "id": "4d746766",
+        "section": "world",
+        "title": "JD Vance letter may offer last chance to avert fresh conflict between US and Iran",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/oct/29/jd-vance-letter-may-offer-last-chance-to-avert-fresh-conflict-between-us-and-iran",
+        "publishedAt": "2026-10-29T19:32:24.000Z",
+        "snippet": "Vance sent a letter to Iran's security chief offering to restart talks, with Qatari mediation ahead of a possible new conflict after the midterms.",
+        "brief": "Vice-President JD Vance has sent a personal letter to Mohsen Rezaei, a senior Iranian security figure, offering to restart diplomacy and reduce the risk of a fresh clash. The proposal asks Tehran to commit to nuclear steps in exchange for sanctions relief, with the Strait of Hormuz reopening within a week. Iran's reply is expected soon, but Tehran is wary of irreversible nuclear concessions unless US relief is also guaranteed, and China has been floated as a possible guarantor.",
+        "basis": "article",
+        "why": "Qatar-mediated talks are the main off-ramp before post-midterm escalation",
+        "eventKey": "vance-letter-iran-diplomacy-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "25a34f6c",
+        "section": "world",
+        "title": "Mexico's GDP grows 0.9% in the third quarter",
+        "originalTitle": "El PIB de México crece un 0,9% en el tercer trimestre",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/economia/2026-10-30/el-pib-mexico-crece-un-09-en-el-tercer-trimestre.html",
+        "publishedAt": "2026-10-30T13:20:21.000Z",
+        "snippet": "Mexico's GDP grew 0.9% in the third quarter, driven by industry and services as the recovery continues.",
+        "brief": "Mexico's economy kept recovering in the third quarter, with growth driven by industry and services, according to El País. Expansión reports that year-over-year growth reached 3.2%, and the economy grew 1.9% across January through September compared with the same period of 2025. The sources provided do not give the quarter-on-quarter 0.9% figure from the headline, so that rate is not confirmed here.",
+        "basis": "summaries",
+        "why": "Industry and services lead growth despite tariff pressure",
+        "eventKey": "mexico-gdp-q3-2026",
+        "alsoCovered": [
+          {
+            "source": "Expansión",
+            "url": "https://expansion.mx/economia/2026/10/30/pib-de-mexico-crece-0-9-en-tercer-trimestre-inegi"
+          }
+        ]
+      },
+      {
+        "id": "fb49f276",
+        "section": "world",
+        "title": "Pemex eleva sus ingresos en un entorno de precios del crudo altos, pero reporta una pérdida neta de unos 600 millones de dólares",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/economia/2026-10-30/pemex-eleva-sus-ingresos-en-un-entorno-de-precios-del-crudo-altos-pero-reporta-una-perdida-neta-de-unos-600-millones-de-dolares.html",
+        "publishedAt": "2026-10-30T17:22:19.000Z",
+        "snippet": "Pemex revenue rose 28% on higher crude prices, but peso depreciation and higher duties pushed it to a net loss of about $600 million.",
+        "brief": "Pemex aumentó sus ingresos un 28 % mientras mantuvo estable su producción. Sin embargo, la caída de la moneda nacional y el aumento de las obligaciones fiscales han pesado sobre el balance final. La combinación muestra que crecer en facturación no garantiza beneficios cuando el tipo de cambio y los tributos se encarecen.",
+        "basis": "summaries",
+        "why": "Even high crude can't fix Pemex finances; fiscal burden persists",
+        "eventKey": "pemex-q3-2026-net-loss",
+        "alsoCovered": []
+      },
+      {
+        "id": "d5608118",
+        "section": "world",
+        "title": "Early voting soars in Senate battlegrounds as Trump set to rally in Florida, Kansas and Iowa – live",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/live/2026/oct/30/trump-rally-iowa-kansas-republican-strategy-midterms-live",
+        "publishedAt": "2026-10-30T18:16:11.000Z",
+        "snippet": "Early voting is far ahead of 2022 levels in Senate battlegrounds, with about 10 million more ballots cast, as Trump campaigns in Florida, Kansas and Iowa.",
+        "brief": "Early voting has surged in tight Senate races compared with the 2022 midterms, with more than 43 million ballots already cast, 10 million more than at the same point four years ago. Texas early voting is up 50%, while Maine, Michigan and Kansas have each recorded gains above 30%. In Kansas, Republican Senator Roger Marshall faces a close race and a lawsuit accusing him of charging illegally high interest on medical debt.",
+        "basis": "article",
+        "why": "Turnout 10 million above 2022 signals contested Senate control",
+        "eventKey": "us-midterms-early-voting-trump-rallies-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "65c0b872",
+        "section": "world",
+        "title": "Evacuation of civilians begins in besieged Ukrainian city of Oleshky",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/oct/30/evacuation-besieged-ukrainian-city-oleshky",
+        "publishedAt": "2026-10-30T17:13:48.000Z",
+        "snippet": "A joint relief operation brought the first evacuations from the besieged city in nearly five years of war, with only a few thousand residents, about 50 of them children, left.",
+        "brief": "A joint humanitarian convoy of 25 buses and ambulances reached the Russian-held city of Oleshky on Friday, delivering food and medicine and evacuating residents who wanted to leave. The operation followed a localised ceasefire that allowed roads to be de-mined, and it is the first such evacuation in nearly five years of war. Evacuees must travel through Russia and Belarus to reach Ukraine, and several hundred people, mostly older, have chosen to stay.",
+        "basis": "article",
+        "why": "First civilian evacuation from occupied Kherson-area city in years",
+        "eventKey": "oleshky-civilian-evacuation-oct-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2779,
+      "fresh": 379,
+      "classified": 379,
+      "kept": 273,
+      "stories": 257,
+      "candidates": 47,
+      "picked": 22,
+      "briefs": 20
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 170058,
+      "outputTokens": 50409,
+      "costUsd": 0.1125
+    },
+    "notes": []
+  }
+}
