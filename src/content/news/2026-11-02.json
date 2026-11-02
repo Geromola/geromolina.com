@@ -1,0 +1,381 @@
+{
+  "date": "2026-11-02",
+  "generatedAt": "2026-11-02T22:09:43.713Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "386f9f60",
+      "section": "world",
+      "title": "Iran Says It Would Reopen Strait of Hormuz in 2 Days as Part of U.S. Deal",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/02/world/middleeast/iran-deal-strait-of-hormuz.html",
+      "publishedAt": "2026-11-02T20:25:33.000Z",
+      "snippet": "Iranian officials say the strait could reopen within two days under a U.S. deal, while Qatari mediators press talks as war preparations continue.",
+      "brief": "Iranian officials said they see some progress in talks that could reopen the Strait of Hormuz, even as they prepare for possible all-out war. A Qatari delegation arrived in Tehran on Monday to meet Iran's foreign minister and keep the negotiations moving. The source does not specify the two-day timeline or the terms of any U.S. deal, so those details remain unconfirmed.",
+      "basis": "summaries",
+      "why": "A deal could end the war's oil shock; Qatari mediation is key.",
+      "eventKey": "iran-hormuz-reopening-us-deal-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "5a1fe395",
+      "section": "world",
+      "title": "Oil price falls amid hope of a breakthrough to end Iran war",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/business/2026/nov/02/oil-price-falls-amid-hope-of-a-breakthrough-to-end-iran-war",
+      "publishedAt": "2026-11-02T17:14:23.000Z",
+      "snippet": "Brent fell to $105.55, its lowest since mid-October, lifting airline shares and lowering government borrowing costs.",
+      "brief": "Brent crude fell more than 6% on Monday to about $105.55 a barrel, its lowest point since mid-October, after Tehran said indirect talks with Washington were still underway. Iran's foreign minister described the mediated exchanges as intensive, while Qatar tried to free over $6bn in Iranian funds to help reopen the Strait of Hormuz. Analysts warned that Donald Trump's tough rhetoric could still derail progress.",
+      "basis": "article",
+      "why": "Brent at its lowest since October; borrowing costs are easing too.",
+      "eventKey": "oil-price-falls-iran-war-breakthrough-hopes-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "2540e51b",
+      "section": "world",
+      "title": "Trump, Vance and candidates campaign on last day before US midterms",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/2/trump-vance-and-candidates-make-final-push-before-us-midterms?traffic_source=rss",
+      "publishedAt": "2026-11-02T17:07:14.000Z",
+      "snippet": "Trump and Vance made final campaign stops before the US midterm elections, which will determine control of Congress.",
+      "brief": null,
+      "basis": "summaries",
+      "why": "Control of Congress decides the rest of Trump's agenda.",
+      "eventKey": "us-midterms-final-campaign-day-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "fdb17119",
+      "section": "world",
+      "title": "Russian bombing kills 26 people at Ukraine aid centre, Kyiv says",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cjy56dndlyz0o",
+      "publishedAt": "2026-11-02T21:10:04.000Z",
+      "snippet": "Officials say at least nine heavy aerial bombs struck a southern Ukrainian village, killing 26 people at an aid centre.",
+      "brief": "Russian aerial bombs struck a aid distribution centre in the village of Komyshuvakha in southern Zaporizhzhia, killing at least 26 people, according to Ukrainian officials. Five others were injured, and President Zelensky said a second strike hit where people were sheltering after an initial attack on a school used for humanitarian needs. The Russian military has not publicly commented, and a regional day of mourning has been declared for Tuesday as peace talks are due to resume.",
+      "basis": "article",
+      "why": "Deadliest strike in weeks, right after the humanitarian truce collapsed.",
+      "eventKey": "russia-bombing-ukraine-aid-centre-26-killed",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/2/russian-bombing-of-ukrainian-aid-centre-kills-24-people-zelenskyy?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "8cda3065",
+      "section": "world",
+      "title": "DOJ asks for Supreme Court to intervene on California ballot demands",
+      "lang": "en",
+      "source": "NPR",
+      "url": "https://npr.org/2026/11/02/nx-s1-6023802/supreme-court-california-voting-ballots-trump",
+      "publishedAt": "2026-11-02T16:34:17.000Z",
+      "snippet": "The administration asks the Supreme Court to reverse lower-court rulings blocking removal of ballots from thousands of voters it calls likely noncitizens.",
+      "brief": "The Justice Department has asked the Supreme Court to step in after lower courts refused its request to force California to discard ballots from thousands of people it claims are likely noncitizens. The filing seeks an emergency order covering roughly 20,000 mail-in ballots, arriving just before the November 3 election. The outcome could determine whether those ballots are counted in a contest where voter eligibility checks are under intense scrutiny.",
+      "basis": "summaries",
+      "why": "Supreme Court ruling could set noncitizen ballot rules before results.",
+      "eventKey": "doj-california-ballots-supreme-court",
+      "alsoCovered": [
+        {
+          "source": "The New York Times",
+          "url": "https://nytimes.com/2026/11/02/us/politics/trump-supreme-court-california-ballots.html"
+        }
+      ]
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "7cfb2656",
+        "section": "cleantech",
+        "title": "Trump bulk power equipment ban sparks industry pushback: ‘Let’s not reinvent the wheel’",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/trump-bulk-power-equipment-ban-sparks-industry-pushback-lets-not-reinvent-the-wheel",
+        "publishedAt": "2026-11-02T12:42:19.000Z",
+        "snippet": "Storage industry groups are pushing back on the August emergency order that bans certain foreign-made grid equipment imports.",
+        "brief": "President Trump issued an emergency executive order on 26 August that restricts imports of certain foreign-made power equipment. The move has drawn criticism and quiet worry from companies working in battery storage, who are voicing concern about its reach. The source offers few specifics beyond that reaction, so the scale of the restrictions and any next steps remain unclear from this coverage.",
+        "basis": "summaries",
+        "why": "Foreign grid equipment ban threatens storage project supply chains and timelines.",
+        "eventKey": "trump-bulk-power-equipment-import-ban",
+        "alsoCovered": []
+      },
+      {
+        "id": "3949c139",
+        "section": "cleantech",
+        "title": "Exelon eyes $8B in energy storage, partly to address PJM supply crunch",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/exelon-energy-storage-new-jersey-earnings/873423",
+        "publishedAt": "2026-11-02T14:26:00.000Z",
+        "snippet": "Exelon plans about $8 billion in storage and transmission investment, positioned as a response to PJM's generation shortfall.",
+        "brief": "Exelon is considering about $8 billion in energy storage investments, according to CEO Calvin Butler. He said the PJM grid operator is not adding new generation quickly enough, and the company believes storage and transmission spending can help close that gap. The source summary gives no further detail on project timing or specific plans, so the scope of the investment remains unclear.",
+        "basis": "summaries",
+        "why": "$8B utility bet shows storage filling PJM's capacity gap.",
+        "eventKey": "exelon-8b-storage-pjm",
+        "alsoCovered": []
+      },
+      {
+        "id": "803c7e9a",
+        "section": "cleantech",
+        "title": "Electric trucks hit 50% of China’s heavy truck sales, diesel demand falls",
+        "lang": "en",
+        "source": "Electrek",
+        "url": "https://electrek.co/2026/11/02/electric-trucks-50-percent-china-heavy-truck-sales-diesel-demand",
+        "publishedAt": "2026-11-02T14:44:40.000Z",
+        "snippet": "Electric trucks took 33,100 heavy-truck sales in September, and China's diesel demand is on track to drop about 230,000 barrels per day this year.",
+        "brief": "Electric trucks made up 50.3% of heavy trucks sold in China in September, about 33,100 units and up 37% from a year earlier, while the overall heavy-truck market shrank 21%. Kpler expects China's diesel demand to fall about 230,000 barrels per day this year as battery and LNG trucks take over. Electric trucks are still only around 8% of the fleet, so the shift is early.",
+        "basis": "article",
+        "why": "Half of China's heavy trucks electric; diesel demand down 230k bpd.",
+        "eventKey": "china-electric-trucks-half-heavy-sales",
+        "alsoCovered": []
+      },
+      {
+        "id": "bb62a77e",
+        "section": "cleantech",
+        "title": "Envision claims world first with 800 V DC architecture for AI data center",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/02/envision-claims-world-first-with-800-v-dc-architecture-for-ai-data-center",
+        "publishedAt": "2026-11-02T14:13:08.000Z",
+        "snippet": "Envision's system combines a solid-state transformer and battery storage in an 800 V DC design that fits more compute in the same footprint.",
+        "brief": "Envision Energy says it has deployed what it calls the world's first commercial integrated 800 V DC power system in a large data center, at its Galaxy AI campus in Ulanqab, China. The system pairs solid-state transformers with battery storage, converting 10 kV medium voltage to an 800 V DC bus while its Dubhe Controller balances supply with fluctuating GPU loads. The campus targets 3 GW capacity with over 80% renewable power, and the approach is expected to scale through its Mission Gobi program toward 5 GW by 2030.",
+        "basis": "article",
+        "why": "Solid-state transformer plus batteries could reshape data-centre power design.",
+        "eventKey": "envision-800v-dc-ai-datacenter",
+        "alsoCovered": []
+      },
+      {
+        "id": "9e42810b",
+        "section": "cleantech",
+        "title": "Solar sector corporate funding increases 45% through three quarters of 2026",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/02/solar-sector-corporate-funding-increases-45-through-three-quarters-of-2026",
+        "publishedAt": "2026-11-02T13:50:16.000Z",
+        "snippet": "Mercom counts $25.1 billion raised across venture, public markets and debt, a sharp rise on the prior year.",
+        "brief": "Mercom Capital Group reports that corporate funding in the global solar sector rose 45% year over year through the first three quarters of 2026, reaching $25.1 billion across 170 deals. Debt financing drove most of the gain, totaling $20.4 billion, while venture capital fell 31% to $2.0 billion. Mercom also noted that financing conditions stayed challenging due to U.S. tax changes, trade restrictions, and rising equipment costs.",
+        "basis": "article",
+        "why": "$25.1B raised shows solar capital flowing despite policy headwinds.",
+        "eventKey": "mercom-solar-funding-q3-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2256b714",
+        "section": "cleantech",
+        "title": "Germany’s Hydrogen Pipeline Reached Marl. Its Market Still Needs to Add Up.",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/02/germany-hydrogen-backbone-marl-paying-customers",
+        "publishedAt": "2026-11-02T17:11:57.000Z",
+        "snippet": "Renewable hydrogen from the Lingen commissioning reached Marl, about 120 km away, using converted gas pipelines; the commercial case is still unproven.",
+        "brief": "RWE and partners said renewable hydrogen made during commissioning at Lingen reached the Marl Chemical Park, about 120 kilometres away, on August 4, 2026, with electrolysers and converted gas pipelines working together. The announcement did not disclose the quantity delivered, the price paid, or which existing hydrogen supply was displaced. The piece argues that finishing a pipeline is different from proving a competitive market, citing a 15-year RWE supply deal with TotalEnergies for about 30,000 tonnes a year to Leuna from 2030 as a stronger commercial signal.",
+        "basis": "article",
+        "why": "Converted gas pipelines work technically; hydrogen economics remain the bottleneck.",
+        "eventKey": "germany-hydrogen-backbone-marl-aug-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "28602abe",
+        "section": "ai",
+        "title": "Anthropic reduces losses and improves revenue ahead of stock market listing",
+        "originalTitle": "Anthropic reduce las pérdidas y mejora los ingresos antes de la salida a Bolsa",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/economia/2026-11-02/anthropic-reduce-las-perdidas-y-mejora-los-ingresos-antes-de-la-salida-a-bolsa.html",
+        "publishedAt": "2026-11-02T15:30:12.000Z",
+        "snippet": "Anthropic's quarterly revenue reportedly reached $17 billion, with losses narrowing ahead of a planned public listing.",
+        "brief": "Anthropic filed updated financial figures with the US SEC ahead of its planned November stock market listing, which could be the largest IPO on record. For the third quarter, revenue rose to 17,000 million dollars, up 47%, while losses narrowed to 23,300 million dollars from 66,300 million in the second quarter. Analysts expect a valuation of 1.5 to 2 trillion dollars and fundraising of about 100,000 million dollars.",
+        "basis": "article",
+        "why": "$17B quarterly revenue sets the benchmark for an Anthropic IPO valuation.",
+        "eventKey": "anthropic-q3-2026-revenue-ipo",
+        "alsoCovered": []
+      },
+      {
+        "id": "fc20c678",
+        "section": "ai",
+        "title": "OpenAI pitches data center power plants as a way to protect nearby areas",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1024604/openai-data-center-grid-protection-program",
+        "publishedAt": "2026-11-02T18:01:30.000Z",
+        "snippet": "The pilot would let a Georgia data centre shed up to 1,000 MW during emergencies, roughly powering 700,000 homes' air conditioners.",
+        "brief": "OpenAI announced a pilot called the Grid Protectors Program for an upcoming data center in Effingham County, Georgia, promising to release as much as 1,000 megawatts to utilities during severe weather or crises. The company says that is enough to run air conditioners for roughly 700,000 households. The pitch comes as local opposition to data centers grows nationwide, and it reframes these facilities as grid assets rather than burdens.",
+        "basis": "article",
+        "why": "1 GW of flexible data-centre load could ease interconnection fights.",
+        "eventKey": "openai-grid-protectors-program",
+        "alsoCovered": []
+      },
+      {
+        "id": "9facb008",
+        "section": "ai",
+        "title": "Anthropic's internal AI use, at retail prices, now exceeds its employee pay",
+        "lang": "en",
+        "source": "businessinsider.com",
+        "url": "https://businessinsider.com/anthropic-claude-internal-ai-use-exceeds-employee-pay-tokens-2026-11",
+        "publishedAt": "2026-11-02T16:40:29.000Z",
+        "snippet": "Business Insider reports Anthropic's employees' internal AI usage, valued at retail token prices, now exceeds their salaries.",
+        "brief": "Anthropic's IPO filing shows that, starting in April, the value of Claude used internally, priced at the rates it charges customers, passed its monthly employee pay excluding stock awards. That internal usage grew more than 250-fold from January to September. The company stresses this is a valuation at retail prices rather than extra cash spent, but it signals how AI is reshaping staffing economics, with over 90% of September's added code written by Claude.",
+        "basis": "article",
+        "why": "Token spend exceeding salaries signals where agentic work costs are heading.",
+        "eventKey": "anthropic-internal-ai-use-exceeds-pay",
+        "alsoCovered": []
+      },
+      {
+        "id": "12b62b90",
+        "section": "ai",
+        "title": "Elon Musk throttles Grok Bot limits due to ‘unsustainably high’ costs",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/02/elon-musk-throttles-grok-bot-limits-due-to-unsustainably-high-costs",
+        "publishedAt": "2026-11-02T16:23:21.000Z",
+        "snippet": "Musk cut Grok Bot usage limits, citing costs he calls unsustainably high despite rapid user growth.",
+        "brief": "Some Grok Bot subscribers found their weekly usage caps suddenly near full over Halloween weekend, even without activity. Elon Musk confirmed on X that the change was deliberate, blaming expenses that outweighed what the service brings in. He has not said how limits will change going forward, and the company has touted Grok Bot's growth and a profitable AI division.",
+        "basis": "article",
+        "why": "Inference costs are biting even well-funded labs; expect pricing to tighten.",
+        "eventKey": "grok-bot-limits-costs",
+        "alsoCovered": []
+      },
+      {
+        "id": "57508526",
+        "section": "ai",
+        "title": "AI chatbots are becoming political advisers. Their answers can mislead voters",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/02/nx-s1-6025407/chatbots-midterms-voting-advice",
+        "publishedAt": "2026-11-02T20:02:41.000Z",
+        "snippet": "Chatbots are giving voters wrong election facts and recommending candidates, with millions of Americans now using them for voting information.",
+        "brief": "Millions of Americans are now using AI chatbots to look up election information, according to NPR. The chatbots are sometimes getting basic voting facts wrong and even recommending candidates. That raises concern that the tools could shape how people vote, even though the summary does not detail specific errors or studies.",
+        "basis": "summaries",
+        "why": "Election misinformation from chatbots invites new regulatory pressure on labs.",
+        "eventKey": "ai-chatbots-election-misinformation-voters",
+        "alsoCovered": []
+      },
+      {
+        "id": "721535ba",
+        "section": "ai",
+        "title": "Astra can read and write weights to improve Qwen",
+        "lang": "en",
+        "source": "rikiyat.github.io",
+        "url": "https://rikiyat.github.io/blog/weight-space-programming",
+        "publishedAt": "2026-11-02T18:21:28.000Z",
+        "snippet": "A technical write-up proposes reading and editing a model's weights directly to improve Qwen, drawing strong community attention.",
+        "brief": "Researchers report that frontier language model Astra can read neural network weights to infer what a network was trained to do, identifying the game behind four policies and the shape behind diffusion models without running them. In a language model experiment, Astra found a reasoning-loop flaw in Qwen3.5-0.8B's weights that its model card warns about, and edited 0.016% of weights to raise MATH-500 accuracy from 7.9% to 48.1%. The authors call this approach Weight-Space Programming and describe it as early results rather than a proven method.",
+        "basis": "article",
+        "why": "Direct weight editing on open models is worth a practitioner's look.",
+        "eventKey": "astra-weight-space-programming-qwen",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "c9f636e8",
+        "section": "world",
+        "title": "Russia resumes attacks in Ukraine after the longest humanitarian truce of the war",
+        "originalTitle": "Rusia reanuda ataques en Ucrania tras el fin de la tregua humanitaria más larga de la guerra",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/mundo/2026/11/02/rusia-reanuda-ataques-ucrania-fin-tregua-humanitaria-jerson",
+        "publishedAt": "2026-11-02T17:19:59.000Z",
+        "snippet": "The six-day pause let hundreds of civilians leave Kherson and brought aid in, but Ukraine says Moscow refused to extend it.",
+        "brief": "Russia resumed attacks on the Kherson region on Monday, November 2, hours after a humanitarian truce ended. The pause, which began October 27, was the longest local lull in the fighting since the invasion began, and it let crews evacuate civilians and deliver food and medicine to Oleshki. Ukrainian officials reported a drone strike on a medical facility in Kherson city, and the two sides plan to resume U.S.-mediated talks this month.",
+        "basis": "article",
+        "why": "Moscow refused to extend the pause, undercutting Turkey-hosted peace talk hopes.",
+        "eventKey": "russia-ukraine-truce-ends-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2bfa0ccf",
+        "section": "world",
+        "title": "Trump’s Election Fraud Reward Raises Fears of Vigilantism, Local Officials Say",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/02/us/politics/trump-midterms-election-fraud-reward.html",
+        "publishedAt": "2026-11-02T22:05:30.000Z",
+        "snippet": "",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Bounties for fraud reports risk intimidating poll workers on election day.",
+        "eventKey": "trump-election-fraud-reward-vigilantism-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d484dea1",
+        "section": "world",
+        "title": "Democrats have high hopes for midterms - but are the polls right?",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cmg47p3edv4do",
+        "publishedAt": "2026-11-02T00:25:12.000Z",
+        "snippet": "Last-minute deciding voters and sampling problems mean the polling lead for Democrats in the midterms is not certain.",
+        "brief": "Democrats enter the November midterms with strong expectations, as polls show them leading in well over the 218 seats needed to win the House and tied or narrowly ahead in key Senate races. The article points to recent misses, including Trump outperforming surveys in 2016 and 2024 and surprising primary results, which show polls can be wrong. Analysts note that Trump's low approval and polling averages still favour a good night for Democrats, though Republicans' cash advantage and calcified electorate could temper that.",
+        "basis": "article",
+        "why": "Sampling errors could flip expectations on the Democrats' lead.",
+        "eventKey": "us-midterms-2026",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/commentisfree/2026/nov/02/us-midterms-donald-trump-democrats-us-politics"
+          },
+          {
+            "source": "Expansión",
+            "url": "https://expansion.mx/mundo/2026/11/01/que-elecciones-intermedias-eu-eleccion-donald-trump"
+          }
+        ]
+      },
+      {
+        "id": "ca9af5eb",
+        "section": "world",
+        "title": "‘Sharper, longer slowdown’ predicted for Australian economy as fifth interest rate hike looms",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/australia-news/2026/nov/02/australia-economy-fifth-interest-rate-hike-looms",
+        "publishedAt": "2026-11-02T06:57:29.000Z",
+        "snippet": "The Reserve Bank of Australia is expected to raise rates for a fifth time, pushing the cash rate to its highest since 2008 amid Middle East war pressures.",
+        "brief": "Major banks now expect Australia's economy to slow more sharply and for longer, as the Reserve Bank is widely expected to raise interest rates for a fifth time on Tuesday. CBA cut its real GDP forecast for mid-next year to 1%, nearly half its earlier estimate, citing a prolonged Middle East conflict that has pushed oil above $US110 a barrel and collapsing house prices. NAB also expects unemployment to climb as high as 5.4%, and AMP's chief economist puts recession risk at up to 45% if the hike goes ahead.",
+        "basis": "article",
+        "why": "Shows how the war's energy shock is forcing central banks to tighten.",
+        "eventKey": "rba-fifth-rate-hike-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2764,
+      "fresh": 312,
+      "classified": 312,
+      "kept": 220,
+      "stories": 204,
+      "candidates": 45,
+      "picked": 21,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 143648,
+      "outputTokens": 39339,
+      "costUsd": 0.0981
+    },
+    "notes": []
+  }
+}
