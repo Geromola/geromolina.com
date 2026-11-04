@@ -1,0 +1,401 @@
+{
+  "date": "2026-11-04",
+  "generatedAt": "2026-11-04T20:16:34.524Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "7a8e0522",
+      "section": "world",
+      "title": "Democrats Win Big",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/03/world/us-midterms-trump-iran-ukraine.html",
+      "publishedAt": "2026-11-04T05:45:07.000Z",
+      "snippet": "Democrats flipped key seats in Republican strongholds, a sign of voter rebuke of Trump in the midterm elections.",
+      "brief": "Democrats won control of both houses of Congress in the midterm elections, flipping key seats in Republican strongholds and taking statehouses as well. Voters cited high prices, corruption and the spread of data centers, and the outcome gives Democrats the power to check President Trump's agenda and open investigations into his administration. Counting was still ongoing in some races when the results were reported.",
+      "basis": "summaries",
+      "why": "Divided government ahead: Trump's agenda now faces a hostile Congress",
+      "eventKey": "us-midterms-2026-democrats-win-congress",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/articles/cwz0v5lv30lyo"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/04/democrats-house-midterm-elections-results"
+        },
+        {
+          "source": "Inside Climate News",
+          "url": "https://insideclimatenews.org/news/04112026/democrats-seize-congress-statehouses-in-referendum-on-the-economy"
+        },
+        {
+          "source": "Politico",
+          "url": "https://politico.com/news/2026/11/03/midterms-blue-wave-gop-wipeout-01147461"
+        },
+        {
+          "source": "Expansión",
+          "url": "https://expansion.mx/mundo/2026/11/03/un-tsunami-democrata-pone-presion-sobre-trump"
+        }
+      ]
+    },
+    {
+      "id": "8048043a",
+      "section": "world",
+      "title": "Vance, in Break With Trump, Blames Iran War for Republicans’ 2026 Midterm Losses",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/04/us/politics/vance-iran-war-midterms-trump.html",
+      "publishedAt": "2026-11-04T19:54:10.000Z",
+      "snippet": "Vance publicly blamed the Iran war for the midterm losses, in an apparent break with Trump's agenda and messaging.",
+      "brief": "Vice President JD Vance publicly blamed the Iran war for Republican losses in the 2026 midterm elections, in a social media post that criticized the administration's agenda and messaging. The critique appeared to be an effort to distance him from President Trump. Trump responded that the claim was largely true, while insisting Republicans would have won if he had been on the ballot.",
+      "basis": "summaries",
+      "why": "Open GOP rift over Iran war shapes 2028 succession fight",
+      "eventKey": "us-midterms-2026-results-trump-reaction",
+      "alsoCovered": [
+        {
+          "source": "El País",
+          "url": "https://elpais.com/us/2026-11-04/las-midterms-2026-en-vivo.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/live/2026/nov/04/midterm-elections-results-senate-house-michigan-maine-mississippi-latest-updates"
+        }
+      ]
+    },
+    {
+      "id": "c2f904a5",
+      "section": "world",
+      "title": "Zelenskyy says 40 now confirmed dead after ‘insane’ Russian attack on school – as it happened",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/live/2026/nov/04/eu-ukraine-russia-france-germany-us-nato-europe-latest-news",
+      "publishedAt": "2026-11-04T16:09:19.000Z",
+      "snippet": "Zelenskyy says the death toll from the Russian strike on a Zaporizhzhia school has reached 40, with the Kremlin signalling continued support for Trump's peace efforts.",
+      "brief": "Ukrainian president Volodymyr Zelenskyy says 40 people are now confirmed dead after a Russian strike on a school in Komyshuvakha, in the Zaporizhzhia region, on Monday. He added that more than 30 others may still be trapped under the rubble as search and rescue work continues. Zelenskyy criticised the world for its muted response and called for a strong reaction, just days before key trilateral peace talks involving the US and Russia.",
+      "basis": "article",
+      "why": "One of the war's deadliest strikes as peace efforts continue",
+      "eventKey": "russia-strike-zaporizhzhia-school-40-dead",
+      "alsoCovered": []
+    },
+    {
+      "id": "6d9220ce",
+      "section": "world",
+      "title": "US stocks rise, dollar slides as investors digest Democrats’ midterm victories",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/business/2026/nov/04/us-dollar-slides-democrats-midterm-election-win-growth-fears",
+      "publishedAt": "2026-11-04T16:38:28.000Z",
+      "snippet": "The Dow rose nearly 3% and bond yields fell as investors reassessed Trump's policy outlook after Democrats' midterm wins.",
+      "brief": "US stocks rallied after Democrats won control of the Senate and House in the midterm elections, with the Dow up close to 3% and the Nasdaq and S&P 500 each gaining about 2% by midday in New York. The dollar hit a one-month low as investors moved into Treasuries, which pushed the 10-year yield down to 4.918%, reflecting hopes that Trump's policymaking would be restrained. Analysts caution that Trump can still shape markets through tariffs, foreign policy and existing regulations, and AI shares were under pressure over possible tighter oversight.",
+      "basis": "article",
+      "why": "Dow up nearly 3%, yields down: markets price less policy chaos",
+      "eventKey": "us-stocks-rally-midterms-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "bf7e97c6",
+      "section": "world",
+      "title": "Mike Johnson Won’t Seek Re-Election as House Leader After GOP Midterm Losses",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/04/us/mike-johnson-reelection-house-leader.html",
+      "publishedAt": "2026-11-04T19:22:51.000Z",
+      "snippet": "Johnson told Republicans he will not seek to remain leader, following heavy House losses in the midterms that ended GOP control.",
+      "brief": "House Speaker Mike Johnson has told Republicans he will step down from his leadership post, according to a person familiar with his remarks. The decision follows heavy losses for the party in the midterm elections. The source summary does not detail when the change takes effect or who might replace him.",
+      "basis": "summaries",
+      "why": "GOP leadership vacuum; race for minority leader starts now",
+      "eventKey": "mike-johnson-not-seek-house-leader-midterms-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "7d2a7478",
+        "section": "cleantech",
+        "title": "How Democrats’ midterm sweep will rewire energy and data center policy",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/how-democrats-midterm-sweep-will-rewire-energy-and-data-center-policy",
+        "publishedAt": "2026-11-04T15:37:46.000Z",
+        "snippet": "Wins in Texas, Ohio and Wisconsin could shift energy and data-centre policy quickly after the midterms.",
+        "brief": "Democrats swept key races in the November midterms, taking both chambers of Congress and winning several governorships and utility commission seats. The shift matters most at the state level, where new leaders in Texas, Wisconsin, Ohio, Georgia, and Nevada have pledged to pause or restrict data center construction over energy and water use and rising utility bills. Analysts say these policies could slow data center projects and reshape utility oversight.",
+        "basis": "article",
+        "why": "Texas, Ohio, Wisconsin wins could reshape data-centre power rules",
+        "eventKey": "midterms-energy-data-center-policy",
+        "alsoCovered": []
+      },
+      {
+        "id": "cd1a2025",
+        "section": "cleantech",
+        "title": "Trump ban on foreign grid components sparks industry concern over practicality, cost",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/trump-ban-on-foreign-grid-components-sparks-industry-concern-over-practical/873752",
+        "publishedAt": "2026-11-04T16:41:26.000Z",
+        "snippet": "Industry groups say a Trump order banning foreign grid components by geography rather than capability could raise costs and deter investment.",
+        "brief": "Stakeholders in the utility sector welcomed the goal of securing the electric grid behind a recent order restricting foreign-made grid components. However, they argue that limiting restrictions by geography rather than by a component's function and capability misses the real security concern. Industry members warn that this approach could threaten investment, though the source coverage offers few specifics on costs or timelines.",
+        "basis": "summaries",
+        "why": "Geography-based component ban could raise transmission costs and delays",
+        "eventKey": "trump-foreign-grid-components-ban",
+        "alsoCovered": []
+      },
+      {
+        "id": "bcc75efe",
+        "section": "cleantech",
+        "title": "Amid a blue wave, voters rebuke monopoly utilities",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/amid-a-blue-wave-voters-rebuke-monopoly-utilities",
+        "publishedAt": "2026-11-04T12:43:20.000Z",
+        "snippet": "Georgia and Michigan voters punished utilities over rate increases and political spending, a signal for grid policy.",
+        "brief": "Voters in Georgia and Michigan pushed back against investor-owned utilities on Tuesday, electing Democrats to Georgia's five-seat Public Service Commission for the first time in two decades and approving a Michigan measure barring utilities from donating to state politicians. Utility bills in both states have climbed roughly 30% since 2020, and regulators typically approve most of the rate increases companies request. Critics say the Michigan ban still leaves room for utilities to fund ballot campaigns and outside groups, a gap that could shape future fights.",
+        "basis": "article",
+        "why": "Rate backlash in Georgia, Michigan signals tougher utility regulation",
+        "eventKey": "utility-rate-backlash-midterms-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "aea03f3d",
+        "section": "cleantech",
+        "title": "LG Energy Solution reports 60% growth in ESS shipments, 160GWh order backlog",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/lg-energy-solution-reports-60-growth-in-ess-shipments-160gwh-order-backlog",
+        "publishedAt": "2026-11-04T15:32:22.000Z",
+        "snippet": "LG Energy Solution's energy storage shipments grew strongly, and its order backlog reached 160 GWh.",
+        "brief": "LG Energy Solution reported 28% quarter-on-quarter revenue growth in Q3 2026, with energy storage system shipments cited as a main driver. The source summary does not give the 60% shipment growth or the 160GWh order backlog figures mentioned in the headline, so those numbers cannot be confirmed from this text. The company's results are a sign of rising demand for grid and commercial battery storage.",
+        "basis": "summaries",
+        "why": "160 GWh backlog shows Korean LFP storage pivot is working",
+        "eventKey": "lg-energy-solution-q3-2026-ess",
+        "alsoCovered": []
+      },
+      {
+        "id": "17bb253c",
+        "section": "cleantech",
+        "title": "China-based CATL, global leader in energy storage, signs on for a major Mexican solar project",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/business/china-catl-mexican-solar-project",
+        "publishedAt": "2026-11-03T22:27:21.000Z",
+        "snippet": "CATL, a leading battery storage maker, will supply storage for a large Mexican solar project as the energy ministry seeks storage to stabilise the grid.",
+        "brief": "Mexico's Energy Ministry is reportedly turning to battery energy storage systems to help connect more solar and wind plants to the grid while keeping it stable. The source names China-based CATL, a global energy storage leader, as a participant in a major Mexican solar project. The text provides no contract value, capacity figures, or timeline, so the scale of the deal remains unclear.",
+        "basis": "summaries",
+        "why": "Chinese storage entering Mexico's grid; nearshoring meets energy policy",
+        "eventKey": "catl-mexico-solar-bess-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "89a48572",
+        "section": "cleantech",
+        "title": "Q&A: What is in the global ‘roadmap’ for transitioning away from fossil fuels?",
+        "lang": "en",
+        "source": "Carbon Brief",
+        "url": "https://carbonbrief.org/qa-what-is-in-the-global-roadmap-for-transitioning-away-from-fossil-fuels",
+        "publishedAt": "2026-11-04T15:23:07.000Z",
+        "snippet": "Brazil produced a first-of-its-kind global roadmap for moving away from fossil fuels, which the Q&A explains in detail.",
+        "brief": "Brazil, host of COP30, released a voluntary global roadmap for moving away from coal, oil and gas, describing the shift as urgent, inevitable and possible. Countries are asked to first diagnose their readiness using a self-assessment tool called the Belém readiness index, then pursue tailored policy levers in three phases ending by 2033. The roadmap sits outside the UN negotiation process and will be discussed as COP31 begins in Turkey.",
+        "basis": "article",
+        "why": "First global fossil phase-out roadmap; frames COP30 negotiations",
+        "eventKey": "cop30-fossil-fuel-transition-roadmap",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "7f062f11",
+        "section": "ai",
+        "title": "Texas was the new epicenter of the AI data center buildout. That might be kaput.",
+        "lang": "en",
+        "source": "MIT Technology Review",
+        "url": "https://technologyreview.com/2026/11/04/1148043/texas-was-the-new-epicenter-of-the-ai-data-center-buildout-that-might-be-kaput",
+        "publishedAt": "2026-11-04T18:50:55.000Z",
+        "snippet": "Democratic wins in Texas could threaten the state's status as the leading hub for AI data center construction.",
+        "brief": "Democrats won Texas's US Senate, governor and state House races, and they made data centers a central campaign issue. Governor-elect Gina Hinojosa has pushed for a full moratorium on new facilities, after Governor Abbott ordered a state regulator to halt data center permits in September. Developers worry this could slow current projects and stall large AI buildouts, though local officials and construction unions may resist sweeping state restrictions.",
+        "basis": "article",
+        "why": "Texas data-centre boom at risk; compute siting could shift",
+        "eventKey": "texas-ai-data-center-midterms-risk",
+        "alsoCovered": []
+      },
+      {
+        "id": "e0b313a3",
+        "section": "ai",
+        "title": "Kimi K3.1 Pro model weights are out",
+        "lang": "en",
+        "source": "huggingface.co",
+        "url": "https://huggingface.co/moonshotai/Kimi-K3.1-Pro",
+        "publishedAt": "2026-11-04T15:30:30.000Z",
+        "snippet": "Moonshot AI published the Kimi K3.1 Pro weights on Hugging Face, making the open-weight model available to download.",
+        "brief": "Moonshot has released Kimi K3.1 Pro with open weights, describing it as a natively multimodal agentic model and its most capable 3T-class model so far. It is post-trained from Kimi K3 and supports a 1-million-token context window, with claimed gains in coding, 3D creation, and financial research. Developers can access it through the Kimi platform API using the kimi-k3.1-pro identifier, and it ships under the Kimi K3.1 Pro License.",
+        "basis": "article",
+        "why": "New Chinese open-weight frontier model to download and test",
+        "eventKey": "kimi-k3-1-pro-weights-release",
+        "alsoCovered": []
+      },
+      {
+        "id": "733f5f46",
+        "section": "ai",
+        "title": "The blue wave puts the AI market boom in quarantine",
+        "originalTitle": "La ola azul pone en cuarentena el auge de la IA en los mercados",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://cincodias.elpais.com/mercados-financieros/2026-11-04/la-ola-azul-pone-en-cuarentena-el-auge-de-la-ia-en-los-mercados-y-anade-volatilidad.html",
+        "publishedAt": "2026-11-04T11:21:48.000Z",
+        "snippet": "Democratic gains could bring local moratoria on data-centre construction, though analysts expect no change to federal AI regulation.",
+        "brief": "Democratic victories in Texas, Ohio and Georgia could open the door to possible moratoriums on building data centers, according to the source. Analysts, however, rule out a change in federal regulation. The summary gives no further figures or timeline, so the practical impact on the AI market remains uncertain.",
+        "basis": "summaries",
+        "why": "Local moratoria, not federal rules, are the real build-out risk",
+        "eventKey": "midterms-data-center-moratorium-ai-stocks",
+        "alsoCovered": []
+      },
+      {
+        "id": "c47fc490",
+        "section": "ai",
+        "title": "AI is not a profitable business: Amazon, Google and Meta still depend on e-commerce and advertising to fund it",
+        "originalTitle": "La IA no es un negocio rentable: Amazon, Google y Meta aún dependen de e-commerce y anuncios para financiarla",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/tecnologia/2026/11/04/la-ia-no-es-un-negocio-rentable-amazon-google-meta",
+        "publishedAt": "2026-11-04T11:55:24.000Z",
+        "snippet": "Amazon, Google and Meta report multibillion-dollar net cash outflows on AI, funded by core business operating income.",
+        "brief": "Free cash flow at Amazon, Alphabet and Meta turned negative as they pour money into AI infrastructure, with Amazon posting the largest outflow at about 42,400 million dollars. Analysts note that these outflows are small relative to the companies' overall revenue and operating income, which remain strong. S&P Global also cut Meta's rating outlook to negative over uncertainty about how it will monetize its AI spending.",
+        "basis": "article",
+        "why": "Big Tech AI still cash-negative, subsidised by ads and retail",
+        "eventKey": "big-tech-ai-spending-funded-by-core-business-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f783639c",
+        "section": "ai",
+        "title": "AMD expects to outsell Intel in Q4 for the first time in history",
+        "lang": "en",
+        "source": "tomshardware.com",
+        "url": "https://tomshardware.com/pc-components/cpus/amd-expects-to-outsell-intel-in-q4-for-the-first-time-in-history-usd17b-guidance-would-exceed-intels-projections",
+        "publishedAt": "2026-11-04T15:38:34.000Z",
+        "snippet": "AMD's guidance of about $17B would exceed Intel's projections, marking a first in the companies' sales rivalry.",
+        "brief": "AMD reported record quarterly revenue of $13.377 billion, with data center sales rising 97% to $8.55 billion as demand for Epyc processors and Instinct accelerators grew. Its guidance calls for about $17 billion in fourth-quarter revenue, which would edge past Intel's projected $15 to $16 billion for the first time. The shift reflects AMD's expansion in data center and AI while Intel depends more on weakening PC demand.",
+        "basis": "article",
+        "why": "AMD's ~$17B quarter signals data-centre chip power shift",
+        "eventKey": "amd-outsell-intel-q4-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f3ed9aca",
+        "section": "ai",
+        "title": "Anthropic is working on a system to prove AI models’ identity",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/03/anthropic-is-working-on-a-system-to-prove-ai-models-identity",
+        "publishedAt": "2026-11-03T22:41:03.000Z",
+        "snippet": "Anthropic's proposed FlashProve would let anyone verify that an AI response genuinely came from the model it names.",
+        "brief": "Anthropic has announced an open source project called FlashProve that aims to confirm whether a particular output really came from the AI model a user thinks it did. It relies on cryptographic proofs, and labs would publish a fingerprint for each model that does not expose its internal weights, so commercial models could participate. The company says the work is still in progress and has no plans to deploy it internally, but has released code on GitHub for others to build on.",
+        "basis": "article",
+        "why": "Model provenance verification matters for agent pipelines you build",
+        "eventKey": "anthropic-flashprove-model-identity",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "6f93daf2",
+        "section": "world",
+        "title": "6 takeaways from Democrats' big wave on election night",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/04/nx-s1-6022216/midterms-democrats-trump-republicans-analysis",
+        "publishedAt": "2026-11-04T12:02:38.000Z",
+        "snippet": "Analysis of the election night results points to unusually broad Democratic gains across states.",
+        "brief": "Democrats posted a sweeping election-night win that surprised even some observers, with victories described as both deep and broad across the country. The BBC reports that voters in traditionally Republican areas switched sides, citing anger at the economy and frustration with an unpopular president. The New York Times says the midterm result will reshape the political landscape, so the takeaways focus on what the shift means going forward.",
+        "basis": "summaries",
+        "why": "Breadth of gains across states, beyond the headline seat count",
+        "eventKey": "us-midterm-elections-democrats-win-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "BBC",
+            "url": "https://bbc.co.uk/news/articles/cqkgjvr00zmyo"
+          },
+          {
+            "source": "The New York Times",
+            "url": "https://nytimes.com/2026/11/04/us/politics/democrats-deliver-a-big-blue-bludgeoning.html"
+          }
+        ]
+      },
+      {
+        "id": "752611cd",
+        "section": "world",
+        "title": "Back in the majority, Democrats have plans for a long list of Trump investigations",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/04/g-s1-150276/2026-midterms-democrats-investigations",
+        "publishedAt": "2026-11-04T17:38:36.000Z",
+        "snippet": "With a House majority, Democrats can subpoena records and compel testimony on the Epstein files, Musk, the Iran war and Trump's business interests.",
+        "brief": "Democrats are preparing to regain control of a chamber, which would give them power to demand documents and force witnesses to appear before lawmakers. Topics that could draw scrutiny include the Epstein files, Elon Musk's role in government, the conflict with Iran, and President Trump's business dealings. The shift would turn oversight from a minority complaint into a formal agenda with real legal tools behind it.",
+        "basis": "summaries",
+        "why": "Subpoena power targets Epstein files, Musk, Iran war, Trump businesses",
+        "eventKey": "democrats-house-majority-trump-investigations",
+        "alsoCovered": []
+      },
+      {
+        "id": "2adf3a7e",
+        "section": "world",
+        "title": "Iran's chief negotiator says Americans voted 'no to war'",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/c6d934npl9y8o",
+        "publishedAt": "2026-11-04T16:59:15.000Z",
+        "snippet": "Iran's chief negotiator reads the US midterm results as a rejection of military conflict, and Trump links the war to the Republican defeat.",
+        "brief": "Iran's chief negotiator, parliament speaker Mohammed Bagher Ghalibaf, endorsed the claim that Americans voted \"no to war\" after Trump's Republican Party suffered a heavy defeat in the midterms. He warned Washington that rejecting the public's will would bring a harsh response. Trump admitted the war and higher petrol prices hurt Republican results, but said he does not regret the February attack on Iran.",
+        "basis": "article",
+        "why": "Tehran reads result as leverage in ongoing nuclear talks",
+        "eventKey": "iran-us-war-midterms-reaction-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "abd344ae",
+        "section": "world",
+        "title": "How the Audacious Trump Redistricting Push Backfired for Republicans in the Midterms",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/04/us/trump-republican-redistricting-backfire.html",
+        "publishedAt": "2026-11-04T20:13:17.000Z",
+        "snippet": "Democrats won many of the newly drawn districts that Republicans hoped would secure extra seats, undercutting the redistricting strategy.",
+        "brief": "Republicans pushed to redraw congressional district maps to gain more seats, but the strategy did not work as planned. Democrats ended up winning many of the newly drawn districts instead. The source summary offers little beyond that outcome, so the specific numbers, states involved, and final seat totals are not covered here.",
+        "basis": "summaries",
+        "why": "Mid-decade redistricting gamble backfired, reshaping future map fights",
+        "eventKey": "us-midterms-2026-redistricting-backfire",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2735,
+      "fresh": 374,
+      "classified": 374,
+      "kept": 270,
+      "stories": 242,
+      "candidates": 46,
+      "picked": 21,
+      "briefs": 21
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 165436,
+      "outputTokens": 45800,
+      "costUsd": 0.0926
+    },
+    "notes": []
+  }
+}
