@@ -1,0 +1,396 @@
+{
+  "date": "2026-11-06",
+  "generatedAt": "2026-11-06T19:51:15.338Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "63896711",
+      "section": "world",
+      "title": "Las ‘midterms’ 2026, en vivo | Stephen Miller, nuevo jefe de gabinete de Trump",
+      "lang": "es",
+      "source": "El País",
+      "url": "https://elpais.com/us/2026-11-06/las-midterms-2026-en-vivo.html",
+      "publishedAt": "2026-11-06T19:01:09.000Z",
+      "snippet": "Live coverage of the midterm fallout, led by Stephen Miller's appointment as Trump's new chief of staff.",
+      "brief": "Donald Trump has named Stephen Miller, one of his most hardline advisers on immigration, as White House chief of staff, replacing Susie Wiles. Trump said the change takes effect Monday and called Miller one of his most trusted advisers. The move is seen as a shift toward tougher positions after Republicans suffered a heavy defeat in the midterm elections.",
+      "basis": "article",
+      "why": "Hardline immigration architect now runs the White House facing a Democratic Congress",
+      "eventKey": "stephen-miller-chief-of-staff-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/06/stephen-miller-chief-of-staff-trump"
+        },
+        {
+          "source": "NPR",
+          "url": "https://npr.org/2026/11/06/nx-s1-6032795/stephen-miller-replace-susie-wiles-trumps-chief-of-staff"
+        },
+        {
+          "source": "The New York Times",
+          "url": "https://nytimes.com/2026/11/06/us/politics/susie-wiles-chief-of-staff-trump.html"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/6/trump-says-making-adviser-stephen-miller-white-house-chief-of-staff?traffic_source=rss"
+        },
+        {
+          "source": "El Universal",
+          "url": "https://eluniversal.com.mx/mundo/trump-nombra-al-polemico-asesor-stephen-miller-como-jefe-de-gabinete-es-promotor-de-las-politicas-mas-controvertidas-del-mandatario"
+        }
+      ]
+    },
+    {
+      "id": "acde0e89",
+      "section": "world",
+      "title": "Global stocks fall amid ‘big worries over AI’ after Democrats’ midterms triumph",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/business/2026/nov/06/global-stocks-plunge-amid-ai-slowdown-fears-after-democrats-midterm-triumph",
+      "publishedAt": "2026-11-06T15:48:36.000Z",
+      "snippet": "European and Asian markets fell sharply after the US tech rout, with analysts expecting more selling to follow.",
+      "brief": "European and Asian stocks fell sharply on Friday after a Thursday tech rout on Wall Street, which saw the Nasdaq slump 5.5%, its worst day in 19 months. Japan's Nikkei dropped 6% and South Korea's Kospi fell more than 6.5%, while London's FTSE 100 recovered to close down 1% after being off as much as 2.35%. Analysts warn that worries over slowing datacentre spending and AI returns could bring more selling, though Jefferies does not expect the AI trade to unwind.",
+      "basis": "article",
+      "why": "US tech rout spreads abroad; analysts expect further selling",
+      "eventKey": "global-stocks-fall-ai-worries-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "8d4e65a9",
+      "section": "world",
+      "title": "Hiring jumps: The economy added 165,000 jobs last month",
+      "lang": "en",
+      "source": "NPR",
+      "url": "https://npr.org/2026/11/06/nx-s1-6030867/jobs-labor-market-economy-wages-inflation",
+      "publishedAt": "2026-11-06T13:49:21.000Z",
+      "snippet": "Employers added more jobs than expected last month while unemployment dipped to 4.1%, easing labor-market worries.",
+      "brief": "The U.S. economy added 165,000 jobs in October, according to a Labor Department report released Friday, beating what forecasters had expected. The unemployment rate dipped slightly to 4.1%. Economists describe a \"low-hire, low-fire\" market where hiring is slow but layoffs remain limited, and an interest rate hike is expected in December.",
+      "basis": "summaries",
+      "why": "Beat with 4.1% unemployment makes Fed rate cuts less urgent",
+      "eventKey": "us-jobs-report-oct-2026",
+      "alsoCovered": [
+        {
+          "source": "El País",
+          "url": "https://elpais.com/economia/2026-11-06/el-mercado-laboral-estadounidense-supera-de-largo-las-previsiones-en-octubre-tras-crear-165000-puestos-de-trabajo.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/business/2026/nov/06/us-job-growth-october"
+        }
+      ]
+    },
+    {
+      "id": "5bd3621c",
+      "section": "world",
+      "title": "ANC faces bruising defeat in South African local elections with 80% of ballots counted",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/06/anc-faces-defeat-south-african-local-elections",
+      "publishedAt": "2026-11-06T12:48:37.000Z",
+      "snippet": "With over 80% counted, the ANC is polling under a third nationally, down nearly 14 points from 2021, extending its decline.",
+      "brief": "With more than 80% of ballots counted, the African National Congress is on course for a heavy loss in South Africa's local elections, falling to 31.8% nationally, almost 14 points below its 2021 result. The Democratic Alliance has 24.1% and Jacob Zuma's MK party 9.3%. Final results are due Sunday, and coalition talks in Johannesburg, Gauteng and KwaZulu-Natal will decide who runs the major cities.",
+      "basis": "article",
+      "why": "ANC under a third nationally strains South Africa's coalition government",
+      "eventKey": "south-africa-local-elections-anc-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "f4ba4235",
+        "section": "cleantech",
+        "title": "Election Shakeup Threatens Bipartisan Deal to Speed Energy Projects",
+        "lang": "en",
+        "source": "Inside Climate News",
+        "url": "https://insideclimatenews.org/news/06112026/bipartisan-permitting-reform-outlook-after-election-shakeup",
+        "publishedAt": "2026-11-06T10:00:00.000Z",
+        "snippet": "Democratic gains raise doubts about whether the bipartisan permitting bill has enough Senate votes for Monday's procedural vote.",
+        "brief": "Democrats' recent electoral sweep has unsettled a bipartisan permitting reform bill in Congress, casting doubt on whether it has enough backing to clear an initial Senate vote set for Monday. House Minority Leader Hakeem Jeffries said he opposes the bill in its current form, according to a statement to POLITICO. The measure aims to speed approvals for energy projects, so the outcome of this vote will shape how quickly those projects can move forward.",
+        "basis": "summaries",
+        "why": "Monday Senate vote decides transmission and interconnection permitting reform",
+        "eventKey": "permitting-reform-bill-senate-vote-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "5b96d528",
+        "section": "cleantech",
+        "title": "Sodium-ion batteries approach cost parity with LFP, with 70 GWh covered by supply agreements",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/06/sodium-ion-batteries-approach-cost-parity-with-lfp-with-70-gwh-covered-by-supply-agreements",
+        "publishedAt": "2026-11-06T12:34:37.000Z",
+        "snippet": "",
+        "brief": "Wood Mackenzie reports that sodium-ion batteries already have supply agreements covering more than 70 GWh, with China leading commercialization. Leading makers are expected to reach cell-level cost parity with LFP by late 2026, though module and system parity may not come until after 2030. Sodium-ion cells currently cost about $229/kWh versus roughly $200/kWh for LFP, but the study estimates a 21% lower total cost of ownership over 20 years.",
+        "basis": "article",
+        "why": "70 GWh contracted signals sodium-ion moving from pilot to volume",
+        "eventKey": "sodium-ion-lfp-cost-parity-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c2122d62",
+        "section": "cleantech",
+        "title": "World’s largest liquid-air storage facility comes online in China",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/06/worlds-largest-liquid-air-storage-facility-comes-online-in-china",
+        "publishedAt": "2026-11-06T11:03:49.000Z",
+        "snippet": "The 60 MW/600 MWh plant gives 10 hours of output, making it the largest grid-connected liquid-air storage project so far.",
+        "brief": "A 60 MW, 600 MWh liquid air energy storage demonstration plant in Golmud, Qinghai, was connected to the grid and began generating power on October 30. Its developer, China Green Development Investment Group, working with the Chinese Academy of Sciences, says it is the largest grid-connected facility of its kind, and it could supply about 180 GWh a year, enough for roughly 30,000 households. The project stores surplus renewable electricity by liquefying air in insulated tanks, which avoids the geological sites other compressed-air systems need.",
+        "basis": "article",
+        "why": "10-hour duration benchmark for long-duration storage beyond lithium",
+        "eventKey": "qinghai-liquid-air-storage-online-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "32cd5bf2",
+        "section": "cleantech",
+        "title": "Duke Energy to stay course on data center-fueled growth plan after ‘historic’ election",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/historic-election-night-wont-change-growth-focus-at-duke-energy-executi/873965",
+        "publishedAt": "2026-11-06T18:00:00.000Z",
+        "snippet": "Duke's 15.4 GW large-load pipeline is essentially unchanged, and its $103 billion plan leans heavily on new gas generation.",
+        "brief": "Duke Energy says it will keep its growth strategy in place following a recent election it called historic. Its pipeline of large-load customers, mainly data centers, has stayed at about 15.4 gigawatts since the first quarter of 2026. The company is pursuing a $103 billion spending plan that leans heavily on new natural gas generation to meet that demand.",
+        "basis": "summaries",
+        "why": "15.4 GW data-centre load still met mostly by new gas",
+        "eventKey": "duke-energy-growth-plan-after-election",
+        "alsoCovered": []
+      },
+      {
+        "id": "ac380dad",
+        "section": "cleantech",
+        "title": "Will PG&E’s $2B grid cutbacks derail California’s clean energy buildout?",
+        "lang": "en",
+        "source": "Canary Media",
+        "url": "https://canarymedia.com/articles/utilities/pge-2b-cut-in-grid-investments",
+        "publishedAt": "2026-11-05T17:00:00.000Z",
+        "snippet": "PG&E's planned grid spending cuts could slow California's clean energy buildout, a question the newsletter examines in detail.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Bay Area utility capex cuts could stall interconnection and buildout",
+        "eventKey": "pge-2b-grid-cutbacks-california",
+        "alsoCovered": []
+      },
+      {
+        "id": "049b7e5b",
+        "section": "cleantech",
+        "title": "India approves Viability Gap Funding to support 92GWh of BESS and pumped hydro energy storage capacity",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/india-approves-viability-gap-funding-to-support-92gwh-of-bess-and-pumped-hydro-energy-storage-capacity",
+        "publishedAt": "2026-11-06T14:02:00.000Z",
+        "snippet": "India approved a 145 billion rupee phase of viability gap funding for storage, and states may soon require storage in new renewable projects.",
+        "brief": "India's central government has signed off on a new round of Viability Gap Funding worth about 145 billion rupees, roughly US$1.5 billion, aimed at boosting energy storage projects. An official from the power ministry has indicated that state utilities may soon be obliged to add storage alongside new renewable energy developments. The move signals a push to make batteries and pumped hydro more financially viable as India expands solar and wind generation.",
+        "basis": "summaries",
+        "why": "92 GWh subsidy plus storage mandates make India a major BESS market",
+        "eventKey": "india-viability-gap-funding-storage-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "7111db44",
+        "section": "ai",
+        "title": "Ramp data shows AI spending stalling just as Anthropic nears its IPO",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/06/ramp-data-shows-ai-spending-stalling-just-as-anthropic-nears-its-ipo",
+        "publishedAt": "2026-11-06T15:54:47.000Z",
+        "snippet": "Ramp data shows AI usage still rising while company spending flattens, as price cuts and cost controls take hold before Anthropic's IPO.",
+        "brief": "Ramp's latest report finds companies' AI spending leveled off in late summer, with token spend rising just 1.5% across August and September after a 42% jump in July. Ramp's economist blames cheaper pricing from OpenAI and Anthropic, along with customers getting better at controlling costs, rather than weak demand. The findings matter because Anthropic is preparing an IPO, and investors may be overestimating how fast AI companies can keep growing.",
+        "basis": "article",
+        "why": "Flat enterprise spend despite rising usage pressures Anthropic's IPO valuation",
+        "eventKey": "ramp-ai-spending-stalls-anthropic-ipo",
+        "alsoCovered": []
+      },
+      {
+        "id": "20846d1f",
+        "section": "ai",
+        "title": "AI stocks climb after trillions wiped from market values",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/c35ynnpzdq51o",
+        "publishedAt": "2026-11-06T19:37:10.000Z",
+        "snippet": "Tech shares rebounded after a selloff that wiped out trillions, driven by fears a Democratic win would slow AI development.",
+        "brief": "AI and chip stocks rebounded on Friday after a Thursday sell-off wiped out trillions of dollars in market value, with the Nasdaq up 1.4% after falling 5.5%. Investors had worried that the Democrat midterm victory could slow AI development. Markets were also weighing stronger-than-expected US jobs data, with 165,000 roles added in October, though European and Asian markets fell on Friday.",
+        "basis": "article",
+        "why": "Rebound after the rout shows whether the selloff was panic",
+        "eventKey": "ai-stocks-rebound-selloff-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "83d25c8c",
+        "section": "ai",
+        "title": "Gemini Omni 1.2 Flash",
+        "lang": "en",
+        "source": "blog.google",
+        "url": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash",
+        "publishedAt": "2026-11-06T13:35:27.000Z",
+        "snippet": "Google released a faster, lighter Gemini Omni variant aimed at developers, drawing strong discussion on Hacker News.",
+        "brief": "Google is rolling out Gemini Omni 1.2 Flash, a video model that now generates native clips up to 15 seconds long, up from 10 seconds in version 1.1. Its price drops 30%, to $0.07 per second for 720p video, and it adds multi-turn conversational editing and better consistency for characters, products and brand colors. The model is generally available through the Gemini API and Gemini for business, and it is also reaching Google Vids and Flow.",
+        "basis": "article",
+        "why": "Cheaper, faster multimodal option for his agent pipelines",
+        "eventKey": "google-gemini-omni-1-2-flash",
+        "alsoCovered": []
+      },
+      {
+        "id": "ecd75b0c",
+        "section": "ai",
+        "title": "How a Blue Wave midterm might reshape the AI industry",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/podcast/how-a-blue-wave-midterm-might-reshape-the-ai-industry",
+        "publishedAt": "2026-11-06T18:00:00.000Z",
+        "snippet": "Voters approved restrictions in 40 of 41 data-center ballot measures, signalling tighter limits on AI infrastructure ahead of 2027.",
+        "brief": "Democrats won major victories in this week's U.S. midterm elections, which could reshape the tech industry. Voters decided 41 data center-related ballot measures, and in all but one, the majority backed more restrictions on data center development. Newly elected Democratic governors and congressmembers are likely to back additional regulation, and TechCrunch's Equity podcast discusses wider scrutiny of Big Tech.",
+        "basis": "article",
+        "why": "40 of 41 local measures restrict data centres; siting gets harder",
+        "eventKey": "midterms-data-center-backlash-ai",
+        "alsoCovered": []
+      },
+      {
+        "id": "e007f398",
+        "section": "ai",
+        "title": "OpenAI is stepping back from NDAs for data center projects",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1028454/openai-data-center-nda",
+        "publishedAt": "2026-11-06T00:37:56.000Z",
+        "snippet": "OpenAI pledges communities hosting its data centers it will not use NDAs with public officials, following opposition to data center expansion in the midterms.",
+        "brief": "OpenAI says it will no longer use non-disclosure agreements with public officials as part of its new commitments to communities hosting its data center projects. The company says any NDA protections will be narrow, covering only legitimate security information, trade secrets, or competitively sensitive material. OpenAI also pledged to pay the full cost of the electricity and infrastructure it needs, and to publish expected jobs and hiring reports, following voter opposition to data center expansion in this week's midterms.",
+        "basis": "article",
+        "why": "Labs changing siting tactics as community opposition hardens",
+        "eventKey": "openai-drops-data-center-ndas",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "6dd1af69",
+        "section": "world",
+        "title": "US warns China to respect bilateral trade agreement clauses; asks it to meet commitments 'immediately'",
+        "originalTitle": "EU advierte a China que debe respetar cláusulas de acuerdo comercial bilateral; le pide cumplir \"de forma inmediata\" los compromisos",
+        "lang": "es",
+        "source": "El Universal",
+        "url": "https://eluniversal.com.mx/mundo/eu-advierte-a-china-que-debe-respetar-clausulas-de-acuerdo-comercial-bilateral-le-pide-cumplir-de-forma-inmediata-los-compromisos",
+        "publishedAt": "2026-11-06T18:46:00.000Z",
+        "snippet": "Washington urged Beijing to fully and immediately implement its Busan trade commitments, signalling friction over the truce.",
+        "brief": "The United States urged China to fully and immediately carry out the commitments it made last year to ease the two powers' trade dispute. Treasury Secretary Scott Bessent raised the issue in a call with Chinese Vice Premier He Lifeng, stressing the need to implement the deal reached in Busan, South Korea, in October 2025. The statement was issued by the Treasury Department, signaling that Washington expects Beijing to follow through on those pledges without delay.",
+        "basis": "summaries",
+        "why": "Busan truce fraying risks new tariffs hitting supply chains, Mexico too",
+        "eventKey": "us-china-busan-trade-commitments-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "755a4b7f",
+        "section": "world",
+        "title": "Hegseth Faces Impeachment Effort and Bipartisan Scrutiny After Midterm Elections",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/06/us/politics/hegseth-trump-iran-war.html",
+        "publishedAt": "2026-11-06T19:00:02.000Z",
+        "snippet": "A possible impeachment push against the defense secretary would pit him against both parties, testing congressional support after the midterms.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "First test of how far new Congress will confront the cabinet",
+        "eventKey": "hegseth-impeachment-push-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c35fee4c",
+        "section": "world",
+        "title": "Houston to limit police cooperation with federal immigration authorities",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/06/houston-police-ice-immigration",
+        "publishedAt": "2026-11-06T19:29:55.000Z",
+        "snippet": "Houston's mayor says only immigrants posing a danger will be referred to ICE, after Democrats won Texas's governorship.",
+        "brief": "Houston Mayor John Whitmire said the city will limit cooperation with federal immigration agents, so police will refer people to ICE only if they are arrested on a jailable charge or ICE issues an administrative warrant. Minor traffic incidents will not trigger immigration enforcement, and the two-page order says suspected immigration status alone is not grounds to contact ICE. The move follows the fatal July ICE shooting of Lorenzo Salgado Araujo during a Houston traffic stop, and ICE had not immediately responded to requests for comment.",
+        "basis": "article",
+        "why": "Texas shift changes immigration enforcement on the Mexico corridor",
+        "eventKey": "houston-limits-ice-cooperation-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "El Universal",
+            "url": "https://eluniversal.com.mx/mundo/houston-limitara-la-cooperacion-con-ice-decision-llega-tras-victoria-democrata-en-texas-en-elecciones-intermedias"
+          }
+        ]
+      },
+      {
+        "id": "562a43f6",
+        "section": "world",
+        "title": "Israel’s Election Ended With No Clear Winner. These Parties Are Trying to Form a Coalition.",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/05/world/middleeast/israel-election-herzog-prime-minister-meetings.html",
+        "publishedAt": "2026-11-05T23:18:21.000Z",
+        "snippet": "President Herzog will ask a party leader on Sunday to try forming a governing coalition after two days of talks.",
+        "brief": "Israeli President Isaac Herzog has finished two days of consultations with party leaders after the country's election produced no clear winner. He said he will ask one of those leaders on Sunday to attempt to put together a governing coalition. The source offers little beyond that step, so the outcome of the coalition talks remains open and unknown for now.",
+        "basis": "summaries",
+        "why": "Sunday mandate decides who governs Israel amid Iran tensions",
+        "eventKey": "israel-election-coalition-talks-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ec592db4",
+        "section": "world",
+        "title": "British Doctor Infected With Ebola While Working on Outbreak Evacuated to U.K.",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/05/world/europe/british-ebola-case-congo-uk.html",
+        "publishedAt": "2026-11-05T21:18:04.000Z",
+        "snippet": "A British doctor who was treating outbreak patients was flown home for care; the government says public risk remains low, while the African outbreak has killed over 5,000.",
+        "brief": "A British doctor who was working on an Ebola outbreak in Africa has been evacuated to the United Kingdom after becoming infected with the virus. The government has said the risk to the British public is low. The wider outbreak has spread across much of the continent and has killed more than 5,000 people.",
+        "basis": "summaries",
+        "why": "Outbreak past 5,000 deaths now reaching Western health systems",
+        "eventKey": "ebola-outbreak-british-doctor-evacuated-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "6c735d12",
+        "section": "world",
+        "title": "Incoming Democratic senators don’t want Chuck Schumer as majority leader",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/06/chuck-schumer-majority-leader-incoming-democratic-senators",
+        "publishedAt": "2026-11-06T19:37:25.000Z",
+        "snippet": "Several incoming Democratic senators say they will not back Schumer as leader, though he likely still has enough caucus votes.",
+        "brief": "Several incoming Democratic senators, including Annie Andrews of South Carolina, Adam Hamilton of Kansas and Abdul El-Sayed of Michigan, say they will not back Chuck Schumer as majority leader. Schumer, 75, has led Senate Democrats since 2017 and likely still has enough support within his caucus to keep the job. He is running uncontested so far, and no other Democrat has formally entered the race.",
+        "basis": "article",
+        "why": "Leadership fight shapes the Senate agenda for the new majority",
+        "eventKey": "schumer-majority-leader-challenge-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2768,
+      "fresh": 379,
+      "classified": 379,
+      "kept": 266,
+      "stories": 237,
+      "candidates": 49,
+      "picked": 21,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 163664,
+      "outputTokens": 47183,
+      "costUsd": 0.1138
+    },
+    "notes": []
+  }
+}
