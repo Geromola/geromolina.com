@@ -1,0 +1,362 @@
+{
+  "date": "2026-11-07",
+  "generatedAt": "2026-11-07T17:56:47.120Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "90b9464e",
+      "section": "world",
+      "title": "US carries out another round of ‘minor’ strikes on Iran, Trump says",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/07/us-carries-out-another-round-of-minor-strikes-on-iran-trump-says",
+      "publishedAt": "2026-11-07T03:07:01.000Z",
+      "snippet": "The strikes hit an air defence site on Qeshm Island near the Strait of Hormuz, which has been disrupted since the US war on Iran began in February.",
+      "brief": "President Trump said US forces carried out another limited strike on Friday against an air defence system in Iran, calling it \"minor\" and saying it was knocked out in about 15 minutes. Iranian state media reported two explosions in the Suza area of Qeshm Island near the Strait of Hormuz, a key oil route disrupted since the war began in February. The action comes as Qatar and other mediators press diplomacy, though Trump insists the nuclear programme must be resolved in any deal.",
+      "basis": "article",
+      "why": "Hormuz shipping and oil prices hinge on whether strikes escalate",
+      "eventKey": "us-strikes-iran-qeshm-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "99c772b7",
+      "section": "world",
+      "title": "Strait of Hormuz could reopen as part of Qatari plan for Iran nuclear inspections",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/07/strait-of-hormuz-qatar-plan-iran-nuclear-inspections",
+      "publishedAt": "2026-11-07T07:00:04.000Z",
+      "snippet": "Qatar is mediating a plan for UN inspectors to visit bombed Iranian nuclear sites, with down-blending of the enriched uranium as an option instead of removal.",
+      "brief": "Qatar, the lead mediator, is pushing a plan under which Iran would allow UN nuclear inspectors back to its bombed sites, including those holding its highly enriched uranium stockpile. In return, the US would lift its naval blockade and release part of $8bn in frozen assets, and Iran would open the Strait of Hormuz on the second day via a route negotiated with Oman. Iran has not agreed, and it remains wary of inspectors over distrust of the IAEA chief Rafael Grossi.",
+      "basis": "article",
+      "why": "Qatari deal could end the Iran war's grip on oil flows",
+      "eventKey": "qatar-iran-nuclear-inspections-plan-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "32396d39",
+      "section": "world",
+      "title": "Paraguay’s President Removed and Arrested Over Financial Crisis",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/06/world/americas/paraguay-president-removed-ueno.html",
+      "publishedAt": "2026-11-07T01:29:31.000Z",
+      "snippet": "Congress impeached Paraguay's president, who was then removed and placed under house arrest over a bank tied to his government.",
+      "brief": "Congress impeached Paraguay's president Santiago Peña, removed him from office, and placed him under house arrest shortly afterward. The move follows the suspension of Ueno bank, which expanded rapidly under his government and left many citizens unable to reach their savings. Peña is under investigation over claims he used political influence to favor the lender, and protests have erupted demanding answers.",
+      "basis": "summaries",
+      "why": "Bank collapse has frozen millions of savers' money; contagion risk",
+      "eventKey": "paraguay-pena-impeached-banking-crisis-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/nov/07/ousted-paraguay-president-under-house-arrest-after-banking-crisis-leaves-60-of-country-unable-to-access-accounts"
+        },
+        {
+          "source": "Expansión",
+          "url": "https://expansion.mx/economia/2026/11/06/crisis-en-paraguay-podria-afectar-confianza-de-inversionistas-en-el-corto-plazo-dice-s-p"
+        }
+      ]
+    },
+    {
+      "id": "c7c55d04",
+      "section": "world",
+      "title": "Gunman Opens Fire in Krakow, Killing at Least 5, Polish Police Say",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/07/world/europe/krakow-poland-shooting.html",
+      "publishedAt": "2026-11-07T16:49:25.000Z",
+      "snippet": "A gunman firing from a car near Krakow's market square killed at least five people before being shot and hospitalized.",
+      "brief": "A gunman fired at people from a car in a market square in Kraków, Poland, on Saturday afternoon, according to local police. Reports differ on the toll, with The Guardian citing six people killed and 15 injured, while the headline says at least five. The attacker was wounded by police while trying to flee and taken to hospital, and authorities are investigating the motive and circumstances.",
+      "basis": "summaries",
+      "why": "Rare mass shooting in Poland; motive still unknown",
+      "eventKey": "krakow-market-square-shooting-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/nov/07/krakow-poland-shooting-market-square-deaths-gunman"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/7/casualties-reported-after-shooting-in-polands-krakow?traffic_source=rss"
+        },
+        {
+          "source": "El Universal",
+          "url": "https://eluniversal.com.mx/mundo/tiroteo-en-ciudad-polaca-de-cracovia-deja-cinco-muertos-atacante-fue-neutralizado"
+        }
+      ]
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "13aad445",
+        "section": "cleantech",
+        "title": "U.S. solar developers navigate policy stack as Section 232 deadline nears",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/07/u-s-solar-developers-navigate-policy-stack-as-section-232-deadline-nears",
+        "publishedAt": "2026-11-07T10:50:00.000Z",
+        "snippet": "Solar inventory rose 126% in Q2 2026 as developers rework procurement and contracts before Section 232 trade cutoffs.",
+        "brief": "U.S. solar developers are reworking contracts and financing as new Section 232 tariffs on polysilicon, wafers, cells, and modules take effect December 4. Minimum import price thresholds are set at 22 cents per watt for cells and 38 cents per watt for finished modules, and the market is waiting on Customs and Commerce guidance on importer self-certification forms. OCI Energy's chief executive says change-in-law clauses spread risk across stakeholders, and any tariffs not built into models will likely raise power purchase agreement prices for buyers.",
+        "basis": "article",
+        "why": "Inventory up 126% as developers race Section 232 tariff cutoff",
+        "eventKey": "us-solar-section-232-deadline-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c76a9b88",
+        "section": "cleantech",
+        "title": "NRDC Assessment of BAAJA, the 2026 Permitting & Transmission Bill",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/06/nrdc-assessment-of-baaja-the-2026-permitting-transmission-bill",
+        "publishedAt": "2026-11-07T04:14:00.000Z",
+        "snippet": "The NRDC assesses a bipartisan permitting bill that pairs transmission reforms with changes to environmental review and judicial remedies.",
+        "brief": "NRDC says the Bipartisan American Affordability and Jobs Act of 2026 pairs strong transmission and grid reforms with concerning cuts to environmental laws and court remedies. The bill could cut transmission build times to five to six years from roughly ten, and could require regions to adopt a standardized interconnection process within two years. NRDC warns that its project certainty language and changes to the Clean Water Act and NEPA could favor fossil fuel and data center projects, and it will seek improvements before a floor vote.",
+        "basis": "article",
+        "why": "Transmission reform terms in the bill most likely to pass",
+        "eventKey": "baaja-permitting-transmission-bill-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "0612352c",
+        "section": "cleantech",
+        "title": "Sierra Club: We Cannot Support the Permitting Bill As Currently Written",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/06/sierra-club-we-cannot-support-the-permitting-bill-as-currently-written",
+        "publishedAt": "2026-11-06T14:48:31.000Z",
+        "snippet": "The Sierra Club opposes a Senate permitting bill that could get a lame-duck vote, arguing it does not yet secure a fair deal.",
+        "brief": "The Sierra Club says it cannot back the Bipartisan American Affordability and Jobs Act of 2026 in its current form, even though the permitting bill would help transmission and clean energy projects. The group objects to provisions it says weaken environmental safeguards, including clean water protections and wildlife protections, and would drop Tribal consultation requirements. It also warns the bill would shift more power to the executive branch and limit community input, and it wants Democrats to demand changes before a possible Senate vote during the lame duck session.",
+        "basis": "article",
+        "why": "Green groups' opposition threatens lame-duck permitting deal",
+        "eventKey": "senate-permitting-bill-lame-duck-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "b3fb9dc0",
+        "section": "cleantech",
+        "title": "What will it take to open California’s market to more VPPs?",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/what-will-it-take-to-open-californias-market-to-vpps",
+        "publishedAt": "2026-11-06T16:52:52.000Z",
+        "snippet": "California's new distributed energy law has opened a market for virtual power plants, and regulators must now write the rules to implement it.",
+        "brief": "California's SB913, signed by Gov. Gavin Newsom in late September, directs regulators to bring aggregated distributed energy resources into the core resource adequacy market rather than leaving them in emergency pilot programs. Its success hinges on whether regulators accept device-level telemetry instead of whole-meter readings, and on preventing double payment for the same kilowatt-hour. Implementation spans two CPUC proceedings over the next 18 months, with PG&E expecting full implementation for the 2029 operating year.",
+        "basis": "article",
+        "why": "California rulemaking will set VPP market size and economics",
+        "eventKey": "california-vpp-market-der-law-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "0acce670",
+        "section": "cleantech",
+        "title": "Beyond scale and hardware",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/07/beyond-scale-and-hardware",
+        "publishedAt": "2026-11-07T05:00:00.000Z",
+        "snippet": "Rising demand for solar and battery storage is not yet improving manufacturer margins, with overcapacity already hitting solar and cells heading the same way.",
+        "brief": "Solar and battery energy storage systems have grown sharply since 2015, but S&P Global Energy analyst Susan Taylor argues that rising demand has not improved economics for manufacturers. Solar makers still struggle with overcapacity, because factory expansion has outpaced demand for years. Battery storage is earlier in its growth, yet growing competition in cells and hardware suggests it may follow the same path.",
+        "basis": "summaries",
+        "why": "Battery cell overcapacity squeezing margins like solar did",
+        "eventKey": "solar-bess-manufacturer-economics-s-and-p",
+        "alsoCovered": []
+      },
+      {
+        "id": "b9d8d055",
+        "section": "cleantech",
+        "title": "Cold Seawater Is Supplying District Heat in Esbjerg, Denmark",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/07/esbjerg-seawater-heat-pumps-cold-water-district-heating",
+        "publishedAt": "2026-11-07T17:21:36.000Z",
+        "snippet": "Large heat pumps drew 19.9 MW of power to deliver 55.2 MW of heat, a coefficient of performance near 2.8.",
+        "brief": "Esbjerg, Denmark, is using two large electric heat pumps to pull heat from North Sea water into its district-heating network. In a two-hour winter test, the pumps used 19.9 MW of electricity to deliver 55.2 MW of heat at 90°C, with 35.3 MW coming from the seawater, giving a coefficient of performance of 2.8. The figures reflect that single test rather than annual average performance, and full guarantee testing was not yet complete.",
+        "basis": "article",
+        "why": "Real-world COP 2.8 data for seawater heat pumps at 55 MW",
+        "eventKey": "esbjerg-seawater-district-heat-pumps",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "5edf6a7d",
+        "section": "ai",
+        "title": "Why a new report on Anthropic automating AI development is alarming researchers",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1029126/anthropic-metr-report-accelerating-ai-development",
+        "publishedAt": "2026-11-07T12:30:00.000Z",
+        "snippet": "METR's report says Anthropic's models are improving about twice as fast as a year ago, with AI now helping build AI.",
+        "brief": "An 11-week investigation by the AI safety group METR found Anthropic's models improving roughly twice as fast as a year ago, with most of that acceleration attributed to AI itself rather than extra computing power. Employees using the company's most capable internal model reported being about 12 times as productive as without AI help. METR said Anthropic redacted most of the evidence it found most informative, leaving the public to rely heavily on METR's judgment.",
+        "basis": "article",
+        "why": "METR finds AI-assisted R&D doubling Anthropic's improvement pace",
+        "eventKey": "metr-anthropic-ai-automating-ai-report-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "7b377ddb",
+        "section": "ai",
+        "title": "OpenAI valued at $1.25 trillion, as rival Anthropic nears its IPO",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1029380/openai-1-25-trillion-investment-valuation",
+        "publishedAt": "2026-11-06T23:46:18.000Z",
+        "snippet": "A new $11 billion round would value OpenAI at $1.25 trillion, roughly 47% above its March valuation of $852 billion.",
+        "brief": "OpenAI is now reportedly valued at $1.25 trillion in a new funding round that adds $11 billion, according to Bloomberg, and could grow to $20 billion in total. That is well below the $1.4 trillion it originally hoped for, after tech stocks fell and midterm results showed declining public support for AI companies and data centers. Meanwhile, rival Anthropic has filed its S-1 to go public, while OpenAI CEO Sam Altman says his company is holding off on an IPO until its models' safety claims are more confident.",
+        "basis": "article",
+        "why": "47% jump since March despite post-midterm AI selloff",
+        "eventKey": "openai-1-25-trillion-valuation",
+        "alsoCovered": [
+          {
+            "source": "TechCrunch",
+            "url": "https://techcrunch.com/2026/11/06/openai-reportedly-raises-an-additional-11-billion-at-a-1-25-trillion-valuation"
+          }
+        ]
+      },
+      {
+        "id": "93994522",
+        "section": "ai",
+        "title": "The US let Nvidia sell chips to an empty office in China",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1029483/nvidia-ai-chips-china-blacklist-government",
+        "publishedAt": "2026-11-07T15:43:45.000Z",
+        "snippet": "Approved Chinese buyer New Matrix has empty offices, raising questions about how Commerce and Nvidia vet firms licensed for H200 chips.",
+        "brief": "US officials have approved sales of Nvidia's H200 AI chips to Chinese buyers, including New Matrix, a firm whose office appeared empty to a New York Times reporter. The company was created 17 months ago and has little public footprint, and property staff had no record of it. Its owners are linked to a private equity group blacklisted by Washington in 2024, raising questions about whether export vetting is working.",
+        "basis": "article",
+        "why": "Exposes weak vetting in H200 export licensing to China",
+        "eventKey": "nvidia-h200-china-new-matrix-vetting",
+        "alsoCovered": []
+      },
+      {
+        "id": "0089c40d",
+        "section": "ai",
+        "title": "Several Democrats renew calls for datacenter pauses after blue wave",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/06/democrats-renew-calls-for-datacenter-pauses",
+        "publishedAt": "2026-11-06T21:14:46.000Z",
+        "snippet": "Sanders and newly elected Democrats want a national moratorium on datacenters, a move that could slow the multi-trillion-dollar AI infrastructure buildout.",
+        "brief": "Sanders and several newly elected Democrats have renewed calls for a national pause on datacenter construction after the midterm elections, which Democrats won decisively partly on backlash against the tech industry. Opposition to datacenters featured in campaigns and voters passed dozens of local ballot measures restricting projects. Incoming Texas Governor Gina Hinojosa pledged to halt new datacenter projects until protections are in place, while the White House says existing construction will continue.",
+        "basis": "article",
+        "why": "National moratorium push threatens data-centre power build-out",
+        "eventKey": "datacenter-moratorium-calls-democrats-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "8e0a0745",
+        "section": "ai",
+        "title": "Crusoe sells troubled Wyoming data center project to Google",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/06/crusoe-sells-troubled-wyoming-data-center-project-to-google",
+        "publishedAt": "2026-11-07T01:40:28.000Z",
+        "snippet": "Crusoe is offloading a struggling Wyoming AI data center site, showing the difficulty of building very large facilities.",
+        "brief": "Denver data center developer Crusoe confirmed it transferred a half-built facility in southeastern Wyoming to Google, which had earlier tried to become a tenant there. Google reportedly stepped in after expressing worries about the project's expense and schedule under Crusoe's direction, and it plans to spend $17 billion on the campus, though the purchase price was not disclosed. The move shows how hard it is for independent developers to finish giant projects on budget, and Crusoe continues working with Google on a separate site near Amarillo, Texas.",
+        "basis": "article",
+        "why": "Gigawatt-scale campus troubles show limits of AI infrastructure",
+        "eventKey": "crusoe-sells-wyoming-data-center-google-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "dd299590",
+        "section": "ai",
+        "title": "China’s Top Spy Agency Recruited Woman Who Targeted Jensen Huang",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/06/us/politics/chinese-spy-agency-nvidia-jensen-huang.html",
+        "publishedAt": "2026-11-07T02:18:43.000Z",
+        "snippet": "A US memo says a Chinese executive who cultivated Nvidia's chief was a Ministry of State Security asset.",
+        "brief": "A memo circulating among U.S. policymakers says intelligence links Alice Huang, a Chinese executive who built a relationship with Nvidia chief Jensen Huang, to Beijing's Ministry of State Security. The summary provided does not detail the evidence behind the claim or any official response. The report suggests concern that foreign intelligence was using business ties to gain access to a major American technology leader.",
+        "basis": "summaries",
+        "why": "Espionage angle adds pressure on Nvidia's China chip sales",
+        "eventKey": "china-spy-recruited-alice-huang-nvidia-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "67c19cb0",
+        "section": "world",
+        "title": "Russian strikes wound nine and damage Ukraine's power network ahead of talks",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cm4g1nq8158po",
+        "publishedAt": "2026-11-07T12:49:36.000Z",
+        "snippet": "Russian strikes wounded nine and damaged Ukraine's power network just before trilateral talks in Abu Dhabi next week.",
+        "brief": "Overnight drone and ballistic missile attacks damaged Ukraine's energy infrastructure, causing blackouts and disrupting water supplies, according to President Zelensky. He said 12 regions were hit, with Kyiv worst affected, and nine people were reported hurt, including one child. The strikes come days before Ukrainian and Russian delegations are due to hold trilateral talks in Abu Dhabi.",
+        "basis": "article",
+        "why": "Grid attacks set the tone for Abu Dhabi trilateral talks",
+        "eventKey": "russia-strikes-kyiv-energy-grid-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/world/2026/nov/07/blackout-water-shortage-kyiv-russia-strike-ukraine-energy-grid"
+          }
+        ]
+      },
+      {
+        "id": "141617ea",
+        "section": "world",
+        "title": "Texas v Musk: how southern state Democrats won against the billionaire – explainer",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/video/2026/nov/06/texas-v-musk-how-southern-state-democrats-won-against-the-billionaire-explainer",
+        "publishedAt": "2026-11-06T21:12:04.000Z",
+        "snippet": "Democrat James Talarico won a Texas Senate seat, despite more than $500m in spending, with Musk-linked money backing Paxton failing.",
+        "brief": "Democrat James Talarico won a Texas Senate seat, ending a 38-year drop in his party's fortunes in the Republican stronghold and dealing a blow to Donald Trump. The contest became one of the most expensive Senate races in US history, with ad spending topping $500m by estimates. Republican-aligned groups, including money linked to Elon Musk, backed Ken Paxton, and the result is being read as a costly setback for Musk's midterm spending.",
+        "basis": "summaries",
+        "why": "Half-billion dollars failed; shows limits of Musk-backed money",
+        "eventKey": "talarico-wins-texas-senate-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "58170e02",
+        "section": "world",
+        "title": "More Than 50 Killed in Yemen in One of the Deadliest 24 Hours of the War",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/07/world/middleeast/more-than-50-killed-in-yemen.html",
+        "publishedAt": "2026-11-07T16:39:31.000Z",
+        "snippet": "Yemen's Houthis and Saudi-backed forces have resumed heavy fighting since August, with civilians bearing much of the toll.",
+        "brief": "More than 50 people were killed in Yemen in what the headline describes as one of the deadliest 24-hour periods of the country's war. The source notes that fighting between the Houthis and the Saudi-backed government reignited in August, and that civilians are bearing a heavy share of the cost. The feed summary does not give a breakdown of casualties or details of the individual strikes.",
+        "basis": "summaries",
+        "why": "Renewed Houthi–Saudi war adds Red Sea risk amid Iran conflict",
+        "eventKey": "yemen-houthi-saudi-fighting-deadliest-day",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2755,
+      "fresh": 325,
+      "classified": 325,
+      "kept": 229,
+      "stories": 205,
+      "candidates": 45,
+      "picked": 19,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 143977,
+      "outputTokens": 41047,
+      "costUsd": 0.1021
+    },
+    "notes": []
+  }
+}
