@@ -1,0 +1,432 @@
+{
+  "date": "2026-11-09",
+  "generatedAt": "2026-11-09T22:52:28.164Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "88a36a72",
+      "section": "world",
+      "title": "Hardline Trump aide Stephen Miller takes over as White House chief of staff",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/us-news/2026/nov/09/stephen-miller-white-house-chief-of-staff",
+      "publishedAt": "2026-11-09T18:58:50.000Z",
+      "snippet": "Miller, 41, replaces Susie Wiles and takes the chief-of-staff post after Republicans suffered heavy losses in the midterms.",
+      "brief": "Stephen Miller, the architect of Trump's immigration crackdown and mass deportation policy, has taken over as White House chief of staff, replacing Susie Wiles. The move follows heavy Republican losses in the midterm elections, and Democrats accused Trump of ignoring voters by elevating him. Richard Walters, a deputy chief of staff and close Wiles ally, is also leaving, suggesting more staffing changes may follow.",
+      "basis": "article",
+      "why": "Hardliner runs White House as Trump faces Democratic Congress",
+      "eventKey": "stephen-miller-white-house-chief-of-staff",
+      "alsoCovered": []
+    },
+    {
+      "id": "d5cce43e",
+      "section": "world",
+      "title": "Qatar PM meets with Trump for talks on ending war on Iran",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/video/newsfeed/2026/11/9/qatar-pm-meets-with-trump-for-talks-on-ending-war-on-iran?traffic_source=rss",
+      "publishedAt": "2026-11-09T18:48:00.000Z",
+      "snippet": "Qatar's prime minister met Trump to discuss ending the war with Iran, a key diplomatic step in the conflict.",
+      "brief": "Qatari Prime Minister Sheikh Mohammed bin Abdulrahman bin Jassim Al Thani has met with US President Donald Trump, according to Al Jazeera's report. The source text does not give details of what was discussed, any outcome, or the status of the conflict with Iran. Without further reporting, the specifics of the talks on ending the war remain unconfirmed.",
+      "basis": "summaries",
+      "why": "Qatar mediation may open an exit from the Iran war",
+      "eventKey": "qatar-pm-trump-iran-war-talks",
+      "alsoCovered": []
+    },
+    {
+      "id": "145dfea6",
+      "section": "world",
+      "title": "Trump Veers Back Into Claims of Rigged Election, Questioning Midterm Results",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/09/us/politics/trump-election-fraud-rigging-midterms.html",
+      "publishedAt": "2026-11-09T18:37:12.000Z",
+      "snippet": "Trump's renewed claims of manipulation, without evidence, depart from his earlier pledge to accept the midterm outcome.",
+      "brief": "President Trump has again pushed claims that the midterm vote was manipulated, despite earlier signaling he would respect the outcome. The renewed assertions lack supporting evidence, according to the report. The shift matters because it revives doubts about the integrity of the election results at a time when officials are certifying them.",
+      "basis": "summaries",
+      "why": "Reversal raises fears of contested transfer of congressional power",
+      "eventKey": "trump-rigged-midterm-claims-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "4252b003",
+      "section": "world",
+      "title": "Thomas Massie Moves to Force Vote on Impeaching Pete Hegseth",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/09/us/politics/hegseth-impeachment-massie.html",
+      "publishedAt": "2026-11-09T22:35:05.000Z",
+      "snippet": "If the House approves the charges against Hegseth, a Senate trial would follow, with the vote due by Wednesday.",
+      "brief": "Representative Thomas Massie, a Kentucky Republican, has set in motion a House vote on impeaching Defense Secretary Pete Hegseth, which must take place by Wednesday. He introduced eight articles against Hegseth, alleging he launched a war without lawmakers' approval and overstepped his authority. If the House approves the charges, the matter would move to a Senate trial, making this a significant test of congressional oversight of the Pentagon.",
+      "basis": "summaries",
+      "why": "Republican-led challenge over Iran war powers; vote due Wednesday",
+      "eventKey": "massie-hegseth-impeachment-push-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/live/2026/nov/09/donald-trump-stephen-miller-immigration-midterms-iran-qatar-economy-latest-news-updates"
+        }
+      ]
+    },
+    {
+      "id": "c2aad151",
+      "section": "world",
+      "title": "Ukraine Peace Talks Resume This Week in Abu Dhabi",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/09/world/europe/ukraine-russia-peace-talks.html",
+      "publishedAt": "2026-11-09T15:08:54.000Z",
+      "snippet": "Talks will restart in Abu Dhabi, but organizers have already ruled out a cease-fire as part of the discussions.",
+      "brief": "U.S.-led negotiations aimed at ending the war between Russia and Ukraine are set to restart this week in Abu Dhabi. According to the outlet's summary, a cease-fire will not be part of the discussions, so the talks focus on other terms. The summary offers no further details on participants, agenda items, or expected outcomes.",
+      "basis": "summaries",
+      "why": "Talks restart but ceasefire already off the table",
+      "eventKey": "ukraine-peace-talks-abu-dhabi-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "f36fc0cc",
+        "section": "cleantech",
+        "title": "Senate votes on bill to speed up projects from gas pipelines to clean energy",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/09/senate-energy-infrastructure-bill-vote",
+        "publishedAt": "2026-11-09T18:42:32.000Z",
+        "snippet": "The Baaja bill would speed permitting for pipelines and transmission lines but weaken some environmental protections, with an initial procedural vote Monday.",
+        "brief": "A Senate procedural vote is scheduled on the Bipartisan American Affordability and Jobs Act, a 417-page bill that would speed up large infrastructure, from gas pipelines to transmission lines for clean power. Critics including Earthjustice, Sierra Club, the ACLU and tribal groups say it would weaken environmental laws such as NEPA and limit tribal consultation. Sponsors Heinrich and Whitehouse say they have the votes, while the House must still act before the new Congress takes office in January.",
+        "basis": "article",
+        "why": "Permitting reform could unlock transmission backlog; procedural vote Monday",
+        "eventKey": "senate-baaja-permitting-bill-vote",
+        "alsoCovered": []
+      },
+      {
+        "id": "153ca335",
+        "section": "cleantech",
+        "title": "COP31 opens amid energy crisis as activists demand climate action",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/video/newsfeed/2026/11/9/cop31-opens-amid-energy-crisis-as-activists-demand-climate-action?traffic_source=rss",
+        "publishedAt": "2026-11-09T21:18:25.000Z",
+        "snippet": "The UN climate summit starts as war-driven energy disruptions push countries toward renewed fossil fuel reliance.",
+        "brief": "The COP31 UN climate summit has opened in Turkiye while war-driven energy disruptions are pushing many countries back toward fossil fuels. The source reports the disruptions and the renewed reliance on oil, gas and coal but gives no further figures or details. Activists are pressing for stronger climate action at the talks, which makes the gap between energy security and emissions goals the central issue to watch.",
+        "basis": "summaries",
+        "why": "Energy-crisis backdrop tests whether COP31 sustains clean-energy momentum",
+        "eventKey": "cop31-opens-turkiye",
+        "alsoCovered": []
+      },
+      {
+        "id": "09b4f131",
+        "section": "cleantech",
+        "title": "BloombergNEF: US midterm results likely a ‘net positive’ for BESS despite data centre headwinds",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/bloombergnef-us-midterm-results-likely-a-net-positive-for-bess-despite-data-centre-headwinds",
+        "publishedAt": "2026-11-09T11:01:17.000Z",
+        "snippet": "BloombergNEF sees the Democratic midterm wins as a likely net positive for US battery storage despite data-centre headwinds.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Midterm shift may protect storage credits and demand",
+        "eventKey": "bnef-midterms-bess-impact",
+        "alsoCovered": []
+      },
+      {
+        "id": "6d863e9d",
+        "section": "cleantech",
+        "title": "The backlash about data centers might really just be about electricity",
+        "lang": "en",
+        "source": "MIT Technology Review",
+        "url": "https://technologyreview.com/2026/11/09/1148194/the-backlash-about-data-centers-might-really-just-be-about-electricity",
+        "publishedAt": "2026-11-09T19:35:33.000Z",
+        "snippet": "Local data-centre opposition in Northern Virginia appears driven largely by concerns over electricity costs and grid strain.",
+        "brief": "Reporting from Ashburn, Virginia, a major data center cluster, argues that local opposition to these facilities is driven mainly by electricity demand rather than the culture-war framing that industry figures offer. The author points to grid strain, rising power bills, and new state rules forcing data centers to cover transmission costs. Companies building off-grid with gas turbines face their own pollution complaints, and developers say electricity supply, more than public resistance, limits their growth.",
+        "basis": "article",
+        "why": "Power costs, not land, drive data-centre opposition",
+        "eventKey": "data-center-backlash-electricity-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c7ab96f8",
+        "section": "cleantech",
+        "title": "Massive solar project at Texas coal plant secures $1.8 billion green loan",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/09/texas-sized-solar-project-at-coal-plant-supported-by-1-8-billion-green-loan",
+        "publishedAt": "2026-11-09T12:36:13.000Z",
+        "snippet": "A 1.2 GW solar project will pair with a 342 MW coal plant in a hybrid station, backed by a $1.8 billion green loan.",
+        "brief": "Panamint Capital has started building the first phase of the 1.2 GW Big Rooter Power solar project at its Twin Oaks station in Robertson County, Texas, on reclaimed coal mine land. The company closed the first phase of an $1.8 billion green loan, with $769 million going to the 491 MW Big Rooter West section. The project is expected to create over 800 jobs and is backed by a long-term power purchase agreement with an unnamed corporation.",
+        "basis": "article",
+        "why": "1.2 GW solar hybridising a coal site, financing model",
+        "eventKey": "big-rooter-solar-twin-oaks-loan",
+        "alsoCovered": []
+      },
+      {
+        "id": "342011dd",
+        "section": "cleantech",
+        "title": "Mexico’s National Energy Commission approves 6 solar energy permits worth US $750M",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/business/6-solar-energy-permits-worth-us-750-million",
+        "publishedAt": "2026-11-09T19:55:58.000Z",
+        "snippet": "Six of 57 applications were approved, with Cox, Invex and Viva El Sol developing the projects across several Mexican states.",
+        "brief": "Mexico's National Energy Commission has approved six solar energy projects out of 57 applications received. The projects will be built by three companies: Cox in Aguascalientes, Jalisco and Guanajuato; Invex in Tlaxcala and Morelos; and Viva El Sol in Coahuila. The permits are valued at roughly US $750 million in total.",
+        "basis": "summaries",
+        "why": "Mexico's slow permit pipeline: only 6 of 57 approved",
+        "eventKey": "cne-approves-six-solar-permits-mexico-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "666abda3",
+        "section": "ai",
+        "title": "Anthropic launches new Claude Fable and Mythos 5.2 models",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2",
+        "publishedAt": "2026-11-09T19:00:00.000Z",
+        "snippet": "The new versions reportedly improve coding, reasoning and vision, and generate output faster than the 5.1 models.",
+        "brief": "Anthropic has launched Claude Fable 5.2, available today, and announced Claude Mythos 5.2, which will initially be limited to vetted organizations. The company says both models improve coding, reasoning, and vision, and generate output faster than the 5.1 versions. During prerelease testing, Anthropic says the models solved two open problems in black hole physics and formalized Fermat's Last Theorem in 30 hours.",
+        "basis": "article",
+        "why": "New frontier models; faster output matters for your agent pipelines",
+        "eventKey": "anthropic-claude-fable-mythos-5-2-launch",
+        "alsoCovered": [
+          {
+            "source": "anthropic.com",
+            "url": "https://anthropic.com/claude-fable-and-mythos-5-2"
+          }
+        ]
+      },
+      {
+        "id": "5953f06e",
+        "section": "ai",
+        "title": "Claude Fable 5.2 Scores 65 on Artificial Analysis, Highest So Far",
+        "lang": "en",
+        "source": "artificialanalysis.ai",
+        "url": "https://artificialanalysis.ai/models/claude-fable-5-2",
+        "publishedAt": "2026-11-09T20:04:55.000Z",
+        "snippet": "Anthropic's new model reached a score of 65 on the Artificial Analysis benchmark, now the highest recorded there.",
+        "brief": "Claude Fable 5.2 (Max, Default Fallback), created by Anthropic, scores 65 on the Artificial Analysis Intelligence Index, well above the median of 40 for comparable models. The model is costly, at $8.00 per million input tokens and $40.00 per million output tokens, and it is slow at 44.1 minutes per task versus a median of 12.9. Its high score comes with heavy token use and expense, which buyers should weigh against its capability.",
+        "basis": "article",
+        "why": "Independent benchmark puts Anthropic at the top",
+        "eventKey": "claude-fable-5-2-artificial-analysis-score",
+        "alsoCovered": []
+      },
+      {
+        "id": "64cbe2f1",
+        "section": "ai",
+        "title": "Nvidia shares tumble over investigation into Huang's affair with alleged Chinese spy",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/c6zxjx01vyleo",
+        "publishedAt": "2026-11-09T19:58:01.000Z",
+        "snippet": "Nvidia's share price fell sharply, erasing hundreds of billions of dollars in market value during the investigation.",
+        "brief": "Nvidia announced an independent investigation into chief executive Jensen Huang after he admitted an extramarital affair with Alice Huang, whom US intelligence reportedly believes was a Chinese spy. Shares fell about 4% on Monday, wiping roughly $250bn from market value. Beijing has rejected the spy claims, and Huang is due at a closed-door congressional briefing next week.",
+        "basis": "article",
+        "why": "Hundreds of billions lost; governance risk at compute's chokepoint",
+        "eventKey": "nvidia-huang-spy-affair-democrats-letter",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/technology/2026/nov/09/nvidia-affair-huang-trump-national-security"
+          },
+          {
+            "source": "The New York Times",
+            "url": "https://nytimes.com/2026/11/09/us/politics/democrats-trump-ai-nvidia.html"
+          }
+        ]
+      },
+      {
+        "id": "5d16fc15",
+        "section": "ai",
+        "title": "Control Room: A central system to track and stop model workloads across our research infrastructure",
+        "lang": "en",
+        "source": "OpenAI",
+        "url": "https://openai.com/index/control-room",
+        "publishedAt": "2026-11-09T13:00:00.000Z",
+        "snippet": "OpenAI describes a central system that tracks model workloads across its research infrastructure and can halt them quickly.",
+        "brief": "OpenAI has introduced Control Room, a central system that tracks model workloads running across its research infrastructure. It lets the company rapidly stop those workloads when safety or security concerns come up. The feed summary offers few further details, such as how the system is built or how often it has been used, so those points remain unclear.",
+        "basis": "summaries",
+        "why": "Practical look at how labs halt runaway workloads",
+        "eventKey": "openai-control-room-workloads",
+        "alsoCovered": []
+      },
+      {
+        "id": "139d1311",
+        "section": "ai",
+        "title": "Meta releases Muse Ember, a new lightweight model for agent execution",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution",
+        "publishedAt": "2026-11-09T18:00:00.000Z",
+        "snippet": "Meta's new small model Ember is priced at 10 cents per million input tokens, well below rival frontier models for agent tasks.",
+        "brief": "Meta Superintelligence Lab released Muse Ember on Monday, which the company calls its lightest and most cost-efficient AI model so far. Meta says it is built for repetitive agent work such as tool calls, coding subtasks, routing, and extraction, priced at 10 cents per million input tokens. It is meant to pair with the larger Muse Wonder model, which plans while Ember handles high-volume tasks.",
+        "basis": "article",
+        "why": "10 cents per million tokens reshapes agent cost math",
+        "eventKey": "meta-muse-ember-model-release",
+        "alsoCovered": [
+          {
+            "source": "research.meta.ai",
+            "url": "https://research.meta.ai/blog/muse-ember"
+          }
+        ]
+      },
+      {
+        "id": "75b0aa1b",
+        "section": "ai",
+        "title": "Nancy Pelosi’s replacement is ready to regulate AI",
+        "lang": "en",
+        "source": "MIT Technology Review",
+        "url": "https://technologyreview.com/2026/11/09/1148182/nancy-pelosis-replacement-is-ready-to-regulate-ai",
+        "publishedAt": "2026-11-09T17:05:43.000Z",
+        "snippet": "Scott Wiener, who authored California AI safety legislation, won a Congressional seat and may influence federal AI policy.",
+        "brief": "Scott Wiener, a former California state senator who authored the SB 1047 and SB 53 AI bills, won a tight congressional race for Nancy Pelosi's open San Francisco seat and may influence federal AI policy. He told MIT Technology Review that Congress needs to act quickly, citing a METR report suggesting recursive self-improvement at Anthropic, and he backs a strong federal regulator and whistleblower protections. He opposes broad federal preemption of state AI laws.",
+        "basis": "article",
+        "why": "SB 1047 author brings state AI-safety agenda to Congress",
+        "eventKey": "scott-wiener-congress-ai-policy",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "1b4603fc",
+        "section": "world",
+        "title": "Here Are the Difficult Options Trump Is Weighing to Resolve the War in Iran",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/08/us/politics/trump-iran-options.html",
+        "publishedAt": "2026-11-09T18:36:21.000Z",
+        "snippet": "Trump faces unpopular options for ending the Iran war, with no clearly good path available according to the report.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Lays out exit paths shaping oil prices and energy markets",
+        "eventKey": "trump-iran-war-options-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "77e05c30",
+        "section": "world",
+        "title": "Mexico’s inflation rate rises for third straight month, hitting 3.75%",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/news/mexicos-pesky-inflation-rate-rises",
+        "publishedAt": "2026-11-09T21:15:06.000Z",
+        "snippet": "Inflation rose to 3.75%, a third monthly increase, which may constrain the central bank's further rate cuts.",
+        "brief": "Mexico's annual inflation rate climbed for a third consecutive month, reaching 3.75%. The central bank had recently cut interest rates, judging that supporting economic growth was more pressing than fully taming price increases. Analysts see the new rise as a reason the bank may find it harder to keep easing policy.",
+        "basis": "summaries",
+        "why": "Third rise likely halts Banxico rate cuts",
+        "eventKey": "mexico-inflation-3-75-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "1e83086f",
+        "section": "world",
+        "title": "Supreme Court Allows Construction of Trump’s Border Wall in Big Bend",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/09/us/politics/supreme-court-border-wall-trump.html",
+        "publishedAt": "2026-11-09T21:36:00.000Z",
+        "snippet": "The court's ruling lets the administration build the wall in Big Bend, including sections inside a national park.",
+        "brief": "The Supreme Court has cleared the way for the Trump administration to keep building a border wall in southwestern Texas, including stretches inside a national park. The administration had sought emergency relief from the justices so construction could continue while a lawsuit challenging the plan proceeds. The wall is a signature project for the president, who has long pledged to extend barriers from the Pacific Ocean to the Gulf of Mexico.",
+        "basis": "summaries",
+        "why": "Ruling extends wall along Mexico border into national park",
+        "eventKey": "scotus-border-wall-west-texas-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "NPR",
+            "url": "https://npr.org/2026/11/09/nx-s1-6019424/border-wall-big-bend-texas-trump"
+          },
+          {
+            "source": "El Universal",
+            "url": "https://eluniversal.com.mx/mundo/corte-suprema-de-eu-da-luz-verde-para-reanudar-construccion-de-muro-fronterizo-en-texas-oposicion-ve-desperdicio-de-recursos"
+          }
+        ]
+      },
+      {
+        "id": "5e9c5262",
+        "section": "world",
+        "title": "Trump admits deportation policy was ‘too tough’ despite promotion of Stephen Miller",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/09/trump-tells-60-minutes-deportation-policy-too-tough-ice-immigration",
+        "publishedAt": "2026-11-09T08:32:32.000Z",
+        "snippet": "Trump concedes his deportation crackdown hurt him politically and says he is open to a deal letting some undocumented immigrants stay.",
+        "brief": "Trump told CBS's 60 Minutes that his deportation policy was \"too tough\" and said he is open to a deal letting some long-term undocumented immigrants stay. He described the proposal as targeting serious criminals while accommodating people who have lived in the country for 10 or 15 years. The admission comes after Republicans' midterm defeat and conflicts with his decision to elevate Stephen Miller, the policy's architect, to White House chief of staff.",
+        "basis": "article",
+        "why": "Opening for immigration deal affecting US–Mexico migration",
+        "eventKey": "trump-deportation-too-tough-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d36ae310",
+        "section": "world",
+        "title": "Targeted by U.S., Armed Group Strikes Back in Colombia",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/08/world/americas/colombia-drone-attack-eln.html",
+        "publishedAt": "2026-11-09T20:14:08.000Z",
+        "snippet": "US forces are assisting Colombia and Venezuela against the ELN, and the group responded with a drone attack on a Colombian base.",
+        "brief": "The National Liberation Army, known as the ELN, a Colombian armed group, struck back this weekend by attacking a Colombian military base with drones, according to officials. The attack follows American forces helping Colombia and Venezuela pursue the group. The source text offers few further details on casualties, damage, or what comes next in the campaign.",
+        "basis": "summaries",
+        "why": "US military role in Colombia–Venezuela escalates regional conflict",
+        "eventKey": "us-colombia-eln-strikes-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ecab66de",
+        "section": "world",
+        "title": "France Blames Iran for Cyberattack on Refrigeration Systems",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/09/world/europe/france-iran-refrigerators-cyberattack.html",
+        "publishedAt": "2026-11-09T19:29:39.000Z",
+        "snippet": "Paris summoned Iran's ambassador over a cyberattack that hit hundreds of supermarkets, and Iran has not yet responded.",
+        "brief": "France has summoned Iran's ambassador and accused Tehran of orchestrating a hacking campaign that hit hundreds of grocery stores. The attackers reportedly seized control of digital thermostats on supermarket freezers and chillers, pushing temperatures above 50C. French foreign minister Jean-Noël Barrot promised Europe-wide sanctions against those responsible, while Iran had not immediately responded to the accusation.",
+        "basis": "summaries",
+        "why": "Iran war spills into cyberattacks on European infrastructure",
+        "eventKey": "iran-cyberattack-french-supermarkets-2026",
+        "alsoCovered": [
+          {
+            "source": "El País",
+            "url": "https://elpais.com/internacional/2026-11-09/francia-acusa-a-iran-del-ciberataque-contra-los-sistemas-de-refrigeracion-de-cientos-de-supermercados.html"
+          },
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/world/2026/nov/09/france-blames-irans-revolutionary-guards-for-cyber-attacks-on-supermarket-fridges"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2764,
+      "fresh": 337,
+      "classified": 337,
+      "kept": 249,
+      "stories": 208,
+      "candidates": 45,
+      "picked": 23,
+      "briefs": 21
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 154491,
+      "outputTokens": 41112,
+      "costUsd": 0.0897
+    },
+    "notes": []
+  }
+}
