@@ -1,0 +1,428 @@
+{
+  "date": "2026-11-10",
+  "generatedAt": "2026-11-10T20:14:32.379Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "29b099fe",
+      "section": "world",
+      "title": "Rubio Says ‘Major Combat Operations’ in Iran War Are No Longer Needed",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/10/us/politics/rubio-iran-war.html",
+      "publishedAt": "2026-11-10T19:33:48.000Z",
+      "snippet": "Rubio says American economic pressure is already doing enough damage to Iran's leadership to make major combat unnecessary.",
+      "brief": "Secretary of State Marco Rubio said the United States no longer needs to carry out major combat operations against Iran. He argued that American economic pressure is already doing sufficient damage to the leadership in Tehran. The statement signals a shift toward relying on sanctions and financial measures rather than further large-scale military action.",
+      "basis": "summaries",
+      "why": "Signals US shift from strikes to sanctions; watch Qatar-brokered talks",
+      "eventKey": "rubio-no-major-combat-iran-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/10/rubio-says-no-need-for-major-combat-operations-against-iran?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "2bbad5bd",
+      "section": "world",
+      "title": "First day of Ukraine peace talks constructive, Zelensky says",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cqpvgvrpjvv8o",
+      "publishedAt": "2026-11-10T17:29:36.000Z",
+      "snippet": "Trilateral talks in the UAE mark the first such negotiations since February, with US, Ukrainian and Russian delegations attending.",
+      "brief": "The first day of trilateral talks between Ukraine, Russia and the US concluded in Abu Dhabi after four hours, with officials tight-lipped. President Zelensky, who was not present, called the discussions constructive and substantive, while US Secretary of State Marco Rubio described them as very productive. Expectations for a breakthrough remain low, as Moscow and Kyiv remain far apart on Donetsk, and a second day of talks follows.",
+      "basis": "article",
+      "why": "First trilateral talks since February; Europe excluded, NATO posture at stake",
+      "eventKey": "ukraine-russia-peace-talks-abu-dhabi-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/nov/10/us-officials-russia-ukraine-war-abu-dhabi-talks"
+        }
+      ]
+    },
+    {
+      "id": "9653024f",
+      "section": "world",
+      "title": "US inflation eases less than expected in October and disappoints investors",
+      "originalTitle": "La inflación en Estados Unidos se modera en octubre menos de lo esperado y decepciona a los inversores",
+      "lang": "es",
+      "source": "El País",
+      "url": "https://elpais.com/economia/2026-11-10/la-inflacion-se-modera-en-octubre-en-estados-unidos-por-el-abaratamiento-de-la-energia.html",
+      "publishedAt": "2026-11-10T13:31:33.000Z",
+      "snippet": "Consumer prices rose 0.4% month over month in October, above forecasts, dampening hopes for quicker interest-rate relief.",
+      "brief": "US consumer prices rose 0.4% from September to October, slightly above what analysts had expected, which disappointed investors hoping for a sharper slowdown. Shelter, food and energy costs drove the increase, though falling gasoline prices offered some relief. The Bureau of Labor Statistics did not publish its usual year-over-year inflation figure because October data was not collected during the government shutdown.",
+      "basis": "summaries",
+      "why": "Hotter 0.4% monthly print pushes back expected Fed rate cuts",
+      "eventKey": "us-cpi-october-2026",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/articles/cwy8lx3pg4k2o"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/business/2026/nov/10/october-inflation-report"
+        }
+      ]
+    },
+    {
+      "id": "073862e9",
+      "section": "ai",
+      "title": "Anthropic targets $1.4 trillion valuation in massive stock market debut",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/economy/2026/11/10/anthropic-targets-1-4-trillion-valuation-in-massive-stock-market-debut?traffic_source=rss",
+      "publishedAt": "2026-11-10T17:21:58.000Z",
+      "snippet": "The Claude maker seeks to raise up to $64.4bn in a listing that would rank among the largest IPOs ever, expected next week.",
+      "brief": "Anthropic, the company behind Claude, is seeking to raise as much as $64.4 billion in a public listing next week, which would rank among the largest initial offerings ever. Reported per-share pricing of $70 to $78 could push its valuation to about $1.4 trillion, according to the New York Times. Investors will be watching the final price range, which the Wall Street Journal says is due imminently.",
+      "basis": "summaries",
+      "why": "Up to $64.4bn raise would rank among largest IPOs ever",
+      "eventKey": "anthropic-ipo-valuation-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Verge",
+          "url": "https://theverge.com/ai-artificial-intelligence/1030703/anthropic-ipo-1-4-trillion"
+        },
+        {
+          "source": "TechCrunch",
+          "url": "https://techcrunch.com/2026/11/09/anthropic-reportedly-plans-to-move-forward-with-ipo-plans"
+        }
+      ]
+    },
+    {
+      "id": "564a4b42",
+      "section": "world",
+      "title": "What to Know About Thomas Massie, Leader of Drive to Impeach Hegseth",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/10/us/thomas-massie-impeachment-hegseth.html",
+      "publishedAt": "2026-11-10T15:30:06.000Z",
+      "snippet": "Massie is leaving Congress after losing a primary to a Trump-backed challenger, and now leads the push to impeach Hegseth.",
+      "brief": "Republican Representative Thomas Massie of Kentucky has launched an effort to impeach Defense Secretary Pete Hegseth, alleging he violated the Constitution by waging the Iran war without congressional authorization. Hegseth dismissed the bid as a political spectacle at his first press conference in six months. President Trump has defended him, calling Massie a stone cold loser, and Massie is retiring after losing a primary to a Trump-backed challenger.",
+      "basis": "summaries",
+      "why": "House impeachment vote looms; Senate conviction remains unlikely",
+      "eventKey": "hegseth-impeachment-effort-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/videos/cwm24249dezmo"
+        },
+        {
+          "source": "El País",
+          "url": "https://english.elpais.com/usa/2026-11-10/pete-hegseth-on-impeachment-effort-it-is-a-farce-and-its-a-stunt-and-everybody-knows-it.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/10/pete-hegseth-impeachment-massie"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/10/hegseth-impeachment-what-is-he-accused-of-and-could-he-be-removed?traffic_source=rss"
+        }
+      ]
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "94cea77a",
+        "section": "cleantech",
+        "title": "Senate advances bill to speed up permit reviews for infrastructure projects",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/09/senate-advances-bill-energy-projects",
+        "publishedAt": "2026-11-10T01:03:14.000Z",
+        "snippet": "The 73-25 procedural vote on the bill is the first major Senate action since the election, aimed at cutting multi-year delays for energy and datacenter projects.",
+        "brief": "The Senate voted 73-25 on Monday to formally take up bipartisan permitting legislation meant to shorten review timelines for energy and datacenter projects, both clean energy and fossil fuel. Backers, including Trump, say it would lower energy costs and make datacenters pay for the power they use. Environmental groups oppose it, and Democrats such as Hakeem Jeffries may complicate its passage in the lame-duck session.",
+        "basis": "article",
+        "why": "73-25 vote shows real bipartisan path for faster energy permits",
+        "eventKey": "senate-permitting-bill-advances-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "cc05ec44",
+        "section": "cleantech",
+        "title": "BAAJA: US legislation to speed up permitting carries hidden political risk, ‘won’t solve interconnection queue wait’",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/baaja-us-legislation-to-speed-up-permitting-carries-hidden-political-risk-wont-solve-interconnection-queue-wait",
+        "publishedAt": "2026-11-10T14:13:31.000Z",
+        "snippet": "Industry hopes the permitting bill BAAJA will pass after Democrats' midterm gains, but analysts say it won't fix interconnection queues.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Analysts warn interconnection queues, the real storage bottleneck, stay unsolved",
+        "eventKey": "baaja-permitting-bill-storage-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "91b240ec",
+        "section": "cleantech",
+        "title": "Data centers face a carbon-free power gap that utilities haven’t filled",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/data-centers-face-a-carbon-free-power-gap-that-utilities-havent-filled",
+        "publishedAt": "2026-11-10T15:35:00.000Z",
+        "snippet": "",
+        "brief": "Latitude Intelligence found that at vertically integrated utilities, planned resources through 2035 leave roughly 25% of the power that signed data center contracts will need without any identified source. Gas plants planned or under construction would cover around 45% of that demand, while all proposed carbon-free projects would reach only about 30%. Regulators and newly elected officials will soon decide which resources fill the shortfall, so the outcome matters for both emissions and utility bills.",
+        "basis": "article",
+        "why": "Clean firm power shortfall shapes PPA and nuclear/geothermal demand",
+        "eventKey": "data-center-carbon-free-power-gap-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "44b15c16",
+        "section": "cleantech",
+        "title": "Are data centers really paying their share? AES Indiana’s Google deal highlights a thorny question",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/are-data-centers-really-paying-aes-indianas-google-deal-highlights-a-thor/873040",
+        "publishedAt": "2026-11-10T15:35:36.000Z",
+        "snippet": "Regional grid upgrades complicate cost allocation, since benefits and expenses for data centers spread across jurisdictions rather than a single project.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Cost allocation for data-centre grid upgrades drives power prices",
+        "eventKey": "aes-indiana-google-data-center-cost-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "da62461e",
+        "section": "cleantech",
+        "title": "Analysis: Fossil-fuel CO2 emissions set to dip in 2026 as Iran conflict hits oil use",
+        "lang": "en",
+        "source": "Carbon Brief",
+        "url": "https://carbonbrief.org/analysis-fossil-fuel-co2-emissions-set-to-dip-in-2026-as-iran-conflict-hits-oil-use",
+        "publishedAt": "2026-11-10T01:01:00.000Z",
+        "snippet": "Fossil CO2 emissions are projected to fall about 0.4% in 2026 to roughly 38.2 billion tonnes, driven by reduced oil use during the Iran conflict.",
+        "brief": "Global fossil-fuel and cement CO2 emissions are projected to fall about 0.4% in 2026, to 38.2 billion tonnes, according to the Global Carbon Project's new carbon budget report. The main driver is a 1.9% drop in oil emissions after the Iran conflict and closure of the Strait of Hormuz pushed fuel prices up, though coal emissions still rise slightly. Including deforestation and fires, total emissions are still projected to hit a record 43.3 billion tonnes, so the dip is not yet a sustained decline.",
+        "basis": "article",
+        "why": "Oil demand shock, not clean energy, trims 2026 emissions 0.4%",
+        "eventKey": "fossil-co2-emissions-dip-2026-carbon-brief",
+        "alsoCovered": []
+      },
+      {
+        "id": "d91512d9",
+        "section": "cleantech",
+        "title": "GE Vernova to spend $34.5M expanding Louisiana transformer manufacturing capacity",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/ge-vernova-to-spend-345m-expanding-transformer-manufacturing-capacity-in/874272",
+        "publishedAt": "2026-11-10T17:03:44.000Z",
+        "snippet": "GE Vernova's $34.5M expansion in Louisiana adds transformer output to meet rising electricity demand on the grid.",
+        "brief": "GE Vernova plans to invest $34.5 million to expand its transformer manufacturing capacity in Louisiana. The company's electrification leadership says rising electricity demand makes transformers essential grid equipment. The source text offers little beyond that quote, so further details such as timing or job counts are not confirmed here.",
+        "basis": "summaries",
+        "why": "Transformer shortage is a key grid build-out constraint",
+        "eventKey": "ge-vernova-louisiana-transformer-expansion",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "f8426f08",
+        "section": "ai",
+        "title": "Gemini 4 Carbon is now available",
+        "lang": "en",
+        "source": "Google DeepMind",
+        "url": "https://deepmind.google/blog/gemini-4-carbon-is-now-available",
+        "publishedAt": "2026-11-10T16:03:47.000Z",
+        "snippet": "Google's new flagship model is now generally available after a two-week preview for cybersecurity defenders, with details on pricing and benchmarks still to be confirmed.",
+        "brief": "Google has made Gemini 4 Carbon broadly available to developers, enterprises, scientists, and consumers, positioning it as its strongest frontier model, especially for cybersecurity, long multi-step agent work, and scientific reasoning. Google says it ranks first on several independent coding and automation benchmarks at over twice lower cost per task than the next best external model. It keeps the same introductory API pricing as the Argon model, and it is rolling out to paying developers and AI Ultra subscribers.",
+        "basis": "article",
+        "why": "New Google flagship to benchmark against Claude Fable 5.2",
+        "eventKey": "google-gemini-4-carbon-release-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "The Verge",
+            "url": "https://theverge.com/ai-artificial-intelligence/1030787/google-gemini-4-carbon-public-rollout"
+          }
+        ]
+      },
+      {
+        "id": "651590e2",
+        "section": "ai",
+        "title": "Australia Unveils New A.I. Regulator After OpenAI Breach",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/10/world/australia/ai-regulator-openai-hack-medicare.html",
+        "publishedAt": "2026-11-10T11:01:07.000Z",
+        "snippet": "Australia plans a dedicated AI regulator and may criminalise developers whose models engage in harmful conduct, following an OpenAI breach.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Criminal liability for agent misconduct could set global precedent",
+        "eventKey": "australia-ai-regulator-openai-breach",
+        "alsoCovered": []
+      },
+      {
+        "id": "236d3d04",
+        "section": "ai",
+        "title": "Claude Code is accidentally exposing secrets all over GitHub",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/ai/2026/11/claude-code-settings-files-expose-thousands-of-secrets-on-github",
+        "publishedAt": "2026-11-09T17:24:26.000Z",
+        "snippet": "A Claude Code setting lets users skip confirmation, and secrets such as passwords and API keys are ending up publicly on GitHub.",
+        "brief": "Security researchers at Apiiro found over 100,000 public GitHub repositories containing Claude Code's local settings file, and about 1,100 of those, from 63 organizations, held secrets such as API tokens, database passwords, and private keys. The file is meant to be ignored via a global .gitignore, but that protection does not carry over to repositories that are cloned or later turned into repos. A bug report flagged the issue in August 2025 but was closed without action, and Anthropic says it is looking at a fix while recommending secret scanners…",
+        "basis": "article",
+        "why": "Practical warning: audit your repos if you skip Claude Code confirmations",
+        "eventKey": "claude-code-secrets-exposed-github",
+        "alsoCovered": []
+      },
+      {
+        "id": "c2ed50ca",
+        "section": "ai",
+        "title": "Google broadens its AI hardware portfolio with two new specialized chips",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/10/google-broadens-its-ai-hardware-portfolio-with-two-new-specialized-chips",
+        "publishedAt": "2026-11-10T15:54:08.000Z",
+        "snippet": "The new TPUs target confidential model training and higher memory capacity, widening Google's options beyond its general-purpose accelerators.",
+        "brief": "Google unveiled two new variants of its in-house tensor processing units on Monday, the TPU 8tx and TPU 8i Max, as part of its eighth chip generation introduced in April. The TPU 8tx, designed with AMD, targets confidential training and inference, keeping sensitive data and model weights isolated in hardware. The TPU 8i Max combines two inference chips into one package, doubling memory, processing power and bandwidth, which helps the company reduce reliance on Nvidia.",
+        "basis": "article",
+        "why": "Confidential-training and high-memory TPUs widen non-Nvidia compute options",
+        "eventKey": "google-new-tpu-chips-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "10db112d",
+        "section": "ai",
+        "title": "PSI is trying to make a business out of AI-driven scientific discovery",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/10/psi-is-trying-to-make-a-business-out-of-ai-driven-scientific-discovery",
+        "publishedAt": "2026-11-10T19:03:52.000Z",
+        "snippet": "PSI used an unreleased Anthropic model to tackle a quantum computing question that scientists have chased for almost two decades.",
+        "brief": "Physical Superintelligence, a startup lab, used early access to an Anthropic model to crack an 18-year-old quantum computing puzzle called the Aaronson-Ambainis conjecture. The result is a negative one, narrowing where quantum machines might speed up hard problems, and Scott Aaronson says he trusts it because it was checked in Lean. The company currently earns revenue by using its tools to optimize data centers, while its long-term goal is turning theoretical physics breakthroughs into real technology.",
+        "basis": "article",
+        "why": "Tests whether AI-driven discovery can be a standalone business",
+        "eventKey": "psi-anthropic-quantum-discovery",
+        "alsoCovered": []
+      },
+      {
+        "id": "1978226e",
+        "section": "ai",
+        "title": "Microsoft overtakes Nvidia in market value as Nvidia loses $1.8 trillion amid Huang scandal",
+        "originalTitle": "Microsoft supera en capitalización a Nvidia, que pierde 1,8 billones en valor de mercado con el escándalo Huang",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://cincodias.elpais.com/companias/2026-11-10/microsoft-supera-en-capitalizacion-a-nvidia-que-pierde-18-billones-en-valor-de-mercado-con-el-escandalo-huang.html",
+        "publishedAt": "2026-11-10T17:47:04.000Z",
+        "snippet": "Nvidia has lost about $1.8 trillion in market value and is down 31% from its October peak, with Microsoft now the bigger company.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "31% Nvidia drawdown reshapes AI chip market sentiment",
+        "eventKey": "nvidia-market-cap-drop-microsoft-overtakes",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "6307e05e",
+        "section": "world",
+        "title": "Oil prices fall to lowest since August as Trump says Iran war is ‘effectively over’",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/business/2026/nov/10/oil-prices-fall-donald-trump-iran-war-ftse-100-markets",
+        "publishedAt": "2026-11-10T10:28:47.000Z",
+        "snippet": "Brent fell to about $89.66 after a near 6% drop Monday, as Trump downplayed further military action against Iran.",
+        "brief": "Brent crude fell nearly 3% to $89.66 on Tuesday, its lowest level since 31 August, after Donald Trump said the war on Iran is effectively over and played down the need for further military action. European and UK stock markets rose, with the Stoxx 600 near its record high and airline shares gaining. Drivers may see pump prices fall too, as UK petrol has already dropped 5p a litre since early October.",
+        "basis": "article",
+        "why": "Brent under $90 eases energy costs and inflation pressure",
+        "eventKey": "oil-falls-trump-iran-war-over-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c9ec8590",
+        "section": "world",
+        "title": "Sheinbaum insists that calling criminal groups terrorists is not a license for the United States to operate in Mexico",
+        "originalTitle": "Sheinbaum insiste en que tratar de terroristas a los grupos criminales no es un aval para que Estados Unidos opere en México",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/2026-11-10/sheinbaum-insiste-en-que-tratar-de-terroristas-a-los-grupos-criminales-no-es-un-aval-para-que-estados-unidos-opere-en-mexico.html",
+        "publishedAt": "2026-11-10T15:58:23.000Z",
+        "snippet": "Sheinbaum says she has told Washington that cooperation on cartels must not mean subordination, raising sovereignty tensions over possible US operations in Mexico.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Sovereignty red line could strain US–Mexico security and trade ties",
+        "eventKey": "sheinbaum-us-cartels-terrorists-sovereignty-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2aa08efa",
+        "section": "world",
+        "title": "Republicans elect Jim Jordan as House minority leader after midterm defeats",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/10/jim-jordan-house-republican-leader",
+        "publishedAt": "2026-11-10T19:40:10.000Z",
+        "snippet": "Jordan's election follows Republican midterm losses, setting up the final two years of Trump's term with Democrats controlling the House from January.",
+        "brief": "Republican lawmakers chose Jim Jordan, a longtime congressman known for his closeness to Donald Trump, as their new caucus head. The vote came days after the party suffered heavy setbacks in last week's midterm contests. Democrats are poised to take over both houses of Congress in January, leaving Republicans in the minority, and Jordan will guide the caucus through the final two years of Trump's term.",
+        "basis": "summaries",
+        "why": "Hardliner leads GOP opposition to a Democratic House from January",
+        "eventKey": "jim-jordan-house-minority-leader-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ccbc4ab1",
+        "section": "world",
+        "title": "Merz accused of ‘blackmail’ by Slovak PM after demand for Ukraine aid in EU budget",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/nov/10/friedrich-merz-accused-blackmail-ukraine-aid-eu-budget",
+        "publishedAt": "2026-11-10T16:44:27.000Z",
+        "snippet": "Merz threatens to block the EU seven-year budget without a Ukraine aid deal, angering central European net beneficiaries before stormy talks this month.",
+        "brief": "Germany's chancellor has warned he will hold up the bloc's long-term spending plan unless member states agree to share the cost of supporting Ukraine. Slovakia's prime minister called the move blackmail, and the Czech government also refuses to join the next Ukraine funding round. Leaders will raise the matter at a Dublin summit this week, with a dedicated budget summit set for late November.",
+        "basis": "article",
+        "why": "Ukraine funding threatens EU seven-year budget deal",
+        "eventKey": "merz-eu-budget-ukraine-aid-block-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "fef154ba",
+        "section": "world",
+        "title": "U.S. Received $12 Billion From Venezuela’s Oil, Report Shows",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/10/world/americas/us-venezuela-oil-trump.html",
+        "publishedAt": "2026-11-10T16:23:18.000Z",
+        "snippet": "A U.S.-controlled bank account shows Washington received about $12 billion from Venezuelan oil revenue after the president's capture.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Reveals scale of US control over Venezuelan oil revenue",
+        "eventKey": "us-venezuela-oil-revenue-12-billion-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2781,
+      "fresh": 383,
+      "classified": 383,
+      "kept": 268,
+      "stories": 241,
+      "candidates": 45,
+      "picked": 22,
+      "briefs": 16
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 172799,
+      "outputTokens": 49416,
+      "costUsd": 0.1129
+    },
+    "notes": []
+  }
+}
