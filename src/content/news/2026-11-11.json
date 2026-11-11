@@ -1,0 +1,394 @@
+{
+  "date": "2026-11-11",
+  "generatedAt": "2026-11-11T20:00:10.123Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "67df66db",
+      "section": "world",
+      "title": "Ukraine talks in Abu Dhabi bring progress on prisoners but not on peace",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/11/ukraine-talks-in-abu-dhabi-bring-progress-on-prisoners-but-not-on-peace",
+      "publishedAt": "2026-11-11T17:03:43.000Z",
+      "snippet": "Russia and Ukraine agreed to their largest prisoner exchange of the war, but no progress was made toward a broader peace deal.",
+      "brief": "Russia and Ukraine agreed to what negotiators called the largest prisoner exchange of the war, with more than 1,000 detainees expected from each side, after US-brokered talks in Abu Dhabi. Progress on a wider peace deal was limited, as Moscow's territorial demands for Donbas and parts of two southern regions remained unresolved. US envoys Jared Kushner and Steve Witkoff planned to brief Vladimir Putin in Moscow and Volodymyr Zelenskyy in Dublin.",
+      "basis": "article",
+      "why": "Largest swap of the war; US envoys meet Putin, Zelenskyy next",
+      "eventKey": "russia-ukraine-abu-dhabi-talks-prisoner-swap",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/11/russia-ukraine-talks-in-uae-secure-major-prisoner-exchange-deal?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "4595808a",
+      "section": "world",
+      "title": "Trump planning new military assault or tighter sanctions, say Iranian officials",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/11/trump-planning-military-assault-or-tighter-sanctions-iranian-officials",
+      "publishedAt": "2026-11-11T18:47:57.000Z",
+      "snippet": "Iranian officials say Tehran may be pushed into pre-emptive strikes if the stalemate with Washington continues.",
+      "brief": "Senior Iranian officials, speaking through Mehdi Mohammadi, an adviser to chief negotiator Mohammad Bagher Ghalibaf, say Washington is weighing either a limited military strike or tighter economic pressure. He claimed the Americans proposed a two-week window before Trump decides on military action, and warned that prolonged sanctions could push Tehran into a pre-emptive war. Mohammadi called the US response to Iran's Hormuz proposals deceptive, and Iran says it bombed a US radar post on Didamar.",
+      "basis": "article",
+      "why": "Tehran threatens pre-emptive strikes if stalemate drags on",
+      "eventKey": "iran-us-talks-stalemate-strikes-warning",
+      "alsoCovered": []
+    },
+    {
+      "id": "16668c78",
+      "section": "world",
+      "title": "US House blocks bid to impeach Defence Secretary Pete Hegseth",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cxly4y5jzl0qo",
+      "publishedAt": "2026-11-11T11:47:22.000Z",
+      "snippet": "The House voted down the impeachment bid against Hegseth, and Democrats can retry next year.",
+      "brief": "The House voted 211-204 to send an impeachment resolution against Defence Secretary Pete Hegseth to the Republican-led Judiciary Committee, effectively killing it. Dissident Republican Thomas Massie had filed the articles, accusing Hegseth of waging war on Iran without congressional approval. Democrats take control of both chambers in January, and Democratic leader Hakeem Jeffries says the matter is not over.",
+      "basis": "article",
+      "why": "Measure dies this year; Democrats can revive it with new majorities",
+      "eventKey": "hegseth-impeachment-blocked-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "NPR",
+          "url": "https://npr.org/2026/11/11/g-s1-152949/up-first-newsletter-pete-hegseth-jim-jordan-iran-backed-trio-us-bases"
+        }
+      ]
+    },
+    {
+      "id": "42346d50",
+      "section": "cleantech",
+      "title": "‘The world we know is over’ without urgent climate action, leaders tell Cop31",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/environment/2026/nov/11/the-world-we-know-is-over-marshall-islands-president-cop31",
+      "publishedAt": "2026-11-11T18:52:08.000Z",
+      "snippet": "",
+      "brief": "Leaders gathered at the Cop31 climate summit in Turkey heard stark warnings that failing to respond forcefully could end the world as people know it. Marshall Islands president Hilda Heine described bleached coral near her home and said overshooting the 1.5C target would bring eroding coastlines and destructive floods. UN chief António Guterres urged governments to levy extra taxes on the excess profits of oil and gas companies and use the money to help vulnerable nations.",
+      "basis": "article",
+      "why": "Summit opens after the 1.5C target was declared missed",
+      "eventKey": "cop31-leaders-climate-windfall-tax",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "827e4a32",
+        "section": "cleantech",
+        "title": "Leading small modular nuclear reactor will be late and over budget",
+        "lang": "en",
+        "source": "Canary Media",
+        "url": "https://canarymedia.com/articles/nuclear/small-modular-nuclear-reactor-late-canada",
+        "publishedAt": "2026-11-11T19:00:00.000Z",
+        "snippet": "Ontario Power Generation's first BWRX-300 at Darlington will miss its October 2030 target and exceed its budget.",
+        "brief": "Ontario Power Generation says the first BWRX-300 small modular reactor at its Darlington site in Ontario will miss its October 2030 start-up target. The utility disclosed the delay and cost overrun in a Tuesday earnings release, and the project is North America's first of its kind. The source excerpt cuts off before giving a revised date or the new cost figure, so those details remain unclear.",
+        "basis": "summaries",
+        "why": "Flagship BWRX-300 slip resets SMR cost and timeline expectations",
+        "eventKey": "darlington-bwrx-300-delay-cost-overrun",
+        "alsoCovered": []
+      },
+      {
+        "id": "aa193472",
+        "section": "cleantech",
+        "title": "Another novel nuclear project gets green light to start construction",
+        "lang": "en",
+        "source": "Canary Media",
+        "url": "https://canarymedia.com/articles/nuclear/novel-nuclear-project-green-light-construction",
+        "publishedAt": "2026-11-10T20:30:00.000Z",
+        "snippet": "The NRC approved X-energy and Dow's application to build four Xe-100 advanced reactors at a Texas industrial site.",
+        "brief": "The U.S. Nuclear Regulatory Commission has approved a joint application from X-energy and Dow Chemical to begin building four Xe-100 advanced nuclear reactors. The project will sit at a Texas industrial site owned by Dow, the Michigan-based chemicals company. The approval means another novel nuclear energy project can move from planning into construction.",
+        "basis": "summaries",
+        "why": "Four Xe-100s for Dow test nuclear heat for chemicals",
+        "eventKey": "x-energy-dow-texas-reactors-construction-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f0fbff8b",
+        "section": "cleantech",
+        "title": "QuantumScape unveils Osprey all-solid-state cell: 1,000 cycles at 1 atm",
+        "lang": "en",
+        "source": "Electrek",
+        "url": "https://electrek.co/2026/11/11/quantumscape-osprey-all-solid-state-sulfide-battery",
+        "publishedAt": "2026-11-11T14:00:00.000Z",
+        "snippet": "Early lab cells reached 1,000 cycles at one atmosphere, but the white paper attaches important conditions to these headline numbers.",
+        "brief": "QuantumScape's new Osprey platform replaces the liquid catholyte in its cathode with a sulfide solid electrolyte, and the company reports 1,000 full cycles to about 80% capacity at one atmosphere in a small two-layer lab cell. Electrek notes the cell is far smaller than the QSE-5 product, which holds roughly 5 Ah, and the company has given no timeline for Osprey. Its key test is whether sulfide makers will license the design before their own 2027 to 2030 production plans are set.",
+        "basis": "article",
+        "why": "Low-pressure solid-state cycling claims, with caveats worth reading",
+        "eventKey": "quantumscape-osprey-solid-state-cell-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "443ec3fa",
+        "section": "cleantech",
+        "title": "Analysis: Climate-finance pledges fall 70% as countries meet at COP31",
+        "lang": "en",
+        "source": "Carbon Brief",
+        "url": "https://carbonbrief.org/analysis-climate-finance-pledges-fall-70-as-countries-meet-at-cop31",
+        "publishedAt": "2026-11-11T07:00:00.000Z",
+        "snippet": "Public climate-finance pledges to developing countries have dropped over 70% as COP31 negotiations begin.",
+        "brief": "Public climate-finance pledges from developed countries for developing nations have dropped by more than 70% in 2026, according to a Carbon Brief analysis, as most multi-year pledges expired in 2025. Only five countries have announced new pledges, and the total now averages about $11.7bn a year, down from around $40bn. Analysts point to the US withdrawal, aid cuts in Europe and political shifts as key reasons, as COP31 gets underway in Turkey.",
+        "basis": "article",
+        "why": "Public finance pledges down 70% squeezes developing-market climate deals",
+        "eventKey": "cop31-climate-finance-pledges-fall-70",
+        "alsoCovered": []
+      },
+      {
+        "id": "8488bc37",
+        "section": "cleantech",
+        "title": "New Dem regulators plan to take on Georgia Power’s data center gas boom",
+        "lang": "en",
+        "source": "Canary Media",
+        "url": "https://canarymedia.com/articles/politics/new-dem-regulators-georgia-power",
+        "publishedAt": "2026-11-11T08:30:00.000Z",
+        "snippet": "Democrats' election wins give them new Georgia Public Service Commission seats, setting up scrutiny of Georgia Power's gas buildout to serve data-centre demand.",
+        "brief": "Democrats won every statewide race in Georgia's latest election, including two seats on the Public Service Commission, the body that oversees the state's electric utilities. Voters had grown angry about an unchecked boom in data centers and rising power bills, and Republicans had previously held a majority on the commission. The source text does not detail the new regulators' specific plans for Georgia Power's gas buildout, so the outcome of those plans remains unclear.",
+        "basis": "summaries",
+        "why": "Regulators may curb gas buildout for data-centre load",
+        "eventKey": "georgia-psc-democrats-georgia-power-data-centers",
+        "alsoCovered": []
+      },
+      {
+        "id": "5c51598f",
+        "section": "cleantech",
+        "title": "What the midterms mean for data center developers in PJM",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/what-the-midterms-mean-for-data-center-developers-in-pjm",
+        "publishedAt": "2026-11-11T13:00:00.000Z",
+        "snippet": "Incoming PJM leaders who campaigned on affordability will help write curtailment rules that could limit data-centre load growth.",
+        "brief": "federal regulators rejected PJM's proposal for connecting large new electricity customers, including data centers, that would have let them connect early if they accepted curtailment during grid emergencies. The October ruling found parts of the plan infringed on state authority, shifting decisions to states. After the midterms, officials who campaigned on protecting ratepayers from data center costs are expected to shape those rules, with Ohio and Pennsylvania closely watched.",
+        "basis": "article",
+        "why": "Curtailment rules could cap data-centre load growth in PJM",
+        "eventKey": "pjm-midterms-data-center-curtailment-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "6b1815c0",
+        "section": "ai",
+        "title": "Anthropic sets IPO price range of $70 to $78 per share to reach an implied valuation of $1.404 trillion",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/10/anthropic-sets-ipo-price-range-of-70-to-78-per-share-to-reach-an-implied-valuation-of-1-404-trillion",
+        "publishedAt": "2026-11-10T14:01:39.000Z",
+        "snippet": "The $1.404 trillion valuation at the top of the range would make Anthropic's listing one of the largest IPOs ever.",
+        "brief": "Anthropic said in an updated IPO filing that it plans to sell 825 million Class A shares at an estimated $70 to $78 each, raising roughly $57.75 billion to $64.35 billion. At the top of the range the company could be valued at $1.404 trillion, well above its $965 billion May valuation but below the $2 trillion it reportedly targeted earlier. Trading is expected on Nasdaq around November 19 under the ticker ANT.",
+        "basis": "article",
+        "why": "Range priced below earlier talk, a test of AI market appetite",
+        "eventKey": "anthropic-ipo-price-range-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d6301bc0",
+        "section": "ai",
+        "title": "Anthropic's IPO roadshow video",
+        "lang": "en",
+        "source": "Simon Willison",
+        "url": "https://simonwillison.net/2026/Nov/11/anthropic-ipo-roadshow",
+        "publishedAt": "2026-11-11T15:11:59.000Z",
+        "snippet": "The roadshow reveals Anthropic trains and serves Claude across Trainium, TPUs, NVIDIA and AMD GPUs, a notable disclosure ahead of its IPO.",
+        "brief": "Anthropic has kicked off its IPO roadshow, and the accompanying video reveals previously unreleased details about how the company runs its business. A section with co-founder Tom Brown explains that Claude is trained and served across AWS Trainium, Google TPUs, NVIDIA GPUs, and AMD GPUs. The company says an unconventional early bet on multi-chip support now gives it an edge, and it claims an AI agent got Claude running on AMD hardware in just three days.",
+        "basis": "article",
+        "why": "Claude runs across four chip stacks, avoiding Nvidia lock-in",
+        "eventKey": "anthropic-ipo-roadshow-video-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "10c9e98a",
+        "section": "ai",
+        "title": "OpenAI’s quarterly revenue reportedly crosses $10B for the first time",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/11/openais-quarterly-revenue-reportedly-crosses-10b-for-the-first-time",
+        "publishedAt": "2026-11-11T16:14:44.000Z",
+        "snippet": "Quarterly revenue of $10 billion is up nearly 50% from $6.7 billion in the prior quarter, signalling fast commercial growth.",
+        "brief": "OpenAI's quarterly revenue reportedly topped $10 billion for the first time, according to Bloomberg, citing anonymous sources, an increase of nearly 50% from the $6.7 billion recorded in the second quarter. The report also says its adjusted operating margin improved from -150% to -109%. The figures are unconfirmed, and rival Anthropic reported larger Q3 revenue of $17 billion, with the two companies calculating annualized revenue differently.",
+        "basis": "article",
+        "why": "50% quarter-on-quarter growth benchmarks Anthropic's IPO valuation",
+        "eventKey": "openai-quarterly-revenue-10b-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "1cba9235",
+        "section": "ai",
+        "title": "Google DeepMind just mathematically verified key parts of Signal",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/ai/2026/11/signals-encryption-just-passed-an-ai-powered-mathematical-checkup",
+        "publishedAt": "2026-11-11T14:08:57.000Z",
+        "snippet": "A four-week project used AI to formally verify core parts of the Signal messaging protocol, suggesting formal verification could become much more practical.",
+        "brief": "Google DeepMind researchers used agentic AI, through a new framework called AlphaProof Code, to formally verify several key cryptographic guarantees of the Signal protocol, working through the project in just four weeks. The analysis found no new vulnerabilities in the portions examined, but it correctly flagged known, long-fixed flaws in older Signal versions. The analysis was limited in scope and did not cover the entire Signal mobile app, and the researchers say it is only one milestone toward scaling AI-driven verification.",
+        "basis": "article",
+        "why": "AI-driven formal verification in weeks could change secure engineering",
+        "eventKey": "deepmind-formal-verification-signal-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "172cdd60",
+        "section": "ai",
+        "title": "CoreWeave turns to customer prepayments, shorter contracts to fund AI growth",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/11/coreweave-turns-to-customer-prepayments-shorter-contracts-to-fund-ai-growth",
+        "publishedAt": "2026-11-11T19:54:00.000Z",
+        "snippet": "Shifting to upfront payments and shorter contracts suggests the neocloud is financing its build-out with tighter cash management rather than long commitments.",
+        "brief": "CoreWeave's third-quarter earnings showed $3.66 billion in revenue, up 168% year over year, alongside a $709 million net loss. To fund growth, the neocloud is asking customers for upfront payments, using loans tied to specific contracts, and pursuing short-term deals at higher prices. The approach carries risk, since it depends on demand and pricing holding, and bond yields above 15% show investors are wary.",
+        "basis": "article",
+        "why": "Neocloud financing strain signals fragility in compute build-out",
+        "eventKey": "coreweave-prepayments-financing-q3-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "37ce8486",
+        "section": "ai",
+        "title": "OpenAI, Anthropic face new oversight as New York’s AI safety law takes effect",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/10/openai-anthropic-face-new-oversight-as-new-yorks-ai-safety-law-takes-effect",
+        "publishedAt": "2026-11-10T20:52:13.000Z",
+        "snippet": "",
+        "brief": "New York opened a registration portal for its RAISE Act, the state's AI safety and transparency law, which requires large frontier developers such as Anthropic and OpenAI to register by January 1, 2027. Companies with more than $500 million in annual revenue must publish safety frameworks, report critical incidents within 72 hours, and issue transparency reports. Violations can bring penalties of up to $1 million, with the new DIGIT office overseeing compliance.",
+        "basis": "article",
+        "why": "First state frontier-model safety rules now binding on labs",
+        "eventKey": "new-york-ai-safety-law-effective-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "3e574599",
+        "section": "world",
+        "title": "Russia-Ukraine talks turn to post-war security but end without breakthrough",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/ck792we7zrz4o",
+        "publishedAt": "2026-11-11T18:04:58.000Z",
+        "snippet": "Abu Dhabi talks covered post-war European security arrangements, and US envoys are due to meet Putin and Zelensky on Thursday.",
+        "brief": "Trilateral talks between Russia, Ukraine and the US in Abu Dhabi ended after two days without any breakthrough toward ending the war, now nearly five years old. Both Moscow and Kyiv confirmed a large prisoner of war exchange is being prepared and could happen soon. US envoys Steve Witkoff and Jared Kushner are next due to meet Putin in Moscow and Zelensky in Dublin, while territory in Donetsk remains the hardest unresolved issue.",
+        "basis": "article",
+        "why": "Talks reached post-war European security, a new agenda item",
+        "eventKey": "russia-ukraine-abu-dhabi-talks-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "832f98ad",
+        "section": "world",
+        "title": "Rubio backs blockade, Vance wants deal: Is Trump’s team split on Iran war?",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/11/is-trump-team-split-on-iran?traffic_source=rss",
+        "publishedAt": "2026-11-11T14:10:47.000Z",
+        "snippet": "Administration officials are divided between military force and diplomacy, with a blockade and economic pressure emerging as the main approach.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Internal split decides blockade versus deal, moving oil prices",
+        "eventKey": "us-iran-war-blockade-debate-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f4a20f42",
+        "section": "world",
+        "title": "U.S. Efforts to Tighten Blockade of Iran Rely on Reluctant Neighbors",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/11/world/middleeast/us-blockade-iran-taskforce-iron-gate.html",
+        "publishedAt": "2026-11-11T18:02:52.000Z",
+        "snippet": "Washington wants to close land borders to deepen pressure on Iran, but neighbouring states fear the economic damage to their own economies.",
+        "brief": "Washington is seeking to tighten its economic pressure on Iran by shutting down land crossings along Iran's borders. Neighboring countries are resisting the plan, worried about the damage it could do to their own economies. The source offers no figures or timeline, so the outcome of the dispute remains unclear.",
+        "basis": "summaries",
+        "why": "Blockade depends on neighbours wary of economic fallout",
+        "eventKey": "us-iran-blockade-neighbors-pushback",
+        "alsoCovered": []
+      },
+      {
+        "id": "e5461353",
+        "section": "world",
+        "title": "Secretario del Tesoro de EU se muda a base militar por presuntas amenazas iraníes: NYT; conspiración contra funcionarios habría alcanzado una fase más avanzada",
+        "lang": "es",
+        "source": "El Universal",
+        "url": "https://eluniversal.com.mx/mundo/secretario-del-tesoro-de-eu-se-muda-a-base-militar-por-presuntas-amenazas-iranies-nyt-conspiracion-contra-funcionarios-habria-alcanzado-una-fase-mas-avanzada",
+        "publishedAt": "2026-11-11T19:18:20.000Z",
+        "snippet": "Treasury Secretary Bessent is reportedly living at a military base after Iranian threats to officials advanced to a more serious stage.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Iranian plot against US officials reportedly at advanced stage",
+        "eventKey": "bessent-moves-military-base-iran-threats-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2ad32d89",
+        "section": "world",
+        "title": "Which key races remain undecided one week after the US midterms?",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/11/which-key-races-remain-undecided-one-week-after-the-us-midterms?traffic_source=rss",
+        "publishedAt": "2026-11-11T19:14:29.000Z",
+        "snippet": "Several close US midterm races are still uncounted, and their outcomes could widen the Democrats' congressional majorities.",
+        "brief": "Several US races remain too close to call a week after the midterm elections. Democrats are hoping that the still-uncalled contests will widen their majorities in Congress. The source does not name the specific races or current vote margins, so the outcome of those contests remains unresolved in this report.",
+        "basis": "summaries",
+        "why": "Remaining seats set size of Democrats' new majorities",
+        "eventKey": "us-midterms-undecided-races-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "4d36e689",
+        "section": "world",
+        "title": "Workers in Spain Stage a General Strike for the First Time in 14 Years",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/11/world/europe/spain-general-strike.html",
+        "publishedAt": "2026-11-11T15:54:22.000Z",
+        "snippet": "The walkout over rents and wages across many industries is Spain's first general strike in 14 years and feeds into the election campaign.",
+        "brief": "Workers across many industries walked off the job in Spain to protest rising rents and stagnant wages, issues that have become central to the upcoming parliamentary election campaign. Unions called the turnout a success, while the employers' confederation CEOE put participation at only 5 percent and called it a failure. Madrid's protest drew about 120,000 people, and more than 50 people were arrested in Barcelona after some masked demonstrators smashed shop windows.",
+        "basis": "summaries",
+        "why": "Housing and wage anger reshapes Spain's election campaign",
+        "eventKey": "spain-general-strike-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "BBC",
+            "url": "https://bbc.co.uk/news/articles/cwvg25nypmrvo"
+          },
+          {
+            "source": "El País",
+            "url": "https://elpais.com/espana/2026-11-11/ultima-hora-de-la-huelga-general-y-la-actualidad-politica-en-directo.html"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2764,
+      "fresh": 383,
+      "classified": 383,
+      "kept": 270,
+      "stories": 253,
+      "candidates": 45,
+      "picked": 22,
+      "briefs": 20
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 169467,
+      "outputTokens": 47918,
+      "costUsd": 0.1112
+    },
+    "notes": []
+  }
+}
