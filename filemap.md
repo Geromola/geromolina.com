@@ -1,6 +1,7 @@
 # File map
 
 - `astro.config.mjs` — Astro config (site URL, dev toolbar off, stylesheets inlined)
+- `docs/physarum-review.md` — the 2026-11-10 review of /physarum behind its design language
 - `docs/SPEC.md` — product and game spec
 - `docs/PLAN.md` — task list and status
 - `src/assets/gero.jpg` — portrait for the About section
@@ -107,6 +108,24 @@
 - `tests/news.test.ts` — Vitest for the wire: parsing, normalize, cluster, score, picks, copy check, extraction, robots, edition, the pipeline end to end with fakes
 - `tests/fixtures/news/feeds/*.xml` — synthetic feeds (fictional stories), named after source ids
 - `tests/fixtures/news/golden.json` — 40 labelled items for `npm run news -- --eval`
+- `src/pages/physarum.astro` — Physarum page (not linked from the home menu yet): board canvases, dock, panel (Sandbox / Tour / Tokyo / Challenge tabs, metrics, how it works, the tour's steps rendered from `tour.ts`, the Tokyo comparison, the challenge's levels, budget and You-vs-Mold scores, view and speed, sources; phone bottom sheet), styles and mount
+- `src/physarum/main.ts` — Physarum DOM wiring: layout of the board, renderer choice, flow worker host (main-thread fallback), Food / Light / Cut tools, dock, metrics readout, modes (Sandbox, the Tour with its goals and saved progress, Tokyo with its comparison rows, the Challenge with track drawing, undo, the race and saved bests), keyboard cursor, phone sheet, URL hash; `window.__physarum` debug handle
+- `src/physarum/agents.ts` — the Jones (2010) agent model on the CPU (Canvas fallback and GPU reference), presets, light grid, attractant field from food and tubes
+- `src/physarum/figures.ts` — figure helpers for the design language: the shuttle-streaming wave, oat-flake outlines, hand-drawn callout placement, and the cost-against-resilience figure's layout (DOM-free)
+- `src/physarum/growth.ts` — the spreading phase: strands grown from the food over the flow mesh (shortest-path forest on random costs, fusions), their state at any moment, the flow model's starting conductivities, and how tubes draw afterwards (`flowWeights`, `smoothAlong`) (DOM-free)
+- `src/physarum/runner.ts` — `FlowRunner`: the flow model's message protocol, budgeted stepping, state snapshots, the growth stage (spread, thin, settled) and settling (DOM-free)
+- `src/physarum/flow.worker.ts` — Web Worker around `FlowRunner`
+- `src/physarum/render-gl.ts` — WebGL2 agents: agent state in float textures, point deposits, diffuse and decay, board display
+- `src/physarum/render-canvas.ts` — Canvas 2D fallback for the agents
+- `src/physarum/overlay.ts` — vector layer: light wash, the Tokyo map (shores, region names), tubes by conductivity, shuttle-streaming pulses, a reference network in cyan, the challenge's track with junctions and preview, cut scars, food and city names, cursors
+- `src/physarum/tour.ts` — the guided tour: seven steps (boards incl. the ASCII maze, allowed tools, I₀ and γ, goals as marks earned from readings, Beyond cards) and `physarum-progress` parsing and saving
+- `src/physarum/challenge.ts` — You vs the mold: seeded levels, track (junctions, links, branching, erasing), light and budget checks, measuring (contracted, every length costed), scoring against the mold, and its part of `physarum-progress`
+- `src/physarum/kanto.ts` — the stylized Kanto for the Tokyo tab: 34 cities (Tokyo weighted 7), sea, Kasumigaura and mountains as light polygons, the rail sketch, fitted to a landscape or portrait board
+- `src/physarum/scene.ts` — Physarum's shared scene: board, food sources (with weights), light mask (paint, polygons, lit test), landscape `layout` transposed for portrait, hash
+- `src/physarum/flow.ts` — `FlowNet`: the Tero et al. (2010) flow model on a jittered triangular lattice (warm-started CG per food, tube floor, cuts, light) and `extractNetwork` (foods, junctions, smoothed links)
+- `src/physarum/metrics.ts` — network metrics: TL, MD, FT (bridges), normalised to the MST
+- `src/physarum/reference.ts` — reference networks: MST, Delaunay, approximate Steiner tree
+- `tests/physarum.test.ts` — Vitest for Physarum: scene and hash, metrics, reference networks, the flow model (Kirchhoff, two foods, maze, cut, I₀ trade-off, determinism, budget), agents, the flow runner, the stylized Kanto (cities in the dark, light where the sea and mountains are, the rail sketch, the model's network round the bay), the tour (boards, maze, junction, I₀ trade-off, detour, goals, progress), the challenge (levels, building, erasing, contraction, scoring, progress)
 - `tests/fixtures/nodes.ts` — game-map node ids, kinds and positions; `MENU_NODES` (every node's kind, order, category and tags, mirroring `src/content/nodes/*.md`); the 3 reference layouts and the sampled viewports for the engine tests
 - `.claude/launch.json` — dev-server config for the preview
 - `src/pages/sitemap.xml.ts` — static sitemap endpoint: `/` and every `kind: plant` or `kind: game` node `href`

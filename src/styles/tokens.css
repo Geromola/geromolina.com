@@ -16,7 +16,32 @@
   --glass-edge: rgba(255, 255, 255, 0.16);
   --glass-blur: blur(18px) saturate(160%);
 
+  /* Physarum's petri dish (SPEC "Physarum", Design language). */
+  --phys-dish: #12150f;
+  --phys-rim: #090b07;
+  --phys-raise: #1a1e16;
+  --phys-plasm: #f0c02c;
+  --phys-plasm-rgb: 240, 192, 44;
+  --phys-ochre: #b9801f;
+  --phys-ochre-rgb: 185, 128, 31;
+  --phys-glow: #fff0b0;
+  --phys-oat: #d8c6a0;
+  --phys-oat-rgb: 216, 198, 160;
+  --phys-paper: #ece2c8;
+  --phys-paper-rgb: 236, 226, 200;
+  --phys-paper-2: #bdb39b;
+  --phys-muted: #8a8370;
+  --phys-moss: #7f9e5f;
+  --phys-moss-rgb: 127, 158, 95;
+  --phys-draft: #93aebb;
+  --phys-draft-rgb: 147, 174, 187;
+  --phys-lamp: #fff4d6;
+  --phys-glass: rgba(22, 26, 18, 0.72);
+  --phys-line: rgba(236, 226, 200, 0.12);
+  --phys-line-2: rgba(236, 226, 200, 0.22);
+
   --font: system-ui, -apple-system, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif;
+  --serif: ui-serif, 'New York', 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
 
   --radius-lg: 1.25rem;
