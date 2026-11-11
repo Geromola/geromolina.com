@@ -1,0 +1,1929 @@
+---
+// Physarum (SPEC "Physarum"): a slime mold that builds transport networks between food.
+import Base from '../layouts/Base.astro';
+import TopBar from '../components/project/TopBar.astro';
+import { grow, growthAt } from '../physarum/growth';
+import { TOUR } from '../physarum/tour';
+import { LEVELS } from '../physarum/challenge';
+
+const SOURCES = [
+  {
+    title: 'Rules for biologically inspired adaptive network design',
+    by: 'Tero, Takagi, Saigusa, Ito, Bebber, Fricker, Yumiki, Kobayashi & Nakagaki · Science, 2010',
+    href: 'https://doi.org/10.1126/science.1177894',
+  },
+  {
+    title: 'Maze-solving by an amoeboid organism',
+    by: 'Nakagaki, Yamada & Tóth · Nature, 2000',
+    href: 'https://doi.org/10.1038/35035159',
+  },
+  {
+    title: 'Characteristics of pattern formation and evolution in approximations of Physarum transport networks',
+    by: 'Jones · Artificial Life, 2010',
+    href: 'https://doi.org/10.1162/artl.2010.16.2.16202',
+  },
+];
+
+// The three stages of growth, drawn small with the page's own growth model: strands spreading
+// from two foods and fusing in the middle, the route between them thickening while the rest
+// fades, then that route alone.
+const DIAGRAM_FOODS = [
+  [10, 32],
+  [90, 32],
+];
+const lat = { vx: [] as number[], vy: [] as number[], ea: [] as number[], eb: [] as number[], alive: [] as number[] };
+for (let r = 0; r < 10; r++) {
+  for (let c = 0; c < 15; c++) {
+    lat.vx.push(3 + c * 6.8 + (r % 2 ? 3.4 : 0));
+    lat.vy.push(3.5 + r * 6.3);
+  }
+}
+for (let i = 0; i < lat.vx.length; i++) {
+  for (let j = i + 1; j < lat.vx.length; j++) {
+    if (Math.hypot(lat.vx[i] - lat.vx[j], lat.vy[i] - lat.vy[j]) > 7.3) continue;
+    lat.ea.push(i);
+    lat.eb.push(j);
+    lat.alive.push(1);
+  }
+}
+const nearest = ([x, y]: number[]) => lat.vx.reduce((best, _, v) => (Math.hypot(lat.vx[v] - x, lat.vy[v] - y) < Math.hypot(lat.vx[best] - x, lat.vy[best] - y) ? v : best), 0);
+const diagramOrigins = DIAGRAM_FOODS.map(nearest);
+const diagram = grow(lat, diagramOrigins, 5);
+const grown = growthAt(diagram, lat, diagram.end);
+// The route the flow keeps: from the first fusion back to each food.
+const route = new Set<number>();
+const meetAt = diagram.fuse[0];
+if (meetAt !== undefined) {
+  route.add(meetAt);
+  for (let v of [lat.ea[meetAt], lat.eb[meetAt]]) {
+    while (diagram.parent[v] >= 0) {
+      route.add(diagram.via[v]);
+      v = diagram.parent[v];
+    }
+  }
+}
+const strands = lat.ea.flatMap((a, e) => {
+  if (!grown.fromA[e] && !grown.fromB[e]) return [];
+  const b = lat.eb[e];
+  return [{ x1: diagram.sx[a], y1: diagram.sy[a], x2: diagram.sx[b], y2: diagram.sy[b], weight: grown.weight[e], route: route.has(e) }];
+});
+const heaviest = Math.max(...strands.map((t) => t.weight));
+type Strand = (typeof strands)[number];
+const STAGE_PANELS = [
+  { id: 'spread', name: 'Spread', say: 'strands reach out and fuse', width: (t: Strand) => 0.35 + 1.8 * Math.sqrt(t.weight / heaviest), show: () => true, faint: () => false },
+  { id: 'thin', name: 'Thin out', say: 'the busy route widens, the rest fades', width: (t: Strand) => (t.route ? 2.4 : 0.45), show: () => true, faint: (t: Strand) => !t.route },
+  { id: 'settled', name: 'Settled', say: 'only the useful tubes are left', width: () => 2.6, show: (t: Strand) => t.route, faint: () => false },
+];
+
+// The three lenses the page looks through (SPEC "Physarum", Design language).
+const LENSES = [
+  { id: 'nature', name: 'Nature', say: 'what the cell does', href: '#phys-nature' },
+  { id: 'math', name: 'Math', say: 'the rules it follows', href: '#phys-math' },
+  { id: 'engineering', name: 'Engineering', say: 'what its networks are worth', href: '#phys-engineering' },
+] as const;
+const LENS_NAME = { nature: 'Nature', math: 'Math', engineering: 'Engineering' } as const;
+
+const COMPARE = [
+  { id: 'none', name: 'Mold' },
+  { id: 'rail', name: 'Rail lines' },
+  { id: 'mst', name: 'Spanning tree' },
+  { id: 'delaunay', name: 'Delaunay' },
+];
+---
+
+<Base
+  title="Physarum · Gero Molina"
+  description="A slime mold with no brain builds networks as good as Tokyo's railways. Place food, paint light, cut tubes, and watch Physarum decide which connections to keep."
+>
+  <TopBar title="Physarum" />
+  <main class="phys" data-physarum data-tool="food" data-sheet="peek" data-mode="sandbox">
+    <div class="stage">
+      <canvas class="stage__agents" data-agents aria-hidden="true"></canvas>
+      <canvas
+        class="stage__board"
+        data-board
+        tabindex="0"
+        role="application"
+        aria-roledescription="Slime mold board"
+        aria-label="Slime mold board. Tap to place or remove food."
+        aria-describedby="phys-keys"></canvas>
+      <p class="plate" data-plate></p>
+      <p class="visually-hidden" id="phys-keys">
+        Arrow keys move the cursor, Shift and arrows move faster, Enter places or removes food with the Food tool and paints light with the Light tool. In the challenge, Enter starts and then lays a line with the Track tool (Escape cancels) and erases with the Erase tool. Space plays or pauses.
+      </p>
+    </div>
+
+    <div class="dock glass" data-dock role="toolbar" aria-label="Simulation">
+      <button class="tool tool--play" type="button" data-play aria-pressed="false" aria-label="Play">
+        <svg class="i-play" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.2v11.6a.7.7 0 0 0 1.06.6l9.3-5.8a.7.7 0 0 0 0-1.2l-9.3-5.8A.7.7 0 0 0 6 4.2Z"></path></svg>
+        <svg class="i-pause" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.5" height="12" rx="1"></rect><rect x="11.5" y="4" width="3.5" height="12" rx="1"></rect></svg>
+      </button>
+      <button class="chip" type="button" data-converge data-not-challenge title="Run the model until the network stops changing">Skip ahead</button>
+      <button class="chip" type="button" data-regrow data-not-challenge title="Grow the mold again from the food">Start over</button>
+      <button class="chip chip--go" type="button" data-race data-challenge-only disabled title="Connect every town first">Race the mold</button>
+      <button class="chip" type="button" data-undo data-challenge-only disabled>Undo</button>
+      <span class="dock__sep" aria-hidden="true"></span>
+      <div class="seg" role="group" aria-label="Tool">
+        <button class="seg__b" type="button" data-tool-btn="food" aria-pressed="true">Food</button>
+        <button class="seg__b" type="button" data-tool-btn="light" aria-pressed="false">Light</button>
+        <button class="seg__b" type="button" data-tool-btn="cut" aria-pressed="false">Cut</button>
+        <button class="seg__b" type="button" data-tool-btn="track" aria-pressed="false" data-challenge-only>Track</button>
+        <button class="seg__b" type="button" data-tool-btn="erase" aria-pressed="false" data-challenge-only>Erase</button>
+      </div>
+      <span class="dock__sep" aria-hidden="true"></span>
+      <label class="knob" data-not-challenge title="Flux driven through the network. Higher keeps more links.">
+        <span class="knob__k mono">I₀</span>
+        <input type="range" min="0" max="100" step="1" value="55" data-i0 />
+        <span class="knob__v mono" data-i0-label>2.0</span>
+      </label>
+    </div>
+
+    <aside class="panel glass" data-panel aria-labelledby="phys-title">
+      <div class="grab" data-grab aria-hidden="true"><span></span></div>
+      <header class="head" data-head>
+        <p class="kicker">Field notes · <i>Physarum polycephalum</i></p>
+        <h1 class="title" id="phys-title">Physarum</h1>
+        <p class="lede">
+          In 2010 a single cell with no brain was set down on a map of Tokyo. A day later it had grown a network about as cheap, as quick and nearly as tough as the railway engineers took a century to build. Watch it do it again.
+        </p>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Mode">
+        <button class="tabs__b" type="button" role="tab" id="tab-sandbox" aria-controls="pane-sandbox" aria-selected="true" data-mode-btn="sandbox">Sandbox</button>
+        <button class="tabs__b" type="button" role="tab" id="tab-tour" aria-controls="pane-tour" aria-selected="false" tabindex="-1" data-mode-btn="tour">Tour</button>
+        <button class="tabs__b" type="button" role="tab" id="tab-tokyo" aria-controls="pane-tokyo" aria-selected="false" tabindex="-1" data-mode-btn="tokyo">Tokyo</button>
+        <button class="tabs__b" type="button" role="tab" id="tab-challenge" aria-controls="pane-challenge" aria-selected="false" tabindex="-1" data-mode-btn="challenge">Challenge</button>
+      </div>
+
+      <section class="net" aria-label="The network" data-net data-stage="none">
+        <p class="net__label"><span class="net__k">Specimen</span> <i>P. polycephalum</i>, on agar</p>
+        <ol class="stages" role="list" aria-label="Growth">
+          {
+            STAGE_PANELS.map((p, i) => (
+              <li class="stages__s" data-stage={p.id} data-state="next">
+                <span class="stages__n mono">{i + 1}</span> {p.name}
+              </li>
+            ))
+          }
+        </ol>
+        <p class="status" data-status data-kind="growing">Spreading out.</p>
+        <dl class="metrics">
+          <div class="metric">
+            <dt class="metric__k">Cost</dt>
+            <dd class="metric__v mono" data-m="tl">—</dd>
+            <dd class="metric__note">length vs the shortest tree</dd>
+          </div>
+          <div class="metric">
+            <dt class="metric__k">Travel</dt>
+            <dd class="metric__v mono" data-m="md">—</dd>
+            <dd class="metric__note">trip length vs the tree</dd>
+          </div>
+          <div class="metric">
+            <dt class="metric__k">Robust</dt>
+            <dd class="metric__v mono" data-m="ft">—</dd>
+            <dd class="metric__note">links you can lose</dd>
+          </div>
+        </dl>
+      </section>
+
+      <div class="panes" data-panes>
+        <section class="pane" id="pane-sandbox" role="tabpanel" aria-labelledby="tab-sandbox" data-pane="sandbox">
+          <nav class="lenses" aria-label="Three ways to look">
+            {
+              LENSES.map((l) => (
+                <a class="lenses__l" href={l.href} data-lens={l.id}>
+                  <span class="lenses__k">{l.name}</span>
+                  <span class="lenses__say">{l.say}</span>
+                </a>
+              ))
+            }
+          </nav>
+
+          <p class="lens-tag" data-lens="nature">Nature</p>
+          <h2 class="pane__title" id="phys-nature">What the slime mold does</h2>
+          <p class="pane__body">
+            <i>Physarum polycephalum</i> looks like a fungus but isn't one. It's a single giant cell, a yellow blob that can spread wider than your hand, with no brain and no nerves.
+          </p>
+          <p class="pane__body">
+            It hunts by spreading out in a fan of fine tubes. Inside them its fluid sloshes back and forth every minute or two, carrying food around the cell. A tube that carries a lot of that flow grows wider. A tube that carries little shrinks, and in the end the mold pulls it back in.
+          </p>
+          <p class="pane__body">
+            So once it has found a few pieces of food, the tubes between them stay busy and grow, and the rest wither away. Nobody plans the network. <b>Use it or lose it</b>, over and over, is enough. Footpaths across a lawn form the same way: the routes people walk most get worn in, and the rest grow back.
+          </p>
+
+          <h2 class="pane__title">Try it</h2>
+          <ul class="how" role="list">
+            <li><b>Food</b>: tap to place an oat flake, drag to move it, tap again to remove it.</li>
+            <li><b>Light</b>: paint where the mold can't go, like mountains or sea. Paint over light to clear it.</li>
+            <li><b>Cut</b>: slice through a tube and watch the flow find another way.</li>
+            <li><b>I₀</b>: how hard the foods pump. Low gives a cheap tree, high a web of loops.</li>
+            <li><b>Play</b> runs the rounds and pauses them. <b>Skip ahead</b> runs them until the network stops changing. <b>Start over</b> clears the mold and lets it spread again from the food.</li>
+          </ul>
+          <p class="pane__body">
+            Moving food, painting light or cutting a tube doesn't start over. The mold adapts from where it is, as the real one would.
+          </p>
+          <div class="board-opts">
+            <div class="seg" role="group" aria-label="Speed">
+              <button class="seg__b" type="button" data-speed-btn="slow" aria-pressed="false">Slow</button>
+              <button class="seg__b" type="button" data-speed-btn="normal" aria-pressed="true">Normal</button>
+              <button class="seg__b" type="button" data-speed-btn="fast" aria-pressed="false">Fast</button>
+            </div>
+            <div class="board-opts__row">
+              <button class="chip" type="button" data-example>Example board</button>
+              <button class="chip" type="button" data-clear>Clear board</button>
+              <button class="chip chip--go" type="button" data-go-mode="tour">Take the tour <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
+
+          <p class="lens-tag" data-lens="math">Math</p>
+          <h2 class="pane__title" id="phys-math">The math</h2>
+          <p class="pane__body">The computer copies the cell in four rounds, repeated hundreds of times a second:</p>
+          <ol class="rounds" role="list">
+            <li><b>Spread.</b> Strands reach out from every food, forking as they go, and fuse where they meet.</li>
+            <li><b>Pump.</b> Two foods are picked at random. One pushes fluid in and the other drains it.</li>
+            <li><b>Flow.</b> The fluid takes every route at once, most of it along the shortest, widest tubes, like water through pipes.</li>
+            <li><b>Adjust.</b> Busy tubes widen a little and quiet ones narrow. Then two other foods pump.</li>
+          </ol>
+          <figure class="growth">
+            {
+              STAGE_PANELS.map((p, i) => (
+                <div class="growth__p">
+                  <svg viewBox="0 0 100 64" role="img" aria-label={`${p.name}: ${p.say}`}>
+                    {strands
+                      .filter((t) => p.show(t))
+                      .map((t) => (
+                        <line class="growth__tube" data-faint={p.faint(t) ? 'true' : undefined} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke-width={p.width(t)} />
+                      ))}
+                    {DIAGRAM_FOODS.map(([x, y]) => (
+                      <ellipse class="growth__food" cx={x} cy={y} rx="4.6" ry="3.4" />
+                    ))}
+                  </svg>
+                  <p class="growth__cap">
+                    <span class="mono">{i + 1}</span> <b>{p.name}</b>: {p.say}
+                  </p>
+                </div>
+              ))
+            }
+            <figcaption class="fig"><span class="fig__n">Fig. 1</span> The three stages, grown by the same model as the board. The bar at the top of this panel follows them live.</figcaption>
+          </figure>
+
+          <p class="pane__body">In Tero's model each tube <i>ij</i> has a length <i>L</i>, a conductivity <i>D</i> (how open it is) and carries a flux <i>Q</i>. Three rules do all the work:</p>
+          <figure class="eqs">
+            <div class="eq">
+              <math display="block" aria-label="Q i j equals D i j over L i j, times p i minus p j">
+                <msub><mi>Q</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+                <mo>=</mo>
+                <mfrac><msub><mi>D</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>L</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mfrac>
+                <mo stretchy="false">(</mo><msub><mi>p</mi><mi>i</mi></msub><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub><mo stretchy="false">)</mo>
+              </math>
+              <p class="eq__say"><b>Flow follows pressure.</b> A tube carries more the wider and shorter it is and the steeper the pressure drop: Ohm's law, for protoplasm.</p>
+            </div>
+            <div class="eq">
+              <math display="block" aria-label="The sum over j of Q i j is plus I zero at the source, minus I zero at the sink, and zero elsewhere">
+                <munder><mo>∑</mo><mi>j</mi></munder>
+                <msub><mi>Q</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+                <mo>=</mo>
+                <mrow>
+                  <mo>{</mo>
+                  <mtable>
+                    <mtr><mtd><mo>+</mo><msub><mi>I</mi><mn>0</mn></msub></mtd><mtd><mtext>&nbsp;at the source</mtext></mtd></mtr>
+                    <mtr><mtd><mo>−</mo><msub><mi>I</mi><mn>0</mn></msub></mtd><mtd><mtext>&nbsp;at the sink</mtext></mtd></mtr>
+                    <mtr><mtd><mn>0</mn></mtd><mtd><mtext>&nbsp;elsewhere</mtext></mtd></mtr>
+                  </mtable>
+                </mrow>
+              </math>
+              <p class="eq__say"><b>Nothing is lost.</b> At every junction what flows in flows out (Kirchhoff's law), so what one food pumps in, the other takes out. Solving it gives every pressure <i>p</i>.</p>
+            </div>
+            <div class="eq">
+              <math display="block" aria-label="d D i j by d t equals f of the absolute value of Q i j, minus D i j">
+                <mfrac><mrow><mi>d</mi><msub><mi>D</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac>
+                <mo>=</mo>
+                <mi>f</mi><mo stretchy="false">(</mo><mo>|</mo><msub><mi>Q</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>|</mo><mo stretchy="false">)</mo>
+                <mo>−</mo>
+                <msub><mi>D</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub>
+              </math>
+              <math display="block" aria-label="where f of Q equals Q to the gamma over one plus Q to the gamma">
+                <mi>f</mi><mo stretchy="false">(</mo><mi>Q</mi><mo stretchy="false">)</mo>
+                <mo>=</mo>
+                <mfrac><msup><mi>Q</mi><mi>γ</mi></msup><mrow><mn>1</mn><mo>+</mo><msup><mi>Q</mi><mi>γ</mi></msup></mrow></mfrac>
+              </math>
+              <p class="eq__say"><b>Use it or lose it.</b> A tube grows toward <i>f</i> of its flow and decays without it. <i>f</i> levels off, so no tube grows without limit; γ (1.8 here) sets how decisively the busy tubes win.</p>
+            </div>
+            <figcaption class="fig"><span class="fig__n">Fig. 2</span> Tero et al., <i>Science</i> 2010. <b>I₀</b>, the knob in the dock, is the flux each pair of foods pumps: gently, and the fluid can keep only a few tubes busy (a cheap tree); hard, and back-up routes stay busy too (loops).</figcaption>
+          </figure>
+
+          <p class="lens-tag" data-lens="engineering">Engineering</p>
+          <h2 class="pane__title" id="phys-engineering">Cost against resilience</h2>
+          <p class="pane__body">
+            Every network trades three things. <b>Cost</b> is its total length, against the minimum spanning tree, the shortest network of straight links between foods. <b>Travel</b> is the average trip between two foods, against the same tree; under 1 is quicker. <b>Robust</b> is the share of links that can fail alone without cutting anything off. A tree is cheapest and scores 0%; a dense mesh survives anything but costs a fortune.
+          </p>
+          <figure class="tradeoff">
+            <svg class="tf" data-tradeoff="sandbox" viewBox="0 0 320 190" role="img" aria-label="Cost against robustness for the spanning tree, the Steiner tree, the Delaunay mesh, Tokyo's rail network and the mold on this board"></svg>
+            <figcaption class="fig"><span class="fig__n">Fig. 3</span> This board's networks, live. Engineers look for the top left: tough but cheap. The mold settles between the fragile trees and the costly mesh, close to where Tokyo's railway sits.</figcaption>
+          </figure>
+          <p class="pane__body">
+            In the 2010 experiment Tokyo's rail network cost about 1.8× its tree, travelled 0.85×, and 96% of its links could fail alone without isolating a station. The mold's networks cost 1.75 ± 0.30×, travelled 0.85×, and were a little less robust. The Tokyo tab runs the experiment again.
+          </p>
+
+          <details class="curious">
+            <summary>For the curious</summary>
+            <p class="pane__body">
+              <b>How it spreads.</b> The first stage is a shortest-path forest over random costs: every point on the board is reached the cheapest way from the nearest food, over ground a little different everywhere, which gives forking, wandering strands. They become the starting tubes of Tero's model, with a thin film everywhere else.
+            </p>
+            <p class="pane__body">
+              <b>Two models, one picture.</b> The tubes are Tero's model, and every number comes from them. The grainy yellow growth is Jeff Jones's agent model, there for the look: hundreds of thousands of dots that each head for the strongest scent ahead and leave more behind, nudged along the tubes. Show either alone:
+            </p>
+            <div class="seg" role="group" aria-label="Show">
+              <button class="seg__b" type="button" data-view-btn="mold" aria-pressed="false">Mold</button>
+              <button class="seg__b" type="button" data-view-btn="tubes" aria-pressed="false">Tubes</button>
+              <button class="seg__b" type="button" data-view-btn="both" aria-pressed="true">Both</button>
+            </div>
+            <p class="pane__body">
+              <b>Time.</b> The real cell reverses its streaming about every 100 seconds and takes about a day to settle. Here the streaming is shown about 12× faster, and a settled network takes seconds.
+            </p>
+            <h3 class="pane__sub">Sources</h3>
+            <ul class="sources" role="list">
+              {
+                SOURCES.map((s) => (
+                  <li>
+                    <a href={s.href} target="_blank" rel="noopener">
+                      <span class="sources__title">
+                        {s.title} <span aria-hidden="true">↗</span>
+                      </span>
+                      <span class="sources__by">{s.by}</span>
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </details>
+        </section>
+        <section class="pane" id="pane-tour" role="tabpanel" aria-labelledby="tab-tour" data-pane="tour" data-met="false" hidden>
+          <nav class="steps" aria-label="Tour steps">
+            {
+              TOUR.map((s, i) => (
+                <button class="steps__b mono" type="button" data-step-btn={s.id} data-done="false" aria-label={`Step ${i + 1}: ${s.title}`}>
+                  {i + 1}
+                </button>
+              ))
+            }
+          </nav>
+          {
+            TOUR.map((s, i) => (
+              <article class="step" data-tour-step={s.id} hidden={i > 0}>
+                <p class="step__k">
+                  <span class="mono">Step {i + 1} of {TOUR.length}</span>
+                  <span class="lens-tag" data-lens={s.lens}>{LENS_NAME[s.lens]}</span>
+                </p>
+                <h2 class="pane__title step__title">{s.title}</h2>
+                {s.body.map((para) => (
+                  <p class="pane__body" set:html={para} />
+                ))}
+                {s.note && <p class="pane__note">{s.note}</p>}
+                {s.goal && (
+                  <p class="goal" data-goal data-met="false">
+                    <span class="goal__mark" aria-hidden="true">
+                      <svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" /></svg>
+                    </span>
+                    <span class="goal__k mono">Goal</span>
+                    <span>{s.goal}</span>
+                    <span class="visually-hidden" data-goal-state>Not yet.</span>
+                  </p>
+                )}
+                {s.readings && (
+                  <dl class="readings">
+                    {s.readings.map((r) => (
+                      <div class="readings__r">
+                        <dt class="readings__k mono">{r.label}</dt>
+                        <dd class="readings__v mono" data-reading={r.mark}>
+                          not yet
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {s.cards && (
+                  <ul class="sources" role="list">
+                    {s.cards.map((c) => (
+                      <li>
+                        <a href={c.href} target="_blank" rel="noopener">
+                          <span class="sources__title">
+                            {c.title} <span aria-hidden="true">↗</span>
+                          </span>
+                          <span class="sources__body">{c.body}</span>
+                          <span class="sources__by">{c.by}</span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {s.id === 'tokyo' && (
+                  <button class="chip" type="button" data-go-mode="tokyo">
+                    Open the Tokyo tab <span aria-hidden="true">→</span>
+                  </button>
+                )}
+                {s.id === 'beyond' && (
+                  <div class="board-opts__row">
+                    <button class="chip chip--go" type="button" data-go-mode="sandbox">Back to the Sandbox</button>
+                    <button class="chip" type="button" data-tour-restart>Start the tour over</button>
+                  </div>
+                )}
+              </article>
+            ))
+          }
+          <div class="step-nav">
+            <button class="chip" type="button" data-tour-prev>
+              <span aria-hidden="true">←</span> Back
+            </button>
+            <button class="chip" type="button" data-tour-reset title="Put this step's board back as it started">Reset board</button>
+            <button class="chip step-nav__next" type="button" data-tour-next>
+              Next <span aria-hidden="true">→</span>
+            </button>
+          </div>
+        </section>
+        <section class="pane" id="pane-tokyo" role="tabpanel" aria-labelledby="tab-tokyo" data-pane="tokyo" hidden>
+          <p class="lens-tag" data-lens="engineering">Engineering</p>
+          <h2 class="pane__title">Tokyo in a dish</h2>
+          <p class="pane__body">
+            Tero's team cut a dish to the shape of the land around Tokyo, put an oat flake on each of 36 cities and set the mold down on Tokyo. Light stood in for the sea, the lakes and the mountains, which the mold shuns. Here 34 cities are food, and Tokyo, the biggest, counts seven times.
+          </p>
+
+          <div class="compare" role="group" aria-label="Compare networks. Pick one to draw it on the map.">
+            <div class="compare__head mono" aria-hidden="true"><span></span><span>Cost</span><span>Travel</span><span>Robust</span></div>
+            {
+              COMPARE.map((c) => (
+                <button class="compare__row" type="button" data-compare={c.id} aria-pressed={c.id === 'rail' ? 'true' : 'false'}>
+                  <span class="compare__name">
+                    <span class={`compare__swatch compare__swatch--${c.id}`} aria-hidden="true"></span>
+                    {c.name}
+                  </span>
+                  <span class="compare__v mono"><span class="visually-hidden">cost </span><span data-c={`${c.id}-tl`}>—</span></span>
+                  <span class="compare__v mono"><span class="visually-hidden">travel </span><span data-c={`${c.id}-md`}>—</span></span>
+                  <span class="compare__v mono"><span class="visually-hidden">robust </span><span data-c={`${c.id}-ft`}>—</span></span>
+                </button>
+              ))
+            }
+          </div>
+          <p class="pane__note">
+            In the paper the real rail network scored 1.8× cost, 0.85× travel and 96% robust; the mold 1.75 ± 0.30×, 0.85× and 86%. Cost and travel are against each network's spanning tree.
+          </p>
+          <figure class="tradeoff">
+            <svg class="tf" data-tradeoff="tokyo" viewBox="0 0 320 190" role="img" aria-label="Cost against robustness on the Kanto map: the spanning tree, the Steiner tree, the Delaunay mesh, the rail lines and the mold"></svg>
+            <figcaption class="fig"><span class="fig__n">Fig. 4</span> Kanto, live. The rail lines and the mold land in the same corner: much tougher than a tree for not much more track.</figcaption>
+          </figure>
+
+          <h2 class="pane__title">Try it</h2>
+          <ul class="how" role="list">
+            <li><b>Cut</b> a line, as a landslide or an earthquake might, and watch the flow find another way.</li>
+            <li><b>I₀</b>: at about 3 the mold's network costs as much as the paper's, and almost nothing can cut it off.</li>
+            <li><b>Start over</b> and it spreads from Tokyo again. Each run finds its own network.</li>
+          </ul>
+
+          <p class="pane__note">
+            The map is stylized. Cities sit at rounded positions, the coast is a sketch, and the rail network is straight links along the main lines, so read the comparison as an illustration, not a measurement.
+          </p>
+        </section>
+        <section class="pane" id="pane-challenge" role="tabpanel" aria-labelledby="tab-challenge" data-pane="challenge" hidden>
+          <p class="lens-tag" data-lens="engineering">Engineering</p>
+          <h2 class="pane__title">You vs the mold</h2>
+          <p class="pane__body">
+            Lay straight track between the towns within the budget, then race the mold on the same map. Whoever builds the cheaper, quicker, tougher network wins each round.
+          </p>
+          <nav class="steps" aria-label="Levels">
+            {
+              LEVELS.map((l, i) => (
+                <button class="steps__b mono" type="button" data-level-btn={l.id} data-done="false" aria-label={`Level ${i + 1}: ${l.title}`}>
+                  {i + 1}
+                </button>
+              ))
+            }
+          </nav>
+          <p class="step__k mono" data-level-k>Level 1 of {LEVELS.length}</p>
+          <h3 class="pane__title step__title" data-level-title>{LEVELS[0].title}</h3>
+          <p class="pane__body" data-level-blurb>{LEVELS[0].blurb}</p>
+
+          <div class="budget" data-budget data-over="false">
+            <div class="budget__row mono"><span>Track</span><span data-budget-v>0.00× of {LEVELS[0].budget.toFixed(2)}×</span></div>
+            <div class="budget__bar" aria-hidden="true"><span data-budget-bar></span></div>
+          </div>
+
+          <div class="compare score" role="group" aria-label="You against the mold">
+            <div class="compare__head mono" aria-hidden="true"><span></span><span>Cost</span><span>Travel</span><span>Robust</span></div>
+            <div class="compare__row score__row" data-score-row="you">
+              <span class="compare__name"><span class="compare__swatch" aria-hidden="true"></span>You</span>
+              {
+                ['tl', 'md', 'ft'].map((k) => (
+                  <span class="compare__v mono">
+                    <span class="visually-hidden">{k === 'tl' ? 'cost ' : k === 'md' ? 'travel ' : 'robust '}</span>
+                    <span data-you={k}>—</span>
+                    <span class="score__o" data-o={k}></span>
+                  </span>
+                ))
+              }
+            </div>
+            <div class="compare__row score__row" data-score-row="mold">
+              <span class="compare__name"><span class="compare__swatch compare__swatch--none" aria-hidden="true"></span>Mold</span>
+              {
+                ['tl', 'md', 'ft'].map((k) => (
+                  <span class="compare__v mono">
+                    <span class="visually-hidden">{k === 'tl' ? 'cost ' : k === 'md' ? 'travel ' : 'robust '}</span>
+                    <span data-mold={k}>?</span>
+                  </span>
+                ))
+              }
+            </div>
+          </div>
+          <p class="verdict" data-verdict data-kind="none">Connect every town, then race.</p>
+          <div class="board-opts__row">
+            <button class="chip chip--go" type="button" data-race disabled>Race the mold</button>
+            <button class="chip" type="button" data-clear-track>Clear track</button>
+            <button class="chip" type="button" data-next-level>Next level <span aria-hidden="true">→</span></button>
+          </div>
+
+          <h2 class="pane__title">How to play</h2>
+          <ul class="how" role="list">
+            <li><b>Track</b>: drag from a town to another. Drag onto a line to branch off it, or into open ground to make a junction.</li>
+            <li><b>Erase</b>: tap or scrub over a line or a junction.</li>
+            <li>Track can’t cross light, and the total can’t pass the budget, a multiple of the shortest tree.</li>
+            <li>A result within 2% (2 points for robust) is a tie. Beat the mold on one score without losing another to win the level.</li>
+          </ul>
+          <p class="pane__note">The mold is Tero’s flow model at I₀ 2, grown on this map until it settles, from the same start every race. Junctions with two lines and dead ends don’t count for robust, but every length you build counts for cost.</p>
+        </section>
+      </div>
+      <p class="foot" data-foot>The numbers come from the tube model on a mesh of about 2,500 tubes. The mold you see is drawn by the agents.</p>
+    </aside>
+
+    <p class="visually-hidden" aria-live="polite" data-live></p>
+  </main>
+</Base>
+
+<script>
+  import { mountPhysarum } from '../physarum/main';
+  const root = document.querySelector<HTMLElement>('[data-physarum]');
+  if (root) mountPhysarum(root);
+</script>
+
+<style>
+  .phys {
+    --panel-w: 23.5rem;
+    --top: calc(3.5rem + env(safe-area-inset-top, 0px));
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+  }
+  :global(body:has(.phys)) {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  :global(body:has(.phys) .topbar) {
+    position: fixed;
+    inset: 0 0 auto;
+  }
+
+  /* ---------- board ---------- */
+  .stage {
+    position: absolute;
+    inset: 0;
+  }
+  .stage::before {
+    /* The board's edge. */
+    content: '';
+    position: absolute;
+    left: var(--board-x, 0);
+    top: var(--board-y, 0);
+    width: var(--board-w, 0);
+    height: var(--board-h, 0);
+    border-radius: 0.5rem;
+    box-shadow:
+      0 0 0 1px var(--glass-border),
+      0 24px 60px -20px rgba(0, 0, 0, 0.6);
+    pointer-events: none;
+  }
+  .stage__agents,
+  .stage__board {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .stage__agents {
+    pointer-events: none;
+  }
+  .stage__board {
+    touch-action: none;
+    cursor: pointer;
+  }
+  .stage__board:focus-visible {
+    outline: none;
+  }
+  .phys[data-tool='light'] .stage__board {
+    cursor: none;
+  }
+  .phys[data-tool='cut'] .stage__board {
+    cursor: crosshair;
+  }
+
+  /* ---------- dock ---------- */
+  .dock {
+    position: absolute;
+    left: calc((100% - var(--panel-w) - var(--gutter)) / 2);
+    bottom: calc(var(--gutter) + env(safe-area-inset-bottom, 0px));
+    translate: -50% 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: max-content;
+    padding: 0.5rem;
+    border-radius: 1.75rem;
+    max-width: calc(100% - var(--panel-w) - var(--gutter) * 3);
+  }
+  .dock__sep {
+    width: 1px;
+    height: 1.5rem;
+    background: var(--glass-border);
+  }
+  .tool {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink);
+    cursor: pointer;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .tool svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: currentColor;
+  }
+  .tool:hover {
+    border-color: rgba(var(--amber-rgb), 0.5);
+  }
+  .tool:active:not(:disabled) {
+    transform: scale(0.94);
+  }
+  .tool:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .tool:focus-visible {
+    border-radius: 50%;
+  }
+  .tool--play {
+    width: 3rem;
+    height: 3rem;
+    border-color: rgba(var(--amber-rgb), 0.55);
+    background: rgba(var(--amber-rgb), 0.16);
+    color: var(--amber);
+  }
+  .tool--play .i-pause,
+  .tool--play[aria-pressed='true'] .i-play {
+    display: none;
+  }
+  .tool--play[aria-pressed='true'] .i-pause {
+    display: block;
+  }
+  .knob {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.25rem;
+  }
+  .knob__k {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+  }
+  .knob input {
+    width: 7rem;
+    accent-color: var(--amber);
+  }
+  .knob__v {
+    min-width: 2.25rem;
+    font-size: 0.75rem;
+    color: var(--ink);
+  }
+  .seg {
+    display: flex;
+    padding: 0.1875rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+  }
+  .seg__b {
+    min-height: 2.125rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    cursor: pointer;
+  }
+  .seg__b[aria-pressed='true'] {
+    background: rgba(var(--amber-rgb), 0.18);
+    color: var(--ink);
+  }
+  .seg__b:focus-visible {
+    border-radius: 999px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    min-height: 2.25rem;
+    padding: 0 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 550;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .chip:hover:not(:disabled) {
+    color: var(--ink);
+    border-color: rgba(var(--amber-rgb), 0.5);
+  }
+  .chip:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  .chip:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  .chip:focus-visible {
+    border-radius: 999px;
+  }
+
+  /* ---------- panel ---------- */
+  .panel {
+    position: absolute;
+    top: calc(var(--top) + 0.75rem);
+    right: var(--gutter);
+    bottom: var(--gutter);
+    width: var(--panel-w);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .grab {
+    display: none;
+  }
+  .head {
+    padding: 1.25rem 1.375rem 0.75rem;
+  }
+  .kicker {
+    margin: 0 0 0.5rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .lede {
+    margin: 0.5rem 0 0;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  .tabs {
+    display: flex;
+    margin: 0 1.125rem 0.75rem;
+    padding: 0.1875rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+  }
+  .tabs__b {
+    flex: 1;
+    min-height: 2.125rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tabs__b[aria-selected='true'] {
+    background: rgba(var(--amber-rgb), 0.18);
+    color: var(--ink);
+  }
+  .tabs__b:focus-visible {
+    border-radius: 999px;
+  }
+  .seg__b:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .net {
+    margin: 0 1.125rem;
+    padding: 0.75rem 0.875rem 0.625rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+  }
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0;
+  }
+  .metric {
+    min-width: 0;
+  }
+  .metric dd {
+    margin: 0;
+  }
+  .metric__k {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .metric__v {
+    margin-top: 0.125rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .metric__note {
+    font-size: 0.6875rem;
+    line-height: 1.3;
+    color: var(--muted);
+  }
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stages__s {
+    padding-top: 0.375rem;
+    border-top: 2px solid var(--glass-edge);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: color 200ms ease, border-color 200ms ease;
+  }
+  .stages__s[data-state='done'] {
+    border-top-color: rgba(var(--amber-rgb), 0.45);
+    color: var(--ink-2);
+  }
+  .stages__s[data-state='now'] {
+    border-top-color: var(--amber);
+    color: var(--ink);
+  }
+  .stages__n {
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .status {
+    min-height: 2.6em;
+    margin: 0.375rem 0 0.625rem;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    color: var(--ink-2);
+  }
+  .status[data-kind='settled'] {
+    color: var(--amber);
+  }
+  /* Until the mesh has thinned the numbers measure the whole web, so they stay faint. */
+  .metric__v {
+    transition: opacity 200ms ease;
+  }
+  .phys:not([data-mode='challenge']) .net[data-stage='spread'] .metric__v,
+  .phys:not([data-mode='challenge']) .net[data-stage='none'] .metric__v {
+    opacity: 0.3;
+  }
+  .phys:not([data-mode='challenge']) .net[data-stage='thin'] .metric__v {
+    opacity: 0.6;
+  }
+  .phys[data-mode='challenge'] .stages {
+    display: none;
+  }
+  .phys[data-mode='challenge'] .status {
+    min-height: 0;
+    margin-top: 0;
+  }
+  .panes {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0.5rem 1.375rem 0.5rem;
+  }
+  .pane__title {
+    margin: 1.125rem 0 0.375rem;
+    font-size: 1.0625rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .pane__body {
+    margin: 0 0 0.625rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+    font-size: 0.9375rem;
+  }
+  .pane__body b,
+  .how b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .pane__note {
+    margin: 0.625rem 0;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+  .chip--go {
+    border-color: rgba(var(--amber-rgb), 0.55);
+    background: rgba(var(--amber-rgb), 0.14);
+    color: var(--ink);
+  }
+  .pane > .chip--go {
+    margin: 0.25rem 0 0.5rem;
+  }
+  .steps {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0.625rem 0 0;
+  }
+  .steps__b {
+    flex: 1;
+    min-width: 0;
+    height: 2rem;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out,
+      color 150ms ease-out;
+  }
+  .steps__b[data-done='true'] {
+    background: rgba(var(--amber-rgb), 0.14);
+    color: var(--ink-2);
+  }
+  .steps__b[aria-current='step'] {
+    border-color: rgba(var(--amber-rgb), 0.7);
+    color: var(--ink);
+  }
+  .steps__b:focus-visible {
+    border-radius: 999px;
+  }
+  .step__k {
+    margin: 1rem 0 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+  .step__title {
+    margin-top: 0.25rem;
+  }
+  .step:not([hidden]) {
+    animation: step-in 220ms ease-out;
+  }
+  @keyframes step-in {
+    from {
+      opacity: 0;
+    }
+  }
+  .goal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    margin: 0.75rem 0;
+    padding: 0.625rem 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--glass-border);
+    color: var(--ink-2);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+  .goal__k {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .goal__mark {
+    display: grid;
+    place-items: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+  }
+  .goal__mark svg {
+    width: 0.75rem;
+    height: 0.75rem;
+    fill: none;
+    stroke: transparent;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .goal[data-met='true'] {
+    border-style: solid;
+    border-color: rgba(var(--amber-rgb), 0.55);
+    color: var(--ink);
+  }
+  .goal[data-met='true'] .goal__mark {
+    border-color: var(--amber);
+    background: var(--amber);
+  }
+  .goal[data-met='true'] .goal__mark svg {
+    stroke: var(--bg-raise);
+  }
+  .readings {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+  }
+  .readings__r {
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+  }
+  .readings__k {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .readings__v {
+    margin: 0.125rem 0 0;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--ink);
+    white-space: pre-line;
+  }
+  .step-nav {
+    position: sticky;
+    bottom: -0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem -1.375rem 0;
+    padding: 0.625rem 1.375rem 0.75rem;
+    border-top: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+  }
+  .step-nav__next {
+    margin-left: auto;
+  }
+  .step-nav .chip[hidden] {
+    display: none;
+  }
+  .pane[data-met='true'] .step-nav__next {
+    border-color: rgba(var(--amber-rgb), 0.55);
+    background: rgba(var(--amber-rgb), 0.16);
+    color: var(--ink);
+  }
+  .phys:not([data-mode='challenge']) [data-challenge-only],
+  .phys[data-mode='challenge'] [data-not-challenge],
+  .phys[data-mode='challenge'] .seg__b[data-tool-btn]:not([data-challenge-only]) {
+    display: none;
+  }
+  .phys[data-tool='track'] .stage__board,
+  .phys[data-tool='erase'] .stage__board {
+    cursor: crosshair;
+  }
+  .budget {
+    margin: 0.5rem 0 0.25rem;
+  }
+  .budget__row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--ink-2);
+  }
+  .budget__bar {
+    height: 0.375rem;
+    margin-top: 0.3125rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+  }
+  .budget__bar span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--phys-draft);
+  }
+  .budget[data-over='true'] .budget__bar span {
+    background: var(--amber);
+  }
+  .score__row {
+    cursor: default;
+  }
+  .score__row:hover {
+    border-color: transparent;
+  }
+  .score__o {
+    display: block;
+    font-size: 0.625rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .score__o[data-o-kind='win'] {
+    color: var(--cyan);
+  }
+  .score__o[data-o-kind='lose'] {
+    color: var(--amber);
+  }
+  .verdict {
+    margin: 0.625rem 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .verdict[data-kind='beat'] {
+    color: var(--cyan);
+  }
+  .verdict[data-kind='lost'] {
+    color: var(--amber);
+  }
+  .compare {
+    display: grid;
+    gap: 0.25rem;
+    margin: 0.875rem 0 0;
+  }
+  .compare__head,
+  .compare__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 3.5rem 3.5rem 3.25rem;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0 0.625rem;
+  }
+  .compare__head {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .compare__head span,
+  .compare__v {
+    text-align: right;
+  }
+  .compare__row {
+    min-height: 2.5rem;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--ink-2);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition:
+      background 150ms ease-out,
+      border-color 150ms ease-out;
+  }
+  .compare__row:hover {
+    border-color: var(--glass-border);
+  }
+  .compare__row[aria-pressed='true'] {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--glass-border);
+    color: var(--ink);
+  }
+  .compare__name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  .compare__swatch {
+    flex: none;
+    width: 0.875rem;
+    height: 0.1875rem;
+    border-radius: 999px;
+    background: var(--phys-draft);
+  }
+  .compare__swatch--none {
+    height: 0.375rem;
+    background: var(--amber);
+  }
+  .compare__swatch--delaunay {
+    opacity: 0.6;
+  }
+  .compare__v {
+    font-size: 0.875rem;
+    color: inherit;
+  }
+  .how {
+    display: grid;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  .rounds {
+    display: grid;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0 0 0 1.25rem;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+  .rounds li::marker {
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .rounds b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .growth {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin: 0.875rem 0 0.25rem;
+  }
+  .growth__p {
+    display: grid;
+    gap: 0.25rem;
+    align-content: start;
+  }
+  .growth svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--glass-border);
+  }
+  .growth__tube {
+    stroke: var(--amber);
+    stroke-linecap: round;
+    opacity: 0.85;
+  }
+  .growth__tube[data-faint] {
+    opacity: 0.3;
+  }
+  .growth__food {
+    fill: var(--ink);
+  }
+  .growth__cap {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: var(--muted);
+  }
+  .growth__cap b {
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .board-opts {
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    margin: 1rem 0 0.25rem;
+  }
+  .board-opts__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .sources {
+    display: grid;
+    gap: 0.5rem;
+    margin: 0 0 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+  .sources a {
+    display: grid;
+    gap: 0.125rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 150ms ease-out;
+  }
+  .sources a:hover {
+    border-color: rgba(var(--amber-rgb), 0.5);
+  }
+  .sources__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+  .sources__body {
+    font-size: 0.8125rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .sources__by {
+    font-size: 0.75rem;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .foot {
+    margin: 0;
+    padding: 0.75rem 1.375rem 1rem;
+    border-top: 1px solid var(--glass-border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  /* ---------- phones: the panel is a bottom sheet ---------- */
+  @media (max-width: 899px) {
+    .phys {
+      --panel-w: 0px;
+      --peek: 13.75rem;
+    }
+    .panel {
+      top: var(--top);
+      left: 0;
+      right: 0;
+      bottom: auto;
+      width: auto;
+      height: calc(100% - var(--top));
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      border-bottom: 0;
+      translate: 0 var(--sheet-y, calc(100% - var(--peek)));
+      will-change: translate;
+    }
+    .grab {
+      display: grid;
+      place-items: center;
+      height: 1.375rem;
+      cursor: grab;
+      touch-action: none;
+    }
+    .grab span {
+      width: 2.5rem;
+      height: 0.3125rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .head {
+      padding: 0 1.125rem 0.5rem;
+      touch-action: none;
+    }
+    .title {
+      font-size: 1.5rem;
+    }
+    .kicker,
+    .lede {
+      display: none;
+    }
+    .phys[data-sheet='peek'] .head {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      padding: 0;
+    }
+    .tabs {
+      margin: 0 1.125rem 0.5rem;
+    }
+    .phys[data-sheet='full'] .kicker,
+    .phys[data-sheet='full'] .lede,
+    .phys[data-sheet='half'] .lede {
+      display: block;
+    }
+    .net {
+      padding: 0.5rem 0.75rem;
+    }
+    .metric__v {
+      font-size: 1.0625rem;
+    }
+    .metric__note {
+      display: none;
+    }
+    .foot {
+      padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+    }
+    /* The sheet slides down past the screen's edge: the padding keeps the end of a pane, and
+       the tour's sticky Back and Next, above it. */
+    .panes {
+      padding-bottom: calc(0.5rem + var(--panes-cover, 0px) + env(safe-area-inset-bottom, 0px));
+    }
+    .dock {
+      left: 50%;
+      bottom: calc(var(--peek) + 0.625rem);
+      max-width: calc(100% - 1.25rem);
+      border-radius: 1.5rem;
+      gap: 0.375rem;
+    }
+    .dock__sep {
+      display: none;
+    }
+    /* Two rows: Play, Skip ahead and Start over, then the tools and I₀. */
+    .dock > * {
+      order: 2;
+    }
+    .dock > .tool,
+    .dock > .chip {
+      order: 1;
+    }
+    .knob input {
+      width: 5rem;
+    }
+    .dock .chip {
+      padding: 0 0.6875rem;
+      font-size: 0.75rem;
+    }
+    .seg__b {
+      padding: 0 0.625rem;
+      font-size: 0.75rem;
+    }
+    .phys[data-sheet='full'] .dock,
+    .phys[data-sheet='half'] .dock {
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chip,
+    .tool,
+    .sources a,
+    .compare__row,
+    .steps__b,
+    .stages__s,
+    .metric__v {
+      transition: none;
+    }
+    .step:not([hidden]) {
+      animation: none;
+    }
+  }
+  @media (prefers-reduced-transparency: reduce) {
+    .net,
+    .step-nav {
+      background: var(--bg-raise);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .chip,
+    .seg,
+    .net,
+    .tabs,
+    .steps__b,
+    .goal,
+    .compare__row[aria-pressed='true'],
+    .growth svg,
+    .sources a {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+    .stages__s[data-state='next'] {
+      color: var(--ink-2);
+    }
+    .growth__tube {
+      opacity: 1;
+    }
+  }
+  /* ---------- design language: a field notebook on a dark petri dish (SPEC "Physarum") ---------- */
+  .phys {
+    --ink: var(--phys-paper);
+    --ink-2: var(--phys-paper-2);
+    --muted: var(--phys-muted);
+    --amber: var(--phys-plasm);
+    --amber-rgb: var(--phys-plasm-rgb);
+    --cyan: var(--phys-moss);
+    --cyan-rgb: var(--phys-moss-rgb);
+    --hot: var(--phys-glow);
+    --bg-raise: var(--phys-raise);
+    --glass-bg: var(--phys-glass);
+    --glass-border: var(--phys-line);
+    --glass-edge: var(--phys-line-2);
+    --ease-organic: cubic-bezier(0.22, 0.61, 0.36, 1);
+    color: var(--ink);
+    background: radial-gradient(ellipse 80% 70% at 38% 48%, var(--phys-raise), var(--phys-rim) 78%);
+  }
+  .stage::before {
+    border-radius: 0.875rem;
+    box-shadow:
+      0 0 0 1px var(--phys-line-2),
+      0 0 0 7px rgba(var(--phys-paper-rgb), 0.025),
+      0 0 0 8px var(--phys-line),
+      0 34px 80px -30px var(--phys-rim);
+  }
+  /* On the Kanto map the bottom left is busy with Odawara and Sagami Bay. */
+  .phys[data-mode='tokyo'] .plate {
+    top: calc(var(--board-y, 0px) + 0.625rem);
+  }
+  .plate {
+    position: absolute;
+    left: calc(var(--board-x, 0px) + 0.875rem);
+    top: calc(var(--board-y, 0px) + var(--board-h, 0px) - 1.875rem);
+    max-width: calc(var(--board-w, 0px) - 1.75rem);
+    margin: 0;
+    overflow: hidden;
+    font: italic 400 0.8125rem/1.3 var(--serif);
+    color: rgba(var(--phys-paper-rgb), 0.6);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 0 1px 8px var(--phys-rim);
+    pointer-events: none;
+  }
+
+  /* Type: a humane serif for the story and the headings; the site's sans for controls. */
+  .kicker {
+    font: italic 400 0.875rem/1.3 var(--serif);
+    letter-spacing: 0.01em;
+    text-transform: none;
+    color: var(--phys-plasm);
+  }
+  .title {
+    font-family: var(--serif);
+    font-size: 2.375rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    margin-top: 0.625rem;
+    font: 400 1rem/1.5 var(--serif);
+    color: var(--ink-2);
+  }
+  .pane__title {
+    font-family: var(--serif);
+    font-size: 1.3125rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+  }
+  .pane__sub {
+    margin: 1rem 0 0.5rem;
+    font: 600 1rem var(--serif);
+  }
+  .pane__body,
+  .how,
+  .rounds {
+    font-family: var(--serif);
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+  .pane__note,
+  .foot {
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  /* The readings: a specimen label, ruled twice. */
+  .net {
+    border-radius: 0.375rem;
+    background: rgba(var(--phys-paper-rgb), 0.035);
+    border-color: var(--phys-line-2);
+    outline: 1px solid var(--phys-line);
+    outline-offset: -5px;
+  }
+  .net__label {
+    margin: 0 0 0.5rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid var(--phys-line);
+    font: italic 400 0.8125rem/1.3 var(--serif);
+    color: var(--ink-2);
+  }
+  .net__k {
+    font-style: normal;
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.08em;
+    color: var(--phys-plasm);
+  }
+  .metric__k {
+    font: 600 0.8125rem/1.2 var(--serif);
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.06em;
+    text-transform: none;
+    color: var(--muted);
+  }
+  .metric__note {
+    font: italic 0.75rem/1.3 var(--serif);
+  }
+  .status {
+    font-family: var(--serif);
+    font-size: 0.875rem;
+  }
+  .stages__s {
+    transition:
+      color 600ms var(--ease-organic),
+      border-color 600ms var(--ease-organic);
+  }
+  .metric__v {
+    transition: opacity 600ms var(--ease-organic);
+  }
+
+  /* The three lenses. */
+  [data-lens='nature'] {
+    --lens: var(--phys-moss);
+  }
+  [data-lens='math'] {
+    --lens: var(--phys-plasm);
+  }
+  [data-lens='engineering'] {
+    --lens: var(--phys-draft);
+  }
+  .lenses {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.375rem;
+    margin: 0.5rem 0 0.25rem;
+  }
+  .lenses__l {
+    display: grid;
+    align-content: start;
+    gap: 0.125rem;
+    padding: 0.5rem 0.5625rem 0.5625rem;
+    border: 1px solid var(--phys-line);
+    border-top: 2px solid var(--lens);
+    border-radius: 0.375rem;
+    text-decoration: none;
+    transition:
+      background 400ms var(--ease-organic),
+      border-color 400ms var(--ease-organic);
+  }
+  .lenses__l:hover {
+    background: rgba(var(--phys-paper-rgb), 0.04);
+  }
+  .lenses__k {
+    font: 600 0.9375rem var(--serif);
+    color: var(--lens);
+  }
+  .lenses__say {
+    font: italic 0.75rem/1.3 var(--serif);
+    color: var(--muted);
+  }
+  .lens-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.875rem 0 0;
+    font: 600 0.6875rem var(--font);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--lens);
+  }
+  .lens-tag::before {
+    content: '';
+    width: 1.5rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+  .lens-tag + .pane__title {
+    margin-top: 0.25rem;
+    scroll-margin-top: 2.5rem;
+  }
+  .step__k {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .step__k .lens-tag {
+    margin: 0;
+  }
+
+  /* Figures, numbered and captioned as in a monograph. */
+  .fig {
+    margin-top: 0.5rem;
+    font: italic 0.8125rem/1.45 var(--serif);
+    color: var(--ink-2);
+  }
+  .fig__n {
+    margin-right: 0.375rem;
+    font-style: normal;
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.08em;
+    color: var(--phys-plasm);
+  }
+  .growth .fig {
+    grid-column: 1 / -1;
+  }
+  .growth svg {
+    background: var(--phys-dish);
+    border-color: var(--phys-line);
+  }
+  .growth__tube {
+    stroke: var(--phys-plasm);
+  }
+  .growth__food {
+    fill: var(--phys-oat);
+    stroke: var(--phys-ochre);
+    stroke-width: 0.8;
+  }
+  .growth__cap {
+    font-family: var(--serif);
+  }
+  .eqs {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0.75rem 0 0.25rem;
+    padding: 0.875rem 0.875rem 0.75rem;
+    border: 1px solid var(--phys-line);
+    border-radius: 0.375rem;
+    background: rgba(var(--phys-paper-rgb), 0.025);
+  }
+  .eq + .eq {
+    padding-top: 0.75rem;
+    border-top: 1px dashed var(--phys-line-2);
+  }
+  .eq {
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  /* Leave <math display="block"> its own layout (display: block math); only set the face. */
+  .eq math {
+    margin: 0.25rem 0;
+    font-family: 'STIX Two Math', 'Cambria Math', 'Latin Modern Math', math;
+    font-size: 1.125rem;
+    color: var(--phys-paper);
+  }
+  .eq__say {
+    margin: 0.25rem 0 0;
+    font: 0.875rem/1.45 var(--serif);
+    color: var(--ink-2);
+  }
+  .eq__say b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .tradeoff {
+    margin: 0.75rem 0 0.5rem;
+  }
+  .tf {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--phys-line);
+    border-radius: 0.375rem;
+    background: rgba(var(--phys-paper-rgb), 0.02);
+  }
+  .tf :global(.tf__axis),
+  .tf :global(.tf__tick) {
+    stroke: var(--phys-line-2);
+    stroke-width: 1;
+  }
+  .tf :global(.tf__num) {
+    fill: var(--muted);
+    font: 9px var(--mono);
+  }
+  .tf :global(.tf__cap) {
+    fill: var(--ink-2);
+    font: italic 10px var(--serif);
+  }
+  .tf :global(.tf__pt circle) {
+    fill: var(--phys-dish);
+    stroke: var(--phys-draft);
+    stroke-width: 1.4;
+  }
+  .tf :global(.tf__pt text) {
+    fill: var(--ink-2);
+    font: italic 10.5px var(--serif);
+  }
+  .tf :global(.tf__pt[data-id='paper'] circle) {
+    stroke-dasharray: 2 2;
+  }
+  .tf :global(.tf__pt[data-id='mold'] circle) {
+    fill: var(--phys-plasm);
+    stroke: var(--phys-glow);
+    filter: drop-shadow(0 0 4px rgba(var(--phys-plasm-rgb), 0.7));
+  }
+  .tf :global(.tf__pt[data-id='mold'] text) {
+    fill: var(--phys-plasm);
+    font-weight: 600;
+  }
+
+  /* For the curious: closed until asked. */
+  .curious {
+    margin: 2rem 0 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--phys-line);
+  }
+  .curious summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    list-style: none;
+    font: 600 1.125rem var(--serif);
+    cursor: pointer;
+  }
+  .curious summary::-webkit-details-marker {
+    display: none;
+  }
+  .curious summary::before {
+    content: '+';
+    font: 400 1.125rem var(--mono);
+    color: var(--phys-plasm);
+    transition: rotate 400ms var(--ease-organic);
+  }
+  .curious[open] summary::before {
+    rotate: 45deg;
+  }
+  .curious > .seg {
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  /* Motion: slow and eased; nothing snaps. */
+  .step:not([hidden]) {
+    animation: step-in 480ms var(--ease-organic);
+  }
+  .chip,
+  .tool,
+  .seg__b,
+  .tabs__b {
+    transition:
+      background 300ms var(--ease-organic),
+      border-color 300ms var(--ease-organic),
+      color 300ms var(--ease-organic);
+  }
+  @media (max-width: 899px) {
+    .title {
+      font-size: 2rem;
+    }
+    /* The peek holds the stage bar and the readings; the label's heading waits for the sheet. */
+    .phys[data-sheet='peek'] .net__label {
+      display: none;
+    }
+    /* Half open is for reading: the readings step aside so the pane has room. */
+    .phys[data-sheet='half'] .net {
+      display: none;
+    }
+    .plate {
+      font-size: 0.75rem;
+      top: calc(var(--board-y, 0px) + var(--board-h, 0px) - 1.625rem);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lenses__l,
+    .curious summary::before,
+    .stages__s,
+    .metric__v,
+    .chip,
+    .tool,
+    .seg__b,
+    .tabs__b {
+      transition: none;
+    }
+    .step:not([hidden]) {
+      animation: none;
+    }
+  }
+  @media (prefers-contrast: more) {
+    .lenses__l,
+    .eqs,
+    .tf,
+    .growth svg {
+      border-color: rgba(var(--phys-paper-rgb), 0.5);
+    }
+    .plate,
+    .fig {
+      color: var(--phys-paper);
+    }
+  }
+</style>

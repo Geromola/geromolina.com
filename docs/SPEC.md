@@ -482,6 +482,114 @@ Decided 2026-10-27. A daily feed at `/news` that Gero reads himself: clean tech,
 - The `ANTHROPIC_API_KEY` repository secret is set by Gero.
 - `npm run news -- --dry-run` runs the whole funnel on fixtures with a fake Claude.
 
+## Physarum
+Decided 2026-10-27. A fifth interactive at `/physarum`, in "Math & Nature": the slime mold *Physarum polycephalum* building transport networks between food, after Tero, Nakagaki et al., "Rules for biologically inspired adaptive network design", *Science* 327 (2010). The page joins nature, networks and optimization. It stays off the home menu until Gero has play-tested it.
+
+### The science (what the page claims)
+- The plasmodium is one giant cell. Protoplasm shuttles through its tubes. Tubes that carry more flow thicken, and tubes that carry little thin out and vanish.
+- In the experiment, 36 oat flakes stood for the cities around Tokyo. The mold grew out from Tokyo, and light kept it off mountains, lakes and sea, which it avoids. Within about 26 hours it had thinned to a network.
+- The networks were scored on cost (total length, TL), transport efficiency (mean shortest distance between food pairs, MD) and fault tolerance (FT: the chance that a single random link failure does *not* cut off part of the network). TL and MD are normalised to the minimum spanning tree (MST).
+- Results: rail TL ≈ 1.8 × MST and the mold's 1.75 ± 0.30; MD 0.85 for both; 4% of single faults would disconnect the rail network and 14 ± 4% the illuminated mold networks. The Delaunay triangulation is ~4.6 × MST.
+- The model (Tero et al.): a fine random mesh of tubes. Each step a random food is the source (+I₀) and another the sink (−I₀). Kirchhoff gives the pressures, and `Q = D/L · Δp`. Then `dD/dt = f(|Q|) − D` with `f(Q) = Q^γ / (1 + Q^γ)`. A higher I₀ (or a lower γ) keeps more cross-links: more robust but more expensive. Tokyo was seven food sources.
+- The live, organic layer is Jeff Jones's agent model (2010): particles with three sensors follow and lay down a diffusing, decaying trail.
+
+### Models
+- **Growth** (`src/physarum/growth.ts`, decided 2026-11-01 after play-testing): every fresh board first spreads, as the real plasmodium explores. Each origin (every food; on the Kanto map Tokyo alone, `scene.origin`, as in the experiment) grows a tree over the flow mesh: the shortest-path forest under random tube costs (length × 1 ± 0.6, first-passage percolation), so strands fork and wander. A vertex is reached at its cost distance and its tube grows out from the parent, so tips advance; where two trees touch, up to three of the cheapest tubes per pair (0.12 apart) fuse, grown from both ends to meet in the middle. Thickness follows how much a tube feeds (√(vertices below / 120)). Drawing positions are smoothed along the strands. The flow model is held during growth (9 s at Normal, 16 Slow, 4 Fast, 3 in the race; it waits for two foods), then starts from the strands: strand tubes at 0.5 + 0.5 × thickness, fused tubes 0.75, every other tube a film at 0.2 × f(I₀) ± 25%. Settled networks stay within the old seed-to-seed spread (Tokyo at I₀ 2 ≈ 1.5× / 0.76× / 84%).
+- **Flow** (`src/physarum/flow.ts`): the Tero model on a jittered triangular lattice, minus the lit vertices. Each food keeps a potential (warm-started conjugate gradient), so a step costs two short solves. A tube never thins below a floor (a film of plasmodium), so after a cut the flux leaks round and a new route thickens. Defaults: I₀ 2, γ 1.8, dt 0.05, lattice spacing 0.03 on a 1 × 0.625 board (~850 vertices); a network forms in ~1,200 steps. `extractNetwork()` drops dead ends, contracts chains into links between foods and junctions, and smooths each link's path. This is the measured network.
+- **Agents** (`src/physarum/agents.ts`, GPU in `render-gl.ts`): the Jones model on the same scene. This is the picture, not the measurement. The agents are drawn to an attractant field (food, plus every tube weighted by D / f(I₀)) and lay trail only where that field is, so the mold fills the fine mesh at first and gathers on the tubes that survive, with no self-sustaining strays off the network. While the board grows, the attractant is the grown part of each strand, rebuilt about 11 times a second.
+- **Runtime:** the flow model runs in a Web Worker (`flow.worker.ts` around the DOM-free `FlowRunner`, or on the main thread without workers) and posts the conductivities, the network and its metrics about 15 times a second. Once the network has settled (TL within 1% over 6 time units, and under half the live mesh's length, so a fresh mesh never counts) it slows to 40 steps a second. Each init carries a generation number that comes back on every state, so the page drops states from the board it just replaced. WebGL2 runs 131k agents (98k on phones) on a 640 × 400 trail (480 × 300 on phones); the Canvas fallback runs 14k on 320 × 200. Each new growth goes to the page once as a `growth` message (`takeGrowth`); states carry `grow: {tau, end, rate}` while growing, and the page runs `tau` on between states so the tips move smoothly. States also carry `inNet`, the tubes of the measured network. Drawing (`flowWeights`, `smoothAlong` in growth.ts): strands by √(D / f(I₀)), network tubes at least faintly; film only in the network, and only once the flow has thickened it past 0.3 × f(I₀) or after 5 time units (when unused film has decayed out of the network), so the lattice never shows. Tube positions are relaxed along the tubes that show, so chains draw as curves. Speeds: Slow 60, Normal 120, Fast unlimited rounds a second.
+- **Reference networks** (`src/physarum/reference.ts`): MST, Delaunay, and an approximate Steiner tree (Fermat points inserted into the MST, then Weiszfeld).
+- **Metrics** (`src/physarum/metrics.ts`): TL, MD and FT, where FT = 1 − bridges / links on the contracted network, plus TL/MST and MD/MST.
+
+### Modes
+- **Sandbox:** place, move and remove food; paint light; cut tubes; tune I₀; view Mold, Tubes or Both; Skip ahead; Start over.
+  - Board: 1 × 0.625 landscape, or 0.625 × 1 portrait when the window is taller than wide. Opens on a nine-food example.
+  - Food tool: pointer-down on empty dark board places food at once (up to 40); drag moves it; a tap on an existing food removes it. Light tool: drag paints a soft brush; starting on light erases. Cut tool: a drag cuts every tube it crosses and leaves a dashed scar. Start over restarts the fine mesh (and heals cuts). Moving food, painting light and cutting never start over: the model adapts from where it is.
+  - Dock: Play/Pause, Skip ahead (1,500 rounds at once), Start over, Food / Light / Cut, I₀ (0.2–8, log scale). There is no single-step button and no model-time counter: the page calls model steps "rounds" (the tour's steps are its chapters). The panel holds View (Mold / Tubes / Both), Speed (Slow / Normal / Fast), Example board and Clear board.
+  - Panel top (in the phone sheet's peek too): a three-stage bar, **1 Spread → 2 Thin out → 3 Settled**, from the runner's `stage` (spread while the strands grow, and after while the extracted network is still over half the live mesh; thin after; settled by the settle rule), then one plain sentence on what is happening (prefixed "Paused." when paused), then the three metrics. The metrics show at 30% opacity while spreading and 60% while thinning, since they only mean something once it settles. The challenge hides the bar.
+  - Panel body (2026-11-10, Design language). The head is the story hook: "In 2010 a single cell with no brain was set down on a map of Tokyo…". Then the Sandbox pane:
+    - the three-lens strip (anchor links);
+    - **Nature**, *What the slime mold does* (a single cell, not a fungus; use it or lose it; the footpaths analogy);
+    - **Try it**: the tools, the time controls, speed, Example and Clear board, and Take the tour;
+    - **Math**, *The math*: four plain rounds, Fig. 1 (the three stages grown by `growth.ts` on a small lattice in the frontmatter), then Fig. 2, the three equations in MathML (flux, Kirchhoff, the conductivity update with f) with captions and I₀;
+    - **Engineering**, *Cost against resilience*: the three metrics and Fig. 3, the live trade-off figure (spanning tree, Steiner tree, Delaunay, the 2010 Tokyo rail and the mold);
+    - *For the curious*, a closed `<details>`: how it spreads, the two models with the Mold, Tubes and Both switch, time scales, and sources.
+
+    The Tokyo pane adds Fig. 4, the same figure with the Kanto rail sketch. Under the board a plate caption names the mode (Plate I to IV). The readings sit on a specimen label.
+  - Keyboard: arrows move a cursor on the board (Shift for bigger steps), Enter places or removes food (or paints light); Space plays or pauses.
+  - Hash: `#n=x,y;…&l=<light runs>&i=<I₀>&o=p`.
+  - Reduced motion: no autoplay and no shuttle pulses; a fresh board shows its grown strands at once (growth skipped), and Skip ahead and Start over still work. An agent burst after Skip ahead animates the picture only; the flow stays put.
+- **Tokyo:** a stylized Kanto (`src/physarum/kanto.ts`). The panel's tabs are Sandbox, Tour, Tokyo and Challenge; the last three put their own boards up, and the sandbox board comes back on returning to the Sandbox.
+  - Map: 34 cities at rounded real positions (Tokyo weighted 7, as in the paper's model), nudged inland where the coast is close. Light: the Pacific with Sagami Bay and Tokyo Bay, Lake Kasumigaura, the western mountains and Mount Tsukuba. The map is projected (x scaled by cos 35.7°) and fitted to the board, landscape or portrait. The overlay draws the coast and lake shore, the sea and mountain names, and the city names (major cities only on boards under 620 px wide).
+  - Rail sketch: 53 straight links along the main lines (Tokaido, Chuo, Odakyu, Musashino, Joban, Sobu and others), with some parallel and secondary lines left out. It scores 2.15× cost, 0.68× travel and 91% robust on this map.
+  - Comparison: rows for Mold (live), Rail lines, Spanning tree and Delaunay, each with cost, travel and robust (against the same spanning tree); picking a row draws it in cyan on the board (Rail by default, Mold draws none). A note gives the paper's numbers (rail 1.8×, 0.85×, 96%; mold 1.75 ± 0.30×, 0.85×, 86%), and one line says the map is stylized and the comparison illustrative.
+  - The map is fixed: Food and Light are disabled and the tool is Cut. The mold spreads from Tokyo alone. I₀ starts at 2, where the model settles near 1.5× cost, 0.76× travel and 84% robust; at about 3 it costs ~1.7× and 96% robust.
+  - Hash: `#m=tokyo&i=<I₀>`.
+- **Challenge (You vs the mold)** (`src/physarum/challenge.ts`): lay straight track between towns within a budget, then race the mold on the same map.
+  - Levels: Five towns (budget 1.6× MST), Round the lake (8 towns round a lit lake, 1.6×), Nine towns (1.7×; was 1.5× before the growth phase, when its mold cost 1.38×), The pass (10 towns either side of a lit ridge with one gap, 1.6×), Twelve towns (1.5×). Towns are seeded, at least a set gap apart, laid out landscape and transposed for portrait. Measured mold (I₀ 2, 1,500 steps, landscape): 1.43× / 0.86× / 83%, 1.35× / 0.83× / 100%, 1.38× / 0.92× / 83%, 1.45× / 0.95× / 75%, 1.28× / 0.82× / 85%. Race molds (seed 1, I₀ 2, grown first): Five towns 1.39× / 0.87× / 67%, Round the lake 1.40× / 0.83× / 100%, Nine towns 1.58× / 0.93× / 79%, The pass 1.56× / 0.98× / 85%, Twelve towns 1.46× / 0.80× / 95%; a test keeps every budget above its mold.
+  - Tools: **Track** (drag from a town, a junction, a point on a line, which splits it, or open ground, which makes a junction; the drag shows a dashed preview, grey when it can't be built) and **Erase** (tap or scrub; a junction goes with its links, except one on a straight line, which loses only its branches and leaves the line whole). Undo and Clear track. Track can't cross light or pass the budget, and both say so in the live region. Keyboard: Enter starts and then lays a line at the cursor, Escape cancels.
+  - Scoring (`measure`): cost counts every length built; travel and robust use the track with dead-end junctions pruned and two-link junctions contracted, as for the mold. Against the mold: cost and travel tie within 2%, robust within 2 points; lower cost and travel win, higher robust wins. Verdict: beat (a win and no loss), lost, trade-off, tie, or unfinished (not every town connected).
+  - The race: the mold is hidden while you build (no agents, no tubes, Play disabled). Race the mold re-inits the model with the same seed (so a level's mold is the same every race) and runs it flat out with the mold drawn, until it settles or reaches 1,500 steps; then the scores show (win / tie / lose per metric, the verdict). Editing the track after the race rescores it against the same mold.
+  - In this mode the top readout shows your track, and its status shows the budget, then "n won · n lost". The dock shows Play, Race the mold, Undo, Track and Erase, and hides Skip ahead, Start over and I₀.
+  - Progress: `physarum-progress` gains `challenge: {at, best: {level: {margin, beat}}}` (margin = wins − losses, the best kept); a level's dot is tinted once beaten.
+  - Hash: `#m=challenge&c=<level id>`.
+- **Tour** (`src/physarum/tour.ts`): seven steps, each with its own board (laid out landscape and transposed for a portrait board), the tools it allows, its I₀, and a goal checked against the flow model's settled readings. The panel shows step dots (done ones tinted), "Step n of 7", the text, the goal (a check when met), and a sticky Back / Reset board / Next bar; Next lights up once the goal is met but never waits for it.
+  1. **One cell, many nuclei:** two foods thin to one tube (I₀ 1; at 2 parallel tubes survive). Food and Cut. Goal: settle.
+  2. **The maze** (Nakagaki, Yamada & Tóth 2000): a 7 × 4 maze drawn in ASCII in `tour.ts`, walls as light, food at opposite corners, a 13-cell way and a 21-cell way round, and dead ends. Cut only. Goal: settle (on the short way, travel ~1.16×; cut it and it takes the long way, ~1.93×).
+  3. **Three foods:** an equilateral triangle with its spanning tree drawn in cyan (redrawn as foods move). With the default γ 1.8 the model keeps two sides; this step runs γ 3 with seed 13, which grows a junction (cost ~0.89×; about one seed in four does). It still often settles for two sides after a food moves, and the text says so: the mold finds good networks, not always the best. Goal: cost under 0.97×.
+  4. **The I₀ knob:** the nine-food example board. Each change of I₀ (on release) starts the mold over. A tree at low I₀ is only about even odds (loops often survive, and evenly spread boards keep them always), so the goal is the trade-off: settle once with I₀ under 1 and once over 4, shown side by side (about 1.0× and 0% robust against 2× and 100%).
+  5. **Light is terrain:** two foods and a lit block; Light, Food and Cut. Goal: paint light, then settle.
+  6. **Tokyo:** the Kanto map with the rail sketch in cyan, Cut only, a button to the Tokyo tab. Goal: settle.
+  7. **Beyond the dish:** cards for Adamatzky et al., "Are motorways rational from slime mould's point of view?" (2013; 14 regions, closest in Belgium, Canada and China) and Burchett et al., "Revealing the dark threads of the cosmic web" (ApJL 2020; Physarum-style agents on ~38,000 SDSS galaxies). Keeps the board as it was. Done on arrival; Back to the Sandbox and Start the tour over.
+  - Progress in `localStorage` (`physarum-progress`, `{tour: {at, done}}`, other keys kept), inside try/catch; the tour reopens on the step you left. The Sandbox has a "Take the tour" button.
+  - Hash: `#m=tour&s=<step id>`.
+  - Phones: the panes are padded by how far the sheet sits below the screen, so the end of a pane and the tour's bar stay reachable in the half sheet.
+
+### Design language
+Decided 2026-11-10 (supersedes "Look"). The page is a naturalist's field notebook crossed with an engineering drawing, in the spirit of D'Arcy Thompson's *On Growth and Form* and Haeckel's plates: biophilic, calm and alive. The review that led to it is `docs/physarum-review.md`.
+
+- **The dish.** The site is dark-only, so the board is a dark petri dish: deep moss-black agar (`--dish`) with a faint grain and a darker rim (vignette). It is never pure black. The panel, dock and tabs are re-tinted inside `.phys` from the same family, so the page reads as one warm, dark specimen table. A paper (agar-cream) theme would need a site-wide light mode, which the site doesn't have.
+- **Palette** (tokens in `tokens.css`, `--phys-*`; no hex in components). The page overrides `--ink`, `--amber`, `--cyan` and the rest inside `.phys`, so shared components follow.
+
+  | Token | Colour | Used for |
+  |---|---|---|
+  | `--phys-dish` | `#12150f` | the agar |
+  | `--phys-plasm` | `#f0c02c` | chrome-yellow plasmodium |
+  | `--phys-ochre` | `#b9801f` | old, thick tubes and the mold's mid-tones |
+  | `--phys-glow` | `#fff0b0` | luminous cores |
+  | `--phys-oat` | `#d8c6a0` | food (oat flakes) |
+  | `--phys-paper` | `#ece2c8` | text, annotation ink |
+  | `--phys-moss` | `#5d7a45` | accents: done marks, focus, links |
+  | `--phys-draft` | `#93aebb` | drafting ink for engineered networks: rail, MST, Delaunay and the player's track, drawn thin and dashed like a technical drawing |
+  | `--phys-lamp` | — | light is a warm lamp haze |
+
+  No neon and no cyan.
+- **Living matter.** Tubes are drawn as soft, glowing, slightly translucent strokes: a wide faint halo under an ochre-to-chrome body and a pale core on the thickest ones, with rounded caps.
+  - Width follows conductivity as before.
+  - Shuttle streaming is a slow peristaltic wave of brightness and thickness travelling along the board, not dashes. The real period is about 100 s; it is shown at about 8 s and labelled "sped up".
+  - Growing tips glow softly.
+  - Oat flakes are irregular beige flakes, not dots.
+  - The agents' trail maps dish → ochre → chrome → glow.
+- **Three lenses.** Nature, Math and Engineering are a recurring motif:
+  - a three-part strip under the story;
+  - lens tags on the Sandbox sections and on every Tour step;
+  - the Tokyo tab framed as Engineering.
+  
+  What each lens covers:
+  - **Nature:** what the organism does.
+  - **Math:** Tero's model, with real equations in MathML (Kirchhoff's law, flux, the conductivity update and the response f), each with a plain-language caption.
+  - **Engineering:** the cost against resilience trade-off. A live figure plots cost (× MST) against robustness for the spanning tree, the Delaunay mesh, the Tokyo rail sketch and the mold.
+- **Annotation layer.**
+  - Figure numbers and captions under the board ("Fig. 1 · *Physarum polycephalum* on agar …"), in serif italic.
+  - Hand-drawn-feeling callouts on the board in Sandbox and Tour: a slightly wobbly leader line and an italic label for an oat flake, the growing front (the tip farthest from any food), and the busiest tube (kept while it stays thick).
+    - Boards under 520 px wide get one short note.
+    - Labels are clamped inside the board, and the flake note keeps away from the other note.
+  - On phones the half-open sheet snaps to 30% and hides the readings, so the pane has room to read.
+  - The measured readings appear as a specimen label: a ruled card with a serif heading, mono values and italic captions.
+- **Typography.** A humane serif (`--serif`: the system's New York, Iowan Old Style or Palatino, falling back to Georgia; no web font is downloaded) for headings and narrative. The site's sans is kept for controls, and `--mono` for numbers and labels. This is a deliberate, page-scoped exception to the site's system-sans rule.
+- **Motion.** Slow and organic: eased fades of about 400 ms, the step-in rise, and the streaming wave. Nothing snaps. Under `prefers-reduced-motion` the wave, the callout drift and the step-in animation are off, and the board shows the grown strands still.
+- **Explanation first.** The panel opens with a story hook (a single brainless cell that redesigned Tokyo's rail network), then progressive disclosure in the Sandbox: **Story** (Nature) → **Try it** → **The math** (Math) → **Cost against resilience** (Engineering) → **For the curious** (a closed `<details>`: the growth model, the two models, the board options and the sources).
+
 ## Home hero v4: News wire on the grid
 Decided 2026-10-28 (supersedes v3's ABOUT ME section and the fixed section nav).
 - **Root:** the photo is 80px and the name 2.25rem (1.875rem on phones).
