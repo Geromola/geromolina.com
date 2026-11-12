@@ -1,0 +1,434 @@
+{
+  "date": "2026-11-12",
+  "generatedAt": "2026-11-12T20:40:01.955Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "bb3f5d8c",
+      "section": "ai",
+      "title": "Jensen Huang has resigned, what's next for Nvidia?",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/videos/cmdx1r99kp9wo",
+      "publishedAt": "2026-11-12T19:33:37.000Z",
+      "snippet": "Nvidia's chief executive stepping down would reshape leadership at the most valuable AI chip maker, with implications for the wider AI industry.",
+      "brief": "Nvidia's board accepted the resignation of co-founder Jensen Huang as chief executive and president after reports of two extramarital affairs, one involving an alleged Chinese spy and another with a company executive who reported to him. CFO Colette Kress has been named interim chief executive. The news also weighed on markets, with the Nasdaq slipping about 1.47 percent at the open.",
+      "basis": "summaries",
+      "why": "Leadership shock at the AI boom's most valuable chip supplier",
+      "eventKey": "jensen-huang-resigns-nvidia",
+      "alsoCovered": [
+        {
+          "source": "El País",
+          "url": "https://elpais.com/us/2026-11-12/jensen-huang-dimite-como-consejero-delegado-de-nvidia-tras-destaparse-el-escandalo-sobre-sus-infidelidades-y-el-caso-de-espionaje.html"
+        },
+        {
+          "source": "The Verge",
+          "url": "https://theverge.com/ai-artificial-intelligence/1031689/jensen-huang-nvidia-ceo-resigns"
+        },
+        {
+          "source": "Expansión",
+          "url": "https://expansion.mx/mercados/2026/11/12/acciones-nvidia-desploman-renuncia-jensen-huang"
+        },
+        {
+          "source": "TechCrunch",
+          "url": "https://techcrunch.com/2026/11/12/jensen-huang-is-out-at-nvidia-who-is-colette-kress-his-interim-replacement"
+        }
+      ]
+    },
+    {
+      "id": "73e16352",
+      "section": "world",
+      "title": "Trump Says He’s Pulling Vance Off Iran Talks to Focus on Fraud Campaign",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/12/us/politics/trump-vance-iran-fraud.html",
+      "publishedAt": "2026-11-12T19:38:36.000Z",
+      "snippet": "Trump said he is removing Vance from Iran negotiations and cast doubt on whether he wants a deal to end the war.",
+      "brief": "President Trump said Thursday he has removed Vice President JD Vance from possible peace talks with Iran and redirected him toward probing alleged fraud in jurisdictions run by Democrats. In a social media post he declared that a deal with Iran is no longer needed. The move follows Vance's public claim that the war cost Republicans heavily in the midterms, and it leaves unclear how the administration plans to end the conflict.",
+      "basis": "article",
+      "why": "Signals the US may abandon talks and prolong the Iran war",
+      "eventKey": "trump-pulls-vance-iran-talks",
+      "alsoCovered": []
+    },
+    {
+      "id": "df73fd9d",
+      "section": "world",
+      "title": "In Moscow, Witkoff and Kushner Ask Putin to Include Europe in Peace Talks",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/12/world/europe/russia-ukraine-witkoff-kushner.html",
+      "publishedAt": "2026-11-12T20:30:48.000Z",
+      "snippet": "Kremlin resists the US envoys' request, pushing instead to widen talks to overhaul European security structures.",
+      "brief": "President Trump's envoys, Steve Witkoff and Jared Kushner, traveled to Moscow to ask President Vladimir Putin to bring Europe into the Ukraine peace talks. The Kremlin wants wider negotiations over European security arrangements and says it will not consider a cease-fire until those broader demands are addressed. After the Kremlin meeting, the envoys planned to meet Ukrainian President Volodymyr Zelensky in Dublin.",
+      "basis": "article",
+      "why": "Kremlin wants Europe's security order reopened, not just a Ukraine ceasefire",
+      "eventKey": "ukraine-peace-talks-europe-envoys-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/articles/cwrkgmymk55zo"
+        }
+      ]
+    },
+    {
+      "id": "30bba7ab",
+      "section": "world",
+      "title": "Israeli strike on Gaza hospital kills six Palestinians, health ministry says",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/ckzd9p7e4eqeo",
+      "publishedAt": "2026-11-12T16:54:12.000Z",
+      "snippet": "Six Palestinians were killed when a missile hit surgical wards and intensive care units at Gaza's largest southern hospital.",
+      "brief": "An Israeli air strike on Nasser hospital in southern Gaza killed six people and injured about 30, according to the Hamas-run health ministry. The hospital director said two missiles hit a surgical building overnight, with one failing to explode, and that a surgeon was among the dead. The Israeli military said it targeted a Hamas armed wing commander and fighters using the hospital as a headquarters, claims Hamas rejects.",
+      "basis": "article",
+      "why": "Strike hit ICU wards at Gaza's largest southern hospital",
+      "eventKey": "israeli-strike-nasser-hospital-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/nov/12/israeli-airstrike-nasser-hospital-gaza-kills-surgeon"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/12/jerusalem-daily-gazas-nasser-hospital-hit-by-israeli-air-strike?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "a87cf403",
+      "section": "world",
+      "title": "Mississippi Democrats built a coalition to elect a Black senator for the first time since Reconstruction.",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/live/2026/11/11/us/mississippi-senate-election-midterms/mississippi-democrats-built-a-coalition-to-elect-a-black-senator-for-the-first-time-since-reconstruction",
+      "publishedAt": "2026-11-12T01:30:05.000Z",
+      "snippet": "A Democratic coalition in Mississippi delivered the first Black US senator from the state since Reconstruction.",
+      "brief": "Democrat Scott Colom, a district attorney, narrowly beat Republican incumbent Cindy Hyde-Smith in Mississippi, a state long considered safe for the GOP. He will be the first Black senator from the state since Reconstruction, and he celebrated the result at Tougaloo College, a historically Black school tied to civil rights organizing. Colom's win relied on a mixed coalition of Black voters, white voters, and some Republicans unhappy with Hyde-Smith's loyalty to President Trump, and it pushes Democrats to 55 Senate seats with one race still undecided.",
+      "basis": "article",
+      "why": "Mississippi elects its first Black senator since Reconstruction",
+      "eventKey": "colom-mississippi-senate-win",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/videos/cjy5x42p3qzko"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/11/scott-colom-mississippi-senate-race"
+        },
+        {
+          "source": "Politico",
+          "url": "https://politico.com/news/2026/11/11/scott-colom-wins-mississippi-senate-01161555"
+        }
+      ]
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "1e2aefbc",
+        "section": "cleantech",
+        "title": "As coal burn declines, rising power demand will be primarily met by renewables: EIA",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/as-coal-burn-declines-rising-power-demand-will-be-primarily-met-by-renewab/874315",
+        "publishedAt": "2026-11-12T18:25:33.000Z",
+        "snippet": "EIA expects the power sector could add over 26 GW of battery storage next year and renewables to supply almost a quarter of 2027 electricity use.",
+        "brief": "The U.S. Energy Information Administration expects the electric power sector could add more than 26 gigawatts of battery storage next year. That capacity is expected to help a renewable resource base supply almost a quarter of electricity consumption in 2027. The source summary does not detail how coal declines or demand growth figures compare, so the broader claim in the headline is not fully covered here.",
+        "basis": "summaries",
+        "why": "26 GW of batteries next year shows storage scaling fast",
+        "eventKey": "eia-renewables-meet-power-demand-2027",
+        "alsoCovered": []
+      },
+      {
+        "id": "729ecc65",
+        "section": "cleantech",
+        "title": "Sener eleva la apuesta eléctrica y promete 141 centrales en construcción para 2027",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/empresas/2026/11/12/sener-mexico-141-centrales-electricas-construccion-2027",
+        "publishedAt": "2026-11-12T20:26:07.000Z",
+        "snippet": "Sener's new target is 141 power plants under construction by 2027, 41 more than planned in September, costing 460,000 million pesos.",
+        "brief": "Mexico's Energy Secretariat, known as Sener, says 141 power plants will be under construction by the end of 2027, 41 more than the target it set in September. Luz Elena González told the Senate the projects carry an estimated investment of 460,000 million pesos, and the 32,000 megawatt expansion aims to raise renewables from 23% of generation in 2024 to 38% by 2030. Officials also plan 233,696 million pesos in public grid spending, though no specific progress on distribution works was reported.",
+        "basis": "article",
+        "why": "MXN 460bn Mexican build-out; CFE-led generation opportunity",
+        "eventKey": "sener-141-power-plants-2027-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "fc8ab858",
+        "section": "cleantech",
+        "title": "SoftBank’s billion-dollar loss may have put a cap on AI’s natural gas ambitions",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/12/softbanks-billion-dollar-loss-may-have-put-a-cap-on-ais-natural-gas-ambitions",
+        "publishedAt": "2026-11-12T17:00:52.000Z",
+        "snippet": "SoftBank's loss on prepaid gas turbines for AI data centres could reduce demand for gas-fired power built for that load.",
+        "brief": "SoftBank reported a $7.1 billion quarterly loss, with more than half tied to power-generating equipment. The company had placed nonrefundable deposits on more than 13 gigawatts of turbines, nearly 50% more than it needed, and now treats much of that as worthless. Analysts suggest data centers may lean toward grid connections and batteries rather than gas, slowing the natural gas market.",
+        "basis": "article",
+        "why": "Gas-turbine bet for data centres sours, which may help renewables",
+        "eventKey": "softbank-gas-turbine-loss-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "622ffd41",
+        "section": "cleantech",
+        "title": "How Data Center Opponents Won the Election",
+        "lang": "en",
+        "source": "Inside Climate News",
+        "url": "https://insideclimatenews.org/news/12112026/inside-clean-energy-election-data-center-defeats",
+        "publishedAt": "2026-11-12T14:00:00.000Z",
+        "snippet": "Data center developers lost 40 of 41 ballot measures nationwide, signaling strong local opposition to new data-centre projects in the US.",
+        "brief": "Data center developers lost 40 of 41 ballot measures nationwide in the recent election, according to the report. Volunteers behind one of the winning local measures celebrated at a restaurant in Sunbury, Ohio, a Columbus suburb, after gathering signatures, delivering yard signs and knocking on doors. The source text is cut off, so it does not explain the specific strategies or what the measure now requires.",
+        "basis": "summaries",
+        "why": "Data centres lost 40 of 41 ballot measures",
+        "eventKey": "data-center-ballot-measures-opponents-win-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "cde088fe",
+        "section": "cleantech",
+        "title": "Energy equipment manufacturer WEG will build a $250 million plant in Hidalgo, creating over 2,000 jobs",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/business/energy-equipment-manufacturer-weg-250-million-plant-in-hidalgo-creating-over-2000-jobs",
+        "publishedAt": "2026-11-12T20:05:03.000Z",
+        "snippet": "WEG, a Brazilian maker of generators and transformers, will invest $250 million in Hidalgo, adding more than 2,000 jobs to its 6,000 Mexican staff.",
+        "brief": "Brazilian energy equipment maker WEG plans a $250 million manufacturing plant in Hidalgo, state of Mexico, expected to create more than 2,000 jobs. The company, a global leader in generators, alternators and transformers, has operated in Mexico for over 25 years and already employs about 6,000 people, with its local headquarters in México state. The source text does not give a construction timeline or opening date for the new facility.",
+        "basis": "summaries",
+        "why": "Nearshoring of grid equipment amid the global transformer shortage",
+        "eventKey": "weg-hidalgo-plant-250m",
+        "alsoCovered": []
+      },
+      {
+        "id": "ea11010d",
+        "section": "cleantech",
+        "title": "A Key Paris Agreement Goal Is Dead. What Now?",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/12/climate/a-key-paris-agreement-goal-is-dead-what-now.html",
+        "publishedAt": "2026-11-12T20:15:04.000Z",
+        "snippet": "Global warming has reached the level scientists call the unsafe zone, forcing COP31 negotiators to rethink the Paris 1.5C target.",
+        "brief": "Scientists now say the Paris Agreement goal of limiting warming to 1.5 degrees Celsius is effectively out of reach, just 11 years after it was set. Without drastic cuts to greenhouse gases, the planet is very likely to warm at least 2.6 degrees Celsius by century's end. Diplomats at the COP31 climate summit in Antalya, Turkey, expressed dismay, with Australia's climate minister saying the world has no chance of holding to the target.",
+        "basis": "article",
+        "why": "COP31 must reset targets now that 1.5C is breached",
+        "eventKey": "paris-15c-goal-dead-cop31",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "10548fec",
+        "section": "ai",
+        "title": "Nvidia’s Jensen Huang to testify to US Congress amid scandal, reports say, as CFO Colette Kress replaces him as interim CEO – follow live",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/technology/live/2026/nov/12/nvidia-ceo-jensen-huang-affairs-share-price-plunges-live-latest",
+        "publishedAt": "2026-11-12T20:06:26.000Z",
+        "snippet": "Nvidia shares lost about $888 billion this week, and Huang is expected to testify to Congress while CFO Colette Kress becomes interim CEO.",
+        "brief": "Nvidia CEO Jensen Huang resigned Thursday after reports of extramarital affairs, including one with an alleged Chinese spy, and CFO Colette Kress will serve as interim chief executive. Shares fell 13% at the open before partly recovering, wiping out more than $320bn in value that day. Lawmakers from both parties are now seeking briefings and records, and the board says it will weigh internal and external candidates for the permanent role.",
+        "basis": "article",
+        "why": "$888bn wiped out; CFO Kress interim and congressional testimony ahead",
+        "eventKey": "nvidia-huang-resigns-ceo",
+        "alsoCovered": [
+          {
+            "source": "El País",
+            "url": "https://elpais.com/us/2026-11-12/jensen-huang-mantuvo-una-tercera-relacion-extramarital-con-una-empleada-de-nvidia.html"
+          }
+        ]
+      },
+      {
+        "id": "be72d27d",
+        "section": "ai",
+        "title": "Jensen Huang’s exit puts Nvidia’s support for open source in question",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/12/jensen-huangs-exit-puts-nvidias-support-for-open-source-in-question",
+        "publishedAt": "2026-11-12T18:39:23.000Z",
+        "snippet": "Huang's resignation leaves open whether Nvidia will keep backing open-weight models and the Hugging Face acquisition.",
+        "brief": "Nvidia CEO Jensen Huang resigned after admitting to an affair with an alleged Chinese spy, prompting worries about national security and his push for looser chip export controls. He had been a leading backer of open source AI, including the Nemotron open-weight models, and had pushed back against restrictions on open models. With CFO Colette Kress serving as interim CEO, open source advocates are unsure whether Nvidia will keep backing the open model community, including its pending Hugging Face deal.",
+        "basis": "article",
+        "why": "Open-weight backing and the Hugging Face deal now uncertain",
+        "eventKey": "jensen-huang-exit-nvidia-open-source",
+        "alsoCovered": []
+      },
+      {
+        "id": "b08696f9",
+        "section": "ai",
+        "title": "Google rolls out Gemini 4 Hydrogen, finally replacing 3.8 Flash",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/google/2026/11/google-rolls-out-gemini-4-hydrogen-finally-replacing-3-8-flash",
+        "publishedAt": "2026-11-12T19:23:03.000Z",
+        "snippet": "Gemini 4 Hydrogen replaces 3.8 Flash and skips the slower, security-focused staged release used for earlier versions.",
+        "brief": "Google has launched Gemini 4 Hydrogen, a faster and cheaper model that now replaces Gemini 3.8 Flash across its products. Google says it runs 2.5 times faster than Flash 3.8 even in high mode, cuts fabricated claims by more than 5x, and scores 54 on the Artificial Analysis Intelligence Index versus 50 for Argon. Access is live for AI Pro and Ultra subscribers, while free and AI Plus users still get the older 3.5 Flash-Lite, and API pricing stays at $1.50 per million input tokens.",
+        "basis": "article",
+        "why": "Google drops staged safety release for its new model",
+        "eventKey": "gemini-4-hydrogen-release",
+        "alsoCovered": []
+      },
+      {
+        "id": "c87736c0",
+        "section": "ai",
+        "title": "Nvidia Scandal Unveils a Fierce Spy War Raging Behind Trump and Xi’s Diplomacy",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/11/world/asia/china-us-nvidia.html",
+        "publishedAt": "2026-11-12T03:22:36.000Z",
+        "snippet": "US suspicions that Nvidia's leader was a Chinese espionage target highlight distrust that persists even as leaders seek stability.",
+        "brief": "Nvidia chief Jensen Huang, an influential ally of President Trump, has acknowledged an affair with a Chinese businesswoman that U.S. intelligence officials suspect was aimed at spying for Beijing, a charge China denies. Analysts say Huang is a prime target because Nvidia's chips power the global AI boom and he has lobbied to ease export limits on advanced chips to China. The episode lands just before Trump and Xi Jinping meet to extend a fragile trade truce.",
+        "basis": "article",
+        "why": "Espionage angle could tighten US-China chip controls",
+        "eventKey": "nvidia-spy-war-trump-xi",
+        "alsoCovered": []
+      },
+      {
+        "id": "c3af2ff8",
+        "section": "ai",
+        "title": "US nonprofits sue tech giants to halt AI development",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/12/us-nonprofits-sue-tech-giants-to-halt-ai-development?traffic_source=rss",
+        "publishedAt": "2026-11-12T19:55:02.000Z",
+        "snippet": "A California lawsuit by US nonprofits seeks a court order halting training of models they call catastrophic.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Court bid to halt frontier training could set precedent",
+        "eventKey": "nonprofits-sue-ai-training-freeze-california",
+        "alsoCovered": []
+      },
+      {
+        "id": "016f93a6",
+        "section": "ai",
+        "title": "United Airlines blocks AI agents from booking flights, citing cybersecurity risks",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/12/united-airlines-blocks-ai-agents-from-booking-flights-citing-cybersecurity-risks",
+        "publishedAt": "2026-11-12T17:17:58.000Z",
+        "snippet": "United Airlines will no longer let customers use AI agents to book flights or manage reservations, citing security concerns.",
+        "brief": "United Airlines says it will restrict access to AI agents that try to book flights or manage reservations for users, citing cybersecurity risks. The airline warns that sharing account logins with third-party assistants could expose sensitive data and lead to unintended purchases or use of MileagePlus miles. United also flags possible conflicts with federal aviation rules, such as the requirement that a human complete flight check-ins. The move follows a similar warning from Bank of America urging customers not to share passwords with AI assistants.",
+        "basis": "article",
+        "why": "Real-world pushback on agentic commerce over security",
+        "eventKey": "united-airlines-blocks-ai-agents",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "ee73ad3d",
+        "section": "world",
+        "title": "Trump threatens to double tariffs on Mexico unless it tightens the border",
+        "originalTitle": "Trump amenaza con duplicar los aranceles a México si no endurece la frontera",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/us/2026-11-12/trump-amenaza-con-duplicar-los-aranceles-a-mexico-si-no-endurece-la-frontera.html",
+        "publishedAt": "2026-11-12T14:53:36.000Z",
+        "snippet": "Trump, after an electoral setback, claims large migrant caravans are heading toward the border and threatens doubled tariffs on Mexico.",
+        "brief": "Trump warned on Truth Social that tariffs on Mexico would double immediately unless Mexico stops migrant caravans heading toward the U.S. border. The threat follows a caravan of about 1,000 people crossing Mexico's southern border and another group of roughly 600 that Mexican authorities have since reduced to under 100. Mexico already pays sectoral tariffs on key exports, and the threat comes while the USMCA trade pact is under review.",
+        "basis": "article",
+        "why": "Doubled tariffs would hit nearshoring and Mexico's export economy",
+        "eventKey": "trump-double-tariffs-mexico-border-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "4510b57a",
+        "section": "world",
+        "title": "Estados Unidos supera las 483 mil deportaciones en 2026; es la cifra más alta en la historia de ICE",
+        "lang": "es",
+        "source": "El Universal",
+        "url": "https://eluniversal.com.mx/mundo/estados-unidos-supera-las-483-mil-deportaciones-en-2026-es-la-cifra-mas-alta-en-la-historia-de-ice",
+        "publishedAt": "2026-11-12T19:31:42.000Z",
+        "snippet": "Deportations passed 483,000 in 2026 and detentions reached 475,000, both record highs for ICE.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Record ICE removals pressure Mexico's border and remittance flows",
+        "eventKey": "ice-record-deportations-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "0f3978b2",
+        "section": "world",
+        "title": "'Punch in the gut': Homes sales fall to their lowest in 16 years",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/12/nx-s1-6038940/punch-in-the-gut-homes-sales-fall-to-their-lowest-in-16-years",
+        "publishedAt": "2026-11-12T18:44:00.000Z",
+        "snippet": "October existing home sales fell 8.8% year over year, the weakest level in 16 years, per the National Association of Realtors.",
+        "brief": "Sales of previously owned U.S. homes fell 8.8% in October compared with a year earlier, reaching about 3.75 million units, according to the National Association of Realtors. Buyers appear to be stepping back as borrowing costs climb to near three-year highs. Declines were recorded in the Midwest, South and West, while the median sale price edged up slightly to $416,700.",
+        "basis": "summaries",
+        "why": "Housing at a 16-year low signals the rate squeeze is biting",
+        "eventKey": "us-existing-home-sales-oct-2026",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/business/2026/nov/12/home-sales-october-low"
+          },
+          {
+            "source": "Al Jazeera",
+            "url": "https://aljazeera.com/economy/2026/11/12/home-sales-in-the-us-are-at-their-lowest-level-since-2016?traffic_source=rss"
+          }
+        ]
+      },
+      {
+        "id": "df2b0e1e",
+        "section": "world",
+        "title": "CDC reports six measles deaths in 2026 as US battles worst outbreak in 35 years",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/12/cdc-measles-deaths",
+        "publishedAt": "2026-11-12T20:19:45.000Z",
+        "snippet": "Six measles deaths so far this year is double 2025's count, though the CDC has not said which states the deaths occurred in.",
+        "brief": null,
+        "basis": "article",
+        "why": "Deaths double 2025's count in the worst outbreak in 35 years",
+        "eventKey": "us-measles-deaths-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "6582996b",
+        "section": "world",
+        "title": "Palestinian baby dies from cold in Gaza amid Israeli restrictions on aid",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/12/palestinian-baby-dies-from-cold-in-gaza-amid-israeli-restrictions-on-aid?traffic_source=rss",
+        "publishedAt": "2026-11-12T19:56:26.000Z",
+        "snippet": "The infant reportedly died of hypothermia in a tent in southern Gaza, highlighting the humanitarian impact of restricted aid.",
+        "brief": "A Palestinian baby died of hypothermia overnight in his family's tent in southern Gaza, according to the child's father, as reported by Al Jazeera. The source gives no further details on the circumstances. The headline links the death to Israeli restrictions on aid, but the source text provided does not address that link, so the wider context remains unconfirmed here.",
+        "basis": "summaries",
+        "why": "Aid restrictions now causing winter deaths in Gaza tents",
+        "eventKey": "gaza-baby-hypothermia-death-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "hacker-news"
+      ]
+    },
+    "counts": {
+      "fetched": 2796,
+      "fresh": 367,
+      "classified": 367,
+      "kept": 266,
+      "stories": 228,
+      "candidates": 46,
+      "picked": 22,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 164613,
+      "outputTokens": 46956,
+      "costUsd": 0.111
+    },
+    "notes": []
+  }
+}
