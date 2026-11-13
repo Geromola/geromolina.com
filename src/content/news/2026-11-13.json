@@ -1,0 +1,403 @@
+{
+  "date": "2026-11-13",
+  "generatedAt": "2026-11-13T20:20:32.723Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "57ebf47a",
+      "section": "world",
+      "title": "Iran says it targeted US military radar in Bahrain in retaliatory strike",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/13/iran-us-radar-bahrain-sirik-hormuz",
+      "publishedAt": "2026-11-13T13:52:11.000Z",
+      "snippet": "It is Iran's first direct attack on US military sites in months, following a US airstrike on an Iranian communications tower near the Strait of Hormuz.",
+      "brief": "Iran's Revolutionary Guard claims it struck a US early-warning radar in Bahrain, presenting the action as payback for an American airstrike on a communications tower in Sirik. Washington disputes that the radar was destroyed, saying it intercepted two Iranian drones bound for Bahrain. Analysts note it would be Tehran's first direct assault on American military sites in months, raising fears of renewed hostilities.",
+      "basis": "article",
+      "why": "First direct Iranian hit on US bases in months; escalation risk",
+      "eventKey": "iran-strikes-us-radar-bahrain-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "21607f42",
+      "section": "world",
+      "title": "IRGC says tanker caught fire after hitting mines in Strait of Hormuz",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/video/newsfeed/2026/11/13/irgc-says-tanker-caught-fire-after-hitting-mines-in-strait-of-hormuz?traffic_source=rss",
+      "publishedAt": "2026-11-13T19:23:05.000Z",
+      "snippet": "A liquefied gas carrier caught fire after hitting naval mines in the Strait of Hormuz, raising risks to a key energy shipping route.",
+      "brief": "Iran's Revolutionary Guard Corps says a gas tanker was set ablaze after striking mines in the Strait of Hormuz, the narrow waterway through which a large share of the world's seaborne oil passes. The claim comes from the IRGC alone, so independent confirmation of the blast and fire was not available in this report. Shipping in the region could face added risk and insurance costs while the situation is verified.",
+      "basis": "summaries",
+      "why": "Mines in Hormuz threaten LNG and oil flows; watch shipping insurance",
+      "eventKey": "hormuz-tanker-mine-fire-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "c54e62a9",
+      "section": "world",
+      "title": "US Treasury warns against rate hikes during US-Iran war energy ‘shock’",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/economy/2026/11/13/us-treasury-warns-against-rate-hikes-during-us-iran-war-energy-shock?traffic_source=rss",
+      "publishedAt": "2026-11-13T16:22:33.000Z",
+      "snippet": "Treasury's Bessent urges against rate hikes despite an energy shock from the US-Iran war, while futures markets price a December increase as likely.",
+      "brief": "US Treasury Secretary Scott Bessent has publicly cautioned against raising interest rates in response to the energy price shock tied to the US-Iran conflict. Despite his remarks, the CME FedWatch tool, which tracks market expectations for Federal Reserve decisions, currently suggests a rate hike in December is likely. The divergence highlights a tension between Treasury's stance and market pricing as policymakers weigh inflation risks from higher energy costs.",
+      "basis": "summaries",
+      "why": "Markets price December hike; Fed independence versus war-driven inflation",
+      "eventKey": "treasury-warns-rate-hikes-us-iran-energy-shock-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "5d386508",
+      "section": "world",
+      "title": "Supreme Court Set to Hear Trump’s Ban on Asylum Claims at Border",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/13/us/politics/supreme-court-trump-asylum-border.html",
+      "publishedAt": "2026-11-13T20:13:16.000Z",
+      "snippet": "Lower courts ruled against the policy, which has effectively blocked asylum avenues for people seeking protection in the United States.",
+      "brief": "The Supreme Court agreed on Friday to examine whether a blanket rule denying asylum to people who cross the southern border without permission can stand. The policy was issued on Trump's first day back in office, and lower courts have ruled it unlawful, yet it has mostly stayed in effect under a temporary order. The justices will weigh if the executive branch can sidestep statutes passed by lawmakers, a question that could decide much of his border agenda.",
+      "basis": "article",
+      "why": "Ruling could cement or end near-total asylum shutdown at border",
+      "eventKey": "scotus-asylum-border-ban-review-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/13/supreme-court-us-mexico-border-asylum"
+        },
+        {
+          "source": "El Universal",
+          "url": "https://eluniversal.com.mx/mundo/corte-suprema-revisara-orden-de-trump-que-suspende-acceso-al-asilo-en-la-frontera-sur-revisara-dos-de-tres-cuestiones-planteadas"
+        }
+      ]
+    },
+    {
+      "id": "d6b629f1",
+      "section": "world",
+      "title": "EU agrees on five countries to represent Europe in Ukraine peace talks",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/13/europe-seeks-seat-at-ukraine-peace-talks-but-lacks-unified-voice?traffic_source=rss",
+      "publishedAt": "2026-11-13T15:43:39.000Z",
+      "snippet": "Europe's chosen representatives would join a US-backed process that lets Washington and Moscow shape the Ukraine settlement.",
+      "brief": null,
+      "basis": "summaries",
+      "why": "Europe gains a seat, but Moscow still resists its participation",
+      "eventKey": "eu-representatives-ukraine-peace-talks-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "e3943d00",
+        "section": "cleantech",
+        "title": "Feds Greenlight Construction of Advanced Nuclear Reactors in Texas",
+        "lang": "en",
+        "source": "Inside Climate News",
+        "url": "https://insideclimatenews.org/news/12112026/texas-dow-nuclear-plant-greenlit",
+        "publishedAt": "2026-11-12T18:18:03.000Z",
+        "snippet": "The NRC permit covers four advanced reactors at Dow's Gulf Coast site, a first major step for X-energy's technology before operation.",
+        "brief": "The Nuclear Regulatory Commission has issued a construction permit for four next-generation reactors at a petrochemical complex on the rural Gulf Coast of Texas. The project, called the Long Mott Generating Station, is being developed by chemical company Dow together with nuclear startup X-energy. It is one of two flagship projects the U.S. Energy Department selected in 2020.",
+        "basis": "summaries",
+        "why": "First X-energy build permit; industrial heat SMRs at Dow site",
+        "eventKey": "nrc-permit-dow-x-energy-long-mott",
+        "alsoCovered": []
+      },
+      {
+        "id": "e356c42f",
+        "section": "cleantech",
+        "title": "Sodium-ion batteries close gap with lithium-ion as utility-scale storage opportunities grow",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/13/sodium-ion-batteries-close-gap-with-lithium-ion-as-utility-scale-storage-opportunities-grow",
+        "publishedAt": "2026-11-13T10:37:49.000Z",
+        "snippet": "Commercial sodium-ion cells now reach 175 Wh/kg, and utility-scale storage is seen as their most promising market.",
+        "brief": "Sodium-ion batteries are becoming a credible option for stationary energy storage, according to Silvia Bodoardo of the Polytechnic University of Turin. Commercial sodium-ion cells reach about 175 Wh/kg, versus roughly 205 Wh/kg for advanced LFP, a gap that matters less when weight is not critical. CATL expects roughly 1 GWh of cumulative shipments of its sodium-ion storage system by year end, with international deliveries starting in 2027.",
+        "basis": "article",
+        "why": "175 Wh/kg cells make sodium-ion credible for grid storage",
+        "eventKey": "sodium-ion-close-gap-lithium-utility-storage",
+        "alsoCovered": []
+      },
+      {
+        "id": "fc00438e",
+        "section": "cleantech",
+        "title": "Around 400 onshore wind projects await DOD action, official tells court",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/around-400-onshore-wind-projects-await-dod-action-official-says-in-court/874521",
+        "publishedAt": "2026-11-12T15:48:08.000Z",
+        "snippet": "Permit backlog at the Pentagon, which lacks reviewers, has stalled roughly 400 onshore wind projects, according to a court filing.",
+        "brief": "A federal court filing shows the Pentagon says it lacks enough staff to review roughly 400 onshore wind projects waiting on permits, with only eight federal employees handling the queue. Assistant Secretary Dale Marks argued that contractors cannot perform these inherently governmental reviews and that mitigation agreements now run about 30 a year, against a typical 13. The American Clean Power Association disputes DOD's claim of renewed activity, citing one project that could lose roughly $24 million in tax credits if turbine deliveries slip past 2027.",
+        "basis": "article",
+        "why": "Pentagon reviewer shortage stalls ~400 wind projects' interconnection",
+        "eventKey": "dod-onshore-wind-permit-backlog-400-projects",
+        "alsoCovered": []
+      },
+      {
+        "id": "ad7a2523",
+        "section": "cleantech",
+        "title": "What’s next for California’s climate laws following an appeals court split decision",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/whats-next-for-california-climate-laws-sb253-sb261-following-appeals-court-split-decision/874631",
+        "publishedAt": "2026-11-13T17:00:00.000Z",
+        "snippet": "The Ninth Circuit let scope 1 and 2 disclosure under SB 253 proceed but blocked scope 3 rules and SB 261, reshaping corporate climate reporting in California.",
+        "brief": "A split Ninth Circuit Court of Appeals ruling lets California's SB 253 move forward for reporting of scope 1 and scope 2 emissions. The court halted enforcement of the scope 3 reporting requirement as well as SB 261. The source text is a brief feed summary and does not explain the next steps for companies or state regulators.",
+        "basis": "summaries",
+        "why": "Scope 1–2 reporting survives; scope 3 and SB 261 blocked",
+        "eventKey": "ninth-circuit-sb253-sb261-ruling-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "5c50fcb5",
+        "section": "cleantech",
+        "title": "The Hydrogen Stream: Uniper and VNG Produce first green hydrogen at 30 MW facility in Germany",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/13/the-hydrogen-stream-uniper-and-vng-produce-first-green-hydrogen-at-30-mw-facility-in-germany",
+        "publishedAt": "2026-11-13T15:41:03.000Z",
+        "snippet": "Output will flow through a 25 km converted gas pipeline to a TotalEnergies refinery, with deliveries starting in 2027.",
+        "brief": "Uniper and VNG have produced their first green hydrogen at a 30 MW electrolyzer at the Bad Lauchstädt Energy Park in Saxony-Anhalt, powered by a connected wind farm. The facility is now in a testing phase, and the hydrogen will travel through a roughly 25 km converted gas pipeline to TotalEnergies' Leuna refinery. Full commissioning and deliveries to industrial customers are scheduled for 2027.",
+        "basis": "article",
+        "why": "Real 30 MW electrolyser feeding refinery via repurposed gas pipeline",
+        "eventKey": "uniper-vng-green-hydrogen-germany-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "fcf416cb",
+        "section": "cleantech",
+        "title": "Timing of Climate Science Reports Ignites a Hot Fight at U.N. Talks",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/13/climate/cop31-turkey-ipcc-climate-report.html",
+        "publishedAt": "2026-11-13T17:59:45.000Z",
+        "snippet": "Fossil-fuel-dependent countries are pushing to postpone the next IPCC assessment cycle, which would shift when climate policy inputs arrive.",
+        "brief": "Several countries, including Saudi Arabia, India and Russia, are pushing to delay the release of several climate reports so that at least two arrive after 2028. That year nations are due to review their progress under the Paris Agreement, so timing matters for the review. Critics, including former Vice President Al Gore, say fossil fuel interests may be interfering with the U.N.'s climate science body, the Intergovernmental Panel on Climate Change.",
+        "basis": "article",
+        "why": "Delayed IPCC cycle would slow science inputs to climate policy",
+        "eventKey": "un-climate-report-timing-dispute-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "abafaa45",
+        "section": "ai",
+        "title": "Trump bought Nvidia stock as he helped chipmaker with change to export rule",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/13/trump-nvidia-stock-jensen-huang-us-china",
+        "publishedAt": "2026-11-13T19:09:05.000Z",
+        "snippet": "Trump bought up to $5 million of Nvidia stock before rescinding a Biden-era rule limiting AI chip sales to China.",
+        "brief": "An analysis by the anti-corruption group DeKleptocracy found that Trump bought between $1 million and $5 million of Nvidia stock in the days before his administration rescinded a Biden-era rule limiting chip exports to China. Nvidia's shares rose after the rescission, and China had accounted for about a quarter of the company's sales between 2010 and 2022. Trump later made further Nvidia purchases after allowing H200 chip sales to China, a move critics called controversial, though the article does not establish wrongdoing.",
+        "basis": "article",
+        "why": "Presidential stock buy before export rule change raises conflict questions",
+        "eventKey": "trump-nvidia-stock-export-rule-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "905e2ea6",
+        "section": "ai",
+        "title": "Nvidia scandal fallout widens as Trump's treasury secretary blames cabinet colleague",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cqvg2d1eg7zro",
+        "publishedAt": "2026-11-13T19:53:57.000Z",
+        "snippet": "Treasury Secretary Bessent suggests Commerce failed to block Nvidia chip exports to a China-linked firm, widening the scandal inside the administration.",
+        "brief": "US Treasury Secretary Scott Bessent has blamed the Commerce Department, led by Howard Lutnick, for failing to properly oversee exports of high-spec AI chips. He said several agencies had wanted Megaspeed, the firm linked to Nvidia's ousted chief Jensen Huang, placed on the entity list for months, but Commerce controls that decision. Lutnick is due to testify before the Senate Banking Committee next month, and Bessent also urged scrutiny of Nvidia itself.",
+        "basis": "article",
+        "why": "Cabinet infighting could reshape who controls AI chip export policy",
+        "eventKey": "nvidia-chip-export-scandal-lutnick",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/technology/2026/nov/13/nvidia-scandal-sparks-us-national-security-concerns-china"
+          }
+        ]
+      },
+      {
+        "id": "1034efdc",
+        "section": "ai",
+        "title": "Export-banned Nvidia chips are behind China’s most powerful AI models — uh oh, Jensen!",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen",
+        "publishedAt": "2026-11-13T18:40:30.000Z",
+        "snippet": "Researchers link the strongest Chinese AI models to Nvidia chips that U.S. export rules were meant to keep out of China.",
+        "brief": "A new research effort by Will DePue, a former OpenAI researcher, examined the weights of open models from DeepSeek, Moonshot AI, MiniMax, and Ant Group and reportedly found signs that leading models such as Moonshot's Kimi K3 and DeepSeek's V4 were trained on Nvidia Blackwell chips, which are banned from export to China. The findings do not prove the chips were used in China or that export laws were broken, since they could have been in offshore data centers such as those in Malaysia. Nvidia faces potential liability as a…",
+        "basis": "article",
+        "why": "Shows export controls failed to stop China's frontier training compute",
+        "eventKey": "china-ai-models-banned-nvidia-chips-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "727e40e4",
+        "section": "ai",
+        "title": "Nvidia privately confirmed it could track chips to fight smuggling, even as industry publicly questioned feasibility",
+        "lang": "en",
+        "source": "MIT Technology Review",
+        "url": "https://technologyreview.com/2026/11/12/1148483/nvidia-chip-tracking",
+        "publishedAt": "2026-11-12T20:16:24.000Z",
+        "snippet": "Nvidia reportedly told a congressman that tracking chips to stop smuggling is technically feasible, contradicting an industry group's claim that it is infeasible.",
+        "brief": "Nvidia representatives told Illinois Democrat Bill Foster privately that they could carry out the chip-location tracking required by the proposed Chip Security Act, despite an industry group calling those mandates potentially infeasible. Foster says their reaction during technical talks was an informal yes, though the company has not put this in writing or confirmed it publicly. The bill would only reveal where chips are, so Foster plans stricter licensing legislation next year.",
+        "basis": "article",
+        "why": "Chip location tracking feasible; could become mandatory export condition",
+        "eventKey": "nvidia-chip-tracking-smuggling-feasibility",
+        "alsoCovered": []
+      },
+      {
+        "id": "2741b802",
+        "section": "ai",
+        "title": "China warns against fresh US chip curbs",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/video/newsfeed/2026/11/13/china-warns-against-fresh-us-chip-curbs?traffic_source=rss",
+        "publishedAt": "2026-11-13T13:42:49.000Z",
+        "snippet": "Beijing says new US export controls on AI chips would be unacceptable, signalling further escalation in the chip trade dispute.",
+        "brief": "China has cautioned Washington against adding new export controls on artificial intelligence chips. The warning signals Beijing's concern that further restrictions would hit its access to advanced semiconductors used in AI development. The source material is limited to this single statement, so it does not provide details on the specific rules under consideration, timing, or any response from US officials.",
+        "basis": "summaries",
+        "why": "New curbs could trigger Chinese retaliation on critical minerals",
+        "eventKey": "china-warns-us-chip-curbs-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "8aabab08",
+        "section": "ai",
+        "title": "AI unlocks Gödel's notebooks, said to contain hundreds of proved theorems",
+        "lang": "en",
+        "source": "theguardian.com",
+        "url": "https://theguardian.com/science/2026/nov/13/kurt-godel-notebooks-ai-helps-unlock-hidden-discoveries-man-who-transformed-maths",
+        "publishedAt": "2026-11-13T17:30:10.000Z",
+        "snippet": "AI tools reportedly helped decode Kurt Gödel's notebooks, which may contain hundreds of previously unknown proved theorems.",
+        "brief": "Helsinki logician Jan von Plato has used the AI model Claude to decode 1,009 pages of Kurt Gödel's 1940s notebooks, written in obsolete German shorthand. Claude's digest surfaced 663 candidate theorems, and checking them in the Coq proof assistant verified about 400 as stated and repaired about 200 more. Von Plato says Gödel was far ahead of his time, though outside logician Joel David Hamkins notes that how much credit belongs to Claude versus Gödel is still open.",
+        "basis": "article",
+        "why": "Concrete case of AI accelerating mathematical scholarship",
+        "eventKey": "ai-godel-notebooks-theorems",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "9d619150",
+        "section": "world",
+        "title": "Mexican Prosecutor Who Helped C.I.A. Secretly Operate in His State Flees to the U.S.",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/12/world/americas/mexico-prosecutor-cia-us.html",
+        "publishedAt": "2026-11-12T22:00:29.000Z",
+        "snippet": "The Chihuahua prosecutor faces arrest in Mexico and is reportedly under US government protection, raising sovereignty questions for US–Mexico security ties.",
+        "brief": "Guillermo Zuany Portillo, a former Mexican prosecutor in Chihuahua facing arrest, has fled to the United States and is under U.S. government protection, according to U.S. and Mexican officials. He had shepherded C.I.A. officers for more than six months as they trained state forces and joined counter-cartel missions. The cover was blown after an April car crash killed two C.I.A. officers, and Mexican authorities have since issued an arrest warrant over his role.",
+        "basis": "article",
+        "why": "CIA-linked official sheltered in US strains Sheinbaum security cooperation",
+        "eventKey": "chihuahua-prosecutor-cia-flees-to-us-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "1156a388",
+        "section": "world",
+        "title": "Border Crossings Have Plummeted. Stephen Miller Isn’t Satisfied.",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/13/world/americas/stephen-miller-mexico-immigration.html",
+        "publishedAt": "2026-11-13T10:00:19.000Z",
+        "snippet": "Mexican cooperation has sharply reduced migrant crossings, but the new White House chief of staff wants more.",
+        "brief": "Illegal crossings at the U.S.-Mexico border have fallen to their lowest level in decades since Donald Trump returned to office, yet adviser Stephen Miller privately insists they must be reduced further. According to officials in both countries, his goal is zero crossings, which Mexican officials say is impossible given the nearly 2,000-mile border. Miller, now chief of staff, reportedly presses the issue in near daily calls with the U.S. ambassador to Mexico, especially after a slight recent uptick.",
+        "basis": "article",
+        "why": "Miller as chief of staff signals more pressure on Mexico",
+        "eventKey": "border-crossings-drop-stephen-miller-pressure",
+        "alsoCovered": []
+      },
+      {
+        "id": "f53fb11d",
+        "section": "world",
+        "title": "FGR carries out inquiries at INE headquarters; opens investigation into alleged corruption linked to Taddei",
+        "originalTitle": "FGR realiza diligencias en sede del INE; abre carpeta de investigación por presunta corrupción ligada a Taddei",
+        "lang": "es",
+        "source": "El Universal",
+        "url": "https://eluniversal.com.mx/nacion/fgr-realiza-diligencias-en-sede-del-ine-indagan-presuntos-actos-de-corrupcion-ligados-a-taddei",
+        "publishedAt": "2026-11-13T19:47:04.000Z",
+        "snippet": "Federal prosecutors opened an investigation into alleged corruption linked to INE chief Taddei, and officials expect more document requests.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Probe of electoral authority chief tests Mexico's institutional independence",
+        "eventKey": "fgr-ine-taddei-investigation-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "19e62422",
+        "section": "world",
+        "title": "Trump Signals New Strategy on Iran: A Waiting Game",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/13/us/politics/trump-iran-strategy.html",
+        "publishedAt": "2026-11-13T18:20:50.000Z",
+        "snippet": "Trump appears to favour a long-term economic pressure campaign on Iran over an urgent push for a nuclear deal.",
+        "brief": "President Trump is reportedly leaning toward declaring the Iran nuclear crisis over, even though little has changed on the ground. His team now says Iran is under pressure and no longer needs a new nuclear deal or limits on missiles, and military options such as strikes on nuclear sites and a commando seizure of enriched uranium have been set aside for now. Secretary of State Marco Rubio described a strategy of waiting for economic sanctions to weaken Iran's government.",
+        "basis": "article",
+        "why": "Long economic pressure means sustained energy price volatility",
+        "eventKey": "trump-iran-long-pressure-strategy-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "9e0495a6",
+        "section": "world",
+        "title": "Rosenberg: Uncompromising Putin ups demands for peace with Ukraine",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cq39glwprknjo",
+        "publishedAt": "2026-11-13T16:40:31.000Z",
+        "snippet": "Putin is reportedly raising demands in peace talks, with European security now part of the negotiating agenda.",
+        "brief": "Russia's Kremlin has revived its December 2021 draft treaties with the US and Nato, which demanded guarantees that Ukraine and Georgia would never join the alliance and a rollback of Nato infrastructure in eastern Europe. Putin's foreign policy aide Yuri Ushakov has hinted Moscow may add new demands. EU diplomat Kaja Kallas called these demands a trap and insisted a ceasefire must come first.",
+        "basis": "article",
+        "why": "Putin's rising demands make a quick ceasefire unlikely",
+        "eventKey": "putin-hardens-ukraine-peace-demands-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "18994e49",
+        "section": "world",
+        "title": "Why Aid Isn’t Reaching Ebola’s Epicenter",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/video/world/africa/100000011257751/why-aid-isnt-reaching-ebolas-epicenter.html",
+        "publishedAt": "2026-11-13T10:02:19.000Z",
+        "snippet": "An armed group isolates the new Ebola epicentre in eastern Congo, having killed and kidnapped aid workers.",
+        "brief": "The Ebola outbreak in eastern Democratic Republic of the Congo has shifted to a new epicenter that is largely cut off from aid. An armed group there has killed and kidnapped aid workers, leaving local health teams struggling to contain the spread. The situation is reported from a town where those workers are working under these conditions.",
+        "basis": "summaries",
+        "why": "Armed group blocking aid lets Ebola spread unchecked in Congo",
+        "eventKey": "ebola-outbreak-drc-aid-access-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 31,
+      "failed": []
+    },
+    "counts": {
+      "fetched": 2800,
+      "fresh": 353,
+      "classified": 353,
+      "kept": 246,
+      "stories": 222,
+      "candidates": 46,
+      "picked": 23,
+      "briefs": 21
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 157545,
+      "outputTokens": 45286,
+      "costUsd": 0.1103
+    },
+    "notes": []
+  }
+}
