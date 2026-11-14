@@ -1,0 +1,405 @@
+{
+  "date": "2026-11-14",
+  "generatedAt": "2026-11-14T18:39:04.539Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "47f17e47",
+      "section": "world",
+      "title": "Copper wire upgrade caused nationwide flight suspension, US transport secretary says",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/c6wy9lynq4qno",
+      "publishedAt": "2026-11-14T17:16:36.000Z",
+      "snippet": "The transport secretary says a copper-to-fiber telecom upgrade at an FAA facility caused the nationwide suspension, with investigators checking for equipment faults.",
+      "brief": "Transport Secretary Sean Duffy said a copper-to-fibre upgrade by contractor L3Harris triggered a faulty router that flooded air traffic control systems, forcing a nationwide ground stop of more than four hours. Over 3,500 US flights were cancelled on Saturday, and officials say there is no evidence of a cyber-attack. Duffy warned the problem could recur unless Congress approves $30.1bn requested for air traffic control upgrades.",
+      "basis": "article",
+      "why": "Fiber cutover fault grounded 16,000+ flights; probe for equipment faults continues",
+      "eventKey": "us-nationwide-ground-stop-faa-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/nov/14/faa-ground-stop-flights-resume-airport-chaos"
+        },
+        {
+          "source": "The New York Times",
+          "url": "https://nytimes.com/2026/11/14/us/faa-groundstop-flights-restarting.html"
+        },
+        {
+          "source": "El Universal",
+          "url": "https://eluniversal.com.mx/cartera/vuelos-a-eu-se-regularizan-en-el-aicm-tras-restricciones-piden-a-usuarios-consultar-con-aerolineas-el-estatus-de-sus-viajes"
+        }
+      ]
+    },
+    {
+      "id": "2dfced5c",
+      "section": "world",
+      "title": "Trump, Putin and Xi plan historic joint meeting in China next week, White House says",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/ckz74jzpy18do",
+      "publishedAt": "2026-11-14T15:53:55.000Z",
+      "snippet": "The talks would be the first meeting of the three leaders and will include discussion of reducing nuclear weapons.",
+      "brief": "The White House says Donald Trump, Vladimir Putin and Xi Jinping are planning a trilateral meeting on the sidelines of the Apec summit in Shenzhen next week, with nuclear arms reduction as a stated topic. Russia has confirmed the meeting, while China has yet to react. The talks come after the US-Russia nuclear treaty expired in February, leaving the largest arsenals without major limits, and no agreement is expected.",
+      "basis": "article",
+      "why": "First-ever three-way summit; nuclear arms cuts and Iran war on table",
+      "eventKey": "trump-putin-xi-meeting-china-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "2b4f98f8",
+      "section": "world",
+      "title": "US has floated Ukraine ceding Donbas for Nato membership, Zelensky says",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cwvg2l312ylqo",
+      "publishedAt": "2026-11-14T15:15:57.000Z",
+      "snippet": "Zelensky says US envoys floated ceding Donbas to Russia in exchange for Nato membership as part of ending the war.",
+      "brief": "Zelensky says US negotiators floated the idea of Ukraine pulling its remaining forces out of the eastern Donbas in return for Nato membership, a question he says was raised for the first time. Russia controls most of Donbas, and Zelensky has repeatedly said Ukraine will not give up sovereign territory. He added that he would put any offer with security guarantees and rebuilding funds to a referendum, while Moscow's demands still far exceed what Kyiv will consider.",
+      "basis": "article",
+      "why": "Land-for-NATO trade reshapes peace talks; Kyiv rejects territorial concessions",
+      "eventKey": "us-ukraine-donbas-nato-proposal-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "8ded8aec",
+      "section": "world",
+      "title": "How does Iran view shift in US approach after JD Vance ordered away?",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/14/how-does-iran-view-shift-in-us-approach-after-vance-ordered-away?traffic_source=rss",
+      "publishedAt": "2026-11-14T13:24:44.000Z",
+      "snippet": "Washington sees its blockade, border, air and sanctions pressure on Iran as working, signalling a possible change in strategy after Vance's exit.",
+      "brief": null,
+      "basis": "summaries",
+      "why": "Vance's exit may signal pressure-only Iran strategy, prolonging energy shock",
+      "eventKey": "us-iran-pressure-campaign-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "edddaa01",
+        "section": "cleantech",
+        "title": "Clarifying the CATL Tener Sodium, with new specifications and availability",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/14/clarifying-the-catl-tener-sodium-with-new-specifications-and-availability",
+        "publishedAt": "2026-11-14T08:30:00.000Z",
+        "snippet": "CATL's four-hour sodium-ion Tener product will be marketed on cost against LFP, with international deliveries starting summer 2027.",
+        "brief": "CATL used an ATA Insights webinar to detail its Tener Sodium four-hour battery storage system, which is built in pairs of cabinets from two to eight. The eight-cabinet version is rated above 30 MWh and about 7.5 MW, with 95% round-trip efficiency and 70% state of health after 20 years. In CATL's modeled 500 MWh project, the sodium layout needs about 32% less land and cuts engineering, procurement and construction costs by 9.2%. Overseas delivery is expected in summer 2027.",
+        "basis": "article",
+        "why": "Sodium-ion priced against LFP for four-hour storage, ships 2027",
+        "eventKey": "catl-tener-sodium-ion-specs-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c6e3904b",
+        "section": "cleantech",
+        "title": "An Obscure Utility Calculation Is Putting a Thumb on the Scale for Gas in Georgia",
+        "lang": "en",
+        "source": "Inside Climate News",
+        "url": "https://insideclimatenews.org/news/14112026/georgia-power-grid-expansion-gas",
+        "publishedAt": "2026-11-14T09:55:00.000Z",
+        "snippet": "Georgia Power plans 2,000 to 6,000 MW of new capacity for 2032-2033, with gas under consideration to meet data-centre and electrification load.",
+        "brief": "Georgia Power, the state's biggest electric utility, is planning to bring roughly 2,000 to 6,000 megawatts of additional generating capacity online around 2032 and 2033. Rising demand from data centers and a broader shift toward electric power is behind the push. The company is weighing several options, among them natural gas, and the choice will shape how much the region relies on that fuel for years to come.",
+        "basis": "summaries",
+        "why": "Planning math tilts up to 6 GW of new capacity toward gas",
+        "eventKey": "georgia-power-capacity-expansion-gas-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "95e606b7",
+        "section": "cleantech",
+        "title": "Southern Co. eyes $100B spending plan on natural gas, nuclear and other investments",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/southern/874111",
+        "publishedAt": "2026-11-13T14:45:20.000Z",
+        "snippet": "Southern Co. plans about $100B across natural gas, nuclear and other investments, and its CEO says it is confident despite political change.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "$100B utility capex shows how data-centre load gets financed",
+        "eventKey": "southern-co-100b-capex-plan",
+        "alsoCovered": []
+      },
+      {
+        "id": "b352ad1c",
+        "section": "cleantech",
+        "title": "Masdar completes $950 million solar and battery storage project in California",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/14/masdar-completes-950-million-solar-and-battery-storage-project-in-california",
+        "publishedAt": "2026-11-14T09:30:00.000Z",
+        "snippet": "The Lockhart complex adds 365 MW of solar and 173.7 MW of storage to California's grid, a large utility-scale project for the state.",
+        "brief": "Abu Dhabi's Masdar has announced completion of the $950 million Lockhart Solar and Storage complex in California, built by its Terra-Gen unit. The facility pairs 365 MW of solar with 173.7 MW of battery storage and is designed to supply roughly 350,000 homes and businesses. Construction over four years supported more than 1,000 peak on-site jobs, and Masdar plans to invest a further $20 billion in the U.S. over the coming decade.",
+        "basis": "article",
+        "why": "365 MW solar plus 174 MW storage online in California",
+        "eventKey": "masdar-terra-gen-lockhart-california-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "33868caa",
+        "section": "cleantech",
+        "title": "Hydropower Generation in the Southwest Fell to Record Lows This Summer",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/13/hydropower-generation-in-the-southwest-fell-to-record-lows-this-summer",
+        "publishedAt": "2026-11-13T23:17:06.000Z",
+        "snippet": "April–August 2026 hydropower output in the Southwest was 19% below the same period a year earlier, driven by Colorado River drought.",
+        "brief": "Drought in the Colorado River Basin pushed hydropower output in the Southwest to record lows this summer, with April through August 2026 generation down 19% from last year and 28% below the 10-year average. Lake Powell sat less than 1% above the minimum power pool needed at Glen Canyon Dam, prompting water releases from Flaming Gorge. The EIA expects 2026 generation of 6.13 billion kilowatthours, 9% lower than 2025, and says one wet year would not undo multiple years of scarcity.",
+        "basis": "article",
+        "why": "19% hydro drop tightens Western grid, raises storage and gas reliance",
+        "eventKey": "southwest-hydropower-record-low-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d8c0ab42",
+        "section": "cleantech",
+        "title": "Quantifying the state of AI power development post-midterms",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/quantifying-the-state-of-ai-power-development-post-midterms",
+        "publishedAt": "2026-11-13T21:03:20.000Z",
+        "snippet": "Five figures outline the power-supply challenges facing data-centre build-out for AI in 2027 and beyond.",
+        "brief": "Latitude Intelligence tracks about 120 GW of signed data center load across 53 utility territories, roughly 5.5 times the 22 GW currently operating in the same footprint. That gap raises the central question for 2027: whether new generation and grid connections can keep pace with contracted demand. Political backlash, including Ohio voters rejecting local data center projects and new Georgia leaders pledging scrutiny, adds further uncertainty to timelines.",
+        "basis": "article",
+        "why": "Hard numbers on power constraints for 2027 data-centre build-out",
+        "eventKey": "ai-data-center-power-numbers-2027",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "695a4f21",
+        "section": "ai",
+        "title": "Jensen Huang’s departure blasts big hole in AI startup funding, VCs and founders say",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/13/jensen-huangs-departure-blasts-big-hole-in-ai-startup-funding-vcs-and-founders-say",
+        "publishedAt": "2026-11-13T22:43:00.000Z",
+        "snippet": "Founders and VCs expect smaller checks and lower valuations for AI startups following Huang's exit from Nvidia.",
+        "brief": "Nvidia's former chief executive Jensen Huang has stepped down after leading the chipmaker for decades, and investors warn that his exit will tighten money flowing to young AI companies. Nvidia has been an extremely active backer, joining 105 funding rounds this year by PitchBook's count and frequently writing the biggest check. Interim leader Colette Kress is widely expected to be more cautious, so founders may face smaller rounds and lower valuations until a clear replacement strategy emerges.",
+        "basis": "article",
+        "why": "Nvidia's startup backing shrinks: expect smaller checks, lower valuations",
+        "eventKey": "jensen-huang-departs-nvidia-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "25dfd312",
+        "section": "ai",
+        "title": "Nvidia allegedly engineered scarcity by funding AI startups to buy its GPUs",
+        "lang": "en",
+        "source": "techpowerup.com",
+        "url": "https://techpowerup.com/354814/nvidia-allegedly-engineered-scarcity-by-funding-ai-startups-to-buy-its-gpus",
+        "publishedAt": "2026-11-14T02:52:59.000Z",
+        "snippet": "Reports allege Nvidia funded AI startups that then bought its GPUs, artificially creating chip scarcity.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Alleged circular financing questions real GPU demand signals",
+        "eventKey": "nvidia-allegedly-funds-startups-gpu-scarcity",
+        "alsoCovered": []
+      },
+      {
+        "id": "033cb1e4",
+        "section": "ai",
+        "title": "Asian governments react to Nvidia CEO Jensen Huang’s exit",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/14/asian-governments-react-to-nvidia-ceo-jensen-huangs-exit",
+        "publishedAt": "2026-11-14T16:34:15.000Z",
+        "snippet": "Governments in Asia are seeking to confirm chip supply commitments and assess effects on local projects after Huang's departure.",
+        "brief": "Governments across Asia have responded differently to Jensen Huang's departure from Nvidia, which followed an internal investigation after reports of a Chinese spy operation targeting him. South Korea says Nvidia reaffirmed plans to supply 260,000 advanced GPUs, while Taiwan says Nvidia's planned Taipei headquarters remains on track. Singapore's probe into Megaspeed, linked to Alice Huang, is still ongoing with six other individuals under investigation.",
+        "basis": "article",
+        "why": "Asian chip supply commitments now in doubt after leadership change",
+        "eventKey": "jensen-huang-exit-asia-reactions-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d9a6272c",
+        "section": "ai",
+        "title": "Introducing ChatGPT Wallet",
+        "lang": "en",
+        "source": "OpenAI",
+        "url": "https://openai.com/index/introducing-chatgpt-wallet",
+        "publishedAt": "2026-11-13T15:00:00.000Z",
+        "snippet": "OpenAI's announcement says agents can complete purchases only with user approval, with existing card protections applying.",
+        "brief": "OpenAI has introduced ChatGPT Wallet, a feature that lets AI agents inside ChatGPT complete purchases on a user's behalf. Purchases require the user's approval and are covered by existing card protections. The feature is starting as a limited rollout to U.S. Pro subscribers.",
+        "basis": "summaries",
+        "why": "Agentic checkout meets card rails; directly echoes your payments work",
+        "eventKey": "chatgpt-wallet-agent-checkout-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "TechCrunch",
+            "url": "https://techcrunch.com/2026/11/13/chatgpts-new-wallet-lets-ai-agents-shop-and-check-out-for-you"
+          }
+        ]
+      },
+      {
+        "id": "7c450a39",
+        "section": "ai",
+        "title": "AI agent startup LangChain hits $3B valuation",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/13/ai-agent-startup-langchain-hits-3b-valuation",
+        "publishedAt": "2026-11-13T19:37:57.000Z",
+        "snippet": "LangChain's valuation reached $3 billion, with its LangSmith tool now serving 7,000 customers.",
+        "brief": "LangChain, a company that manages AI agents, has secured a $300 million funding round that values it at $3 billion, with CapitalG leading and several other investors joining. The valuation has more than doubled from $1.25 billion a year ago, when the firm raised $125 million. The company says its LangSmith platform lets customers avoid lock-in to any single model or cloud, and it now reports 7,000 customers.",
+        "basis": "article",
+        "why": "Agent tooling market pricing: 7,000 LangSmith customers at $3B",
+        "eventKey": "langchain-3b-valuation",
+        "alsoCovered": []
+      },
+      {
+        "id": "75a05c21",
+        "section": "ai",
+        "title": "Ggml v1.0.0",
+        "lang": "en",
+        "source": "github.com",
+        "url": "https://github.com/ggml-org/ggml/releases/tag/v1.0.0",
+        "publishedAt": "2026-11-14T02:28:29.000Z",
+        "snippet": "The ggml project released version 1.0.0, the tensor library underpinning local open-weight model inference.",
+        "brief": "The ggml 1.0.0 release drops its deprecated public interface along with the older DIAG_MASK operations, while adding adjustable YaRN truncation and FP8 handling. Performance gains span many hardware backends, including faster low-row quantized multiplication and expert-routing fusion on NVIDIA and Apple GPUs. Developers using llama.cpp's underlying library should check whether their code calls removed functions before upgrading.",
+        "basis": "article",
+        "why": "Stable 1.0 of the engine behind llama.cpp local inference",
+        "eventKey": "ggml-v1-release",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "676d8f53",
+        "section": "world",
+        "title": "Former prosecutor Zuany's flight and US protection reinforce Mexico's criticism for violating its sovereignty",
+        "originalTitle": "La huida y protección del exfiscal Zuany por Estados Unidos refuerza las críticas de México por violación a su soberanía",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/2026-11-14/la-huida-y-proteccion-del-exfiscal-zuany-por-estados-unidos-refuerza-las-criticas-de-mexico-por-violacion-a-su-soberania.html",
+        "publishedAt": "2026-11-14T09:30:00.000Z",
+        "snippet": "Fresh revelations about former Chihuahua prosecutor Zuany's deals with the CIA deepen Mexican complaints that Washington violated its sovereignty.",
+        "brief": "Former Chihuahua prosecutor Zuany reportedly struck agreements with the CIA, according to new revelations cited by El País. The reports suggest the cooperation with Washington was deeper and older than previously known. The source text does not detail the flight or the scope of US protection named in the headline, so the account here is limited to the collaboration described.",
+        "basis": "summaries",
+        "why": "CIA deal revelations escalate Mexico's sovereignty dispute with Washington",
+        "eventKey": "zuany-cia-mexico-sovereignty-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "9791f318",
+        "section": "world",
+        "title": "'We'll get home one day' - US travellers impacted by nationwide ground stop",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/videos/c893ryz7lw33o",
+        "publishedAt": "2026-11-14T01:47:36.000Z",
+        "snippet": "Travellers across the country were stranded as the FAA attributed the ground stop to safety and communication issues.",
+        "brief": "A nationwide FAA ground stop halted US flights on Friday after a communications outage, leaving passengers stranded on planes across the country. The agency lifted the stop about four hours later, and flights have slowly been resuming, though officials expect full recovery to take considerable time. Hundreds of thousands of travelers were reportedly hit by cancellations and delays, with knock-on effects reaching Australian airports.",
+        "basis": "summaries",
+        "why": "Nationwide stranding exposes fragility of aging US air traffic systems",
+        "eventKey": "faa-nationwide-ground-stop-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "The New York Times",
+            "url": "https://nytimes.com/live/2026/11/13/us/ground-stop-nationwide-flights-faa/nationwide-ground-stop-flights-faa"
+          },
+          {
+            "source": "NPR",
+            "url": "https://npr.org/2026/11/13/nx-s1-6040397/stuck-on-the-tarmac-without-information-travelers-share-their-ground-stop-experiences"
+          },
+          {
+            "source": "El País",
+            "url": "https://english.elpais.com/usa/2026-11-14/united-states-resumes-air-traffic-after-nearly-five-hour-shutdown-that-forced-6000-flight-cancellations.html"
+          },
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/australia-news/2026/nov/14/us-bound-flights-out-of-australia-grounded-as-telecommunications-outage-affects-american-travel"
+          },
+          {
+            "source": "Expansión",
+            "url": "https://expansion.mx/mundo/2026/11/13/estados-unidos-cancela-todos-los-vuelos-que-esta-pasando"
+          }
+        ]
+      },
+      {
+        "id": "2e810e0f",
+        "section": "world",
+        "title": "Ukraine’s Starshield Access Is Being Restricted Again, Zelensky Says",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/14/world/europe/ukraine-starshield-zelensky.html",
+        "publishedAt": "2026-11-14T13:57:36.000Z",
+        "snippet": "Zelensky says Russian-occupied areas are being cut off from Starshield, which Ukraine uses to guide drones; SpaceX denies it.",
+        "brief": "Ukrainian President Volodymyr Zelensky said on Friday that new speed limits of about 100 miles per hour on Starshield, the SpaceX satellite internet system controlled by the U.S. government, disrupted military operations along the front lines. The limits took effect Monday and apply only over Russian-occupied territories, which Zelensky says hurts drone strikes on Russian troops and makes a political statement about those areas. SpaceX told Axios the throttling claim was false, and Musk and SpaceX did not respond to requests for comment.",
+        "basis": "article",
+        "why": "Drone guidance cutoff hits Ukraine's frontline edge; SpaceX denies",
+        "eventKey": "ukraine-starshield-access-restricted",
+        "alsoCovered": []
+      },
+      {
+        "id": "7daf88f3",
+        "section": "world",
+        "title": "Microsoft says services fully restored after day-long global outage",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/c6rrg51rkz09o",
+        "publishedAt": "2026-11-14T06:42:27.000Z",
+        "snippet": "Microsoft says the underlying fault affecting Outlook, Teams and Copilot has been fixed after a day-long global disruption.",
+        "brief": "Microsoft says Outlook, Teams and Copilot are back to normal after a worldwide disruption that began Thursday and lasted about a day. The outage reached more than 70 nations and hit businesses, public agencies and individual users, with the company blaming a network capacity upgrade rather than a cyber-attack. Because the wider user base is so large, experts say the episode shows how much organisations depend on a small group of major tech providers, and they urge firms to plan for working without those tools.",
+        "basis": "article",
+        "why": "Day-long Outlook, Teams, Copilot outage shows cloud concentration risk",
+        "eventKey": "microsoft-global-outage-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/australia-news/2026/nov/14/microsoft-deeply-sorry-for-global-disruption-that-could-have-billion-dollar-impact-on-australia"
+          }
+        ]
+      },
+      {
+        "id": "9f6ebb1a",
+        "section": "world",
+        "title": "Russian casualties ‘reach 450,000’: What that means for the Ukraine war",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/14/russian-casualties-reach-450000-what-that-means-for-the-ukraine-war?traffic_source=rss",
+        "publishedAt": "2026-11-14T12:57:36.000Z",
+        "snippet": "",
+        "brief": "A leaked set of Russian records reportedly points to roughly 450,000 casualties in the Ukraine war, according to coverage by Al Jazeera. The toll is said to weigh most heavily on older men, residents of poorer regions, and foreign recruits. The source summary gives no further breakdown, so the figures and their reliability should be checked against the full report before drawing firm conclusions.",
+        "basis": "summaries",
+        "why": "Casualty toll frames Moscow's leverage in current peace negotiations",
+        "eventKey": "russia-casualties-450000-leak",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2784,
+      "fresh": 324,
+      "classified": 324,
+      "kept": 217,
+      "stories": 190,
+      "candidates": 46,
+      "picked": 21,
+      "briefs": 18
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 161679,
+      "outputTokens": 40657,
+      "costUsd": 0.1043
+    },
+    "notes": []
+  }
+}
