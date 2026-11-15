@@ -1,0 +1,376 @@
+{
+  "date": "2026-11-15",
+  "generatedAt": "2026-11-15T19:14:45.526Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "d3cea895",
+      "section": "world",
+      "title": "Iran Attacks Bahrain for the Second Time in Days",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/15/world/middleeast/bahrain-iran-israel.html",
+      "publishedAt": "2026-11-15T15:55:09.000Z",
+      "snippet": "Attacks on Bahrain resumed after a two-month lull, as US–Iran peace talks appear to have stalled.",
+      "brief": "Iran has again struck Bahrain, with an airbase reportedly targeted, marking the first renewed attacks in about two months after a lull. The strikes come while peace talks between Washington and Tehran appear to be stalled. Several regional governments, including Saudi Arabia, Qatar, Egypt and Jordan, have publicly denounced the assault and voiced support for Bahrain.",
+      "basis": "summaries",
+      "why": "Strikes resume as US–Iran talks stall; Hormuz shipping at risk",
+      "eventKey": "iran-attacks-bahrain-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/live/2026/nov/15/middle-east-crisis-live-iran-bahrain-strikes-gulf-donald-trump-us-israel-yemen-houthis"
+        }
+      ]
+    },
+    {
+      "id": "43e1da46",
+      "section": "world",
+      "title": "Estonia to close all border crossings with Russia after attack on drone maker",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/15/estonia-to-close-all-border-crossings-with-russia-after-attack-on-drone-maker",
+      "publishedAt": "2026-11-15T18:23:12.000Z",
+      "snippet": "Estonia will close all Russian border crossings from 1 December after a drone maker attack it links to Russia's GRU.",
+      "brief": "Estonia will shut all three of its land crossings with Russia starting 1 December, after authorities blamed Russian military intelligence for a weekend sabotage attempt on a drone manufacturer. Eight suspects were held after the plot against Threod Systems, which aimed to trigger an explosion and fire, but no one was hurt. Officials say the move aims to deter further strikes on defence firms, and the closure has no set end date.",
+      "basis": "article",
+      "why": "NATO state sealing Russian border; GRU sabotage escalation in Baltics",
+      "eventKey": "estonia-closes-russia-border-after-drone-maker-attack",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/15/estonia-to-close-border-crossings-with-russia-after-attack-on-drone-maker?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "53a9fb06",
+      "section": "world",
+      "title": "Estados Unidos advierte que problemas en transporte aéreo pueden prolongarse hasta el lunes; van 18 mil vuelos cancelados",
+      "lang": "es",
+      "source": "El Universal",
+      "url": "https://eluniversal.com.mx/mundo/estados-unidos-advierte-que-problemas-en-transporte-aereo-pueden-prolongarse-hasta-el-lunes-van-18-mil-vuelos-cancelados",
+      "publishedAt": "2026-11-15T18:54:45.000Z",
+      "snippet": "Transport Secretary Sean Duffy warns recovery could take until Monday, with about 18,000 flights already cancelled.",
+      "brief": "El secretario de Transporte de Estados Unidos, Sean Duffy, advirtió que los problemas en el transporte aéreo podrían prolongarse hasta el lunes. Explicó que harán falta más días para que aviones, tripulaciones y pasajeros vuelvan a estar donde deben. La cifra de 18 mil vuelos cancelados que menciona el titular no aparece en el texto disponible, por lo que el resumen se limita a esa declaración.",
+      "basis": "summaries",
+      "why": "Disruption now 18,000 cancellations; recovery may stretch to Monday",
+      "eventKey": "us-air-travel-disruption-cancellations-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "26057662",
+      "section": "world",
+      "title": "World’s top court to rule if Myanmar committed genocide against Rohingya",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/world/2026/nov/15/myanmar-rohingya-genocide-icj",
+      "publishedAt": "2026-11-15T06:00:05.000Z",
+      "snippet": "The ICJ's ruling would be the first time it has found a state guilty of genocide, with implications for the case against Israel.",
+      "brief": "The International Court of Justice is set to deliver its judgment on Thursday on whether Myanmar committed genocide against the Rohingya, a case brought by the Gambia over repression that drove hundreds of thousands to flee in 2017. The court has never before found a state responsible for genocide, so a ruling would set a major benchmark in international law. The decision is also expected to shape how judges later assess South Africa's genocide case against Israel over Gaza.",
+      "basis": "article",
+      "why": "First-ever state genocide finding would shape the case against Israel",
+      "eventKey": "icj-myanmar-rohingya-genocide-judgment",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "46c8ff7a",
+        "section": "cleantech",
+        "title": "$3.4 Billion — Anthropic Order for Gas Power Plants!",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/14/3-4-billion-anthropic-order-for-gas-power-plants",
+        "publishedAt": "2026-11-15T00:33:38.000Z",
+        "snippet": "Anthropic reportedly agreed to a $3.4 billion purchase of gas-fired engines from OnePWR, to power its AI compute.",
+        "brief": null,
+        "basis": "article",
+        "why": "AI lab buying gas engines shows data-centre load outrunning clean supply",
+        "eventKey": "anthropic-onepwr-gas-engines",
+        "alsoCovered": []
+      },
+      {
+        "id": "78b05b39",
+        "section": "cleantech",
+        "title": "Darlington’s First SMR Is Late and Over Budget. Ontario Needs to Rethink the Next Three.",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/15/darlington-smr-cost-overrun-four-reactor-risk",
+        "publishedAt": "2026-11-15T15:56:31.000Z",
+        "snippet": "Darlington's first small modular reactor has overrun both its budget and schedule before its design is settled, raising questions for the next three units.",
+        "brief": "Ontario Power Generation now expects its first BWRX-300 small modular reactor at Darlington to overrun its approved C$7.7 billion budget and slip past its target of October 2030 for commercial operation. No replacement cost or new completion date has been set, with a full engineering, cost and schedule review due by mid-2027. OPG blamed unfinished first-of-a-kind reactor engineering, which affected construction and supply chains, and it has since removed the project's generation forecast from its 2027 to 2031 rate application.",
+        "basis": "article",
+        "why": "First Western grid SMR overruns cost; test for SMR economics",
+        "eventKey": "darlington-smr-delays-costs",
+        "alsoCovered": []
+      },
+      {
+        "id": "f7d4c7ea",
+        "section": "cleantech",
+        "title": "What The US Midterm Elections Mean For Climate Progress",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/14/what-the-us-midterm-elections-mean-for-climate-progress",
+        "publishedAt": "2026-11-15T00:52:25.000Z",
+        "snippet": "Congress changes in January 2027 after record midterm turnout could shape future US climate legislation and funding.",
+        "brief": "Voters in the latest US midterms changed the makeup of Congress starting January 2027, and the author argues the shift could limit the Trump administration's ability to push its climate and clean energy agenda. Energy affordability, opposition to data centers, and anger over corruption were major voter concerns, and a majority of the new Congress is described as accepting climate science. Ongoing court fights over the Endangerment Finding and the repeal of climate rules remain key, along with pressure from fossil fuel interests.",
+        "basis": "article",
+        "why": "Democratic Congress could reshape IRA credits and climate funding",
+        "eventKey": "midterms-climate-impact-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "14822828",
+        "section": "cleantech",
+        "title": "China’s electric airliner era starts with a 19-seat plane and 400 km of range",
+        "lang": "en",
+        "source": "Electrek",
+        "url": "https://electrek.co/2026/11/15/china-comac-ce-25a-electric-plane-crewed-flight",
+        "publishedAt": "2026-11-15T14:43:57.000Z",
+        "snippet": "COMAC's 19-seat battery-electric CE-25A completed crewed flight after 19 uncrewed autonomous flights and is under type-certificate review.",
+        "brief": "COMAC's CE-25A, a 19-seat battery-electric commuter plane, made its first flight with a crew aboard in Binzhou, Shandong, after 19 unmanned test flights since February. COMAC lists a 300 km/h cruise speed and 400 km range, though reserve requirements would shorten that. China's aviation regulator is reviewing it for type certification, which starts the airworthiness review, but no commercial service date has been announced.",
+        "basis": "article",
+        "why": "Battery-electric aviation reaching certification; energy density limits range",
+        "eventKey": "comac-ce25a-electric-airliner-crewed-flight-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "fd241f08",
+        "section": "cleantech",
+        "title": "Fabric Molds Could Bring Material-Saving Concrete Beams Within Reach",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/14/fabric-molds-could-bring-material-saving-concrete-beams-within-reach",
+        "publishedAt": "2026-11-14T21:06:51.000Z",
+        "snippet": "MIT's sewn fabric formwork cut concrete use by two-thirds and steel use by half in a test beam design.",
+        "brief": "MIT engineers cast a three-meter concrete test beam inside a sewn fabric mold, using about one-third the concrete and half the steel reinforcement of a conventional beam designed for the same load. Measured deflection under load came within about 2 percent of the computer model's prediction. The approach is cheaper than conventional molds in the Global South but about 16 to 55 percent pricier in the Global North, so it is best suited to custom, small-batch components.",
+        "basis": "article",
+        "why": "Cuts concrete two-thirds, steel half: cheap cement decarbonisation lever",
+        "eventKey": "mit-fabric-formwork-concrete-beam",
+        "alsoCovered": []
+      },
+      {
+        "id": "8c40f51a",
+        "section": "cleantech",
+        "title": "Accelerating Electrification Can Unlock the Full Benefits of Spain’s Renewables Leadership",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/15/accelerating-electrification-can-unlock-the-full-benefits-of-spains-renewables-leadership",
+        "publishedAt": "2026-11-15T14:17:31.000Z",
+        "snippet": "An IEA report finds Spain's renewable expansion is cutting fuel import costs, with faster electrification and grid upgrades needed to extend gains.",
+        "brief": "An IEA Energy Policy Review published October 5, 2026 finds Spain's rapid renewable expansion has strengthened energy security and competitiveness. Renewables grew from 35% to 56% of electricity generation between 2015 and 2025, and without that expansion, 2024 gas imports for power would have been nearly 40%, or USD 26 billion, higher. The report says faster electrification of transport, buildings and industry is now essential, since electricity covers just 25% of final energy use against a 35% target for 2030.",
+        "basis": "article",
+        "why": "IEA quantifies renewables cutting Spain's fuel imports; grid upgrades next",
+        "eventKey": "iea-spain-renewables-electrification-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "f0f74ffc",
+        "section": "ai",
+        "title": "Lutnick Pushed to Weaken Chip Rules That Overlap With His Family Business",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/15/us/politics/trump-lutnick-ai-chips-nvidia-cantor-fitzgerald.html",
+        "publishedAt": "2026-11-15T10:02:05.000Z",
+        "snippet": "Commerce Secretary Lutnick is writing rules that would hit Southeast Asian data centers, some clients of his former firm.",
+        "brief": "Commerce Secretary Howard Lutnick is drafting new rules that would affect data centers in Southeast Asia, and some of those data centers are clients of his former firm. The report raises concerns about a possible conflict of interest between his government work and his past business ties. The source text provides little further detail on the specific rules or any official response.",
+        "basis": "summaries",
+        "why": "Chip export rules for Southeast Asian data centres may be weakened",
+        "eventKey": "lutnick-chip-rules-family-business-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "nytimes.com",
+            "url": "https://nytimes.com/2026/11/15/us/politics/lutnick-pushed-to-weaken-chip-rules-that-overlap-with-his-family-business.html"
+          }
+        ]
+      },
+      {
+        "id": "2f42d4c6",
+        "section": "ai",
+        "title": "Suspected China spy linked to Nvidia's ex-boss left in 2025, Megaspeed says",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cmdx1vpprk9vo",
+        "publishedAt": "2026-11-15T14:56:21.000Z",
+        "snippet": "Megaspeed says a suspected Chinese spy tied to Nvidia's former executive left the company in 2025, amid questions over chip diversion.",
+        "brief": "Megaspeed, a Singapore-based company that is the largest buyer of Nvidia chips in south-east Asia, says Alice Huang, a suspected China spy linked to Nvidia's former chief Jensen Huang, left her executive role there in August last year. The firm has launched an internal investigation and says the reports about its business are not backed by verifiable evidence. The case has raised concerns that advanced AI chips may have reached China despite US export restrictions, and US Treasury Secretary Scott Bessent has blamed the Commerce Department for failing to oversee…",
+        "basis": "article",
+        "why": "Chip-diversion probe behind Huang exit widens to Megaspeed",
+        "eventKey": "megaspeed-spy-nvidia-chips-china-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "02da5c20",
+        "section": "ai",
+        "title": "The hidden costs of the US AI boom",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/video/newsfeed/2026/11/15/the-hidden-costs-of-the-us-ai-boom?traffic_source=rss",
+        "publishedAt": "2026-11-15T17:24:59.000Z",
+        "snippet": "The piece examines the less visible costs of the US AI buildout, likely including power, water and local infrastructure burdens.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Power, water and grid burdens of the AI compute build-out",
+        "eventKey": "hidden-costs-us-ai-boom",
+        "alsoCovered": []
+      },
+      {
+        "id": "acd5eaae",
+        "section": "ai",
+        "title": "Court denies motion to dismiss DRAM price fixing case",
+        "lang": "en",
+        "source": "litnews.ai",
+        "url": "https://litnews.ai/articles/garciaguirre-samsung-sk-hynix-micron-dram-conspiracy-suit-survives-dismissal",
+        "publishedAt": "2026-11-15T01:18:36.000Z",
+        "snippet": "A court let a lawsuit alleging Samsung, SK Hynix and Micron fixed DRAM prices proceed past dismissal.",
+        "brief": "A federal judge in California declined to throw out a consumer and small business lawsuit alleging Samsung, SK Hynix and Micron coordinated to limit supply of standard DRAM memory chips. The court said the complaint plausibly showed parallel conduct, pointing to near-identical customer-vetting practices adopted in January 2026 and the companies' long-term HBM contracts. The companies must answer by Dec. 7, 2026, and the case is set for a case management conference in January 2027.",
+        "basis": "article",
+        "why": "Memory price-fixing case proceeds as DRAM costs squeeze AI compute",
+        "eventKey": "dram-price-fixing-suit-survives",
+        "alsoCovered": []
+      },
+      {
+        "id": "6bfe2c60",
+        "section": "ai",
+        "title": "Lovable apps expose passport details and more than 200K private messages",
+        "lang": "en",
+        "source": "crissyfield.de",
+        "url": "https://crissyfield.de/research/lovable-en",
+        "publishedAt": "2026-11-14T17:43:10.000Z",
+        "snippet": "Security researchers found Lovable-built apps exposing passport details and over 200,000 private messages.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Vibe-coded apps leaking data: security lesson for builders",
+        "eventKey": "lovable-apps-data-exposure",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "08baa4f8",
+        "section": "world",
+        "title": "Mexico’s week in review: Trump renews tariff threats as Sheinbaum prepares for China",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/news/trump-tariff-sheinbaum-china-trip-mexico-week-in-review",
+        "publishedAt": "2026-11-14T20:02:08.000Z",
+        "snippet": "",
+        "brief": "Mexico News Daily's weekly roundup covers a busy stretch in mid-November. Donald Trump reportedly threatened to double tariffs in response to a migrant caravan, and a Mexican official accused of helping the CIA slipped across the border into the United States. The report also notes President Claudia Sheinbaum's preparations for the APEC summit in China.",
+        "basis": "summaries",
+        "why": "Tariff threats and Sheinbaum's China trip test USMCA ties",
+        "eventKey": "mexico-week-review-tariff-threats-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "20fe9ff3",
+        "section": "world",
+        "title": "World leaders head to Asia for back-to-back diplomatic summits",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/nov/15/asia-diplomatic-summits-trump-xi-putin-apec-asean",
+        "publishedAt": "2026-11-15T04:00:02.000Z",
+        "snippet": "Trump travels to Shenzhen for APEC, two weeks after losing the midterms, with Beijing hosting on home ground amid US-China rivalry.",
+        "brief": "World leaders are gathering across Asia for a run of summits in China, the Philippines and Cambodia, with trade, technology and regional security on the agenda. The Asia-Pacific Economic Cooperation meeting in Shenzhen, which represents more than 60% of global GDP, will host Donald Trump, and a possible trilateral meeting with Xi Jinping and Vladimir Putin is drawing comparisons to Yalta. Analysts doubt it will produce binding decisions on Ukraine or Taiwan, so the gatherings are seen mainly as a test of influence between Washington and Beijing.",
+        "basis": "article",
+        "why": "Post-midterm Trump meets Xi on Beijing's turf; trade truce stakes",
+        "eventKey": "apec-leaders-shenzhen-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "1f05c97e",
+        "section": "world",
+        "title": "Gaza mourns 70 dead; bodies recovered from buildings attacked by Israel",
+        "originalTitle": "Gaza despide a 70 fallecidos; los cuerpos fueron recuperados en edificios atacados por Israel",
+        "lang": "es",
+        "source": "El Universal",
+        "url": "https://eluniversal.com.mx/mundo/gaza-despide-a-70-fallecidos-los-cuerpos-fueron-recuperados-en-edificios-atacados-por-israel",
+        "publishedAt": "2026-11-15T17:33:52.000Z",
+        "snippet": "Seventy bodies were recovered from buildings struck by Israel, and the reported death toll since October 2023 is now about 74,695.",
+        "brief": "Gaza's health ministry figures, as cited in the El Universal summary, put the death toll since Israel's offensive began in October 2023 at no fewer than 74,695 people, with 176,093 injured. The summary does not mention the 70 deaths or the recovered bodies named in the headline, so the new casualties cannot be confirmed from this text. The available figures are cumulative totals covering the whole conflict period.",
+        "basis": "summaries",
+        "why": "Toll nears 75,000 as rubble recovery continues despite ceasefire",
+        "eventKey": "gaza-70-bodies-recovered-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "938608b7",
+        "section": "world",
+        "title": "US has lost measles elimination status, global health authorities say",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/14/nx-s1-6041119/us-measles-elimination-status-vaccines-cdc-paho",
+        "publishedAt": "2026-11-14T22:15:02.000Z",
+        "snippet": "Researchers say PAHO deliberations resulted in the US losing measles elimination status, a significant public health setback.",
+        "brief": "The United States has reportedly lost its status as a country where measles is considered eliminated, according to researchers who have direct knowledge of deliberations at the Pan American Health Organization. The report comes from sources involved in those discussions rather than an official announcement. Losing elimination status signals that measles transmission has continued in the country long enough to meet the threshold for a loss of that designation.",
+        "basis": "summaries",
+        "why": "Public-health setback after vaccine-policy shifts; outbreaks likely spread",
+        "eventKey": "us-loses-measles-elimination-status-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "163584ab",
+        "section": "world",
+        "title": "Yemeni government forces redeploy from Bab al-Mandeb to defend Aden",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/15/yemeni-government-forces-redeploy-from-bab-al-mandeb-to-defend-aden?traffic_source=rss",
+        "publishedAt": "2026-11-15T17:33:00.000Z",
+        "snippet": "Redeployment toward Aden signals a shift in the fighting over the southern Yemeni port city and the Red Sea strait area.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Retreat from Bab al-Mandeb raises Red Sea shipping risk",
+        "eventKey": "yemen-forces-redeploy-aden-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "0de61d29",
+        "section": "world",
+        "title": "Hundreds of thousands of Czechs protest in Prague over media freedom",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/nov/15/czechia-protest-prague-media-freedom",
+        "publishedAt": "2026-11-15T18:20:36.000Z",
+        "snippet": "The crowd, estimated at over 350,000, is among the largest protests in Czech history and targets a plan to fund broadcasters from the state budget.",
+        "brief": "Organisers say more than 350,000 people rallied at Prague's Letná Plain against a government plan to scrap mandatory licence fees and fund public broadcasters from the state budget, a change that would cut their budgets by about 15%. Protesters argue it would give ministers more leverage over newsrooms, while Prime Minister Andrej Babiš denies any plan to interfere with editorial work. The bill's first reading, pushed through overnight in October, sparked weeks of demonstrations and a strike at Czech TV and Czech Radio.",
+        "basis": "article",
+        "why": "Among largest Czech protests ever; EU media-freedom flashpoint",
+        "eventKey": "czech-media-freedom-protest-prague-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2768,
+      "fresh": 236,
+      "classified": 236,
+      "kept": 153,
+      "stories": 139,
+      "candidates": 50,
+      "picked": 21,
+      "briefs": 17
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 127642,
+      "outputTokens": 31633,
+      "costUsd": 0.1023
+    },
+    "notes": []
+  }
+}
