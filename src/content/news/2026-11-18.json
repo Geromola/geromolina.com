@@ -1,0 +1,392 @@
+{
+  "date": "2026-11-18",
+  "generatedAt": "2026-11-18T21:06:29.672Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "5357f0ae",
+      "section": "world",
+      "title": "Trump, Xi and Putin Shake Hands as Leaders Gather in China",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/live/2026/11/18/world/trump-china-asia-apec",
+      "publishedAt": "2026-11-18T20:13:01.000Z",
+      "snippet": "Trump and Putin are expected to meet with Xi in Shenzhen for a trilateral session on Thursday.",
+      "brief": "Chinese leader Xi Jinping greeted President Trump with a hug on the tarmac as Trump arrived for a regional summit in Shenzhen. The three leaders, including Russian President Vladimir Putin, are expected to hold a trilateral meeting on Thursday. Analysts quoted in coverage doubt they will settle major issues, though the gathering is meant to project leadership over the world order, and Al Jazeera notes Ukraine and post-war security are on the agenda.",
+      "basis": "summaries",
+      "why": "First-ever three-way summit; Ukraine, Europe and Taiwan excluded from table",
+      "eventKey": "trump-xi-putin-shenzhen-summit-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/18/trump-and-putin-to-meet-one-on-one-in-china-thursday?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "02142d8a",
+      "section": "world",
+      "title": "Kuwait, Bahrain face new Iran attacks after US strike on Qeshm Island",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/18/kuwait-bahrain-face-new-iran-attacks-after-us-strike-on-qeshm-island?traffic_source=rss",
+      "publishedAt": "2026-11-18T16:47:26.000Z",
+      "snippet": "Iranian strikes on Kuwait and Bahrain follow a US strike on Qeshm Island, widening the regional confrontation across the Gulf.",
+      "brief": null,
+      "basis": "summaries",
+      "why": "US strike on Qeshm triggered retaliation; Gulf truce near collapse",
+      "eventKey": "iran-gulf-attacks-after-us-qeshm-strike-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "d30689b7",
+      "section": "ai",
+      "title": "Nvidia isn’t selling any more AI chips to China",
+      "lang": "en",
+      "source": "The Verge",
+      "url": "https://theverge.com/tech/1036445/nvidia-h200-ai-chips-china-stop-selling",
+      "publishedAt": "2026-11-18T13:01:05.000Z",
+      "snippet": "Nvidia says it has halted shipments of its advanced AI chips to China, even though the White House had approved them.",
+      "brief": "Nvidia has stopped shipping its licensed Hopper data center chips, including the H200, to China, even though the White House approved sales in December. Interim CEO Colette Kress made the announcement on an earnings call, but she did not explain the reason or say whether other China business would continue. The move follows Jensen Huang's resignation as CEO amid reports about his personal conduct, and it comes after about 600,000 H200 chips were reportedly stuck in Hong Kong when Beijing withheld import approval.",
+      "basis": "article",
+      "why": "Nvidia forgoes White House-approved China sales after Huang ouster",
+      "eventKey": "nvidia-halts-china-ai-chip-sales-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "f4f79573",
+      "section": "world",
+      "title": "Democrats nominate Hakeem Jeffries to be US Speaker of the House",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cmy49873dn95o",
+      "publishedAt": "2026-11-18T17:34:23.000Z",
+      "snippet": "Hakeem Jeffries would become the first Black lawmaker to lead the House when Democrats take control in January.",
+      "brief": "House Democrats formally picked Hakeem Jeffries as their candidate for Speaker, a move that would make him the first Black lawmaker to lead the chamber. He was re-elected party leader by 251 votes to 11, and the party holds at least 257 seats, well above the 218 needed for a majority. The full House vote happens January 3, though seven incoming progressives have voiced concerns about the party's direction.",
+      "basis": "article",
+      "why": "Democrats retake the House in January; Jeffries sets agenda against Trump",
+      "eventKey": "jeffries-nominated-house-speaker-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "NPR",
+          "url": "https://npr.org/2026/11/18/nx-s1-6043183/hakeem-jeffries-house-democrats-leadership-votes"
+        },
+        {
+          "source": "El País",
+          "url": "https://elpais.com/us/2026-11-18/los-democratas-proponen-a-hakeem-jefferies-como-primer-presidente-negro-de-la-camara-de-representantes-en-el-nuevo-congreso.html"
+        },
+        {
+          "source": "The New York Times",
+          "url": "https://nytimes.com/2026/11/18/us/politics/hakeem-jeffries-speaker-of-the-house-democrats.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/18/hakeem-jeffries-house-speaker-nomination"
+        },
+        {
+          "source": "El Universal",
+          "url": "https://eluniversal.com.mx/mundo/nuevo-lider-de-los-democratas-en-el-congreso-promete-investigar-a-trump-hakeem-jeffries-dice-que-haran-rendir-cuentas-a-corruptos"
+        }
+      ]
+    },
+    {
+      "id": "a77974b9",
+      "section": "world",
+      "title": "What does Israel’s new ground offensive mean for Palestinians in Gaza?",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/18/what-does-israels-new-ground-offensive-mean-for-palestinians-in-gaza?traffic_source=rss",
+      "publishedAt": "2026-11-18T20:38:06.000Z",
+      "snippet": "Israeli tanks pushed past the Yellow Line, displacing Palestinians again and raising the risk of a wider collapse of the Gaza truce.",
+      "brief": "Israeli tanks have advanced beyond the so-called Yellow Line inside Gaza, according to a feed summary from Al Jazeera. The move has forced Palestinians to flee their homes again. The summary does not give casualty figures, the extent of the advance, or details of any next phase, so the wider impact remains unclear from this source alone.",
+      "basis": "summaries",
+      "why": "Tanks past the Yellow Line threaten the Gaza truce",
+      "eventKey": "israel-gaza-ground-offensive-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "ca00b2d7",
+        "section": "cleantech",
+        "title": "REPORT: U.S. Exceeds 200 GWh of Energy Storage Capacity Installed to Date",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/17/report-u-s-exceeds-200-gwh-of-energy-storage-capacity-installed-to-date",
+        "publishedAt": "2026-11-18T02:19:25.000Z",
+        "snippet": "US storage installed 14.3 GWh in Q3, pushing cumulative capacity past 200 GWh, and the industry is urging Congress to pass permitting reform.",
+        "brief": "The U.S. energy storage industry added 14.3 GWh of new capacity in the third quarter of 2026, bringing the first nine months to 48.3 GWh, according to a report from SEIA and Benchmark Mineral Intelligence. Texas led utility-scale deployment with 12.3 GWh, and 11 states set annual installation records in Q3. The industry is urging Congress to pass the BAAJA legislation to speed deployment and ease electricity costs.",
+        "basis": "article",
+        "why": "14.3 GWh in Q3 shows US storage pace despite policy headwinds",
+        "eventKey": "us-storage-200-gwh-report",
+        "alsoCovered": []
+      },
+      {
+        "id": "84a99d30",
+        "section": "cleantech",
+        "title": "ESS Inc files for Chapter 7 bankruptcy; Stem Inc flags ‘going concern’ doubts amidst Athena optimisation platform sale",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/ess-inc-files-for-chapter-7-bankruptcy-stem-inc-flags-going-concern-doubts-amidst-athena-optimisation-platform-sale",
+        "publishedAt": "2026-11-18T11:50:23.000Z",
+        "snippet": "ESS Inc has ceased operations, and Stem has raised going-concern doubts after selling its Athena software platform.",
+        "brief": "ESS Inc, a US energy storage company, has halted all operations and entered Chapter 7 bankruptcy, which typically means its assets are liquidated. Separately, system integrator Stem Inc has raised doubts about its ability to keep operating over the near term, and it has just sold its Athena software platform. The filings signal continued strain in the battery storage sector, and readers may want to watch for how Stem's sale affects its remaining business.",
+        "basis": "summaries",
+        "why": "Iron-flow pioneer liquidates; Stem's distress signals storage shakeout",
+        "eventKey": "ess-inc-chapter-7-stem-going-concern",
+        "alsoCovered": []
+      },
+      {
+        "id": "0682429e",
+        "section": "cleantech",
+        "title": "The grid will fall short of AI’s power needs. These 6 resources can close the gap.",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/the-grid-will-fall-short-of-ais-power-needs-6-resources-close-the-gap/874125",
+        "publishedAt": "2026-11-18T15:57:17.000Z",
+        "snippet": "Flexibility, uprates and transmission stay valuable across demand scenarios, while no single resource meets AI power needs alone.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Which grid resources hold value under any AI demand scenario",
+        "eventKey": "grid-ai-power-gap-six-resources",
+        "alsoCovered": []
+      },
+      {
+        "id": "cba5c3fd",
+        "section": "cleantech",
+        "title": "Data center slowdown would raise risks for utility investments",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/data-center-slowdown-raises-risks-for-utility-investments/874924",
+        "publishedAt": "2026-11-17T18:10:00.000Z",
+        "snippet": "",
+        "brief": "An energy analytics firm, Orennia, estimates that about 191 gigawatts of planned data center capacity now faces new risk following the midterm elections. The exposure is concentrated in Texas, Ohio and Georgia, according to its report. The source does not detail how a slowdown would affect specific utility investments, so the broader financial impact remains unclear.",
+        "basis": "summaries",
+        "why": "Utility capex bets hinge on data-centre load actually materialising",
+        "eventKey": "data-center-slowdown-utility-risk-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c1a59e20",
+        "section": "cleantech",
+        "title": "Ford’s first LFP batteries are en route, and the $30,000 Fathom EV pickup will get them first",
+        "lang": "en",
+        "source": "Electrek",
+        "url": "https://electrek.co/2026/11/18/fords-first-lfp-batteries-en-route-30k-fathom-ev-pickup",
+        "publishedAt": "2026-11-18T17:00:00.000Z",
+        "snippet": "Ford has started producing LFP cells at its Michigan BlueOval plant, with the first output going to Fathom prototypes.",
+        "brief": "Ford has started producing lithium iron phosphate battery cells at its BlueOval Battery Park plant in Michigan, using licensed technology from CATL. The first cells are headed to Louisville to power Fathom prototypes, the UEV-platform pickup Ford says will start under $30,000. Ford says the plant can deliver 40 cells per minute, and the Fathom is slated to launch in Q4 2027.",
+        "basis": "article",
+        "why": "Domestic LFP cell output begins at Ford's Michigan plant",
+        "eventKey": "ford-lfp-cells-blueoval-michigan",
+        "alsoCovered": []
+      },
+      {
+        "id": "16c838e1",
+        "section": "cleantech",
+        "title": "EU reaches provisional deal to accelerate renewable energy permitting",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/18/eu-reaches-provisional-deal-to-accelerate-renewable-energy-permitting",
+        "publishedAt": "2026-11-18T08:54:04.000Z",
+        "snippet": "Under the deal, member states get 18 months to write the directive into national law after formal adoption.",
+        "brief": "The Council of the EU and the European Parliament reached a provisional deal to streamline permitting for renewable energy projects, energy storage, EV charging and grid connections. The agreement still needs formal endorsement by both institutions after legal review, after which member states will have 18 months to write it into national law. Member states may presume renewables and grids are of overriding public interest, though they can opt out to protect security, defence and cultural heritage.",
+        "basis": "article",
+        "why": "Faster EU permitting could unlock stalled renewables pipeline",
+        "eventKey": "eu-renewable-permitting-provisional-deal",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "1e473d19",
+        "section": "ai",
+        "title": "La magnitud de la salida a Bolsa de Anthropic, en cifras",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/us/economia/2026-11-18/la-magnitud-de-la-salida-a-bolsa-de-anthropic-en-cifras.html",
+        "publishedAt": "2026-11-18T18:51:18.000Z",
+        "snippet": "Anthropic's IPO is set to value the Claude maker at roughly $1.4 trillion, making it a landmark listing for AI companies.",
+        "brief": "Anthropic, the company behind the Claude chatbot, is reportedly close to completing an initial public offering of its shares. The offering is expected to value the company at roughly 1.4 trillion dollars. The source text gives little beyond that figure, so the wider details of the listing, such as timing, share count, or how the money will be used, are not covered here.",
+        "basis": "summaries",
+        "why": "~$1.4T valuation sets benchmark for frontier-lab economics",
+        "eventKey": "anthropic-ipo-valuation-1-4-trillion",
+        "alsoCovered": []
+      },
+      {
+        "id": "0af3eee7",
+        "section": "ai",
+        "title": "AI already attacks on its own: Google detects the first autonomous cyberattack without humans that costs millions",
+        "originalTitle": "La IA ya ataca sola: Google detecta el primer ciberataque autónomo y sin humanos que cuesta millones",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/tecnologia/2026/11/18/la-ia-ataca-sola-google-detecta-primer-ciberataque-autonomo",
+        "publishedAt": "2026-11-18T17:52:35.000Z",
+        "snippet": "Google reportedly detected a fully autonomous AI cyberattack running without human involvement, costing millions to carry out.",
+        "brief": "Google's Threat Intelligence Group, working with Mandiant, says it found an AI server able to run a full cyberattack cycle without human help, from analyzing software to automatically executing exploits. The operator targeted French media, entertainment and education websites. The report also notes attackers used AI to build exploits for PaperCut flaws in under 24 hours, and stolen cloud credentials have produced fraudulent AI charges exceeding $100,000 in a single day.",
+        "basis": "article",
+        "why": "Agentic misuse moves from theory to costly real-world attack",
+        "eventKey": "google-autonomous-ai-cyberattack-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "706e0a39",
+        "section": "ai",
+        "title": "Nvidia says its open source AI strategy remains intact after Jensen Huang’s exit",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/17/nvidia-says-its-open-source-ai-strategy-remains-intact-after-jensen-huangs-exit",
+        "publishedAt": "2026-11-17T23:04:35.000Z",
+        "snippet": "Nvidia's open-source model strategy continues under the interim CEO, with a planned Hugging Face acquisition that would matter to open-weight developers.",
+        "brief": "Nvidia's interim chief executive, Colette Kress, told analysts on the first earnings call since Jensen Huang stepped down that the company still backs open AI models. She pointed to a 35-fold yearly jump in weekly token volume on OpenRouter and said Nvidia's Nemotron models now rank as the top American open model there. Nvidia still plans to complete its $12.9 billion Hugging Face purchase, a platform serving 18 million developers, though the deal was not raised during questions.",
+        "basis": "article",
+        "why": "Hugging Face acquisition plan matters for open-weight builders",
+        "eventKey": "nvidia-open-source-strategy-hugging-face-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2e2a3737",
+        "section": "ai",
+        "title": "US lawmakers launch probe into Lutnick’s actions amid Nvidia scandal",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/economy/2026/11/18/us-lawmakers-launch-probe-into-lutnicks-actions-amid-nvidia-scandal?traffic_source=rss",
+        "publishedAt": "2026-11-18T20:14:04.000Z",
+        "snippet": "Lawmakers question whether Commerce Secretary Lutnick improperly kept Megaspeed off the trade blacklist amid Nvidia chip ties.",
+        "brief": "US lawmakers have opened an inquiry into Commerce Secretary Howard Lutnick, following a letter that alleges a possible conflict of interest. The complaint centers on his decision not to add Megaspeed to the US trade blacklist. The feed summary gives no further detail on the scandal, the company's role, or any response from Lutnick, so the wider picture remains unclear.",
+        "basis": "summaries",
+        "why": "Megaspeed blacklist probe could reshape US chip-export enforcement",
+        "eventKey": "lutnick-megaspeed-nvidia-probe-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "e42210a8",
+        "section": "ai",
+        "title": "US senators urge White House AI chief to fix vulnerabilities after mass outages",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/18/jay-clayton-ai-tech-outages-infrastructure",
+        "publishedAt": "2026-11-18T17:25:00.000Z",
+        "snippet": "Senators Cantwell and Rounds asked the AI czar to fix infrastructure vulnerabilities after nationwide outages hit major firms and agencies.",
+        "brief": "Senators Maria Cantwell and Mike Rounds wrote to Jay Clayton, who is both director of national intelligence and the White House AI czar, asking him to find and fix weaknesses in US infrastructure after a run of nationwide tech outages. A four-hour nationwide flight stoppage at the Federal Aviation Administration was among the disruptions. Clayton told lawmakers there was no sign of a coordinated or state-sponsored attack, blaming maintenance and technical changes, though the cause remains unclear.",
+        "basis": "article",
+        "why": "Outages push Congress toward AI infrastructure resilience rules",
+        "eventKey": "senators-letter-ai-czar-outages-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f9a6e988",
+        "section": "ai",
+        "title": "Genie 4 is now available",
+        "lang": "en",
+        "source": "Google DeepMind",
+        "url": "https://deepmind.google/blog/genie-4-is-now-available",
+        "publishedAt": "2026-11-18T18:13:42.000Z",
+        "snippet": "DeepMind has released Genie 4, its next world-model generation, with no details in the feed.",
+        "brief": "Google is rolling out Genie 4 to eligible Google AI Ultra subscribers as part of a new Project Genie experience. Users can type prompts mid-session to change weather, add characters, and hear real-time adaptive audio, while a new agent builds worlds through conversation. Google AI Pro members can join a waitlist, and all generated video and audio carries SynthID watermarking.",
+        "basis": "article",
+        "why": "DeepMind's next world model; check capabilities for agent work",
+        "eventKey": "deepmind-genie-4-release",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "bedf8724",
+        "section": "world",
+        "title": "Mexico-US trade talks ‘very far along,’ says Sheinbaum after meeting Trump",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/news/mexico-us-trade-talks-very-far-along-says-sheinbaum-after-meeting-trump",
+        "publishedAt": "2026-11-18T19:59:56.000Z",
+        "snippet": "The first formal in-person Sheinbaum-Trump talks focused on unresolved USMCA issues, with Sheinbaum saying the trade negotiations are far advanced.",
+        "brief": "Mexican President Claudia Sheinbaum said trade talks with the United States are 'very far along' after she met President Donald Trump in Shenzhen. It was described as their first formal in-person meeting, and the two leaders focused on unresolved issues under the USMCA free trade agreement. The source gives no details on specific terms or a timeline for a deal, so the next steps remain unclear.",
+        "basis": "summaries",
+        "why": "USMCA renewal near deal; steel, aluminum, auto tariffs at stake",
+        "eventKey": "mexico-us-trade-talks-sheinbaum-trump-shenzhen",
+        "alsoCovered": []
+      },
+      {
+        "id": "c9c18fef",
+        "section": "world",
+        "title": "Trump Arrives in China Focused on Friendship With Xi, Not Nvidia Spy Scandal",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/18/us/politics/trump-xi-shenzhen-spy-scandal.html",
+        "publishedAt": "2026-11-18T18:52:04.000Z",
+        "snippet": "Trump arrived in China for talks with Xi while avoiding the espionage case that led to Nvidia's Jensen Huang being removed.",
+        "brief": "President Trump arrived in China with a warm welcome from Xi Jinping, including a hug and a red-carpet reception. Trump avoided publicly discussing an espionage case that reportedly brought down Nvidia's Jensen Huang. The source offers little beyond that contrast, so the broader implications for U.S.-China trade and chip relations are not covered here.",
+        "basis": "summaries",
+        "why": "Spy case behind Huang's ouster shadows US-China chip talks",
+        "eventKey": "trump-xi-china-visit-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f41aed1c",
+        "section": "world",
+        "title": "Democrats Claim 56 Senate Seats After Mary Peltola Wins in Alaska",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/17/us/politics/alaska-senate-sullivan-peltola.html",
+        "publishedAt": "2026-11-18T07:43:35.000Z",
+        "snippet": "Peltola's win gives Democrats 56 Senate seats, a shift in the chamber's balance after the Alaska result.",
+        "brief": "Mary Peltola has unseated Republican Senator Dan Sullivan in Alaska, according to The New York Times, which says she is the first Democrat to hold the state's Senate seat since 2015. The BBC reported earlier that counting was still underway with Peltola ahead, so the result was not final at that point. The source material does not confirm the broader tally of 56 Democratic seats referenced in the headline.",
+        "basis": "summaries",
+        "why": "56 seats gives Democrats room to block nominees and legislation",
+        "eventKey": "alaska-senate-peltola-sullivan",
+        "alsoCovered": [
+          {
+            "source": "BBC",
+            "url": "https://bbc.co.uk/news/articles/cxnv4jlr269eo"
+          }
+        ]
+      },
+      {
+        "id": "3e5b89d3",
+        "section": "world",
+        "title": "Colombia Rejects Joint Plan With U.S. to Target Drug Gangs",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/18/world/americas/colombia-us-joint-military.html",
+        "publishedAt": "2026-11-18T20:21:11.000Z",
+        "snippet": "Colombia's president refuses US troops in anti-cartel operations on its soil, a sharp break in joint security policy.",
+        "brief": "Colombia's president said his country will not allow American forces to take part in operations against cartels on Colombian soil. The statement rejects a joint approach with the United States to target drug gangs. The source gives no further figures, timeline, or next steps, so the broader context of the dispute remains unclear from this summary.",
+        "basis": "summaries",
+        "why": "Petro's refusal splits US anti-cartel strategy in the region",
+        "eventKey": "colombia-rejects-us-anti-gang-plan-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2821,
+      "fresh": 388,
+      "classified": 388,
+      "kept": 293,
+      "stories": 276,
+      "candidates": 46,
+      "picked": 21,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 159465,
+      "outputTokens": 47998,
+      "costUsd": 0.0945
+    },
+    "notes": []
+  }
+}
