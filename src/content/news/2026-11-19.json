@@ -1,0 +1,401 @@
+{
+  "date": "2026-11-19",
+  "generatedAt": "2026-11-19T21:12:01.211Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "f394b370",
+      "section": "world",
+      "title": "Myanmar Committed Genocide Against the Rohingya, Top Global Court Finds",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/19/world/europe/myanmar-genocide-icj-decision-.html",
+      "publishedAt": "2026-11-19T18:27:57.000Z",
+      "snippet": "It is the first time the ICJ has found a state guilty of genocide, a precedent with potentially broad implications.",
+      "brief": "The International Court of Justice has ruled that Myanmar is responsible for genocide against the Rohingya, the first time the court has held a state accountable for this crime. The finding centers on a 2017 military crackdown in Rakhine state that killed thousands, with judges concluding that intent to destroy a substantial part of the group was present. The decision, which closes a seven-year legal fight, could shape future cases, including one brought by South Africa against Israel.",
+      "basis": "summaries",
+      "why": "First-ever ICJ state genocide ruling; watch for sanctions and reparations",
+      "eventKey": "icj-myanmar-rohingya-genocide-ruling-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/articles/c804wzp20ddvo"
+        },
+        {
+          "source": "NPR",
+          "url": "https://npr.org/2026/11/19/g-s1-154340/un-court-myanmar-genocide-rohingya"
+        },
+        {
+          "source": "El País",
+          "url": "https://elpais.com/internacional/2026-11-19/el-tribunal-internacional-de-justicia-concluye-que-el-ejercito-de-myanmar-mato-a-miles-de-rohinyas-y-cometio-actos-de-violencia-extrema-contra-ellos.html"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/world/2026/nov/19/genocide-rohingya-international-court-of-justice-ruling-myanmar"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/19/what-does-the-myanmar-genocide-ruling-mean-for-the-rohingya?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "aed81d32",
+      "section": "world",
+      "title": "Trump, Putin and Xi release 'peace declaration' after historic meeting",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/c623j4ln97x7o",
+      "publishedAt": "2026-11-19T17:38:22.000Z",
+      "snippet": "The leaders issued a joint declaration after their first three-way talks, though its text barely addresses Ukraine or Europe.",
+      "brief": "Trump, Putin and Xi held their first three-way talks in Shenzhen, China, on the sidelines of the APEC summit, lasting about 90 minutes. They then issued a joint declaration warning against atomic conflict, pledging more oil production and supply, and calling for United Nations reform. Critics in Washington, including Democratic Senator Jeanne Shaheen, objected to Trump's warm tone toward Putin and Xi, and Trump plans a White House news conference on Friday.",
+      "basis": "article",
+      "why": "Text sidesteps Ukraine and Europe; arms-control follow-up is the test",
+      "eventKey": "trump-xi-putin-trilateral-summit-china-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/19/aje-onl-nf_chinas-xi-urges-us-and-russia-for-world-peace-191126?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "4f6b8a61",
+      "section": "world",
+      "title": "Senate Republicans Block Bid to Rein in Trump on Iran War",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/19/us/politics/senate-iran-war-powers-trump.html",
+      "publishedAt": "2026-11-19T20:19:12.000Z",
+      "snippet": "It was the first Senate vote on the Iran conflict since the midterms, and most Republicans opposed any limits on the war.",
+      "brief": "The Senate turned down a war powers measure that would have compelled Donald Trump to stop fighting with Iran, with most Republicans lining up against it. Lawmakers voted 51-48 to defeat the resolution, though reports differ on the exact tally, and three GOP senators broke ranks. The vote comes as Republicans lost control of Congress in November, with many blaming the conflict for their setbacks.",
+      "basis": "summaries",
+      "why": "New Congress still won't constrain the Iran war; Hormuz shock persists",
+      "eventKey": "senate-iran-war-powers-vote-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/us-news/2026/nov/19/senate-iran-war-powers-resolution-rejected"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/19/senate-republicans-in-us-reject-measure-to-limit-trumps-war-powers-in-iran?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "6c295873",
+      "section": "ai",
+      "title": "Anthropic jumps 34% on its stock market debut and nears a $2 trillion valuation",
+      "originalTitle": "Anthropic se dispara un 34% en su estreno en Bolsa y roza los dos billones de valoración",
+      "lang": "es",
+      "source": "El País",
+      "url": "https://elpais.com/economia/2026-11-19/anthropic-se-estrena-con-fuertes-subidas-en-la-mayor-salida-a-bolsa-de-la-historia.html",
+      "publishedAt": "2026-11-19T15:12:36.000Z",
+      "snippet": "Anthropic's shares rose 34% in the largest IPO in history, pushing its valuation close to $2 trillion.",
+      "brief": "Shares of the company behind Claude opened trading on Wall Street at $111.5, a debut El País describes as the biggest stock market launch in history. TechCrunch points out that the firm carries heavy computing obligations as it lists, while major backers such as Amazon and Google might keep earning from artificial intelligence even if Anthropic falls behind. Neither report confirms the 34% gain or the valuation.",
+      "basis": "summaries",
+      "why": "Record listing sets the price for AI risk in public markets",
+      "eventKey": "anthropic-ipo-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "TechCrunch",
+          "url": "https://techcrunch.com/2026/11/19/anthropics-ipo-puts-ais-circular-financing-boom-to-the-test"
+        }
+      ]
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "7912a502",
+        "section": "cleantech",
+        "title": "PJM urged to delay base capacity auction until data centers cut from forecast",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/ratepayer-advocates-pjm-market-monitor-capacity-auction/875165",
+        "publishedAt": "2026-11-19T14:29:26.000Z",
+        "snippet": "Regulators and consumer advocates want PJM to delay its December capacity auction until data-centre load forecasts are revised, citing reliability and billions in costs.",
+        "brief": "Ratepayer advocates and PJM's independent market monitor are asking the grid operator to postpone its base capacity auction, which is currently scheduled for December. They argue that proceeding on schedule threatens grid reliability and could expose consumers to billions of dollars in unnecessary costs. The core dispute centers on whether large data center load should be removed from the demand forecast used to set the auction.",
+        "basis": "summaries",
+        "why": "Inflated data-centre forecasts could cost PJM ratepayers billions",
+        "eventKey": "pjm-capacity-auction-delay-data-centers",
+        "alsoCovered": []
+      },
+      {
+        "id": "3faa1a0d",
+        "section": "cleantech",
+        "title": "Utilities want FERC to lock data centers into paying for grid upgrades",
+        "lang": "en",
+        "source": "Latitude Media",
+        "url": "https://latitudemedia.com/news/utilities-want-ferc-to-lock-data-centers-into-paying-for-grid-upgrades",
+        "publishedAt": "2026-11-18T19:23:20.000Z",
+        "snippet": "Utilities propose 10 to 20 year cost commitments from data centers, longer than some state rules require, shifting upgrade costs onto large loads.",
+        "brief": "Utilities that own transmission lines have asked the Federal Energy Regulatory Commission to approve long-term contracts requiring data centers to cover grid upgrade costs before construction begins. In PJM's region, data centers would pay at least 80% of requested transmission service for a minimum of 10 years, backed by collateral. The filings are not final, and FERC must still accept them, with comments due December 7.",
+        "basis": "article",
+        "why": "10–20 year commitments decide who pays for AI load growth",
+        "eventKey": "utilities-ferc-data-center-grid-cost-filings-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "89f2025f",
+        "section": "cleantech",
+        "title": "Tesla seeks Texas tax break for $3.1 billion polysilicon plant",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/19/tesla-seeks-texas-tax-break-for-3-1-billion-polysilicon-plant",
+        "publishedAt": "2026-11-19T10:50:25.000Z",
+        "snippet": "Tesla conditions a $3.1 billion Texas polysilicon plant on a property tax cut, aiming to localise China-dominated solar supply.",
+        "brief": "Tesla has asked Texas for a property tax limitation on a proposed $3.1 billion polysilicon refinery near Robstown, stating the company would not invest in the state without it. The filing, submitted to a local school district under the JETI program, is backed by an EY analysis projecting 2027 to 2030 construction and 515 permanent jobs by 2032. The Comptroller and state governor's office must still review and approve the deal before it can take effect.",
+        "basis": "article",
+        "why": "$3.1B bid to onshore China-dominated solar polysilicon supply",
+        "eventKey": "tesla-texas-polysilicon-plant-tax-break",
+        "alsoCovered": []
+      },
+      {
+        "id": "4821782e",
+        "section": "cleantech",
+        "title": "Google signs 50-MW superhot geothermal PPA with Quaise Energy",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/google-signs-50-mw-superhot-geothermal-ppa-with-quaise-energy/875217",
+        "publishedAt": "2026-11-19T17:58:42.000Z",
+        "snippet": "Google's 50 MW superhot rock geothermal deal with Quaise would supply its Oregon data centers from 2030, using deeper drilling.",
+        "brief": "Google has signed a power purchase agreement with Quaise Energy for 50 megawatts of superhot geothermal power to support its Oregon data centers, with deliveries beginning as early as 2030. Quaise uses millimeter-wave drilling to reach rock above 932 degrees Fahrenheit at depths up to 65,000 feet, and says such wells could produce up to 10 times more power per well. The deal matters because data centers need firm power, and Quaise is still working toward its first kilometer-deep test at its Texas site.",
+        "basis": "article",
+        "why": "Hyperscaler bets on superhot rock geothermal for 2030 firm power",
+        "eventKey": "google-quaise-superhot-geothermal-ppa-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ee01f5bb",
+        "section": "cleantech",
+        "title": "Trump Orders to Keep Florida Coal Plant Running Cost Ratepayers Millions",
+        "lang": "en",
+        "source": "Inside Climate News",
+        "url": "https://insideclimatenews.org/news/19112026/florida-stanton-coal-plant-trump-emergency-orders",
+        "publishedAt": "2026-11-19T10:00:00.000Z",
+        "snippet": "Emergency federal orders have kept the Stanton coal plant open past retirement, with ratepayers bearing about $25.6 million so far across six such plants.",
+        "brief": "Federal emergency orders have repeatedly extended the operation of a Florida coal plant past its planned closure, and the extra running costs have reportedly reached about $25.6 million borne by customers. The plant in Orlando is one of several facilities across the country that the administration has directed to stay open instead of retiring. Ratepayers now face these charges while the orders continue, making the financial burden of keeping aging fossil plants online a growing question for households.",
+        "basis": "summaries",
+        "why": "Forced coal retention already costs ratepayers $25.6M across six plants",
+        "eventKey": "trump-emergency-orders-coal-plants-ratepayer-costs-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "6b14861a",
+        "section": "cleantech",
+        "title": "US consortium wins huge Kenya mining deal, beating Chinese rivals",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cm9q84gp0gr3o",
+        "publishedAt": "2026-11-19T12:56:30.000Z",
+        "snippet": "A US consortium beat Chinese rivals for the Mrima Hill project, a critical-minerals site valued at over $60bn in deposits.",
+        "brief": "A US-led group called Frontier Minerals has been selected to develop Kenya's Mrima Hill site, ahead of several competitors from China and Australia. Deposits there are valued at over $60bn, including niobium, a metal used in electric cars and defence equipment. The firm still needs a prospecting licence, and rival bidders plan to challenge the award, which has also raised local worries about forest loss.",
+        "basis": "article",
+        "why": "US wins $60bn critical-minerals site from Chinese bidders",
+        "eventKey": "us-consortium-kenya-mrima-hill-minerals-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "cded633c",
+        "section": "ai",
+        "title": "Claude solves two open problems in the physics of black holes",
+        "lang": "en",
+        "source": "anthropic.com",
+        "url": "https://anthropic.com/research/claude-black-hole-physics",
+        "publishedAt": "2026-11-19T17:30:44.000Z",
+        "snippet": "Anthropic reports Claude resolved two open problems in black hole physics, a notable test of AI on frontier research.",
+        "brief": "Claude, Anthropic's AI model, reportedly solved two open problems in theoretical physics about black holes within quantum gravity research. In the first, it showed that the phase transition between a gas of particles and a black hole in a model universe is abrupt, a question left unfinished since 2003. The second sharpened a known upper limit on the mass of the lightest black hole in a two-dimensional universe. Neither result touches our own universe directly.",
+        "basis": "article",
+        "why": "Frontier model producing novel physics results, not just benchmark gains",
+        "eventKey": "claude-black-hole-physics-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "de104f83",
+        "section": "ai",
+        "title": "Introducing Gemini 4 Neon",
+        "lang": "en",
+        "source": "Google DeepMind",
+        "url": "https://deepmind.google/blog/introducing-gemini-4-neon",
+        "publishedAt": "2026-11-18T21:35:43.000Z",
+        "snippet": "Google DeepMind has released a new Gemini model version, though the announcement gives no details on capabilities here.",
+        "brief": "Google DeepMind has launched Gemini 4 Neon, aimed at complex software engineering, knowledge work, and science tasks. It ranks third overall with a score of 61 on the Artificial Analysis Intelligence Index, and it is priced at $3 per million input tokens and $15 per million output tokens. The model is rolling out now through the Gemini API, Google AI Studio, Google Antigravity, and the Gemini app for paying subscribers.",
+        "basis": "article",
+        "why": "New Google frontier release to benchmark against Claude and GPT",
+        "eventKey": "gemini-4-neon-release-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "Simon Willison",
+            "url": "https://simonwillison.net/2026/Nov/18/llm-gemini"
+          }
+        ]
+      },
+      {
+        "id": "ad2fa3ef",
+        "section": "ai",
+        "title": "Google gives Gemini the ability to use your Mac for you",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/19/google-gives-gemini-the-ability-to-use-your-mac-for-you",
+        "publishedAt": "2026-11-19T18:09:11.000Z",
+        "snippet": "The Mac agent can organize files, fill out forms and run multistep workflows, moving Gemini from chat toward local task automation.",
+        "brief": "Google is adding computer use to its Gemini desktop app for macOS, letting the AI complete multistep tasks like filling out forms, organizing files, and working across local apps and websites. Users can watch the agent work in a live preview in the chat while still using their own screen, and they can pause, stop, or approve actions before they happen. The feature launches first in English in the U.S. and requires a Google AI Plus, Pro, or Ultra subscription, with no timeline given for other markets or platforms.",
+        "basis": "article",
+        "why": "Desktop computer-use agents move from demos into shipping products",
+        "eventKey": "google-gemini-mac-agent-update-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "989a02c7",
+        "section": "ai",
+        "title": "Meta’s AI agent Muse is mixing up conversations and could be exposing private data, report says",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/19/metas-ai-agent-muse-is-mixing-up-conversations-and-exposing-private-data-report-says",
+        "publishedAt": "2026-11-19T17:38:40.000Z",
+        "snippet": "Employees reported Meta's Muse agent surfacing other users' messages and account balances, raising a private data exposure risk.",
+        "brief": "Current and former Meta staff have flagged that the Muse AI agent sometimes delivers one user's information to someone else, including bank balances, childcare requests, and product orders. In one case, an employee was sent a bank balance that wasn't hers, and another was nudged about a sister's Signal message she never shared access to. Meta says employee testing is meant to surface such problems, and that staff see different builds than the public. Muse has more than 10 million downloads since its September launch.",
+        "basis": "article",
+        "why": "Agent context leakage: a cautionary failure mode for multi-agent builders",
+        "eventKey": "meta-muse-agent-data-exposure-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2ee432b3",
+        "section": "ai",
+        "title": "With the biggest IPO of all time, Anthropic’s ‘good guy’ reputation is on the line",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/ai-artificial-intelligence/1037459/anthropic-ipo-safe-ai-reputation-power-structure",
+        "publishedAt": "2026-11-19T14:25:37.000Z",
+        "snippet": "Anthropic's IPO, which raised $81.3 billion, tests whether a company built on safety commitments can keep that reputation as a public firm.",
+        "brief": "Anthropic has gone public in what is described as the largest IPO ever, raising $81.3 billion and beating SpaceX for most valuable debut of all time. The article argues its founder-friendly structure lets leadership pursue the listing largely on its own, since the Long-Term Benefit Trust has limited real power. Experts question whether the trust can check the founders, especially as public shareholder pressure grows to speed up releases and commercialization.",
+        "basis": "article",
+        "why": "Can safety commitments survive quarterly earnings pressure at $81B raised?",
+        "eventKey": "anthropic-ipo-nyse-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "Expansión",
+            "url": "https://expansion.mx/mercados/2026/11/19/anthropic-destruye-record-spacex-debut-bolsa-de-ny"
+          }
+        ]
+      },
+      {
+        "id": "2727ca5a",
+        "section": "ai",
+        "title": "The Bay Area Wonders: What Will Anthropic Workers Do With Their Wealth?",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/19/us/anthropic-ipo-spending-wealth-san-francisco.html",
+        "publishedAt": "2026-11-19T18:55:40.000Z",
+        "snippet": "Anthropic's IPO has created sudden paper wealth for its staff, raising questions about how much of it will flow into the local economy.",
+        "brief": "San Francisco is not bracing for a shopping spree, even though Anthropic employees are gaining sudden wealth from the company's initial public offering. The source offers little beyond that observation, so the article's broader picture of how workers plan to spend or invest their new money is unclear from this summary alone. Readers wanting specifics would need the full report.",
+        "basis": "summaries",
+        "why": "Anthropic paper wealth reshapes Bay Area housing and startup funding",
+        "eventKey": "anthropic-ipo-employee-wealth-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "4c0eff52",
+        "section": "world",
+        "title": "Breaking: Peso surpasses 19 to the dollar, its weakest point in 17 months",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/news/peso-breaks-19-dollar-17-month-high",
+        "publishedAt": "2026-11-19T17:15:49.000Z",
+        "snippet": "The peso's fall past 19 per dollar reflects diverging Banxico and Federal Reserve rate moves, a key concern for Mexico-US trade and finance.",
+        "brief": "The Mexican peso has weakened past 19 to the U.S. dollar for the first time since June 2025, according to Mexico News Daily. The move is linked to diverging interest-rate paths, with Banxico and the Federal Reserve moving rates in opposite directions. The report does not give further detail on the size of the rate gap or the outlook for the currency.",
+        "basis": "summaries",
+        "why": "Banxico–Fed divergence hits nearshoring costs and US–Mexico trade flows",
+        "eventKey": "peso-weakens-past-19-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "fe250f23",
+        "section": "world",
+        "title": "After Bridge Attack, Putin Says He Will ‘Not Be Negotiating’ Ukraine Cease-Fire",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/19/world/europe/putin-shenzhen-crimea-bridge.html",
+        "publishedAt": "2026-11-19T16:51:57.000Z",
+        "snippet": "Putin rejected a ceasefire negotiation stance while inviting European representatives to Moscow, though the seriousness of that offer is unclear.",
+        "brief": "Russian President Vladimir Putin has asked European officials to travel to Moscow for talks about whether they could take part in peace negotiations over Ukraine. The report does not make clear how sincere that offer is, leaving open whether it signals a real shift in how Moscow approaches the talks. Readers should watch for whether any meeting actually takes place and what role Europe is given.",
+        "basis": "summaries",
+        "why": "Summit goodwill collides with Putin's refusal after bridge attack",
+        "eventKey": "putin-ukraine-ceasefire-talks-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c670fe82",
+        "section": "world",
+        "title": "Europe ready for talks with Russia on ending war in Ukraine, leaders say",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/ckzd9nln5e6go",
+        "publishedAt": "2026-11-19T19:16:21.000Z",
+        "snippet": "Allies of Ukraine presented a united negotiating position at a Berlin summit, signalling a possible opening with Moscow.",
+        "brief": "European leaders at Berlin's Coalition of the Willing summit said they are ready for negotiations with Russia to end the war in Ukraine, with UK Prime Minister Andy Burnham and German Chancellor Friedrich Merz insisting on a united position. Merz said talks on European security should only follow a peace agreement with Ukraine, while Putin has so far rejected any European role in US-led talks. Moscow has invited Europeans to Moscow to clarify their positions before deciding on the format of future talks.",
+        "basis": "article",
+        "why": "Europe, excluded in Shenzhen, stakes its own negotiating position",
+        "eventKey": "europe-russia-ukraine-talks-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "8d923949",
+        "section": "world",
+        "title": "The midterms were the largest win for either party in 50 years",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/19/nx-s1-6045916/democrats-midterm-house-majority",
+        "publishedAt": "2026-11-19T15:55:05.000Z",
+        "snippet": "Democrats won House races by 14 points, 56% to 42%, the widest margin for either party in half a century.",
+        "brief": "Democrats won the House popular vote by roughly 56 percent to 42 percent, a 14-point margin that is the largest any party has posted in half a century. The gap is the biggest since the period just after the Watergate scandal, according to the figures reported. Meanwhile, the Senate picture is tighter: Democrats reached 56 seats after Mary Peltola's Alaska victory, while Jamie Davis came roughly 25,000 votes short in Louisiana.",
+        "basis": "summaries",
+        "why": "14-point margin signals a mandate shaping 2027 federal policy",
+        "eventKey": "us-midterms-senate-results-2026",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/us-news/2026/nov/19/louisiana-senate-seat-democrats-jamie-davis"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2833,
+      "fresh": 383,
+      "classified": 383,
+      "kept": 282,
+      "stories": 251,
+      "candidates": 45,
+      "picked": 20,
+      "briefs": 20
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 177130,
+      "outputTokens": 51865,
+      "costUsd": 0.1078
+    },
+    "notes": []
+  }
+}
