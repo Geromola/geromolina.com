@@ -1,0 +1,392 @@
+{
+  "date": "2026-11-21",
+  "generatedAt": "2026-11-21T19:56:13.083Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "c9e3f0b7",
+      "section": "world",
+      "title": "Mexico detains top cartel boss 'El Chapo Isidro,' setting off violence",
+      "lang": "en",
+      "source": "NPR",
+      "url": "https://npr.org/2026/11/21/nx-s1-6049672/cartel-boss-el-chapo-isidro-detained",
+      "publishedAt": "2026-11-21T18:08:55.000Z",
+      "snippet": "Meza Flores was one of the FBI's most wanted fugitives, and his arrest in northwest Mexico has triggered violence in the region.",
+      "brief": "Mexican authorities arrested Fausto Isidro Meza Flores, known as \"El Chapo Isidro,\" who was on the FBI's list of most wanted fugitives, in northwest Mexico on Saturday. The arrest triggered violence in the region, with burned vehicles used as roadblocks. State officials say the situation is now under control, though federal bus lines remain suspended between Los Mochis and nearby cities.",
+      "basis": "summaries",
+      "why": "FBI top-ten fugitive captured; watch for Sinaloa violence and extradition",
+      "eventKey": "chapo-isidro-capture-mexico-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "El Universal",
+          "url": "https://eluniversal.com.mx/estados/tras-captura-de-el-chapo-isidro-fuerzas-estatales-y-federales-mantienen-vigilancia-en-guasave-situacion-bajo-control-graciela-dominguez"
+        }
+      ]
+    },
+    {
+      "id": "756433ac",
+      "section": "world",
+      "title": "Deadly attack in Kyiv as Russia launches barrage against Ukraine",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/video/newsfeed/2026/11/21/aje-onl-nf_deadly-attack-in-kyiv-as-russia-launches-barrage-211126?traffic_source=rss",
+      "publishedAt": "2026-11-21T18:42:38.000Z",
+      "snippet": "More than 400 drones and 110 missiles hit Ukraine overnight, with at least seven killed in Kyiv alone.",
+      "brief": "Russia fired more than 400 drones and 110 missiles at targets across Ukraine overnight, according to Al Jazeera. The attack killed at least seven people in the capital, Kyiv. The source offers few further details on damage or the wider impact of the strikes.",
+      "basis": "summaries",
+      "why": "One of the war's largest barrages as US peace push stalls",
+      "eventKey": "russia-attack-kyiv-drones-missiles-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "9431c4e2",
+      "section": "world",
+      "title": "Tankers hit in Strait of Hormuz as Iran tightens grip on shipping",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/21/tankers-hit-in-strait-of-hormuz-as-iran-tightens-grip-on-shipping?traffic_source=rss",
+      "publishedAt": "2026-11-21T15:01:18.000Z",
+      "snippet": "Two tanker incidents near Oman, one blamed on a naval mine, signal rising risk to Gulf oil shipping.",
+      "brief": "A British maritime security agency has reported two incidents involving tankers near Oman in the Strait of Hormuz. Iran has said one tanker caught fire after striking a naval mine. The source text offers little beyond these two reports, so the wider impact on shipping and the next steps remain unclear from this summary.",
+      "basis": "summaries",
+      "why": "Mine strike raises risk to Gulf oil flows and prices",
+      "eventKey": "hormuz-tanker-attacks-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "adb519e8",
+      "section": "world",
+      "title": "Trump says he wants ‘permanent’ deal to stop Iran getting nuclear weapons",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/video/newsfeed/2026/11/21/21-11-clip-trump-iran-permanent-nuclear-deal?traffic_source=rss",
+      "publishedAt": "2026-11-21T18:05:51.000Z",
+      "snippet": "Trump is pushing for a lasting arrangement, not a temporary one, to block Iranian nuclear weapons development.",
+      "brief": "US President Donald Trump has said he wants a permanent agreement that would stop Iran from developing nuclear weapons. The statement is the core of the report, and the feed summary offers no further details on the terms, timing, or how Iran has responded. Readers should treat it as a stated goal rather than a finalized deal, with the full Al Jazeera article needed for specifics.",
+      "basis": "summaries",
+      "why": "Signals US terms for any Iran settlement; temporary deals ruled out",
+      "eventKey": "trump-permanent-iran-nuclear-deal-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "dfe49500",
+      "section": "ai",
+      "title": "Anthropic worker claims to have solved a Holy Grail of math problems with the help of AI",
+      "lang": "en",
+      "source": "NPR",
+      "url": "https://npr.org/2026/11/21/g-s1-154922/anthropic-worker-claims-to-have-solved-a-holy-grail-of-math-problems-with-the-help-of-ai",
+      "publishedAt": "2026-11-21T12:30:16.000Z",
+      "snippet": "An Anthropic mathematician says Claude helped him solve a famed open problem, the second such claim by an AI-linked party recently.",
+      "brief": "An Anthropic mathematician says he used the company's Claude chatbot to crack a long-standing, famously difficult math puzzle. It is the latest such claim in a short span, following an earlier one from another AI-linked group. Mathematicians say the proof could be historic, but checking it may take weeks before its validity is settled.",
+      "basis": "summaries",
+      "why": "If verified, AI-assisted proof of the Riemann hypothesis would be historic",
+      "eventKey": "riemann-hypothesis-claude-proof-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/21/riemann-hypothesis-has-the-worlds-most-famous-maths-problem-been-cracked?traffic_source=rss"
+        }
+      ]
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "608493d3",
+        "section": "cleantech",
+        "title": "Fight over fossil fuels leaves COP31 climate talks in deadlock",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/c6ly5w40eg07o",
+        "publishedAt": "2026-11-21T19:33:49.000Z",
+        "snippet": "Negotiations on a new global climate agreement have stalled over disputes about fossil fuel phase-out language.",
+        "brief": "Negotiators at the COP31 climate summit in Turkey are stuck after running more than 36 hours past schedule without agreeing a new global deal. The EU and Pacific island nations object to a draft that never mentions reducing fossil fuel demand, while a push for more adaptation money remains unresolved. If consensus fails, talks could be suspended and reconvened next year, which has happened only once before since 1995.",
+        "basis": "article",
+        "why": "Phase-out language fight shapes global fossil demand signals",
+        "eventKey": "cop31-talks-deadlock-fossil-fuels-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "96837bc8",
+        "section": "cleantech",
+        "title": "Is the Energy Crisis Accelerating the Clean Energy Transition? 4 Takeaways from the IEA’s World Energy Outlook 2026",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/20/is-the-energy-crisis-accelerating-the-clean-energy-transition-4-takeaways-from-the-ieas-world-energy-outlook-2026",
+        "publishedAt": "2026-11-21T01:13:03.000Z",
+        "snippet": "The IEA's 2026 outlook examines how the ongoing energy crisis is reshaping energy security and the clean energy transition.",
+        "brief": "The International Energy Agency's World Energy Outlook 2026 finds that the energy crisis is pushing countries toward electrification and domestic energy, but progress is too slow. Under current policies, electricity is projected to reach only 29% of final energy consumption by 2035, about half the increase needed to hit the 35% COP31 target. Experts stress that grids must be expanded and made more flexible, since major grid projects can take 5 to 15 years to complete.",
+        "basis": "article",
+        "why": "IEA's annual baseline for demand, investment and transition pace",
+        "eventKey": "iea-world-energy-outlook-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "1afd8bae",
+        "section": "cleantech",
+        "title": "U.S. Auctions 31.5 Million Acres of Pacific Ocean to Deep Sea Mining Company",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/19/climate/metals-company-seafloor-mining-auction.html",
+        "publishedAt": "2026-11-20T14:16:51.000Z",
+        "snippet": "Wetstone U.S. Ventures paid $6 million for seabed leases covering 31.5 million acres, for mapping and preparation only, despite a federal judge's objections.",
+        "brief": "The U.S. government held its first-ever lease sale for a patch of Pacific seabed, with the rights going to Wetstone U.S. Ventures for $6 million. The lease covers mapping and preparation work rather than actual extraction, so no mining would begin under this deal alone. The sale proceeded despite objections from a federal judge, a dispute that may shape whether further sales move ahead.",
+        "basis": "summaries",
+        "why": "$6M seabed lease opens US path to nickel and cobalt nodules",
+        "eventKey": "us-pacific-seabed-mining-lease-sale-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "2a099e8f",
+        "section": "cleantech",
+        "title": "Spain approves new data center rules requiring 80% renewable electricity",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/21/spain-approves-new-data-center-rules-requiring-80-renewable-electricity",
+        "publishedAt": "2026-11-21T08:00:00.000Z",
+        "snippet": "Spain's new rules require data centres to source 80% renewable power and meet grid flexibility rules, backed by a €17.14 billion grid plan for 47.4 GW of new demand.",
+        "brief": "Spain's government approved a royal decree on November 20 setting energy, environmental, resilience and digital sovereignty rules for data centers. Under the decree, facilities with grid access of at least 10 MW must show that 80% of annual electricity use comes from on-site renewables or long-term renewable purchase deals, with hourly matching phased in through 2032. The government says unchecked growth could add €5 billion a year to electricity costs.",
+        "basis": "article",
+        "why": "Template for tying data-centre load to renewables; 47.4 GW demand",
+        "eventKey": "spain-data-center-renewable-rules-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "51ef59dd",
+        "section": "cleantech",
+        "title": "Europe’s Modelled €5.70/kg Hydrogen Faces Industrial Buyers Who Can Afford Far Less",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/21/europe-hydrogen-cost-industrial-buyers-price-ceilings",
+        "publishedAt": "2026-11-21T16:49:13.000Z",
+        "snippet": "Industrial buyers' price ceilings sit well below the modelled 5.70 euro per kg cost, challenging hydrogen economics in heat, ammonia and steel.",
+        "brief": "A commentary argues Europe's industrial hydrogen plans face a buyer-side price problem. Its central 2050 scenario puts onsite hydrogen at €5.70/kg, but direct-electric heating sets a customer ceiling of about €2.07/kg, so the production case overshoots by €3.63/kg. The author says investors should test whether buyers can pay the maximum acceptable price before financing supply.",
+        "basis": "article",
+        "why": "Green hydrogen cost gap persists for steel and ammonia buyers",
+        "eventKey": "europe-hydrogen-5-70-euro-kg-buyers",
+        "alsoCovered": []
+      },
+      {
+        "id": "2daeb794",
+        "section": "cleantech",
+        "title": "Meta reconsiders 2030 net-zero goal amid record emissions from AI data centers",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/ai/2026/11/meta-reconsiders-2030-net-zero-goal-amid-record-emissions-from-ai-data-centers",
+        "publishedAt": "2026-11-20T21:47:10.000Z",
+        "snippet": "Meta says it is re-evaluating its 2030 sustainability goals as AI data-centre emissions reach record levels.",
+        "brief": "Meta's latest sustainability report says executives are re-evaluating the 2030 net-zero goal and related interim targets, citing AI infrastructure demand that has grown faster than expected. The company's total emissions rose from 15.6 million to over 21.7 million metric tons of CO2 equivalent in 2025, a nearly 40 percent jump that is the largest among major US tech giants. Much of the increase is attributed to capital goods such as data center servers.",
+        "basis": "article",
+        "why": "AI load is now breaking hyperscaler climate pledges",
+        "eventKey": "meta-reconsiders-2030-net-zero-goal",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "52aac633",
+        "section": "ai",
+        "title": "Lean verification of the Riemann Hypothesis",
+        "lang": "en",
+        "source": "leanprover-community.github.io",
+        "url": "https://leanprover-community.github.io/blog/posts/riemann-hypothesis",
+        "publishedAt": "2026-11-21T14:36:45.000Z",
+        "snippet": "A Lean formal-verification effort tackles the Riemann Hypothesis, a notable test of AI-assisted proof tools.",
+        "brief": "The Lean and Mathlib communities, backed by the Lean FRO and Mathlib Initiative, say Levent Alpöge released a 17 million line Lean library claiming to prove the Riemann Hypothesis. After a day of rapid checking, they certify that the claim and its argument are correct, and the code depends directly only on Mathlib. The statement does not explain the new ideas, which they expect the wider mathematical community to examine next.",
+        "basis": "article",
+        "why": "Formal Lean check is the real test of the Claude proof claim",
+        "eventKey": "lean-riemann-hypothesis-verification",
+        "alsoCovered": []
+      },
+      {
+        "id": "bdba709e",
+        "section": "ai",
+        "title": "Language Models Can Rewrite Their Own Weights",
+        "lang": "en",
+        "source": "arxiv.org",
+        "url": "https://arxiv.org/abs/2611.21885",
+        "publishedAt": "2026-11-20T16:29:06.000Z",
+        "snippet": "An arXiv paper proposes language models that modify their own weights, a notable step toward self-directed model adaptation.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Self-editing weights could change how models adapt after training",
+        "eventKey": "lm-self-rewriting-weights-paper-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "368b9f97",
+        "section": "ai",
+        "title": "U.N. Fails to Regulate Lethal Autonomous Weapons, but Plans to Try Again",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/21/world/europe/un-lethal-autonomous-weapons.html",
+        "publishedAt": "2026-11-21T13:35:19.000Z",
+        "snippet": "Major militaries, including the US and Russia, resisted binding limits, and talks will resume at a later date.",
+        "brief": "Talks at the United Nations in Geneva ended without binding rules on lethal autonomous weapons, the systems that can select and attack targets with limited human control. Major military powers, including the United States and Russia, strongly resisted binding restrictions. Humanitarian groups warn that military artificial intelligence is advancing much faster than diplomatic efforts, and negotiators plan to return to the issue.",
+        "basis": "summaries",
+        "why": "No binding limits on autonomous weapons; US and Russia resisted",
+        "eventKey": "un-autonomous-weapons-talks-fail-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "NPR",
+            "url": "https://npr.org/2026/11/21/nx-s1-6047916/killer-robots-un-drones"
+          }
+        ]
+      },
+      {
+        "id": "fae7756c",
+        "section": "ai",
+        "title": "Anthropic says it will put humanity first. Will its IPO change that?",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/21/nx-s1-6048678/anthropic-ipo-mission-ai-safety",
+        "publishedAt": "2026-11-21T10:00:00.000Z",
+        "snippet": "Critics say Anthropic's safety-first commitment will face pressure now that it is publicly traded.",
+        "brief": "Anthropic, the AI company, has publicly committed to putting humanity first, but critics argue that commitment will face its toughest test once the firm becomes a publicly traded company. The concern is that shareholder pressure could push safety priorities behind commercial success. The source offers little beyond that central tension, so readers should look to the full NPR report for details on how the IPO might affect those promises.",
+        "basis": "summaries",
+        "why": "Public-market pressure tests Anthropic's safety governance post-IPO",
+        "eventKey": "anthropic-ipo-safety-commitment-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "645fb32b",
+        "section": "ai",
+        "title": "Researcher plants 2m canaries into the AI supply chain. A privacy disaster surfaced.",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate",
+        "publishedAt": "2026-11-20T20:59:08.000Z",
+        "snippet": "Planted trackable secrets in prompts showed that data sent into AI supply chains does not stay private.",
+        "brief": "A security researcher, HD Moore of Dragos, seeded nearly two million unique fake credentials into AI prompts sent through router services such as OpenRouter and Vercel to see where they surfaced. Three hosting providers were breached, and attackers used a couple hundred stolen AWS keys tens of thousands of times. Some resellers were also found logging prompts, and a Chinese AI lab's systems scraped secret URLs from many requests despite privacy terms. Moore advises using first-tier providers with a single contract and choosing upstream providers directly.",
+        "basis": "article",
+        "why": "Prompts leak through AI vendors; matters for your agent pipelines",
+        "eventKey": "canary-prompts-ai-supply-chain-privacy",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "16ddfc33",
+        "section": "world",
+        "title": "Trump orders contractors to check with White House over any congressional inquiries",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/21/trump-contractors-congress-executive-order",
+        "publishedAt": "2026-11-21T18:08:30.000Z",
+        "snippet": "The order requires contractors to consult the White House before answering congressional requests and to withhold privileged communications.",
+        "brief": "President Trump signed an executive order late Friday requiring federal contractors and subcontractors to consult the White House about any congressional inquiries they receive and to withhold communications the administration considers privileged. Companies must also coordinate with the White House and agencies on responses, and noncompliance could lead to terminated contracts and suspended future federal work. The move comes ahead of expected aggressive Democratic oversight once they take over Congress in January, particularly over federal money flowing to companies linked to Trump's family.",
+        "basis": "article",
+        "why": "Expands executive control over congressional oversight of contractors",
+        "eventKey": "trump-contractors-congress-inquiries-order-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "46a1384a",
+        "section": "world",
+        "title": "Vance stops short of endorsing Trump’s claim that Iran was close to nuclear weapon",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/21/vance-trump-iran-nuclear-weapon",
+        "publishedAt": "2026-11-21T17:24:51.000Z",
+        "snippet": "Vance declined to back Trump's claim that Iran was near a nuclear weapon, deferring to the president instead.",
+        "brief": "At a White House briefing on Friday, Vice-President JD Vance declined to back Donald Trump's claim that Iran was so close to a nuclear weapon in February that war was essential. Trump's claim is undercut by his own earlier statements, including a 2025 intelligence assessment that Iran was not building a bomb and his later description of strikes that had supposedly obliterated Iran's enrichment sites. Vance said only that it was not his place to second-guess the president.",
+        "basis": "article",
+        "why": "Rare daylight between Trump and Vance on Iran war rationale",
+        "eventKey": "vance-iran-nuclear-claim-trump",
+        "alsoCovered": []
+      },
+      {
+        "id": "5088594c",
+        "section": "world",
+        "title": "Zelensky says Putin is a 'killer' after Trump calls Russian leader a friend",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cxnv4zvmdy0jo",
+        "publishedAt": "2026-11-21T08:10:25.000Z",
+        "snippet": "Zelensky condemned Putin after Trump praised him and said they have a great relationship, days before a Trump-Putin meeting in China.",
+        "brief": "Ukraine's President Volodymyr Zelensky called Vladimir Putin a \"killer\" after Donald Trump described the Russian leader as his friend ahead of a trilateral meeting in China. Zelensky told CNN that Putin is an enemy and that praising him as a friend means he does not feel enough pressure. The remarks came as Russian strikes killed at least nine people in Kyiv and western Ukraine on Friday, and a Russian cruise missile hit a Polish rural area.",
+        "basis": "article",
+        "why": "Trump-Putin China meeting next; Kyiv fears concessions",
+        "eventKey": "zelensky-putin-killer-trump-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "281fd307",
+        "section": "world",
+        "title": "Russian strike kills two, wounds 60, in Zelenskyy’s hometown",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/21/russian-strike-kills-two-wounds-60-in-zelenskyys-hometown?traffic_source=rss",
+        "publishedAt": "2026-11-21T17:20:03.000Z",
+        "snippet": "Missiles also landed in NATO member Poland as US-led efforts to broker peace face uncertainty, raising escalation concerns.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Strikes spilling into Poland raise NATO escalation risk",
+        "eventKey": "russia-strike-kryvyi-rih-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "51e276e6",
+        "section": "world",
+        "title": "From giant pandas to smart hospitals: Sheinbaum seeks to diversify trade and investment in China visit without risking USMCA",
+        "originalTitle": "De osos panda a hospitales inteligentes: Sheinbaum quiere diversificar el comercio y la inversión en su visita a China sin arriesgar el TMEC",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/economia/2026-11-21/de-osos-panda-a-hospitales-inteligentes-sheinbaum-quiere-diversificar-el-comercio-y-la-inversion-en-su-visita-a-china.html",
+        "publishedAt": "2026-11-21T09:30:00.000Z",
+        "snippet": "Sheinbaum sought new trade and investment ties with China, Canada and Vietnam at APEC while keeping USMCA intact.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Mexico hedging toward Asia ahead of USMCA review",
+        "eventKey": "sheinbaum-china-apec-visit-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "74960b3b",
+        "section": "world",
+        "title": "United States launches full-scale assault on Mexican cartel La Nueva Familia Michoacana",
+        "originalTitle": "Estados Unidos se lanza en tromba contra el cartel mexicano La Nueva Familia Michoacana",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/2026-11-21/estados-unidos-se-lanza-en-tromba-contra-el-cartel-mexicano-la-nueva-familia-michoacana.html",
+        "publishedAt": "2026-11-21T09:30:00.000Z",
+        "snippet": "A new US indictment details the cartel's structure and applies a racketeering law historically used against the Sicilian Mafia.",
+        "brief": "A federal prosecutor's office in western Texas has filed a new indictment against 21 members of La Nueva Familia Michoacana, led by the Hurtado Olascoaga brothers, known as El Pez and La Fresa. Prosecutors used the RICO racketeering law, historically aimed at major crime syndicates, and list 13 further charges including drug, migrant and arms trafficking. The filing describes the group's mining control and its straw-buyer gun network, and the group was designated a narcoterrorist organization in February 2025.",
+        "basis": "article",
+        "why": "RICO indictment shows US escalating legal pressure on Mexican cartels",
+        "eventKey": "us-indicts-la-nueva-familia-michoacana-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2818,
+      "fresh": 310,
+      "classified": 310,
+      "kept": 195,
+      "stories": 175,
+      "candidates": 46,
+      "picked": 22,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 141961,
+      "outputTokens": 40223,
+      "costUsd": 0.1052
+    },
+    "notes": []
+  }
+}
