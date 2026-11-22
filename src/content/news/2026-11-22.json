@@ -1,0 +1,322 @@
+{
+  "date": "2026-11-22",
+  "generatedAt": "2026-11-22T20:09:23.496Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "3b52a6f1",
+      "section": "cleantech",
+      "title": "COP31 fails to reach major climate deal as talks expose deep divisions",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cqwy06zrd26lo",
+      "publishedAt": "2026-11-22T18:17:59.000Z",
+      "snippet": "Talks broke down over a dispute about referencing fossil fuels, leaving no agreed text on tackling climate change.",
+      "brief": "Climate talks at COP31 in Turkey ended without a major new deal after running into Sunday, the longest UN climate conference on record. The draft text never mentioned fossil fuels, which the EU, Pacific island nations and others rejected, while poorer countries objected to the lack of concrete financing figures for adapting to warming. UN climate chief Simon Stiell says he will seek advice on reforming the consensus-based process before COP32 in Ethiopia in November 2027.",
+      "basis": "article",
+      "why": "Petrostates blocked fossil-fuel language; no agreed text after a year of diplomacy",
+      "eventKey": "cop31-talks-fail-no-deal",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/22/un-climate-talks-collapse-without-a-deal?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "cdfc9aa6",
+      "section": "world",
+      "title": "Democrats capture at least 258 House seats in largest sweep since 1992",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/us-news/2026/nov/22/house-democrats-historic-sweep",
+      "publishedAt": "2026-11-22T19:17:56.000Z",
+      "snippet": "Democrats have won at least 258 House seats, with 44 gained so far, their biggest midterm sweep since 1992 and a mandate with heavy pressure to deliver.",
+      "brief": "Democrats have won at least 258 House seats, the largest midterm sweep since 1992, after Chuck Hubbard defeated Republican Virginia Foxx in North Carolina on Sunday. The result gives Democrats 44 seats gained so far, four more than their 2018 midterm gains, while Republicans will hold at least 173 seats. With the Senate also in Democratic hands and a Republican president in the White House, Democrats now face pressure to deliver on a 100-day agenda and oversight of Trump.",
+      "basis": "article",
+      "why": "Largest House majority in three decades; watch the first legislative priorities",
+      "eventKey": "democrats-house-midterm-sweep-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "7d0cfa91",
+      "section": "world",
+      "title": "Zelenskyy urges US to release Patriot missiles as Russia kills 7 in Ukraine",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/2026/11/22/zelenskyy-urges-us-to-release-patriot-missiles?traffic_source=rss",
+      "publishedAt": "2026-11-22T14:48:50.000Z",
+      "snippet": "Zelenskyy is pressing Washington for Patriot interceptors while Russian strikes continue across Ukraine, with Kyiv's region hit hardest.",
+      "brief": "Three Russian attacks killed at least six people near Kyiv, according to the feed summary, while overnight Russian shelling in Zaporizhzhia killed one more person. The summary does not give the total of seven cited in the headline or describe Zelenskyy's call for the United States to release Patriot missiles. Those details would need to come from the full Al Jazeera report.",
+      "basis": "summaries",
+      "why": "Ukraine's air defence depends on Washington releasing more interceptors",
+      "eventKey": "ukraine-russia-strikes-patriot-request-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "1099da02",
+      "section": "ai",
+      "title": "Nvidia loses more than 20% on the stock market in a week and now the SEC investigates its accounts",
+      "originalTitle": "Nvidia pierde más de 20% en bolsa en una semana y ahora la SEC indaga sus cuentas",
+      "lang": "es",
+      "source": "Expansión",
+      "url": "https://expansion.mx/tecnologia/2026/11/21/nvidia-caida-en-bolsa-investigacion-sec",
+      "publishedAt": "2026-11-21T23:25:01.000Z",
+      "snippet": "Nvidia shares fell over 20% in a week after Jensen Huang resigned, and the SEC is examining whether its reports misled investors.",
+      "brief": "US regulators have reportedly opened an accounting inquiry into Nvidia, still at an early stage. The probe focuses on a change in how sales by region were reported, which removed Singapore from the breakdown despite heavy business there. Shares fell 14% on Friday, more than 20% for the week, following CEO Jensen Huang's resignation on November 12.",
+      "basis": "article",
+      "why": "An SEC probe after Huang's exit puts the AI market bellwether in…",
+      "eventKey": "nvidia-huang-resigns-sec-probe",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "48d7d726",
+        "section": "cleantech",
+        "title": "Ford Begins Producing Its Own LFP Batteries",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/21/ford-begins-producing-its-own-lfp-batteries",
+        "publishedAt": "2026-11-22T04:49:26.000Z",
+        "snippet": "Ford has started producing LFP EV batteries at its Michigan plant using CATL-licensed technology for its own vehicles.",
+        "brief": "Ford has started making lithium iron phosphate battery cells at its BlueOval Battery Park Michigan plant, using technology licensed from CATL. The facility can produce 40 cells per minute, which Ford says lowers costs and leaves room to expand. The first cells are headed to Louisville Assembly Plant for Fathom prototypes, and Ford claims it will be a pioneer in domestic LFP supply for everyday vehicles.",
+        "basis": "article",
+        "why": "CATL-licensed LFP made in Michigan tests the US cell supply chain",
+        "eventKey": "ford-lfp-battery-production-michigan-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "41870680",
+        "section": "cleantech",
+        "title": "EV Share Jumps to 68%(!) and Small BEVs Rise to Power — China EV Sales Report for October",
+        "lang": "en",
+        "source": "CleanTechnica",
+        "url": "https://cleantechnica.com/2026/11/21/ev-share-jumps-to-68-and-small-bevs-rise-to-power-china-ev-sales-report-for-october",
+        "publishedAt": "2026-11-21T19:38:50.000Z",
+        "snippet": "Plug-in share hit a record 68% in October as total car sales fell 27% year over year to about 1.6 million.",
+        "brief": "China's October plug-in share hit a record 68 percent, with BEVs at 45 percent and PHEVs at 23 percent, as the overall market fell about 27 percent year over year to roughly 1.6 million sales. Pure combustion sales crashed 44 percent, while plug-in sales dropped 14 percent. Small battery-electric cars drove the gains, with three of the top four sellers in the subcompact segment, and the year-to-date EV share now stands at 59 percent.",
+        "basis": "article",
+        "why": "China's 68% plug-in share signals where battery demand is heading",
+        "eventKey": "china-ev-share-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "fdd8de9d",
+        "section": "cleantech",
+        "title": "Australia urged to wean off imported fossil fuels amid global supply shocks",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/australia-news/2026/nov/23/australia-urged-to-wean-off-imported-fossil-fuels-amid-global-supply-shocks",
+        "publishedAt": "2026-11-22T14:00:29.000Z",
+        "snippet": "The Grattan Institute proposes capping diesel tax credits, building cleaner refineries and targeting EV subsidies to lower-income buyers.",
+        "brief": "A Grattan Institute report released on Sunday urges Australia to cut its reliance on imported fuel, which it says imports 97% of its liquid fuel. It proposes capping diesel fuel tax credits at $35m per corporate group, which it says could save the government $3bn a year, and shifting spending toward electric trucks, chargers and clean refineries. The Minerals Council has rejected the plan, arguing higher diesel costs would flow through to households.",
+        "basis": "article",
+        "why": "Grattan plan links fuel security to refinery and electrification policy",
+        "eventKey": "grattan-australia-fossil-fuel-import-report-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "7952806c",
+        "section": "ai",
+        "title": "Two groups verify mathematician’s claim that Claude helped prove mathematics problem",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/technology/2026/nov/21/anthropic-riemann-hypothesis-solved-claude-ai",
+        "publishedAt": "2026-11-22T17:55:27.000Z",
+        "snippet": "Independent groups reportedly confirmed the mathematician's account that Claude substantially contributed to the proof.",
+        "brief": "Levent Alpöge, a mathematician at Anthropic, says its Claude AI helped him prove the Riemann hypothesis over about six weeks. On Saturday, the Lean Focused Research Organization and the Mathlib Initiative said they had independently verified his proof after reviewing the Lean code he shared. The Riemann hypothesis, posed in 1859, is one of the Clay Institute's Millennium prize problems carrying a $1m reward.",
+        "basis": "article",
+        "why": "Independent checks turn yesterday's claim into credible evidence of frontier reasoning",
+        "eventKey": "claude-riemann-hypothesis-proof",
+        "alsoCovered": []
+      },
+      {
+        "id": "565cb81b",
+        "section": "ai",
+        "title": "China’s Spies Set Sights on A.I. Chips Years Before Nvidia Scandal",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/21/world/asia/china-nvidia-spy-chips-state-security.html",
+        "publishedAt": "2026-11-22T11:03:04.000Z",
+        "snippet": "China's intelligence service reportedly ran a covert effort to help domestic firms obtain advanced AI chips and gather sector intelligence.",
+        "brief": "China's espionage agency has reportedly been running a covert effort to help domestic companies obtain advanced artificial intelligence chips and to collect intelligence on the AI sector, according to officials. The campaign predates a separate Nvidia-related scandal named in the headline. The source summary offers few specifics beyond this, so the scale of the operation and any charges or responses remain unclear from the available text.",
+        "basis": "summaries",
+        "why": "Shows export controls were targeted by state espionage for years",
+        "eventKey": "china-spies-ai-chips-campaign",
+        "alsoCovered": []
+      },
+      {
+        "id": "fa80296c",
+        "section": "ai",
+        "title": "87% of the Anthropic power will come from gas and 11% from coal in 2028",
+        "lang": "en",
+        "source": "betterdatacenterproject.com",
+        "url": "https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power",
+        "publishedAt": "2026-11-22T08:57:34.000Z",
+        "snippet": "A breakdown projects Anthropic's 2028 power supply at 87% gas and 11% coal, highlighting data-centre fossil dependence.",
+        "brief": "A case study estimates that Anthropic's data centers could be supplied mostly by fossil fuels in 2028, with roughly 87 percent of power from gas and about 11 percent from coal. The researchers say no new renewable capacity is tied to the company's U.S. sites, so new demand is expected to be met by marginal fossil generation. Their mid-case projects about 32 million metric tons of carbon dioxide that year, a figure they expect could roughly double by 2030.",
+        "basis": "article",
+        "why": "Fossil-heavy power mix for a frontier lab's compute build-out",
+        "eventKey": "anthropic-2028-power-gas-coal-breakdown",
+        "alsoCovered": []
+      },
+      {
+        "id": "b8c01183",
+        "section": "ai",
+        "title": "Perplexity and Intelligence",
+        "lang": "en",
+        "source": "openai.com",
+        "url": "https://openai.com/index/perplexity-and-intelligence",
+        "publishedAt": "2026-11-22T17:06:27.000Z",
+        "snippet": "An OpenAI essay on Perplexity and intelligence drew strong discussion on Hacker News, with 273 points at the time.",
+        "brief": "OpenAI's chief scientist Jakub Pachocki argues that perplexity, a score of how accurately a model forecasts upcoming text, should become a shared yardstick across AI labs. He reports internal measurements showing that models reaching a log-perplexity below 0.8 began producing advanced abilities in cybersecurity and mathematics. He proposes that developers agree on common limits tied to this metric, and that they stop crossing them until monitoring tools reach a set milestone.",
+        "basis": "article",
+        "why": "OpenAI essay on perplexity as an intelligence measure; useful for practitioners",
+        "eventKey": "openai-perplexity-and-intelligence-essay",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "83d26eba",
+        "section": "world",
+        "title": "Republicans Debate Why They Lost the Midterms, and if Trump Is to Blame",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/22/us/politics/republican-midterm-loss-debate-trump.html",
+        "publishedAt": "2026-11-22T12:30:24.000Z",
+        "snippet": "Republicans are splitting over whether Trump caused their midterm losses, setting up a fight over the party's direction before 2028.",
+        "brief": "Republicans are split over what caused their heavy losses in the midterm elections, with some internal debate about how much responsibility falls on Donald Trump. The source describes the divide as an early sign of a larger fight over the party's direction ahead of the 2028 race. The available summary offers no vote totals, specific candidates, or named figures, so the details of that debate remain limited here.",
+        "basis": "summaries",
+        "why": "The GOP fight over Trump shapes the 2028 field and policy",
+        "eventKey": "republicans-debate-midterm-losses-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "bcbe9f22",
+        "section": "world",
+        "title": "Russia-bound ship towed away after it was attacked in Gulf of Finland",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cj752ddve27ko",
+        "publishedAt": "2026-11-22T17:18:26.000Z",
+        "snippet": "Finland's military believes Ukraine was behind the drone strike on the Russia-bound ship, which was towed away after the attack.",
+        "brief": "A Russian cargo vessel, the Sparta II, bound for Kaliningrad, was hit by a drone strike on Saturday morning in the eastern Gulf of Finland, causing a fire. The ship drifted into Finnish waters, and its crew were evacuated to another Russian vessel, with one crew member lightly injured. Finnish defence forces said Ukraine was likely responsible, though Kyiv has not commented, and the ship is now being towed away while no fuel leaks have been detected.",
+        "basis": "article",
+        "why": "Suspected Ukrainian strike in Baltic waters widens the war toward NATO",
+        "eventKey": "russian-ship-drone-attack-gulf-of-finland",
+        "alsoCovered": [
+          {
+            "source": "El País",
+            "url": "https://elpais.com/internacional/2026-11-22/un-carguero-ruso-sancionado-sigue-ardiendo-un-dia-despues-del-ataque-de-un-dron-en-el-golfo-de-finlandia.html"
+          }
+        ]
+      },
+      {
+        "id": "3e0e2ce4",
+        "section": "world",
+        "title": "Explosion on Russian ship at Libya port caused by suspected drone attack, officials say",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cr894gjz0j0yo",
+        "publishedAt": "2026-11-22T19:52:50.000Z",
+        "snippet": "Officials suspect a drone strike hit the Russian vessel after it stopped for fuel and supplies, a possible escalation in the Libyan theatre.",
+        "brief": "Libya's eastern government says a suspected drone attack caused an explosion on a Russian navy ship docked at the Benghazi port at dawn on Sunday, while it was refuelling on its way back to Russia. No casualties were reported, but satellite images reviewed by BBC Verify show the vessel later partly sunk. Officials are investigating and coordinating with Russia, and Moscow had not yet commented.",
+        "basis": "article",
+        "why": "Attacks on Russian shipping are spreading into the Mediterranean",
+        "eventKey": "russian-ship-libya-port-explosion-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "Al Jazeera",
+            "url": "https://aljazeera.com/video/newsfeed/2026/11/22/suspected-drone-attack-causes-explosion-on-russian-ship-in-libya?traffic_source=rss"
+          }
+        ]
+      },
+      {
+        "id": "aea34d62",
+        "section": "world",
+        "title": "The PRD looks left and considers allying with Morena in the 2027 local elections",
+        "originalTitle": "El PRD mira a la izquierda y plantea aliarse con Morena en las elecciones locales de 2027",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/2026-11-22/el-prd-mira-a-la-izquierda-y-plantea-aliarse-con-morena-en-las-elecciones-locales-de-2027.html",
+        "publishedAt": "2026-11-22T09:30:00.000Z",
+        "snippet": "PRD is weighing alliances with Morena in 13 states, where it still holds local strength despite losing national registration in 2024.",
+        "brief": "The Party of the Democratic Revolution, which lost its national registration after weak results in 2024, is weighing whether to ally with Morena ahead of the 2027 local elections or risk disappearing. Its local leaders formed a Bloque Nacional PRD to push for reuniting the left, and in Michoacán the party's leaders have already backed Morena's Carlos Torres Piña as their candidate. Morena's leader Ariadna Montiel says any alliance will be decided state by state.",
+        "basis": "article",
+        "why": "Morena's coalition-building ahead of Mexico's 2027 state elections",
+        "eventKey": "prd-morena-alliance-2027-local-elections",
+        "alsoCovered": []
+      },
+      {
+        "id": "3db528a1",
+        "section": "world",
+        "title": "ICE Officers Arrest 2 Passengers Boarding a Flight at Seattle Airport",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/22/us/ice-arrest-passengers-seattle-airport.html",
+        "publishedAt": "2026-11-22T19:42:55.000Z",
+        "snippet": "Immigration agents detained two passengers boarding a flight at Seattle's airport, drawing condemnation from Washington's governor and airport officials.",
+        "brief": "Immigration agents detained two passengers at Seattle's airport while they were boarding a flight, and video of the arrests circulated widely. Washington's governor and airport officials criticized the incident, with officials calling it \"distressing.\" Critics have raised concerns about the tactics the agents used, though the available reports give few further details about the people involved or the legal basis for the detentions.",
+        "basis": "summaries",
+        "why": "Airport ICE arrests escalate federal–state clashes over immigration enforcement",
+        "eventKey": "ice-seattle-airport-arrests-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "Al Jazeera",
+            "url": "https://aljazeera.com/news/2026/11/22/horrific-and-chilling-officials-condemn-ice-arrests-at-seattle-airport?traffic_source=rss"
+          }
+        ]
+      },
+      {
+        "id": "dac0e5a3",
+        "section": "world",
+        "title": "Netanyahu rival condemns ‘Jewish terrorism’ after settler attacks on Palestinian villages",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/nov/22/netanyahu-rival-condemns-settler-arson-attacks-palestinian-villages-west-bank",
+        "publishedAt": "2026-11-22T15:22:38.000Z",
+        "snippet": "Opposition leader Gadi Eisenkot condemned the overnight settler arson attacks on West Bank villages as Jewish terrorism.",
+        "brief": "Opposition leader Gadi Eisenkot has condemned overnight arson raids by militant settlers on Palestinian villages in the occupied West Bank, calling them Jewish terrorism. Around a dozen vehicles and several homes were torched across at least four communities, and police have opened an investigation. The attacks have intensified political pressure on Netanyahu, whose coalition lost its majority in an inconclusive election last month, and rivals accuse his government of enabling the violence.",
+        "basis": "article",
+        "why": "Settler violence is becoming an issue in Israel's domestic politics",
+        "eventKey": "settler-attacks-west-bank-eisenkot-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2837,
+      "fresh": 228,
+      "classified": 228,
+      "kept": 144,
+      "stories": 127,
+      "candidates": 45,
+      "picked": 17,
+      "briefs": 17
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 125932,
+      "outputTokens": 30624,
+      "costUsd": 0.0965
+    },
+    "notes": []
+  }
+}
