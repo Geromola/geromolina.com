@@ -1,0 +1,401 @@
+{
+  "date": "2026-11-24",
+  "generatedAt": "2026-11-24T22:54:56.998Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "239f564e",
+      "section": "ai",
+      "title": "Nvidia CEO Jensen Huang apologizes to staff: ‘I made some terrible mistakes’",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/technology/2026/nov/24/jensen-huang-nvidia-apologizes-staff",
+      "publishedAt": "2026-11-24T20:32:02.000Z",
+      "snippet": "Huang admitted violating the company's conduct code and disputed reports that Trump helped secure his reinstatement as chief executive.",
+      "brief": "Nvidia CEO Jensen Huang apologized to staff on Tuesday, a day after the board reinstated him, admitting he violated the code of conduct through extramarital affairs. He denied reports that Donald Trump was instrumental in his return, saying the board reviewed the situation and gathered facts. Two congressional hearings may follow next week, and a Democratic congressman says Huang should still testify publicly.",
+      "basis": "article",
+      "why": "Admits conduct-code breach; Senate testimony next week tests his reinstatement",
+      "eventKey": "nvidia-huang-reinstated-ceo-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The Verge",
+          "url": "https://theverge.com/tech/1041571/jensen-huang-all-hands-nvidia-apology"
+        }
+      ]
+    },
+    {
+      "id": "9c53cfb5",
+      "section": "world",
+      "title": "Estados Unidos ultima nuevos aranceles a China, la UE y otra docena de países",
+      "lang": "es",
+      "source": "El País",
+      "url": "https://elpais.com/us/2026-11-24/estados-unidos-ultima-nuevos-aranceles-a-china-la-ue-y-otra-docena-de-paises.html",
+      "publishedAt": "2026-11-24T16:04:34.000Z",
+      "snippet": "The Commerce office concludes its probe of 16 jurisdictions over overproduction and unfair competition, paving the way for new tariffs on China, the EU and others.",
+      "brief": "The US Trade Representative is nearly ready to announce tariffs on 16 jurisdictions, including China and the European Union, for allegedly subsidizing industries and creating overcapacity that floods world markets with cheap goods. The probe under Section 301 of the 1974 Trade Act is expected this week, and the rates have not been disclosed. Countries with trade deals, such as Japan and the EU, may face tariffs of 15% or less, while China could face a higher rate.",
+      "basis": "article",
+      "why": "Probe of 16 jurisdictions closes; new tariff round could reignite trade war",
+      "eventKey": "us-new-tariffs-china-eu-16-jurisdictions",
+      "alsoCovered": []
+    },
+    {
+      "id": "fa7f4af6",
+      "section": "cleantech",
+      "title": "COP31 Talks Collapse in Turkey in a Clash Over Fossil Fuels",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/22/climate/cop31-climate-summit-ends-climate.html",
+      "publishedAt": "2026-11-23T19:27:13.000Z",
+      "snippet": "Saudi Arabia and other oil producers blocked any phase-out language, so the climate summit ended without an agreed deal.",
+      "brief": "Talks at the COP31 climate summit in Turkey ended without a deal after a disagreement over fossil fuels. European countries and nations vulnerable to climate change turned down a proposed agreement. They objected after Saudi Arabia and other oil-producing countries blocked any reference to phasing out coal, oil and gas, leaving the dispute over how to address fossil fuel use unresolved.",
+      "basis": "summaries",
+      "why": "No deal for the first time; fossil phase-out language now stalled",
+      "eventKey": "cop31-talks-collapse-fossil-fuels",
+      "alsoCovered": []
+    },
+    {
+      "id": "c546982c",
+      "section": "world",
+      "title": "Democrat Victoria Broderick unseats eight-term Republican incumbent in Tennessee to win election",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/us-news/2026/nov/24/democrat-victoria-broderick-election-win-tennesee-midterms",
+      "publishedAt": "2026-11-24T20:20:24.000Z",
+      "snippet": "",
+      "brief": "Democrat Victoria Broderick, 34, has defeated eight-term Republican Scott DesJarlais in Tennessee's fourth congressional district by fewer than 400 votes, according to the Associated Press. The win, in a seat Donald Trump carried by more than 20 points in 2024, pushes Democrats' House majority to 259 seats, their largest advantage in three decades. DesJarlais conceded last week, but the race was only officially called on Tuesday.",
+      "basis": "article",
+      "why": "Republican seat flips after midterms; signals shifting ground in red states",
+      "eventKey": "broderick-unseats-desjarlais-tn4-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "1846f823",
+      "section": "world",
+      "title": "Stock Markets Slip as Nvidia and A.I. Stocks Erase Some of Monday’s Rally",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/24/business/stocks-sp500-huang-nvidia.html",
+      "publishedAt": "2026-11-24T21:12:53.000Z",
+      "snippet": "Stocks reversed part of Monday's gains as Nvidia and AI shares swung sharply amid the Nvidia leadership drama and Anthropic's volatile stock.",
+      "brief": null,
+      "basis": "summaries",
+      "why": "AI-led market swings show how much rides on Nvidia's turmoil",
+      "eventKey": "stocks-slip-nvidia-ai-selloff-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "0e05b0f3",
+        "section": "cleantech",
+        "title": "TVA announces $1.7B data center deal under new large-load tariff",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/tva-announces-17b-data-center-deal-under-new-large-load-tariff/875630",
+        "publishedAt": "2026-11-24T16:11:04.000Z",
+        "snippet": "The deal is struck under a new large-load tariff, and the utility has an NRC construction permit for a BWRX-300 small modular reactor but has not decided to build it.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Large-load tariff template; BWRX-300 permit held but SMR not committed",
+        "eventKey": "tva-1-7b-data-center-large-load-tariff",
+        "alsoCovered": []
+      },
+      {
+        "id": "d9c53e15",
+        "section": "cleantech",
+        "title": "Global grid-scale BESS deployments up 42% in YTD; Europe nearly 200%",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/global-grid-scale-bess-deployments-up-42-in-ytd-europe-nearly-200",
+        "publishedAt": "2026-11-24T11:43:36.000Z",
+        "snippet": "Grid-scale battery additions reached 229.8GWh year-to-date through October, with Europe's growth near 200 percent.",
+        "brief": "Global grid-scale battery energy storage system deployments reached 15.6GWh in the most recent month, lifting the year-to-date total to 229.8GWh as of 31 October. The source text supplies only these two figures and does not give the 42% growth rate or the nearly 200% European increase cited in the headline. Readers wanting regional breakdowns or year-on-year comparisons would need the full report.",
+        "basis": "summaries",
+        "why": "229.8GWh year-to-date; Europe nearly triples grid-scale storage",
+        "eventKey": "global-grid-bess-deployments-ytd-oct-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "5276bda3",
+        "section": "cleantech",
+        "title": "Midterms provide clarity on data center development: Vistra CEO",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/vistra-midterms-data-center-ercot-pjm/875626",
+        "publishedAt": "2026-11-24T15:54:55.000Z",
+        "snippet": "Vistra's CEO says ERCOT load interconnection queues were overstated by developer speculation, clarifying data-centre demand after the midterms.",
+        "brief": "Vistra CEO James Burke said load interconnection queues across the country were overstated, especially in ERCOT, and attributed the inflated figures to speculation from developers. The comment suggests that the pipeline of proposed data center and other large power demand projects may be smaller than earlier headlines implied. The source text offers no further figures or timelines, so the wider impact on grid planning and development remains unclear.",
+        "basis": "summaries",
+        "why": "ERCOT load queues inflated by speculation; real data-centre demand smaller",
+        "eventKey": "vistra-ceo-data-center-queues-overstated",
+        "alsoCovered": []
+      },
+      {
+        "id": "f9c042ba",
+        "section": "cleantech",
+        "title": "Climate scientists urge US lawmakers to vote no on sweeping permitting bill",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/24/climate-scientists-lawmakers-baaja",
+        "publishedAt": "2026-11-24T22:09:57.000Z",
+        "snippet": "Over 120 climate scientists warn the bill would speed energy and datacentre projects at irreversible environmental cost.",
+        "brief": "More than 120 climate scientists have written to House members asking them to reject the Baaja permitting bill, which aims to speed approval of energy, datacenter and infrastructure projects. They argue it would loosen environmental safeguards, entrench oil and gas development, and offer only small emission reductions. The Senate has already passed the measure, and the House vote is expected next week, with Democrats set to take control of Congress in January.",
+        "basis": "article",
+        "why": "Opposition builds as permitting bill heads to House vote",
+        "eventKey": "baaja-permitting-bill-climate-scientists",
+        "alsoCovered": []
+      },
+      {
+        "id": "eac029c5",
+        "section": "cleantech",
+        "title": "CMBLU highlights community participation in California long-duration non-lithium battery project for tribal and desert community resilience",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/cmblu-highlights-community-participation-in-california-long-duration-non-lithium-battery-project-for-tribal-and-desert-community-resilience",
+        "publishedAt": "2026-11-24T12:42:40.000Z",
+        "snippet": "CMBLU's flow battery will be the Imperial Irrigation District's first non-lithium system, a 10 MW, 100 MWh project.",
+        "brief": "CMBLU Energy, a flow battery maker, and the Imperial Irrigation District in California have revealed plans for a 10 megawatt storage facility holding 100 megawatt-hours. The utility would be using a flow battery rather than lithium chemistry for the first time, marking a shift in its storage portfolio. Details on timing, cost, and community involvement were not included in the announcement.",
+        "basis": "summaries",
+        "why": "100MWh flow battery: non-lithium long-duration storage enters California utility",
+        "eventKey": "cmblu-iid-flow-battery-california-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ea95f73f",
+        "section": "cleantech",
+        "title": "FirstEnergy utilities get approval for $2.5B gas plant in West Virginia",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/firstenergy-utilities-get-approval-for-25b-gas-plant-in-west-virginia/875646",
+        "publishedAt": "2026-11-24T17:26:49.000Z",
+        "snippet": "Regulators approved a $2.5 billion gas plant despite objections that load-growth forecasts are overstated and risk shifts to ratepayers.",
+        "brief": "West Virginia regulators approved FirstEnergy's Mon Power unit to build the Maidsville Energy Center, a gas-fired plant expected to cost about $2.48 billion. The project was prompted by a data center customer needing 100 MW in 2028, rising to 1,012 MW by 2033, and regulators noted a projected capacity shortfall. Consumer advocates and environmental groups opposed it, warning that ratepayers could bear the risk, and the commission approved a construction surcharge to protect the utility's credit.",
+        "basis": "article",
+        "why": "$2.5B gas bet on contested load forecasts; ratepayer risk",
+        "eventKey": "firstenergy-west-virginia-gas-plant-approval-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "14005b39",
+        "section": "ai",
+        "title": "Schumer accuses Huang of violating US export control laws amid shipments of chips to China",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/technology/2026/nov/24/nvidia-jensen-huang-congress",
+        "publishedAt": "2026-11-24T20:05:09.000Z",
+        "snippet": "Schumer alleges Nvidia shipped advanced chips to China in breach of export controls, drawing bipartisan criticism of Huang's reinstatement.",
+        "brief": "Senate minority leader Chuck Schumer accused Nvidia CEO Jensen Huang of shipping extremely advanced chips to China in violation of US export control laws, after the board reinstated him following Trump's intervention. Schumer called it an unfathomable enforcement failure by the Trump administration, comparing it to selling rocket engines to the Soviets. Huang is due before a Senate banking committee on 3 December, and lawmakers from both parties are pressing for answers and new export control bills.",
+        "basis": "article",
+        "why": "Export-control charge could bring sanctions on Nvidia's China sales",
+        "eventKey": "schumer-nvidia-export-controls-china-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d29a2007",
+        "section": "ai",
+        "title": "Blanche Downplays Questions Over Nvidia as Company’s Customers Come Under Scrutiny",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/24/us/politics/nvidia-justice-department-todd-blanche.html",
+        "publishedAt": "2026-11-24T22:02:13.000Z",
+        "snippet": "Justice Department investigators reportedly have evidence that Nvidia chips were diverted via other firms to China.",
+        "brief": "Attorney General Todd Blanche played down questions about Nvidia while Justice Department investigators reportedly gather evidence that the company's high-powered chips were illegally diverted to China by other firms. According to people familiar with the inquiries, the probe is focused on Nvidia's customers rather than the chipmaker itself. Blanche declined to discuss claims by Donald Trump that his administration had carried out a thorough investigation, leaving the scope of the review unclear.",
+        "basis": "summaries",
+        "why": "DOJ evidence of chip diversion via third parties widens probe",
+        "eventKey": "nvidia-chip-diversion-china-probe",
+        "alsoCovered": [
+          {
+            "source": "Al Jazeera",
+            "url": "https://aljazeera.com/news/2026/11/24/todd-blanche-declines-to-confirm-if-nvidias-jensen-huang-was-investigated?traffic_source=rss"
+          }
+        ]
+      },
+      {
+        "id": "751416fb",
+        "section": "ai",
+        "title": "Anthropic pierde el precio de la salida a Bolsa cuatro días después de debutar",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://cincodias.elpais.com/economia/2026-11-24/anthropic-pierde-el-precio-de-salida-a-bolsa-antes-de-su-cuarto-dia-de-cotizacion-en-wall-street.html",
+        "publishedAt": "2026-11-24T16:06:10.000Z",
+        "snippet": "Shares fell as much as 13% below the $83 offer price, four days after the listing that raised $120 billion for the company.",
+        "brief": "Anthropic's shares fell as much as 13% in the days after its stock market debut, dropping below the $83 price at which the company sold stock worth $120,000 million. The source text gives no further detail on the cause of the drop or the company's next steps, so the story rests on the price move alone.",
+        "basis": "summaries",
+        "why": "Shares 13% under $83 offer price after $120B raise; AI valuations reset",
+        "eventKey": "anthropic-ipo-shares-fall-below-offer",
+        "alsoCovered": []
+      },
+      {
+        "id": "fce0f778",
+        "section": "ai",
+        "title": "Amazon says hackers' AI agents found and exploited 0-day with little human input",
+        "lang": "en",
+        "source": "Ars Technica",
+        "url": "https://arstechnica.com/security/2026/11/amazon-says-hackers-ai-agents-found-and-exploited-0-day-with-little-human-input",
+        "publishedAt": "2026-11-24T12:30:05.000Z",
+        "snippet": "Amazon reports attackers' AI agents discovered and exploited a zero-day vulnerability with minimal human direction.",
+        "brief": "Amazon reports that AI agents, using the open-source penetration-testing tool Cairn, located and abused a previously unknown flaw in a medical imaging application on a East Asian university server. Hackers gave only a short goal of gaining shell access, and the agents got full root control in roughly eleven minutes after mapping the app's API. Amazon warns that such speed leaves defenders little time to respond, so patching and faster alert triage matter.",
+        "basis": "article",
+        "why": "Autonomous agents finding zero-days changes security threat model for builders",
+        "eventKey": "amazon-ai-agents-zero-day-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "6bd5ae22",
+        "section": "ai",
+        "title": "GPT-6 models demonstrate intrinsic protein-design capabilities",
+        "lang": "en",
+        "source": "OpenAI",
+        "url": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities",
+        "publishedAt": "2026-11-24T13:00:00.000Z",
+        "snippet": "Lab tests reportedly found binding evidence across five protein targets, suggesting models can design proteins from reasoning and code.",
+        "brief": "OpenAI reports that its GPT-6 models can design new protein shapes and their amino acid sequences using only reasoning and code, without specialized biology models generating the designs. In lab tests with partner Onava, 35 of 322 tested minibinders (10.9%) showed binding to their intended targets across five targets. The company calls this early evidence and notes that predicting complete protein structures remains a clear weakness.",
+        "basis": "article",
+        "why": "Lab-validated binders across five targets from a general model",
+        "eventKey": "gpt6-protein-design-capabilities-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "aaacff63",
+        "section": "ai",
+        "title": "Even the best AI agents struggle with everyday life",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/24/even-the-best-ai-agents-struggle-with-everyday-life",
+        "publishedAt": "2026-11-24T21:33:29.000Z",
+        "snippet": "A new benchmark finds leading AI models often fail everyday tasks reliably and safely, sometimes creating new problems while attempting them.",
+        "brief": "A new benchmark called ShellBench tested personal AI agents on everyday tasks like scheduling, travel, and bill handling, and found that even top systems from OpenAI, Anthropic, and Meta frequently stumbled. Roughly 15.7% of attempts broke at least one safety rule, and the best-scoring model, GPT-6 Astra, passed all three repeated runs of a task less than half the time. The results matter because millions of people are already handing routine chores to these assistants, though the tests did not use the consumer products' own built-in software.",
+        "basis": "article",
+        "why": "New benchmark shows agent reliability gaps relevant to your pipelines",
+        "eventKey": "ai-agents-everyday-tasks-benchmark-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "fd326a79",
+        "section": "world",
+        "title": "Inflation rises to nearly 4% in first half of November",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/news/inflation-rises-to-nearly-4-in-first-half-of-november",
+        "publishedAt": "2026-11-24T18:21:21.000Z",
+        "snippet": "Annual inflation has risen across five consecutive fortnightly readings since early September, pressuring Banxico's policy.",
+        "brief": "Mexico's annual headline inflation rate has climbed for five straight 15-day reporting periods, from the first half of September through the first half of November. The rate is now close to 4 percent, according to the headline. The source summary gives no further detail on drivers or policy response, so the broader implications for prices and households cannot be assessed from it alone.",
+        "basis": "summaries",
+        "why": "Five straight rises near 4% complicate Banxico's rate-cut path",
+        "eventKey": "mexico-inflation-first-half-november-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "cbaee96b",
+        "section": "world",
+        "title": "Foreign investment in Mexico hits record $43.09bn, but new capital falls 42%",
+        "originalTitle": "Inversión extranjera en México bate récord con 43,090 mdd, pero los nuevos capitales caen 42%",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/economia/2026/11/24/inversion-extranjera-en-mexico-bate-record-con-43-090-mdd-pero-los-nuevos-capitales-caen-42",
+        "publishedAt": "2026-11-24T17:02:45.000Z",
+        "snippet": "Most of the record inflow came from reinvested profits, while new foreign capital fell 42% in the January–September period.",
+        "brief": "Mexico attracted $43.09 billion in foreign direct investment from January to September 2026, the highest figure for that period, up 5.3% from the prior year. Most of it came from profits that foreign companies kept reinvested in their existing Mexican operations, which rose 26% to $34.98 billion. New investment, however, fell 42.1% to $3.8 billion, though manufacturing bucked the trend with a 58.8% rise in new capital.",
+        "basis": "article",
+        "why": "New capital down 42%: nearshoring momentum weaker than headline suggests",
+        "eventKey": "mexico-foreign-investment-record-q3-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "be349df8",
+        "section": "world",
+        "title": "The U.S. government is investigating Iranian ties to as many as 50 hacked commercial vessels",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/24/nx-s1-6052994/hack-commercial-vessels-iran",
+        "publishedAt": "2026-11-24T21:04:50.000Z",
+        "snippet": "Officials say Iranian-linked hackers may have targeted as many as 50 commercial vessels, extending Iranian cyberattacks during the US conflict.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Iran's cyber front expands to shipping amid ongoing US conflict",
+        "eventKey": "iran-hacked-commercial-vessels-probe-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "74f9983e",
+        "section": "world",
+        "title": "China’s Huawei found guilty of trade secrets conspiracy, fraud in US trial",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/economy/2026/11/24/chinese-tech-giant-huawei-found-guilty-of-conspiracy-to-steal-trade-secrets?traffic_source=rss",
+        "publishedAt": "2026-11-24T21:43:34.000Z",
+        "snippet": "Jurors cleared Huawei of the most serious racketeering conspiracy count but convicted it on trade secrets and fraud charges in the US.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Conviction escalates US-China tech fight alongside chip export scrutiny",
+        "eventKey": "huawei-us-trial-verdict-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "0565757f",
+        "section": "world",
+        "title": "More than 300 Russians killed as Moscow props up Mali’s junta, leaked data reveals",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/2026/nov/24/russian-fighters-killed-in-mali-africa-leaked-data",
+        "publishedAt": "2026-11-24T16:00:50.000Z",
+        "snippet": "Leaked records list 349 Russian deaths in Mali over three years, showing deeper Russian military involvement than officially acknowledged, including in other African countries.",
+        "brief": "Leaked Russian state death certificates, obtained by hacker groups and analysed by the Guardian, list 349 Russian deaths in Mali between September 2023 and September 2026. The records include 43 deaths on 25 April, when insurgents attacked Kidal and Russian forces abandoned the city the next morning. Western officials said the toll is higher than previously estimated, and the records are likely an undercount because registration often lags.",
+        "basis": "article",
+        "why": "349 deaths reveal Russia's deeper military footprint across Africa",
+        "eventKey": "leaked-data-russian-deaths-mali-junta",
+        "alsoCovered": []
+      },
+      {
+        "id": "75f99af6",
+        "section": "world",
+        "title": "DEA allowed 1.4m fentanyl pills to be ‘walked’ into US during sting operation, report alleges",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/society/2026/nov/24/dea-fentanyl-new-mexico-sting",
+        "publishedAt": "2026-11-24T16:26:47.000Z",
+        "snippet": "An AP investigation says the DEA let the pills move between August 2024 and April 2025, far above the 74,000 reported earlier.",
+        "brief": "An Associated Press investigation alleges the DEA allowed 1.4 million fentanyl pills to be trafficked into the US during a New Mexico sting between August 2024 and April 2025, far above the 74,000 previously reported. The agency denies knowingly permitting fentanyl to reach communities, saying its decisions were lawful and coordinated with prosecutors. Federal and state inquiries are ongoing, and Albuquerque has filed a $153 million claim against the DEA.",
+        "basis": "article",
+        "why": "1.4m pills, far above disclosed 74,000; strains US-Mexico security cooperation",
+        "eventKey": "dea-fentanyl-walked-new-mexico-sting",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2813,
+      "fresh": 370,
+      "classified": 370,
+      "kept": 261,
+      "stories": 247,
+      "candidates": 45,
+      "picked": 23,
+      "briefs": 19
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 168644,
+      "outputTokens": 47884,
+      "costUsd": 0.1097
+    },
+    "notes": []
+  }
+}
