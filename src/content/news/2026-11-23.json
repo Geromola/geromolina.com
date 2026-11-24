@@ -1,0 +1,430 @@
+{
+  "date": "2026-11-23",
+  "generatedAt": "2026-11-24T00:35:55.119Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "6fce3c37",
+      "section": "ai",
+      "title": "The rise and fall and rise again of Jensen Huang",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cmze750zg0jeo",
+      "publishedAt": "2026-11-23T15:49:52.000Z",
+      "snippet": "Huang resigned amid scandal days ago, then returned to lead Nvidia, a sharp reversal for the company central to AI chips.",
+      "brief": "Nvidia's board has reinstated Jensen Huang as chief executive just 11 days after he stepped down amid reports of two extramarital relationships, one involving a businesswoman U.S. officials allege is a Chinese intelligence asset. The move matters because Nvidia dominates the chips powering artificial intelligence, a field central to the U.S.-China technology rivalry. A campaign by employees, partners and shareholders pushed for his return, and the board cited the interests of stockholders, staff and customers.",
+      "basis": "article",
+      "why": "Senate testimony and smuggling probes now test Nvidia's governance",
+      "eventKey": "nvidia-huang-return-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "The New York Times",
+          "url": "https://nytimes.com/2026/11/23/world/jensen-huang-return-nvidia-ukraine.html"
+        },
+        {
+          "source": "El País",
+          "url": "https://elpais.com/economia/2026-11-23/nvidia-recupera-a-jensen-huang-como-consejero-delegado.html"
+        },
+        {
+          "source": "NPR",
+          "url": "https://npr.org/2026/11/23/nx-s1-6050910/nvidias-jensen-huang-trump"
+        },
+        {
+          "source": "The Guardian",
+          "url": "https://theguardian.com/technology/2026/nov/23/trump-jensen-huang-nvidia-reinstated"
+        },
+        {
+          "source": "Ars Technica",
+          "url": "https://arstechnica.com/ai/2026/11/jensen-huang-reinstated-as-nvidia-ceo-board-chair"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/23/ceo-jensen-huang-returns-to-nvidias-office?traffic_source=rss"
+        },
+        {
+          "source": "Expansión",
+          "url": "https://expansion.mx/tecnologia/2026/11/23/estituye-jensen-huang-acciones-suben"
+        },
+        {
+          "source": "The Verge",
+          "url": "https://theverge.com/tech/1040069/jensen-huang-return-elon-musk-sam-altman-yay"
+        },
+        {
+          "source": "TechCrunch",
+          "url": "https://techcrunch.com/2026/11/23/nvidia-reverses-course-and-brings-jensen-huang-back-as-ceo"
+        },
+        {
+          "source": "cnbc.com",
+          "url": "https://cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html"
+        }
+      ]
+    },
+    {
+      "id": "6011027c",
+      "section": "world",
+      "title": "Iran war live: Iran says three ships catch fire after hitting Hormuz mines",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/news/liveblog/2026/11/24/iran-war-live-iran-says-three-ships-catch-fire-after-hitting-hormuz-mines?traffic_source=rss",
+      "publishedAt": "2026-11-24T00:00:00.000Z",
+      "snippet": "Iran's Revolutionary Guards say three oil tankers caught fire after striking naval mines in the Strait of Hormuz, threatening a major oil route.",
+      "brief": "Iran's Revolutionary Guards say three oil tankers caught fire after striking naval mines in the Strait of Hormuz, the narrow waterway through which a large share of the world's seaborne oil passes. The source material available here is a single line from the report and does not give casualty figures, the cause of the mines, or any official response, so those details remain unconfirmed. Readers should treat the account as Iran's claim until independent shipping or government sources verify the incident.",
+      "basis": "summaries",
+      "why": "Mined Hormuz threatens a fifth of seaborne oil; watch prices",
+      "eventKey": "hormuz-tankers-mines-fire-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "c9394978",
+      "section": "world",
+      "title": "Iran hits US bases and civilian sites in the Gulf after a lull",
+      "lang": "en",
+      "source": "Al Jazeera",
+      "url": "https://aljazeera.com/video/inside-story/2026/11/23/iran-hits-us-bases-and-civilian-sites-in-the-gulf-after-a-lull?traffic_source=rss",
+      "publishedAt": "2026-11-23T20:26:40.000Z",
+      "snippet": "Iran has stepped up strikes on US bases and Gulf civilian sites while the US naval blockade and sanctions weigh on its economy.",
+      "brief": "Iran has stepped up attacks in recent days, according to Al Jazeera, as a US naval blockade and sanctions campaign take a toll on the country. The summary does not give details of specific strikes, targets, casualties, or the locations involved, so the headline's claims about US bases and civilian sites cannot be confirmed from this text. Readers should look to the full report for those specifics.",
+      "basis": "summaries",
+      "why": "Renewed strikes on US bases raise risk of direct escalation",
+      "eventKey": "iran-attacks-us-bases-gulf-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "b8d6342e",
+      "section": "world",
+      "title": "What strike on Russian ship in Libya says about spread of Ukraine war",
+      "lang": "en",
+      "source": "BBC",
+      "url": "https://bbc.co.uk/news/articles/cm894p88jzxpo",
+      "publishedAt": "2026-11-23T20:48:35.000Z",
+      "snippet": "Ukrainian forces sank a Russian battleship in a Libyan port, extending the war's reach into North Africa and raising escalation risks.",
+      "brief": "Ukraine's security service and armed forces reportedly carried out a night-time attack on Russia's corvette Merkury in Benghazi harbour, Libya, nearly 2,000 miles from Moscow. Russia called it a dangerous escalation, and the UN mission in Libya voiced deep concern. The attack follows a suspected Ukrainian drone strike on a Russian cargo ship in the Gulf of Finland, and it raises fresh questions about whether the war is spreading beyond its borders.",
+      "basis": "article",
+      "why": "Now attributed to Ukraine: war spreads to Mediterranean",
+      "eventKey": "ukraine-sinks-russian-ship-libya",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "59b9b081",
+        "section": "cleantech",
+        "title": "US Senate passes permitting bill letting solar developers sue agencies",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/23/us-senate-passes-permitting-bill-letting-solar-developers-sue-agencies",
+        "publishedAt": "2026-11-23T08:15:00.000Z",
+        "snippet": "The bill now goes to the House and would shorten court challenges and allow damages claims against agencies for energy projects.",
+        "brief": "The US Senate approved the Bipartisan American Affordability and Jobs Act by a 62-33 vote, attaching it to a House tax bill so the House must now sign off again. The measure would let developers of 46 project types, including solar, wind, storage, and transmission, sue agencies over patterns of unfair treatment, with damages up to full construction costs. Because the House must act before the current Congress ends in early January, the bill could otherwise need to be reintroduced.",
+        "basis": "article",
+        "why": "Faster permitting and damages claims could de-risk project finance",
+        "eventKey": "us-senate-permitting-bill-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "f358f48f",
+        "section": "cleantech",
+        "title": "Ohio OKs gas plant for data centers despite local voter backlash",
+        "lang": "en",
+        "source": "Canary Media",
+        "url": "https://canarymedia.com/articles/data-centers/ohio-oks-gas-plant-for-data-centers",
+        "publishedAt": "2026-11-23T19:00:00.000Z",
+        "snippet": "",
+        "brief": "Ohio regulators have approved construction of a large gas-fired power plant meant to supply a data center complex. The decision came even though local residents had voted overwhelmingly against the projects in recent elections. The feed excerpt says data center developers across the U.S. are pushing ahead quickly with similar power-hungry projects, though it gives few further specifics on the plant's size or timeline.",
+        "basis": "summaries",
+        "why": "Data-centre load is locking in new gas despite local opposition",
+        "eventKey": "ohio-gas-plant-data-center-approval-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c347d0f2",
+        "section": "cleantech",
+        "title": "FERC approves MISO plan to speed legacy interconnection study process",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/ferc-miso-interconnection-queue-study/875449",
+        "publishedAt": "2026-11-23T14:05:36.000Z",
+        "snippet": "The rule change keeps about 125 GW of generation and storage projects in MISO's legacy interconnection queue from being delayed.",
+        "brief": "Federal regulators have approved a Midcontinent Independent System Operator plan intended to speed up its process for studying legacy generator interconnection requests. According to the grid operator, the queue cycles covered by the changes total about 125 gigawatts of generation and storage, and without the rule changes those studies would have been delayed. The approval matters because a faster queue can help bring new power plants and batteries online sooner.",
+        "basis": "summaries",
+        "why": "Keeps 125 GW of MISO generation and storage moving",
+        "eventKey": "ferc-approves-miso-legacy-interconnection-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "5d1fe3c3",
+        "section": "cleantech",
+        "title": "‘Greater operational flexibility’: Australia’s AEMO leans on 5.3GW of new battery storage for summer",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/greater-operational-flexibility-australias-aemo-leans-on-5-3gw-of-new-battery-storage-for-summer",
+        "publishedAt": "2026-11-23T09:07:38.000Z",
+        "snippet": "AEMO says 5.3GW of the 8.4GW of new capacity added to Australia's grid since December 2025 is battery storage, supporting summer operations.",
+        "brief": "Australia's National Electricity Market operator, AEMO, reports that battery energy storage systems make up 5.3GW of the 8.4GW of new projects added to the grid since December 2025. The batteries form the bulk of recent additions, and AEMO is relying on them to provide greater operational flexibility heading into the summer period. The source text offers little beyond these figures, so further detail on timing or grid impact is not available here.",
+        "basis": "summaries",
+        "why": "Batteries were 63% of Australia's new capacity this year",
+        "eventKey": "aemo-5-3gw-battery-storage-summer",
+        "alsoCovered": []
+      },
+      {
+        "id": "a63f9c5b",
+        "section": "cleantech",
+        "title": "Off-grid costs will push data centers back to utilities: Mitsubishi Heavy Industries CEO",
+        "lang": "en",
+        "source": "Utility Dive",
+        "url": "https://utilitydive.com/news/data-centers-mitsubishi-gas-turbines-earnings/875146",
+        "publishedAt": "2026-11-23T18:00:00.000Z",
+        "snippet": "Mitsubishi Heavy's CEO argues off-grid power for data centres will be too costly, pushing their demand back onto utilities' expansion plans.",
+        "brief": "Mitsubishi Heavy Industries CEO Eisaku Ito says that utilities' long-term expansion plans remain sound, and that rising electricity demand does not depend only on data centers. He argues that even if part of the projected data center demand fails to materialize, the impact would be limited. The comments suggest that the cost of supplying power on-site may lead data center operators to return to utility grids, though the source offers little further detail.",
+        "basis": "summaries",
+        "why": "Turbine maker bets off-grid data-centre power won't pencil out",
+        "eventKey": "mhi-ceo-data-centers-utilities-offgrid",
+        "alsoCovered": []
+      },
+      {
+        "id": "f2950d7e",
+        "section": "cleantech",
+        "title": "Want 24/7 clean power for data centers? Try giant heat batteries.",
+        "lang": "en",
+        "source": "Canary Media",
+        "url": "https://canarymedia.com/articles/batteries/24-7-clean-power-giant-heat-batteries",
+        "publishedAt": "2026-11-23T08:30:00.000Z",
+        "snippet": "Thermal storage is pitched as an alternative to gas plants that face long turbine waits and rising local opposition.",
+        "brief": "Data center developers are struggling to secure enough electricity, and some are turning to their own gas-fired plants. Those plants bring high equipment costs, multi-year waits for backlogged turbines, and rising public opposition over pollution. The source excerpt is brief and does not explain how giant heat batteries would perform or what they would cost, so the details of that alternative remain unclear from this text.",
+        "basis": "summaries",
+        "why": "Thermal storage pitched where gas turbine waits stall projects",
+        "eventKey": "heat-batteries-data-center-power",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "a82405aa",
+        "section": "ai",
+        "title": "GLM-5.4: Toward Generalized Coding with Our First Loop Transformer",
+        "lang": "en",
+        "source": "Simon Willison",
+        "url": "https://simonwillison.net/2026/Nov/23/glm-54",
+        "publishedAt": "2026-11-23T23:40:49.000Z",
+        "snippet": "Z.ai's GLM-5.4 uses a looped transformer, reusing weight-shared layers across iterations for extra depth without more parameters.",
+        "brief": "Z.ai has released GLM-5.4, its first model built on a looped transformer architecture, where a group of weight-shared layers runs several times per pass to deepen the network without adding parameters. The model is not yet available as open weights, and Simon Willison accessed it through the Z.ai API after signing up for the Coding Plan, since 5.4 is not reachable via the regular API. He also notes it is the second looped transformer he has seen in a week, following Thinking Machines Lab's Inkling 2 Mini, and he built…",
+        "basis": "article",
+        "why": "Looped weight-shared layers: depth without parameters, worth replicating",
+        "eventKey": "glm-5-4-loop-transformer-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "z.ai",
+            "url": "https://z.ai/blog/glm-5.4"
+          }
+        ]
+      },
+      {
+        "id": "daef328d",
+        "section": "ai",
+        "title": "Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes",
+        "publishedAt": "2026-11-23T22:05:50.000Z",
+        "snippet": "Anthropic's new developer tooling lets agents review, fix and approve code changes, targeting the growing bottleneck of AI-generated code.",
+        "brief": "Anthropic has launched Claude Ship, a suite of AI agents that reviews proposed code changes, fixes problems, and can approve routine changes automatically under policies a development team writes. The package combines Code Review, which is generally available, with two beta agents: PR Steward, which handles failing CI checks and merge conflicts, and Claude Approvals, which enforces the team's approval policy. It is rolling out to Claude Team and Enterprise plans for GitHub repositories, and Anthropic suggests starting approvals in observe-only mode.",
+        "basis": "article",
+        "why": "Agents approving code shifts the bottleneck to review and trust",
+        "eventKey": "anthropic-claude-ship-launch-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "96dc6773",
+        "section": "ai",
+        "title": "Amazon snaps up Decart’s AI optimization tech for $7.5B as it prepares to sell Trainium chips",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/23/amazon-snaps-up-decarts-ai-optimization-tech-for-7-5b-as-it-prepares-to-sell-trainium-chips",
+        "publishedAt": "2026-11-23T17:14:23.000Z",
+        "snippet": "The deal brings Decart's optimization technology and research team in-house as Amazon readies Trainium chips for sale.",
+        "brief": "Amazon has agreed to acquire a significant part of Israeli startup Decart for $7.5 billion, according to Bloomberg. Under the deal Amazon gets the technology behind Decart Optimization Stack, which helps AI models run efficiently on Nvidia, Amazon, and Google hardware, plus the founding team and its researchers. The move could help customers run workloads on Amazon's Trainium chips, which Amazon is preparing to sell as a rival to Nvidia.",
+        "basis": "article",
+        "why": "Amazon readying Trainium for external sale challenges Nvidia pricing",
+        "eventKey": "amazon-acquires-decart-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "0849538d",
+        "section": "ai",
+        "title": "US to blacklist Asian AI firm Megaspeed after Nvidia scandal",
+        "lang": "en",
+        "source": "BBC",
+        "url": "https://bbc.co.uk/news/articles/cv98xpg5dg5zo",
+        "publishedAt": "2026-11-23T23:16:08.000Z",
+        "snippet": "Megaspeed is accused of routing AI chips to China, and the blacklist would restrict its access to US technology.",
+        "brief": "The US Commerce Department has announced plans to add Singapore-based AI data centre developer Megaspeed Ltd, along with its subsidiary Speedmatrix, to its blacklist, which would bar them from buying or selling goods in America. The move follows allegations that a former Megaspeed executive spied for China while in a relationship with Nvidia chief Jensen Huang, and concern that Megaspeed was channelling Nvidia chips to China despite export controls. No start date for the ban has been given yet.",
+        "basis": "article",
+        "why": "Export-control enforcement tightens chip supply routes to China",
+        "eventKey": "us-blacklists-megaspeed-chips-china",
+        "alsoCovered": []
+      },
+      {
+        "id": "1fae35b9",
+        "section": "ai",
+        "title": "Jensen Huang scheduled to testify next week in Senate following reinstatement as Nvidia CEO",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/23/jensen-huang-scheduled-to-testify-next-week-in-senate-following-reinstatement-as-nvidia-ceo",
+        "publishedAt": "2026-11-23T18:12:22.000Z",
+        "snippet": "Huang's Senate testimony follows bipartisan pressure over his reported relationship with a suspected Chinese spy, raising governance questions for Nvidia.",
+        "brief": "Jensen Huang is scheduled to testify before the Senate Banking Committee on December 3, according to a notice posted on the committee's website. The hearing comes hours after Nvidia reinstated him as chief executive, less than two weeks after he resigned over at least two extramarital affairs, one with a woman the U.S. government suspects of working as a Chinese spy. The committee oversees export controls meant to keep sensitive AI chips out of foreign hands, and lawmakers from both parties have pressed Huang on those issues.",
+        "basis": "article",
+        "why": "Hearing next week could reshape chip export policy",
+        "eventKey": "jensen-huang-senate-testimony-nvidia",
+        "alsoCovered": []
+      },
+      {
+        "id": "21d14b80",
+        "section": "ai",
+        "title": "US states sue SpaceX over Grok AI’s creation of child sexual abuse material",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/economy/2026/11/23/us-states-sue-spacex-over-grok-ais-creation-of-child-sexual-abuse-material?traffic_source=rss",
+        "publishedAt": "2026-11-23T21:15:33.000Z",
+        "snippet": "Virginia and Oregon filed separate suits accusing SpaceX of promoting Grok's spicy mode that generates abusive images.",
+        "brief": "Virginia and Oregon each filed separate lawsuits on Monday against SpaceX, accusing the company of promoting the 'spicy mode' of its Grok AI chatbot. State attorneys general argue Grok is still generating child sexual abuse material, despite X saying every Grok output is screened. The feed summaries do not give further details on the claims or any court schedule.",
+        "basis": "summaries",
+        "why": "State lawsuits test liability for generative image models",
+        "eventKey": "states-sue-spacex-grok-csam-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "Ars Technica",
+            "url": "https://arstechnica.com/tech-policy/2026/11/states-sue-spacex-to-stop-grok-from-generating-child-sex-images-revenge-porn"
+          }
+        ]
+      }
+    ],
+    "world": [
+      {
+        "id": "66b7ac3f",
+        "section": "world",
+        "title": "Sheinbaum y Trump volverán a reunirse en Mar-a-Lago",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/mexico/2026-11-23/sheinbaum-y-trump-volveran-a-reunirse-en-mar-a-lago.html",
+        "publishedAt": "2026-11-23T15:15:16.000Z",
+        "snippet": "Mexican foreign minister Roberto Velasco confirmed the Florida meeting, where both leaders aim to reach a trade agreement.",
+        "brief": "Mexico's foreign minister Roberto Velasco said Sheinbaum and Donald Trump will meet again in the coming weeks at Mar-a-Lago, Florida, with the countries that took part in the Asia-Pacific Economic Cooperation summit also expected to attend. The two leaders had a brief meeting in Shenzhen, China, and Trump said the sides were close to a trade deal while warning Mexico against running a trade surplus. Velasco says talks are advanced and hopes to announce a trade agreement at the Florida gathering.",
+        "basis": "article",
+        "why": "Trade deal at stake for tariffs and nearshoring flows",
+        "eventKey": "sheinbaum-trump-mar-a-lago-meeting-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "30caeb1d",
+        "section": "world",
+        "title": "Mexico's GDP grows 0.9% in third quarter, but loses pace",
+        "originalTitle": "PIB de México crece 0.9% en el tercer trimestre, pero pierde ritmo",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/economia/2026/11/23/pib-de-mexico-crece-0-9-tercer-trimestre-pierde-ritmo-inegi",
+        "publishedAt": "2026-11-23T12:20:51.000Z",
+        "snippet": "Mexico's economy grew 0.9% in Q3, slower than Q2's 1.4%, with annual growth at 3.3% led by trade and services.",
+        "brief": "Mexico's economy grew 0.9% quarter-on-quarter between July and September, according to statistics agency Inegi, slower than the 1.4% recorded in the second quarter. Annual growth reached 3.3%, with trade and services doing most of the work, rising 1.2% over the prior quarter. Banamex, citing these results, projects 2% expansion for all of 2026.",
+        "basis": "article",
+        "why": "Growth slowing quarter-on-quarter despite 3.3% annual pace",
+        "eventKey": "mexico-gdp-q3-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "b81e635a",
+        "section": "world",
+        "title": "EU sanctions package intended to ‘keep pressure’ on Russia and ‘strike harder’ at its ability to fund Ukraine war – as it happened",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/world/live/2026/nov/23/russia-ukraine-war-zelenskyy-libya-benghazi-drone-attack-ship-merkury-un-nato-europe-latest-news-updates",
+        "publishedAt": "2026-11-23T16:42:56.000Z",
+        "snippet": "The Commission's 22nd sanctions package targets Russia's funding of the war, while NATO stresses continued supply of air defence and ammunition to Ukraine.",
+        "brief": "The European Commission has proposed a 22nd package of sanctions on Russia aimed at squeezing its ability to fund the war in Ukraine. Measures target Russian banks, which would be removed from the Swift system, along with energy services, crypto networks, and sports and cultural events. The package also proposes a visa ban on Russian ex-combatants, and it still needs unanimous approval from all 27 EU member states to take effect.",
+        "basis": "article",
+        "why": "22nd package targets Russia's energy revenue and war funding",
+        "eventKey": "eu-22nd-russia-sanctions-package-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "02bb9bb5",
+        "section": "world",
+        "title": "Is Mexico Stepping Up in the War on Drugs?",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/22/world/americas/mexico-us-cartel-arrests.html",
+        "publishedAt": "2026-11-23T19:15:22.000Z",
+        "snippet": "Several major cartel leaders have recently been captured by Mexican forces, suggesting a possible shift in the government's enforcement approach against organized crime.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Cartel crackdown may be Sheinbaum's leverage with Washington",
+        "eventKey": "mexico-cartel-kingpins-captured-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "b43eea0f",
+        "section": "world",
+        "title": "Trump calls to ‘expedite’ US federal executions, blasts Gavin Newsom",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/24/trump-calls-to-expedite-us-federal-executions-blasts-gavin-newsom?traffic_source=rss",
+        "publishedAt": "2026-11-24T00:04:15.000Z",
+        "snippet": "Trump urges faster federal executions and attacks Governor Newsom after California commuted 548 death sentences.",
+        "brief": "President Donald Trump used a public appearance to attack California Governor Gavin Newsom over his decision to commute 548 death sentences. The feed summary does not give details of the policy or the specific executions Trump wants sped up. The source material is thin, so the wider context and any next steps are not covered here.",
+        "basis": "summaries",
+        "why": "Federal-California clash after Newsom commuted 548 death sentences",
+        "eventKey": "trump-newsom-death-sentences-commuted-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d77cc8b3",
+        "section": "world",
+        "title": "A Landmark Genocide Ruling",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/22/world/genocide-myanmar-un-climate-talks.html",
+        "publishedAt": "2026-11-23T05:40:36.000Z",
+        "snippet": "The UN court ruling against Myanmar could shape how the similar genocide case over Gaza is argued.",
+        "brief": "The International Court of Justice found Myanmar responsible for genocide targeting the Rohingya, a persecuted minority. Legal observers see the decision as a precedent that could shape a separate genocide case against Israel over its conduct in Gaza, where the court is considered more likely to reach a similar finding. The ruling has drawn anger from the Trump administration, which opposed the possibility of such a finding against Israel.",
+        "basis": "summaries",
+        "why": "Myanmar precedent will shape the Gaza genocide case",
+        "eventKey": "icj-myanmar-genocide-ruling-nov-2026",
+        "alsoCovered": [
+          {
+            "source": "The Guardian",
+            "url": "https://theguardian.com/commentisfree/2026/nov/23/myanmar-genocide-ruling"
+          }
+        ]
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 31,
+      "failed": []
+    },
+    "counts": {
+      "fetched": 2818,
+      "fresh": 334,
+      "classified": 334,
+      "kept": 250,
+      "stories": 205,
+      "candidates": 46,
+      "picked": 22,
+      "briefs": 21
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 143837,
+      "outputTokens": 43838,
+      "costUsd": 0.1063
+    },
+    "notes": []
+  }
+}
