@@ -1,0 +1,393 @@
+{
+  "date": "2026-11-26",
+  "generatedAt": "2026-11-26T22:07:37.101Z",
+  "degraded": false,
+  "mustKnow": [
+    {
+      "id": "df8243dc",
+      "section": "world",
+      "title": "Two Italians Killed in Iranian Drone Attack on Kuwait, Officials Say",
+      "lang": "en",
+      "source": "The New York Times",
+      "url": "https://nytimes.com/2026/11/26/world/middleeast/italians-killed-iran-drone-attack-kuwait.html",
+      "publishedAt": "2026-11-26T19:33:06.000Z",
+      "snippet": "Two Italians died in an Iranian drone strike on Kuwait, one of several recent attacks on Gulf states hosting US forces amid stalled peace talks.",
+      "brief": "Two Italian men were killed when an Iranian drone struck Kuwait, according to officials, and four other people were hurt. Italy's foreign ministry said the pair worked as technicians for the German defense firm Rheinmetall. The attack is part of a string of recent strikes on Gulf countries that house American military bases, occurring while negotiations to halt the conflict remain deadlocked.",
+      "basis": "summaries",
+      "why": "Iran now hitting Gulf states hosting US troops; peace talks stalled",
+      "eventKey": "iran-drone-attack-kuwait-italians-killed-nov-2026",
+      "alsoCovered": [
+        {
+          "source": "BBC",
+          "url": "https://bbc.co.uk/news/articles/c39w9y5dx4k5o"
+        },
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/video/newsfeed/2026/11/26/two-dead-after-iranian-drone-attack-on-kuwait?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "5a9bcad3",
+      "section": "world",
+      "title": "China reserves right to take ‘necessary measures’ after Trump’s new tariff proposals",
+      "lang": "en",
+      "source": "The Guardian",
+      "url": "https://theguardian.com/us-news/2026/nov/26/brazil-china-react-to-new-trump-tariffs-threat",
+      "publishedAt": "2026-11-26T12:00:22.000Z",
+      "snippet": "Beijing reserves the right to retaliate after the US proposed tariffs of up to 20% on 14 trading partners, drawing a global backlash.",
+      "brief": "Beijing responded to a fresh US proposal for tariffs on 14 trading partners by warning it may act to protect its interests. China faces the steepest potential hit, with a capped rate of 20 percent that could reach 45 percent when stacked on existing duties. The measures are expected to take effect around February or March after a hearing on 25 January, so negotiations may still shape the outcome.",
+      "basis": "article",
+      "why": "Beijing signals retaliation to tariffs up to 20%; trade-war escalation risk",
+      "eventKey": "us-proposes-tariffs-14-partners-china-response-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "794bde5f",
+      "section": "world",
+      "title": "Congo Ebola outbreak reaches 12,000 cases as some responders evacuate",
+      "lang": "en",
+      "source": "NPR",
+      "url": "https://npr.org/2026/11/26/g-s1-155957/congo-ebola-responders",
+      "publishedAt": "2026-11-26T13:47:09.000Z",
+      "snippet": "Ebola cases in eastern Congo have reached about 12,000 while armed fighting between rebels and the army hampers containment and forces responders to leave.",
+      "brief": null,
+      "basis": "summaries",
+      "why": "Fighting forces responders out, making containment far harder",
+      "eventKey": "congo-ebola-outbreak-nov-2026",
+      "alsoCovered": []
+    },
+    {
+      "id": "692781cd",
+      "section": "world",
+      "title": "Hernández de Cos will become the first Spaniard to preside over the ECB in February",
+      "originalTitle": "Hernández de Cos se convertirá en febrero en el primer español en presidir el BCE",
+      "lang": "es",
+      "source": "El País",
+      "url": "https://elpais.com/economia/2026-11-26/hernandez-de-cos-se-convertira-en-febrero-en-el-primer-espanol-en-presidir-el-bce.html",
+      "publishedAt": "2026-11-26T13:19:27.000Z",
+      "snippet": "Former Bank of Spain governor Hernández de Cos will take over from Christine Lagarde in February after winning French and German backing.",
+      "brief": "Pablo Hernández de Cos, who previously led the Bank of Spain, has been named to take over from Christine Lagarde at the head of the European Central Bank. According to El País, he secured the backing of France and Germany before the announcement came out of a meeting of eurozone leaders. The choice puts a Spanish economist at the center of eurozone monetary policy, though the reports do not give a start date.",
+      "basis": "summaries",
+      "why": "New ECB chief from February shapes euro-area rates and inflation",
+      "eventKey": "hernandez-de-cos-ecb-president",
+      "alsoCovered": [
+        {
+          "source": "Al Jazeera",
+          "url": "https://aljazeera.com/news/2026/11/26/spanish-economist-to-become-new-european-central-bank-chief?traffic_source=rss"
+        }
+      ]
+    },
+    {
+      "id": "b6b53a00",
+      "section": "world",
+      "title": "North Korea's Kim vows to build more nuclear weapons after ignoring Trump's overture",
+      "lang": "en",
+      "source": "NPR",
+      "url": "https://npr.org/2026/11/26/g-s1-155955/north-korea-kim-nuclear-weapons-trump",
+      "publishedAt": "2026-11-26T13:31:28.000Z",
+      "snippet": "Kim reportedly toured nuclear material facilities and called for expanding the arsenal, signalling rejection of Trump's outreach.",
+      "brief": "North Korean leader Kim Jong Un reportedly toured facilities that produce nuclear materials and called for expanding the country's nuclear arsenal. He framed the move as a response to threats from the United States and South Korea. The report does not give details on the number of weapons planned or how the call relates to recent diplomatic outreach from Washington.",
+      "basis": "summaries",
+      "why": "Pyongyang rebuffs Trump diplomacy; arsenal expansion raises regional risk",
+      "eventKey": "kim-vows-more-nuclear-weapons-nov-2026",
+      "alsoCovered": []
+    }
+  ],
+  "sections": {
+    "cleantech": [
+      {
+        "id": "059f2761",
+        "section": "cleantech",
+        "title": "US Senate ‘permitting bill’ threatens clean water protections to speed up energy projects",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/26/senate-permitting-bill-clean-water",
+        "publishedAt": "2026-11-26T19:16:35.000Z",
+        "snippet": "The Senate passed the Baaja permitting bill 62-33, and critics say its water-protection rollbacks would do little to speed energy projects.",
+        "brief": "The US Senate passed the Bipartisan American Affordability and Jobs Act, known as Baaja, by a 62-33 vote, and it now faces debate in the House. Advocates say it would weaken water pollution protections, including making it harder for states to limit pollution and doubling the time between reviews of water pollution permits from five to ten years. More than 50 groups affected by PFAS contamination oppose the bill, arguing its permitting changes do little to speed energy projects.",
+        "basis": "article",
+        "why": "62-33 Senate vote; permitting reform could reshape US project timelines",
+        "eventKey": "senate-baaja-permitting-bill-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "c5951afb",
+        "section": "cleantech",
+        "title": "Energy Vault backlog hits US$2.3 billion as it closes financing for 150MW Texas BESS",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/energy-vault-backlog-hits-us2-3-billion-as-it-closes-financing-for-150mw-texas-bess",
+        "publishedAt": "2026-11-26T13:03:53.000Z",
+        "snippet": "Energy Vault's backlog reached $2.3 billion, and it secured non-recourse financing for a 150 MW/300 MWh Texas battery project.",
+        "brief": "Energy Vault, a NYSE-listed energy infrastructure company, has reported its third-quarter 2026 financial results. It also closed non-recourse project financing for the SOSA Energy Centre, a 150MW/300MWh battery storage project in Texas. The source summary does not give the backlog figure, so the financing terms and dollar amounts remain unclear from this text.",
+        "basis": "summaries",
+        "why": "$2.3bn backlog and non-recourse debt show US BESS bankability",
+        "eventKey": "energy-vault-q3-2026-sosa-financing",
+        "alsoCovered": []
+      },
+      {
+        "id": "8c85a580",
+        "section": "cleantech",
+        "title": "Court lets Puerto Rico governor fire firm that runs the island's troubled power grid",
+        "lang": "en",
+        "source": "NPR",
+        "url": "https://npr.org/2026/11/26/nx-s1-6054139/court-rules-puerto-ricos-governor-can-fire-company-that-runs-troubled-power-grid",
+        "publishedAt": "2026-11-26T09:44:20.000Z",
+        "snippet": "A court voided LUMA Energy's contract to run Puerto Rico's grid, giving the government a year to pick a new operator.",
+        "brief": "A court has allowed Puerto Rico's governor to end the contract of LUMA Energy, the company that has run the island's electric grid for about five years. The ruling voids the agreement and gives the government one year to find a replacement operator. The source does not give further detail on the grid's problems or the reasons behind the decision.",
+        "basis": "summaries",
+        "why": "Grid operator reset; a year to pick new utility operator",
+        "eventKey": "puerto-rico-court-luma-contract-voided",
+        "alsoCovered": []
+      },
+      {
+        "id": "d133e92e",
+        "section": "cleantech",
+        "title": "Spain could reach 10 GW of batteries by 2030, but bankability remains the major challenge",
+        "lang": "en",
+        "source": "pv magazine",
+        "url": "https://pv-magazine.com/2026/11/26/spain-could-reach-10-gw-of-batteries-by-2030-but-bankability-remains-the-major-challenge",
+        "publishedAt": "2026-11-26T13:00:59.000Z",
+        "snippet": "Experts at a pv magazine roundtable expect strong Spanish battery growth but flag permitting delays, no revenue history and financing risk.",
+        "brief": "Spanish industry estimates put battery storage at 6 GW to 10 GW by 2030, with a roundtable at Genera 2026 in Madrid suggesting the lower end leans toward 8 GW. Panelists stressed that bankability depends on structuring revenues through PPAs and tolling agreements, since secondary regulation revenue may shrink within two to three years. Accurate timeline modeling and project-specific studies are seen as essential for lenders.",
+        "basis": "article",
+        "why": "No revenue history makes Spanish storage hard to finance",
+        "eventKey": "spain-10gw-batteries-2030-bankability",
+        "alsoCovered": []
+      },
+      {
+        "id": "c9956da3",
+        "section": "cleantech",
+        "title": "Actuate Energy orders 1.5GWh of BESS from Sungrow for 2027/2028 pipeline in Spain",
+        "lang": "en",
+        "source": "Energy-Storage.news",
+        "url": "https://energy-storage.news/actuate-energy-orders-1-5gwh-bess-sungrow-2027-2028-pipeline-spain",
+        "publishedAt": "2026-11-26T11:42:32.000Z",
+        "snippet": "Sungrow will supply a 380MW/1,500MWh battery storage agreement to Actuate Energy for projects in Spain over the next few years.",
+        "brief": "Actuate Energy, a newly formed energy storage platform, has agreed with inverter and battery maker Sungrow to supply a 380MW/1,500MWh battery energy storage system package. The deal covers projects in Spain planned over the next few years, tied to its 2027 and 2028 pipeline. The source provides little beyond this, so the scale of the order is the main takeaway for readers following Spain's storage build-out.",
+        "basis": "summaries",
+        "why": "Chinese integrator locks in 1.5GWh Spanish pipeline through 2028",
+        "eventKey": "actuate-sungrow-1500mwh-bess-spain-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "b50aebb4",
+        "section": "cleantech",
+        "title": "Planet crosses another red line: a week in a row above two degrees of warming",
+        "originalTitle": "El planeta cruza otra línea roja: una semana seguida por encima de los dos grados de calentamiento",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/clima-y-medio-ambiente/2026-11-26/el-planeta-cruza-otra-linea-roja-seis-dias-por-encima-de-los-2-grados-de-calentamiento.html",
+        "publishedAt": "2026-11-26T17:27:36.000Z",
+        "snippet": "Earth has now exceeded the 2-degree warming threshold for 10 days, seven of them consecutive, while the climate summit stalled.",
+        "brief": "Copernicus says Earth recorded seven consecutive days above 2 degrees Celsius over preindustrial temperatures in November, a first for a streak that long. The daily global mean hit 2.25 degrees above the 1850-1900 baseline on November 23, the largest anomaly yet for this time of year. Scientists link the spike to a strong El Niño, and Copernicus expects 2026 to be the second-warmest year on record.",
+        "basis": "article",
+        "why": "Physical warming outpacing stalled climate diplomacy",
+        "eventKey": "earth-exceeds-2c-warming-week-nov-2026",
+        "alsoCovered": []
+      }
+    ],
+    "ai": [
+      {
+        "id": "aea2e443",
+        "section": "ai",
+        "title": "Nvidia hits pause on chip shipments to Southeast Asia",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia",
+        "publishedAt": "2026-11-26T20:03:54.000Z",
+        "snippet": "Nvidia paused server shipments to four Southeast Asian countries as US export controls tighten against AI chip diversion to China.",
+        "brief": "Nvidia has reportedly told manufacturing partners such as Dell and Super Micro to pause server shipments to Malaysia, Singapore, Thailand, and Indonesia for an unspecified period. The company is checking whether its regional partners comply with U.S. export rules. The move follows Chinese firms using Nvidia chips remotely from data centers in those countries, a loophole the Commerce Department recently closed. A Institute for Progress estimate cited in the report says such remote data centers supply about 24% of China's AI computing power.",
+        "basis": "article",
+        "why": "Export controls now disrupting Nvidia's Southeast Asia data-centre supply",
+        "eventKey": "nvidia-pausa-envios-sudeste-asiatico",
+        "alsoCovered": []
+      },
+      {
+        "id": "0d6741e6",
+        "section": "ai",
+        "title": "S&P considers Nvidia credit downgrade over governance and ‘key man’ risks",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/25/sp-considers-nvidia-credit-downgrade-over-governance-and-key-man-risks",
+        "publishedAt": "2026-11-25T22:44:32.000Z",
+        "snippet": "S&P is weighing a cut of Nvidia's credit rating to AA-, citing governance concerns and key-person risk.",
+        "brief": "S&P Global Ratings is weighing a cut to Nvidia's credit rating from AA to AA-, citing weak executive oversight, no clear succession plan, and heavy dependence on CEO Jensen Huang. The agency plans to complete its review within 90 days, and although Nvidia would stay investment grade, a lower rating could make borrowing more expensive for neocloud partners that Nvidia backstops, and lenders may demand bigger guarantees on the $500 billion AI infrastructure financing.",
+        "basis": "article",
+        "why": "Governance turmoil at Nvidia could raise compute financing costs",
+        "eventKey": "sp-nvidia-downgrade-review",
+        "alsoCovered": []
+      },
+      {
+        "id": "470644e3",
+        "section": "ai",
+        "title": "Bipartisan Desire to Regulate A.I. Faces Obstacles in Congress",
+        "lang": "en",
+        "source": "The New York Times",
+        "url": "https://nytimes.com/2026/11/26/us/politics/ai-regulation-congress-nvidia.html",
+        "publishedAt": "2026-11-26T10:03:47.000Z",
+        "snippet": "Lawmakers from both parties want AI rules, but slow legislative pace and jurisdictional turf fights may block action.",
+        "brief": "Lawmakers from both parties say they want to set rules for artificial intelligence, but the source suggests progress could stall. Slow legislative procedure and turf battles between committees are cited as the main obstacles. The summary gives no specific bill, deadline, or vote count, so the outlook for concrete federal AI rules remains unclear.",
+        "basis": "summaries",
+        "why": "Turf fights likely leave states, not Congress, setting AI rules",
+        "eventKey": "congress-bipartisan-ai-regulation-obstacles",
+        "alsoCovered": []
+      },
+      {
+        "id": "e134eb3b",
+        "section": "ai",
+        "title": "42 state AGs are trying to stop Character.AI from selling users’ chats",
+        "lang": "en",
+        "source": "The Verge",
+        "url": "https://theverge.com/policy/1042620/character-ai-sale-state-ags-block-selling-users-chats",
+        "publishedAt": "2026-11-26T09:54:40.000Z",
+        "snippet": "Forty-two state attorneys general want a bankruptcy court to block Character.AI from auctioning over 21 million US users' chat histories.",
+        "brief": "Dozens of state attorneys general are pushing to block Character.AI from auctioning off chat histories while the company works through its Chapter 11 bankruptcy. They say the records cover over 21 million U.S. accounts, including more than 2.1 million tied to minors, with no safeguards for users. Critics note the first bidder has a thin public record, which heightens concerns about where the data could end up.",
+        "basis": "article",
+        "why": "Tests whether chat logs are sellable assets in AI bankruptcies",
+        "eventKey": "character-ai-bankruptcy-chat-data-sale-ags",
+        "alsoCovered": []
+      },
+      {
+        "id": "090750b3",
+        "section": "ai",
+        "title": "Anthropic’s Dario Amodei calls accusations of surrendering human control to AI ‘absurd’",
+        "lang": "en",
+        "source": "TechCrunch",
+        "url": "https://techcrunch.com/2026/11/25/anthropics-dario-amodei-calls-accusations-of-surrendering-human-control-to-ai-absurd",
+        "publishedAt": "2026-11-25T19:44:24.000Z",
+        "snippet": "Amodei rejects rivals' claims that Anthropic favors ceding human agency to AI, even as labs increasingly automate their own research.",
+        "brief": "Anthropic CEO Dario Amodei publicly rejected claims that his company wants humans to surrender free will to AI, calling the suggestion absurd in a long X post. He said he opposes handing governance to AI and would draw a line at recursive self-improvement, though the article notes Anthropic is already using Claude to write most of its code, which complicates that stance.",
+        "basis": "article",
+        "why": "Labs automating their own research; Anthropic defends its safety stance",
+        "eventKey": "amodei-rejects-human-control-accusations",
+        "alsoCovered": []
+      }
+    ],
+    "world": [
+      {
+        "id": "edbd1a2e",
+        "section": "world",
+        "title": "Sheinbaum calls foul after DEA announces Sinaloa Cartel tip line: Thursday’s mañanera recapped",
+        "lang": "en",
+        "source": "Mexico News Daily",
+        "url": "https://mexiconewsdaily.com/politics/sheinbaum-calls-foul-after-dea-announces-sinaloa-cartel-tip-line-thursdays-mananera-recapped",
+        "publishedAt": "2026-11-26T19:24:08.000Z",
+        "snippet": "Sheinbaum pushed back on the DEA's public tip line seeking corruption information on the Sinaloa Cartel, and discussed extradition cases.",
+        "brief": "Mexico's President Claudia Sheinbaum criticized the US Drug Enforcement Administration after it asked for tips on corruption linked to the Sinaloa Cartel. At her Thursday morning press conference, she said the DEA has plenty to handle in its own country. She also commented on extradition cases involving Chapo Isidro and Inés Gómez Mont, though the summary gives few details on those matters.",
+        "basis": "summaries",
+        "why": "DEA tip line opens new US–Mexico security friction",
+        "eventKey": "sheinbaum-dea-sinaloa-tip-line-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ae6b0f33",
+        "section": "world",
+        "title": "Mexico records its fifth-largest quarterly portfolio investment outflow",
+        "originalTitle": "México registra su quinta mayor salida trimestral de inversión de cartera",
+        "lang": "es",
+        "source": "Expansión",
+        "url": "https://expansion.mx/economia/2026/11/26/mexico-registra-su-quinta-mayor-salida-trimestral-de-inversion-de-cartera",
+        "publishedAt": "2026-11-26T21:25:37.000Z",
+        "snippet": "Q3 outflow of $11.7 billion from bond and equity holdings, with analysts pointing to higher US rates and Mexicans investing abroad as drivers.",
+        "brief": "Mexico posted a net outflow of $11.696 billion in portfolio investment between July and September, the fifth-largest quarterly outflow since Banxico began keeping records in 2002. The drop reversed the inflows of the first half and contrasted with the $5.955 billion that came in during the same period of 2025. Analysts say the figure does not signal an economic alarm, citing tighter global financing and a Fed rate hike, though watching FDI, remittances and reserves will show whether pressure persists.",
+        "basis": "article",
+        "why": "$11.7bn outflow pressures peso as US rates stay high",
+        "eventKey": "mexico-portfolio-outflow-q3-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "7e212765",
+        "section": "world",
+        "title": "Judge strikes down Trump’s latest restrictions on US birthright citizenship",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/26/judge-strikes-down-trumps-latest-restrictions-on-us-birthright-citizenship?traffic_source=rss",
+        "publishedAt": "2026-11-26T19:09:39.000Z",
+        "snippet": "A judge blocked the administration's narrower birthright citizenship limits, following an earlier Supreme Court ruling against the broader policy.",
+        "brief": null,
+        "basis": "summaries",
+        "why": "Narrower birthright limits also fail after Supreme Court loss",
+        "eventKey": "judge-blocks-birthright-citizenship-restrictions-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "ef562ec5",
+        "section": "world",
+        "title": "Trump alleges ‘fake’ economic figures released before US midterms but doesn’t provide evidence",
+        "lang": "en",
+        "source": "The Guardian",
+        "url": "https://theguardian.com/us-news/2026/nov/26/trump-fake-economic-figures-midterms",
+        "publishedAt": "2026-11-26T19:41:37.000Z",
+        "snippet": "Trump claims the GDP figures were fake, though the government corrected them three weeks late, and he offers no evidence for the claim.",
+        "brief": "President Donald Trump, in a Thanksgiving post on Truth Social, called official economic figures released before the midterm elections \"fake\" and demanded an immediate investigation, offering no evidence. He pointed to a corrected GDP estimate of 4.3%, up from the 3.4% first published, which the Bureau of Economic Analysis issued about three weeks late. Revisions to economic data are common, and Trump has repeatedly challenged figures that do not back his claims of an economic boom.",
+        "basis": "article",
+        "why": "Attacks on official data credibility ahead of midterms",
+        "eventKey": "trump-fake-economic-figures-claim-nov-2026",
+        "alsoCovered": []
+      },
+      {
+        "id": "d0bfdae2",
+        "section": "world",
+        "title": "Attack on Saudi’s Jazan refinery kills one person, disrupts operations",
+        "lang": "en",
+        "source": "Al Jazeera",
+        "url": "https://aljazeera.com/news/2026/11/26/attack-on-saudi-aramcos-jazan-refinery-kills-worker-disrupts-operations?traffic_source=rss",
+        "publishedAt": "2026-11-26T20:34:34.000Z",
+        "snippet": "A strike on the Jazan refinery killed one Nepali worker and caused a fire, disrupting Saudi energy operations.",
+        "brief": "An attack on the Jazan refinery in Saudi Arabia killed one person, according to the Saudi Energy Ministry. The victim was a Nepali national, and several other people were injured while a fire broke out at the site. The source does not provide details on how operations were affected or who carried out the attack.",
+        "basis": "summaries",
+        "why": "Gulf conflict now hitting Saudi refining capacity; oil price risk",
+        "eventKey": "ataque-refineria-jazan-arabia-saudita",
+        "alsoCovered": []
+      },
+      {
+        "id": "e8705658",
+        "section": "world",
+        "title": "Trump and Rutte urge Russia and Ukraine to avoid actions that widen the war",
+        "originalTitle": "Trump y Rutte reclaman a Rusia y Ucrania que eviten acciones que amplíen la guerra",
+        "lang": "es",
+        "source": "El País",
+        "url": "https://elpais.com/internacional/2026-11-26/trump-y-rutte-reclaman-a-rusia-y-ucrania-que-eviten-acciones-que-amplien-la-guerra.html",
+        "publishedAt": "2026-11-26T15:30:27.000Z",
+        "snippet": "Trump and NATO's Rutte urged Russia and Ukraine to avoid escalation, and discussed alliance defence spending.",
+        "brief": "President Trump met NATO Secretary General Mark Rutte on Wednesday evening, and the two leaders urged both Russia and Ukraine to avoid any action that could widen the conflict, according to a post Trump published on Truth Social. Trump also expressed optimism about a possible end to the war, though the report notes a winter of strikes on energy systems is now approaching. NATO defense spending was also discussed, with Trump pressing for 5% of GDP while Spain's Pedro Sánchez wants to stay near 2%.",
+        "basis": "article",
+        "why": "Washington urges restraint as NATO spending pressure continues",
+        "eventKey": "trump-rutte-mar-a-lago-ukraine-nov-2026",
+        "alsoCovered": []
+      }
+    ]
+  },
+  "meta": {
+    "feeds": {
+      "ok": 30,
+      "failed": [
+        "import-ai"
+      ]
+    },
+    "counts": {
+      "fetched": 2818,
+      "fresh": 315,
+      "classified": 315,
+      "kept": 211,
+      "stories": 197,
+      "candidates": 48,
+      "picked": 22,
+      "briefs": 20
+    },
+    "models": {
+      "classifier": "claude-haiku-5-5",
+      "editor": "claude-opus-5-5",
+      "briefer": "claude-haiku-5-5"
+    },
+    "editor": "claude",
+    "usage": {
+      "inputTokens": 143694,
+      "outputTokens": 41569,
+      "costUsd": 0.1031
+    },
+    "notes": []
+  }
+}
